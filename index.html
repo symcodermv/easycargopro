@@ -35,7 +35,7 @@ body{background:#0a0f1e;min-height:100vh;overflow-x:hidden;color:white}
 .how-inner{padding:1.2rem}
 .how-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem}
 .how-hd h3{color:#f39c12;font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:6px}
-.how-close{background:rgba(255,255,255,.07);border:none;color:white;font-size:1.1rem;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.how-close{background:rgba(255,255,255,.07);border:none;color:white;font-size:1.1rem;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .how-img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px}
 .how-img-item{border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.07);background:#1a2535}
 .how-img-item img{width:100%;display:block;object-fit:cover;min-height:120px}
@@ -102,7 +102,6 @@ select.fi option{background:#1e2a3a}
 .pending-box i{font-size:1.7rem;color:#f39c12;display:block;margin-bottom:.45rem}
 .pending-box h3{color:white;font-size:.9rem;font-weight:700;margin-bottom:.32rem}
 .pending-box p{color:rgba(255,255,255,.48);font-size:.74rem;line-height:1.5}
-/* DASHBOARD */
 #dashboard{display:none;width:100%;min-height:100vh;background:#0a0f1e}
 .top-bar{background:#141b2b;padding:0 .9rem;display:flex;align-items:center;gap:.7rem;border-bottom:1px solid #253241;position:sticky;top:0;z-index:200;height:54px}
 .menu-toggle{background:none;border:none;color:white;font-size:1.3rem;cursor:pointer;width:37px;height:37px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -114,7 +113,6 @@ select.fi option{background:#1e2a3a}
 .user-nm{font-size:.78rem;font-weight:600;color:white;max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .btn-ico{background:#1e2a3a;border:1px solid #2e3f55;color:rgba(255,255,255,.55);width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;font-size:.82rem;flex-shrink:0}
 .btn-ico:hover{border-color:#f39c12;color:#f39c12}
-/* SIDEBAR */
 .sidebar{width:268px;background:#141b2b;height:100vh;position:fixed;left:-268px;top:0;transition:.3s;z-index:1000;border-right:1px solid #2a3a55;overflow-y:auto;display:flex;flex-direction:column}
 .sidebar.open{left:0}
 .s-hd{padding:1rem;border-bottom:1px solid #253241;display:flex;align-items:center;gap:.75rem}
@@ -131,7 +129,6 @@ select.fi option{background:#1e2a3a}
 .s-foot{padding:.75rem 1.1rem;border-top:1px solid #253241}
 .ovl{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:999}
 .ovl.show{display:block}
-/* NAV TABS */
 .nav-bar{background:#141b2b;border-bottom:1px solid #253241;overflow-x:auto;scrollbar-width:none}
 .nav-bar::-webkit-scrollbar{display:none}
 .nav-tabs{display:flex;min-width:max-content}
@@ -141,12 +138,10 @@ select.fi option{background:#1e2a3a}
 .sec{display:none}.sec.active{display:block}
 .sec-title{color:white;font-size:1.05rem;font-weight:700;margin-bottom:.82rem;display:flex;align-items:center;gap:.45rem}
 .sec-title i{color:#f39c12}
-/* CARD */
 .card{background:#141b2b;border-radius:18px;padding:1rem;margin-bottom:.9rem;border:1px solid #2e3f55}
 .c-hd{display:flex;align-items:center;gap:8px;margin-bottom:.85rem;padding-bottom:.78rem;border-bottom:1px solid #253241}
 .c-ico{width:28px;height:28px;background:rgba(243,156,18,.11);border:1px solid rgba(243,156,18,.22);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.78rem;color:#f39c12;flex-shrink:0}
 .c-hd h3{font-size:.84rem;font-weight:700;color:white}
-/* CAPACITY */
 .cap-wrap{background:#1a2535;border:1px solid #2a3a55;border-radius:13px;padding:.9rem;margin-bottom:.9rem}
 .cap-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .cap-lbl{font-size:.76rem;font-weight:600;color:white}
@@ -156,7 +151,6 @@ select.fi option{background:#1e2a3a}
 .cap-fill.warn{background:linear-gradient(90deg,#e67e22,#f39c12)}
 .cap-fill.full{background:linear-gradient(90deg,#e74c3c,#c0392b)}
 .cap-note{font-size:.68rem;color:rgba(255,255,255,.38);margin-top:5px}
-/* CARGO TYPE CARDS */
 .ctype-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.3rem}
 .ct-card{background:#1e2a3a;border:2px solid #2e3f55;border-radius:14px;padding:.9rem .7rem;cursor:pointer;text-align:center;transition:.22s;position:relative}
 .ct-card:hover{border-color:rgba(243,156,18,.4)}
@@ -168,7 +162,6 @@ select.fi option{background:#1e2a3a}
 .ct-ck{position:absolute;top:5px;right:5px;width:16px;height:16px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center}
 .ct-ck i{font-size:.42rem;color:#1e2a3a}
 .ct-card.active .ct-ck{display:flex}
-/* WEIGHT SIZE BUTTONS WITH ICON + LABEL */
 .weight-sec{display:none}.weight-sec.show{display:block}
 .w-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.85rem}
 @media(min-width:380px){.w-grid{grid-template-columns:repeat(3,1fr)}}
@@ -179,7 +172,6 @@ select.fi option{background:#1e2a3a}
 .w-btn .w-rng{font-size:.72rem;font-weight:700;color:white}
 .w-btn .w-lbl{font-size:.6rem;color:rgba(255,255,255,.45)}
 .w-btn .w-pr{font-size:.68rem;font-family:monospace;color:#f39c12;font-weight:700}
-/* EXPRESS HOURS */
 .express-hrs-wrap{display:none;margin-bottom:.3rem}.express-hrs-wrap.show{display:block}
 .express-hrs-title{font-size:.74rem;color:rgba(255,255,255,.5);margin-bottom:.5rem;display:flex;align-items:center;gap:5px}
 .express-hrs-title i{color:#f39c12}
@@ -190,14 +182,12 @@ select.fi option{background:#1e2a3a}
 .hr-btn .hr-val{display:block;font-size:.88rem;font-weight:800;color:white;margin-bottom:1px}
 .hr-btn .hr-label{display:block;font-size:.6rem;color:rgba(255,255,255,.4);margin-bottom:3px}
 .hr-btn .hr-price{display:block;font-size:.68rem;font-family:monospace;color:#f39c12;font-weight:700}
-/* ETA bar */
 .eta-info{background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.18);border-radius:9px;padding:8px 12px;margin:.6rem 0 .3rem;display:none;justify-content:space-between;align-items:center;font-size:.76rem}
 .eta-info.show{display:flex}
 .eta-info.express{background:rgba(243,156,18,.07);border-color:rgba(243,156,18,.2)}
 .eta-info .lbl{color:rgba(255,255,255,.52)}
 .eta-info .val{font-weight:700;font-family:monospace;color:#2ecc71}
 .eta-info.express .val{color:#f39c12}
-/* PICKUP CARDS */
 .pickup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:.85rem}
 @media(max-width:360px){.pickup-grid{grid-template-columns:repeat(2,1fr)}}
 .pickup-card{background:#1e2a3a;border:2px solid #2e3f55;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .22s;position:relative}
@@ -211,7 +201,6 @@ select.fi option{background:#1e2a3a}
 .pickup-ck i{font-size:.45rem;color:#1e2a3a}
 .pickup-card.active .pickup-ck{display:flex}
 .addr-x{display:none;margin-top:.5rem}.addr-x.show{display:block}
-/* DELIVERY MODE */
 .dmode{display:flex;gap:7px;margin-bottom:.3rem}
 .dm-btn{flex:1;padding:10px 7px;background:#1e2a3a;border:2px solid #2e3f55;border-radius:12px;cursor:pointer;text-align:center;transition:.2s;font-family:inherit}
 .dm-btn:hover{border-color:rgba(243,156,18,.38)}
@@ -219,12 +208,10 @@ select.fi option{background:#1e2a3a}
 .dm-btn i{font-size:1.15rem;color:#f39c12;display:block;margin-bottom:4px}
 .dm-btn strong{display:block;font-size:.74rem;font-weight:700;color:white}
 .dm-btn small{font-size:.6rem;color:rgba(255,255,255,.32)}
-/* DELIVERY LOC CHIPS */
 .dloc-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:.85rem}
 .dloc-btn{padding:7px 14px;background:#1e2a3a;border:1.5px solid #2e3f55;border-radius:20px;cursor:pointer;font-size:.76rem;font-weight:600;color:rgba(255,255,255,.6);transition:.2s;font-family:inherit}
 .dloc-btn:hover{border-color:rgba(243,156,18,.4);color:white}
 .dloc-btn.active{border-color:#f39c12;background:rgba(243,156,18,.1);color:#f39c12}
-/* BOAT — ATOLL SEARCH + BOATS */
 .boat-sec{display:none}.boat-sec.show{display:block}
 .atoll-srch{display:flex;gap:7px;margin-bottom:.7rem}
 .atoll-srch input{flex:1;padding:9px 13px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:22px;color:white;font-size:.82rem;outline:none;transition:.2s;font-family:inherit}
@@ -247,12 +234,10 @@ select.fi option{background:#1e2a3a}
 .boat-card.active .boat-ck{display:flex}
 .boat-info-bar{background:rgba(52,152,219,.08);border:1px solid rgba(52,152,219,.18);border-radius:10px;padding:8px 12px;margin-bottom:.75rem;font-size:.76rem;display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.65)}
 .boat-info-bar i{color:#3498db;flex-shrink:0}
-/* ISLAND GRID */
 .isl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:.85rem}
 .isl-btn{background:#1a2535;border:1.5px solid #2e3f55;border-radius:10px;padding:8px;cursor:pointer;text-align:center;transition:.2s;font-family:inherit;font-size:.73rem;font-weight:600;color:rgba(255,255,255,.62)}
-.isl-btn:hover{border-color:rgba(52,152,219,.35);color:white}
-.isl-btn.active{border-color:#3498db;background:rgba(52,152,219,.1);color:#3498db}
-/* PRICE BOX */
+.isl-btn:hover{border-color:rgba(243,156,18,.45);color:white}
+.isl-btn.active{border-color:#f39c12;background:rgba(243,156,18,.12);color:#f39c12}
 .price-box{background:linear-gradient(135deg,#1a2335,#1e2d42);border:1px solid rgba(243,156,18,.22);border-radius:15px;padding:1rem;text-align:center;margin-bottom:.85rem;position:relative;overflow:hidden}
 .price-box::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(243,156,18,.06),transparent 60%)}
 .price-box .plbl{font-size:.62rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1.5px;font-family:monospace;margin-bottom:4px;position:relative}
@@ -261,14 +246,12 @@ select.fi option{background:#1e2a3a}
 .btn-submit{width:100%;padding:13px;background:#f39c12;color:#1e2a3a;border:none;border-radius:35px;font-size:.9rem;font-weight:800;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 5px 18px rgba(243,156,18,.26)}
 .btn-submit:hover{background:#e67e22;transform:translateY(-2px);color:white}
 .btn-submit:disabled{background:#2e3f55;color:rgba(255,255,255,.38);box-shadow:none;transform:none;cursor:not-allowed}
-/* TABLE */
 .tbl-s{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;min-width:560px;font-size:.74rem}
 th{padding:8px 9px;text-align:left;font-size:.6rem;font-weight:700;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid #253241;background:rgba(255,255,255,.02);font-family:monospace}
 td{padding:8px 9px;border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.7);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.02);color:white}
-/* BADGES */
 .badge{display:inline-block;padding:2px 8px;border-radius:14px;font-size:.6rem;font-weight:700;font-family:monospace}
 .b-placed{background:rgba(243,156,18,.13);color:#f39c12;border:1px solid rgba(243,156,18,.18)}
 .b-proc{background:rgba(52,152,219,.13);color:#3498db;border:1px solid rgba(52,152,219,.18)}
@@ -281,7 +264,6 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .b-norm{background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid #2e3f55}
 .b-exp{background:rgba(52,152,219,.1);color:#3498db;border:1px solid rgba(52,152,219,.14)}
 .b-boat{background:rgba(52,152,219,.13);color:#3498db;border:1px solid rgba(52,152,219,.18)}
-/* SEARCH */
 .srch-row{display:flex;gap:7px;margin-bottom:.85rem}
 .srch-row input{flex:1;padding:10px 14px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:25px;color:white;font-size:.84rem;outline:none;transition:.2s;font-family:inherit}
 .srch-row input:focus{border-color:#f39c12;box-shadow:0 0 0 3px rgba(243,156,18,.09)}
@@ -292,7 +274,6 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .rcard:hover{border-color:#f39c12;transform:translateY(-2px)}
 .rcard .rn{font-family:monospace;font-size:.72rem;font-weight:700;color:#f39c12;margin-bottom:5px}
 .rcard .rd{font-size:.7rem;color:rgba(255,255,255,.4);margin-bottom:3px}
-/* TRACK PROGRESS */
 .tracker{display:flex;justify-content:space-between;margin:.85rem 0;padding:8px;background:#1e2a3a;border-radius:14px}
 .trk-step{text-align:center;flex:1;color:#607080;font-size:.58rem}
 .trk-step.active{color:#f39c12}.trk-step.done{color:#27ae60}
@@ -314,7 +295,6 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .i-cell{background:#1e2a3a;border:1px solid #2e3f55;border-radius:9px;padding:8px 10px}
 .i-cell .il{font-size:.55rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;font-family:monospace}
 .i-cell .iv{font-size:.76rem;font-weight:600;color:white}
-/* NOTIFICATIONS panel */
 .n-bell{position:relative;cursor:pointer}
 .n-bell-btn{background:rgba(243,156,18,.09);border:1px solid rgba(243,156,18,.2);border-radius:50%;width:33px;height:33px;display:flex;align-items:center;justify-content:center;color:#f39c12;font-size:.82rem;cursor:pointer;transition:.2s}
 .n-bell-btn:hover{background:rgba(243,156,18,.18)}
@@ -339,7 +319,6 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .n-item .nd{font-size:.6rem;color:rgba(255,255,255,.28);margin-top:4px;font-family:monospace}
 .n-rm{position:absolute;top:7px;right:8px;background:none;border:none;color:rgba(255,255,255,.25);font-size:.9rem;cursor:pointer;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%}
 .n-rm:hover{background:rgba(231,76,60,.2);color:#e74c3c}
-/* INVOICE */
 .invoice-box{background:linear-gradient(135deg,#1a2335,#1d2940);border:1px solid rgba(39,174,96,.25);border-radius:15px;padding:1.1rem;margin-top:.8rem}
 .invoice-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;padding-bottom:.7rem;border-bottom:1px solid rgba(255,255,255,.06)}
 .invoice-brand{font-size:1rem;font-weight:800;color:white}
@@ -355,12 +334,10 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .inv-total .v{color:#27ae60}
 .inv-stamp{margin-top:.7rem;text-align:center}
 .inv-stamp span{display:inline-flex;align-items:center;gap:5px;background:rgba(39,174,96,.12);border:1px solid rgba(39,174,96,.3);border-radius:20px;padding:4px 14px;font-size:.7rem;font-weight:700;color:#27ae60}
-/* MY INVOICES TAB */
 .inv-card{background:#1b2537;border:1px solid rgba(39,174,96,.2);border-radius:13px;padding:.85rem;margin-bottom:.7rem}
 .inv-card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
 .inv-card-no{font-family:monospace;font-size:.72rem;font-weight:700;color:#f39c12}
 .inv-card-date{font-size:.65rem;color:rgba(255,255,255,.35)}
-/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.84);align-items:flex-end;justify-content:center;z-index:2000;padding:0}
 .modal-overlay.show{display:flex}
 @media(min-width:540px){.modal-overlay{align-items:center;padding:1rem}}
@@ -385,7 +362,6 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .file-zone i{font-size:1.3rem;color:#f39c12;display:block;margin-bottom:4px}
 .file-zone span{font-size:.74rem;color:rgba(255,255,255,.38)}
 .slip-img{max-width:100%;border-radius:10px;margin:8px 0;border:1px solid #2e3f55}
-/* TOAST */
 .toast{position:fixed;top:62px;left:50%;transform:translateX(-50%) translateY(-16px);z-index:3000;max-width:310px;width:92%;background:#1e2a3a;border-radius:15px;padding:.78rem .9rem;border:1px solid #2e4057;box-shadow:0 12px 40px rgba(0,0,0,.6);display:flex;align-items:center;gap:7px;opacity:0;transition:all .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.ok{border-color:rgba(39,174,96,.32);background:linear-gradient(135deg,#0d2218,#142b1e)}
@@ -396,7 +372,6 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .toast.err .t-ico{background:rgba(231,76,60,.18);color:#e74c3c}
 .toast.info .t-ico{background:rgba(243,156,18,.1);color:#f39c12}
 .t-msg{flex:1;font-size:.76rem;color:white;font-weight:500}
-/* BOTTOM NAV */
 .mob-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#141b2b;border-top:1px solid #253241;padding:7px 0 10px;z-index:300}
 @media(min-width:768px){.mob-nav{display:none}}
 .m-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(255,255,255,.35);font-size:.56rem;font-weight:600;cursor:pointer;padding:2px;border:none;background:none;font-family:inherit}
@@ -498,7 +473,6 @@ a{color:#f39c12;text-decoration:none}
     </div>
     <div class="s-foot"><button class="btn btn-sec" style="font-size:.78rem;padding:9px" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button></div>
   </div>
-
   <div class="top-bar">
     <button class="menu-toggle" onclick="toggleSB()"><i class="fas fa-bars"></i></button>
     <div class="tb-brand"><i class="fas fa-truck" style="color:#f39c12"></i> Easy<span>Cargo</span></div>
@@ -506,7 +480,6 @@ a{color:#f39c12;text-decoration:none}
     <div class="n-bell"><div class="n-bell-btn" id="nBtn"><i class="fas fa-bell"></i></div><div class="n-dot" id="nDot"></div></div>
     <button class="btn-ico" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i></button>
   </div>
-
   <div class="nav-bar"><div class="nav-tabs">
     <button class="ntab active" data-s="sNew"><i class="fas fa-plus-circle"></i> New</button>
     <button class="ntab" data-s="sMine"><i class="fas fa-list"></i> Mine</button>
@@ -515,7 +488,6 @@ a{color:#f39c12;text-decoration:none}
   </div></div>
 
   <div class="content">
-    <!-- NEW DELIVERY — order: Name, Contact, Cargo Type, Weight, Pickup, Mode -->
     <div class="sec active" id="sNew">
       <div class="sec-title"><i class="fas fa-plus-circle"></i> New Delivery</div>
       <div class="cap-wrap" id="capWrap" style="display:none">
@@ -526,60 +498,48 @@ a{color:#f39c12;text-decoration:none}
       <div class="card">
         <div class="c-hd"><div class="c-ico"><i class="fas fa-truck"></i></div><h3>Delivery Form</h3></div>
         <form id="cargoForm">
-
-          <!-- 1. CUSTOMER INFO (auto-filled, locked) -->
           <div class="fr">
             <div class="fg"><label><i class="fas fa-user" style="color:#f39c12;margin-right:4px"></i>Customer Name</label><input class="fi" type="text" id="cNm" disabled></div>
             <div class="fg"><label><i class="fas fa-phone" style="color:#f39c12;margin-right:4px"></i>Contact Number</label><input class="fi" type="tel" id="cCt" disabled></div>
           </div>
-
-          <!-- 2. CARGO TYPE -->
           <div class="fg">
             <label><i class="fas fa-box" style="color:#f39c12;margin-right:4px"></i>Cargo Type</label>
             <div class="ctype-grid" id="ctypeGrid"><div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div></div>
             <input type="hidden" id="ctV"><input type="hidden" id="ctPrice" value="0"><input type="hidden" id="ctIsExpress" value="0">
             <div class="eta-info" id="etaInfo"><span class="lbl"><i class="fas fa-clock" style="margin-right:4px"></i>Estimated</span><span class="val" id="etaV">—</span></div>
           </div>
-
-          <!-- 3a. EXPRESS DURATION (only Express Cargo) -->
           <div class="express-hrs-wrap" id="expressHrsWrap">
             <div class="express-hrs-title"><i class="fas fa-clock"></i> Select Duration</div>
             <div class="hr-grid" id="hrGrid"></div>
             <input type="hidden" id="selHrId"><input type="hidden" id="selHrPrice" value="0"><input type="hidden" id="selHrLabel" value="">
           </div>
-
-          <!-- 3b. WEIGHT RANGE (only Normal Cargo) — with icon, label, size -->
           <div class="weight-sec" id="weightSec">
             <div class="fg"><label><i class="fas fa-weight-hanging" style="color:#f39c12;margin-right:4px"></i>Package Weight Range</label>
               <div class="w-grid" id="wGrid"></div>
               <input type="hidden" id="selW"><input type="hidden" id="selWP" value="0">
             </div>
           </div>
-
-          <!-- 4. PICKUP LOCATION -->
           <div class="fg">
             <label><i class="fas fa-map-marker-alt" style="color:#f39c12;margin-right:4px"></i>Pickup Location</label>
             <div class="pickup-grid" id="pickupGrid"><div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div></div>
             <input type="hidden" id="pLocVal">
             <div class="addr-x" id="addrX"><div class="fg" style="margin-top:.5rem"><label>Address</label><input class="fi" type="text" id="addrVal" placeholder="Enter full address…"></div></div>
           </div>
-
-          <!-- 5. DELIVERY MODE -->
           <div class="fg">
             <label><i class="fas fa-route" style="color:#f39c12;margin-right:4px"></i>Delivery Mode</label>
             <div class="dmode">
               <button type="button" class="dm-btn active" id="dmCargo" onclick="setMode('cargo')"><i class="fas fa-truck"></i><strong>Cargo</strong><small>Island delivery</small></button>
               <button type="button" class="dm-btn" id="dmBoat" onclick="setMode('boat')"><i class="fas fa-ship"></i><strong>Boat</strong><small>Island to island</small></button>
             </div>
-
-            <!-- CARGO: delivery location (admin-managed chips) -->
             <div id="cargoDest" style="margin-top:.7rem">
-              <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Delivery Location</label>
+              <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Delivery Location (Island / City)</label>
               <div class="dloc-grid" id="dlocGrid"><div class="empty-s" style="padding:.6rem"><p>No delivery locations set.</p></div></div>
               <input type="hidden" id="dLocVal">
+              <div class="fg" style="margin-top:.6rem;display:none" id="houseAddrWrap">
+                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.32rem;display:block"><i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>House / Flat Address</label>
+                <input class="fi" type="text" id="houseAddr" placeholder="e.g. Roashanee Magu, Flat 3B…">
+              </div>
             </div>
-
-            <!-- BOAT: atoll search → boats → islands -->
             <div class="boat-sec" id="boatSec" style="margin-top:.7rem">
               <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-compass" style="color:#3498db;margin-right:4px"></i>Select Atoll</label>
               <div class="atoll-srch"><input type="text" id="atollSearch" placeholder="Search atoll…" oninput="filterAtolls()"></div>
@@ -597,13 +557,11 @@ a{color:#f39c12;text-decoration:none}
               </div>
             </div>
           </div>
-
           <div class="fg"><label>Package Description <span style="opacity:.35;font-size:.65rem">(optional)</span></label>
             <textarea class="fi fi-ta" id="pkgDesc" placeholder="Describe contents…"></textarea>
           </div>
-
           <div class="price-box"><div class="plbl">Total Delivery Price</div><div class="pnum"><span class="pcur">MVR </span><span id="pDisp">0</span></div></div>
-          <div class="fg"><label>Expected Delivery Date</label><input class="fi" type="date" id="dDate" required></div>
+          <div class="fg" style="margin-top:.9rem"><label><i class="fas fa-calendar-alt" style="color:#f39c12;margin-right:4px"></i>Expected Delivery Date</label><input class="fi" type="date" id="dDate" required style="width:100%;display:block"></div>
           <button type="submit" class="btn-submit" id="submitBtn"><i class="fas fa-paper-plane"></i> Save &amp; Pay</button>
         </form>
       </div>
@@ -612,8 +570,6 @@ a{color:#f39c12;text-decoration:none}
         <div id="myRefs"><div class="empty-s"><i class="fas fa-inbox"></i><p>No deliveries yet.</p></div></div>
       </div>
     </div>
-
-    <!-- MY DELIVERIES -->
     <div class="sec" id="sMine">
       <div class="sec-title"><i class="fas fa-list"></i> My Deliveries</div>
       <div class="card"><div class="tbl-s"><table>
@@ -621,14 +577,10 @@ a{color:#f39c12;text-decoration:none}
         <tbody id="myTB"></tbody>
       </table></div></div>
     </div>
-
-    <!-- MY INVOICES (separate sidebar tab) -->
     <div class="sec" id="sInv">
       <div class="sec-title"><i class="fas fa-file-invoice"></i> My Invoices</div>
       <div id="invListWrap"><div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet.</p></div></div>
     </div>
-
-    <!-- TRACK -->
     <div class="sec" id="sTrk">
       <div class="sec-title"><i class="fas fa-search-location"></i> Track Delivery</div>
       <div class="card">
@@ -666,7 +618,6 @@ a{color:#f39c12;text-decoration:none}
       </div>
     </div>
   </div>
-
   <nav class="mob-nav">
     <button class="m-tab active" data-s="sNew"><i class="fas fa-plus-circle"></i>New</button>
     <button class="m-tab" data-s="sMine"><i class="fas fa-list"></i>Mine</button>
@@ -712,7 +663,7 @@ a{color:#f39c12;text-decoration:none}
 <div class="modal-box"><div class="modal-hd"><div class="modal-title"><i class="fas fa-image"></i> Payment Slip</div><button class="close-btn" id="slipClose"><i class="fas fa-times"></i></button></div><img id="slipViewImg" class="slip-img" alt="slip"><div class="modal-btns"><button class="btn btn-sec" id="slipClose2">Close</button></div></div>
 </div>
 
-<!-- INVOICE MODAL (view + download PDF) -->
+<!-- INVOICE MODAL -->
 <div class="modal-overlay" id="invMod">
 <div class="modal-box">
   <div class="modal-hd"><div class="modal-title"><i class="fas fa-file-invoice"></i> Invoice</div><button class="close-btn" id="invClose"><i class="fas fa-times"></i></button></div>
@@ -742,15 +693,11 @@ function pBadge(s){const m={'under_review':['b-rev','Reviewing'],'paid':['b-paid
 function showMsg(id,msg,t){const el=$(id);el.className=`msg ${t}`;el.textContent=msg;setTimeout(()=>el.className='msg',4000)}
 function timeAgo(ts){if(!ts)return'';const s=Math.floor((Date.now()-new Date(ts))/1000);if(s<60)return s+'s ago';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago'}
 function calcTotal(){const isExp=$('ctIsExpress').value==='1';const cp=isExp?parseFloat($('selHrPrice').value)||0:parseFloat($('ctPrice').value)||0;const wp=isExp?0:parseFloat($('selWP').value)||0;const tot=cp+wp;$('pDisp').textContent=tot.toFixed(0);return tot}
-
-/* SLIDESHOW */
 function initSlideshow(){const slides=siteSettings.homeSlides||[];const ss=$('slideshow');const dots=$('slideDots');if(siteSettings.homeTagline)$('homeTagline').textContent=siteSettings.homeTagline;if(!slides.length){ss.innerHTML='<div class="slide active" style="background:linear-gradient(135deg,#0a0f1e,#1a2747)"></div>';dots.innerHTML='';return}ss.innerHTML=slides.map((s,i)=>`<div class="slide${i===0?' active':''}" style="background-image:url('${s.url||s}')"></div>`).join('');dots.innerHTML=slides.map((_,i)=>`<div class="dot${i===0?' active':''}" onclick="gotoSlide(${i})"></div>`).join('');clearInterval(slideTimer);slideTimer=setInterval(()=>gotoSlide((slideIdx+1)%slides.length),5000)}
 window.gotoSlide=function(i){const sl=document.querySelectorAll('.slide');const ds=document.querySelectorAll('.dot');if(!sl.length)return;sl[slideIdx]?.classList.remove('active');ds[slideIdx]?.classList.remove('active');slideIdx=i;sl[slideIdx]?.classList.add('active');ds[slideIdx]?.classList.add('active')}
 function loadHowTo(){const imgs=siteSettings.howToImages||[];const el=$('howImgGrid');if(!imgs.length){el.innerHTML='<div class="how-empty">No guide images yet.</div>';return}el.innerHTML=imgs.map(img=>`<div class="how-img-item"><img src="${img.url||img}" loading="lazy"></div>`).join('')}
 window.toggleHow=function(){$('howPanel').classList.toggle('open')}
 window.showAuth=function(){$('homePage').style.display='none';$('authScreen').classList.add('show')}
-
-/* LOGIN PAGE SETTINGS */
 function loadLoginPageSettings(){
   const logo=siteSettings.loginLogoUrl||'';const li=$('loginLogoImg');if(logo){li.src=logo;li.style.display='block'}else li.style.display='none';
   const links=siteSettings.socialLinks||[];const row=$('socialRow');
@@ -760,8 +707,6 @@ function loadLoginPageSettings(){
   row.style.display='flex';
   row.innerHTML=links.map(l=>{const pl=l.platform?.toLowerCase()||'other';return`<a href="${l.url||'#'}" target="_blank" class="social-btn ${cc[pl]||'s-ot'}"><i class="${ic[pl]||'fas fa-link'}"></i>${l.platform}</a>`}).join('')
 }
-
-/* AUTH */
 $('tLogin').onclick=()=>{$('tLogin').classList.add('active');$('tReg').classList.remove('active');$('pLogin').classList.add('active');$('pReg').classList.remove('active')};
 $('tReg').onclick=()=>{$('tReg').classList.add('active');$('tLogin').classList.remove('active');$('pReg').classList.add('active');$('pLogin').classList.remove('active')};
 $('loginBtn').onclick=async()=>{
@@ -798,17 +743,12 @@ function initFB(){
   db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});
 }
 function enterDash(){$('authScreen').classList.remove('show');$('dashboard').style.display='block';$('hName').textContent=me.username;$('sidebarName').textContent=me.username;$('cNm').value=me.username;$('cCt').value=me.contact||'';loadPickupGrid();buildAtollChips();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}
-
 function updateCapBar(){const cap=siteSettings.dailyCapacity||0;if(!cap){$('capWrap').style.display='none';return}const today=new Date().toISOString().split('T')[0];const tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;const pct=Math.min(100,Math.round((tc/cap)*100));$('capWrap').style.display='block';$('capFill').style.width=pct+'%';$('capPct').textContent=pct+'%';$('capPct').style.color=pct>=100?'#e74c3c':pct>=80?'#f39c12':'#27ae60';$('capFill').className='cap-fill'+(pct>=100?' full':pct>=80?' warn':'');$('capNote').textContent=pct>=100?`Full (${tc}/${cap})`:`${tc}/${cap} today`;const sb=$('submitBtn');if(pct>=100){sb.disabled=true;sb.innerHTML='<i class="fas fa-ban"></i> Capacity Full'}else{sb.disabled=false;sb.innerHTML='<i class="fas fa-paper-plane"></i> Save &amp; Pay'}}
-
-/* NAV */
 document.querySelectorAll('.ntab[data-s],.m-tab[data-s]').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.s)}));
 function switchTab(s){document.querySelectorAll('.ntab,.m-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll(`[data-s="${s}"]`).forEach(x=>x.classList.add('active'));document.querySelectorAll('.sec').forEach(x=>x.classList.remove('active'));$(s).classList.add('active');if(s==='sMine')loadMyTbl();if(s==='sInv')loadMyInvoices()}
 function toggleSB(){$('sidebar').classList.toggle('open');$('sideOvl').classList.toggle('show')}
 function closeSB(){$('sidebar').classList.remove('open');$('sideOvl').classList.remove('show')}
 $('sideOvl').onclick=closeSB;
-
-/* CARGO TYPE */
 function loadCtypeGrid(){
   const g=$('ctypeGrid');if(!allCargoTypes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div>';return}
   const icons={'normal':'fa-box','express':'fa-bolt','fragile':'fa-wine-glass-crack','oversized':'fa-pallet','custom':'fa-cube'};
@@ -821,50 +761,48 @@ window.selCtype=function(el,id){
   const eta=$('etaInfo');eta.classList.add('show');eta.classList.toggle('express',!!ct.isExpress);$('etaV').textContent=ct.eta||'—';
   document.querySelectorAll('.w-btn,.hr-btn').forEach(b=>b.classList.remove('active'));
   $('selW').value='';$('selWP').value='0';$('selHrId').value='';$('selHrPrice').value='0';$('selHrLabel').value='';
-  if(ct.isExpress){$('expressHrsWrap').classList.add('show');$('weightSec').classList.remove('show');loadHrGrid()}
+  if(ct.isExpress){$('expressHrsWrap').classList.add('show');$('weightSec').classList.remove('show');loadHrGrid(ct.id)}
   else{$('expressHrsWrap').classList.remove('show');$('weightSec').classList.add('show');loadWeights()}
   calcTotal()
 };
-
-/* EXPRESS HOURS */
-function loadHrGrid(){const g=$('hrGrid');if(!allExpressHrs.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No hourly options set.</p></div>';return}g.innerHTML=[...allExpressHrs].sort((a,b)=>a.hours-b.hours).map(hr=>`<button type="button" class="hr-btn" data-id="${hr.id}" data-price="${hr.price}" data-label="${hr.label||hr.hours+'hr'}" onclick="selHr(this)"><span class="hr-val">${hr.hours}</span><span class="hr-label">${hr.label||'Hour'+(hr.hours>1?'s':'')}</span><span class="hr-price">MVR ${hr.price}</span></button>`).join('')}
+function loadHrGrid(ctId){const g=$('hrGrid');const hrs=ctId?allExpressHrs.filter(h=>String(h.cargoTypeId)===String(ctId)):allExpressHrs;if(!hrs.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No hourly options for this type.</p></div>';return}g.innerHTML=[...hrs].sort((a,b)=>a.hours-b.hours).map(hr=>`<button type="button" class="hr-btn" data-id="${hr.id}" data-price="${hr.price}" data-label="${hr.label||hr.hours+'hr'}" onclick="selHr(this)"><span class="hr-val">${hr.hours}</span><span class="hr-label">${hr.label||'Hour'+(hr.hours>1?'s':'')}</span><span class="hr-price">MVR ${hr.price}</span></button>`).join('')}
 window.selHr=function(el){document.querySelectorAll('.hr-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('selHrId').value=el.dataset.id;$('selHrPrice').value=el.dataset.price;$('selHrLabel').value=el.dataset.label;calcTotal()};
-
-/* WEIGHT RANGES — with icon, label, size */
 function weightIcon(mn,mx){if(mx<=2)return'fa-feather';if(mx<=10)return'fa-box';if(mx<=30)return'fa-boxes-stacked';return'fa-pallet'}
 function weightLabel(mn,mx){if(mx<=2)return'Light';if(mx<=10)return'Medium';if(mx<=30)return'Heavy';return'Oversized'}
 function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return}const sorted=[...allP].sort((a,b)=>a.min-b.min);g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${weightIcon(x.min,x.max)}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${weightLabel(x.min,x.max)}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');$('selW').value=`${this.dataset.mn}-${this.dataset.mx} kg`;$('selWP').value=this.dataset.pr;calcTotal()}));$('selW').value='';$('selWP').value='0';calcTotal()}
-
-/* PICKUP */
 function loadPickupGrid(){const g=$('pickupGrid');if(!allPickups.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div>';return}g.innerHTML=allPickups.map(loc=>`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`).join('')}
 window.selPickup=function(el,id){document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');const loc=allPickups.find(l=>String(l.id)===String(id));if(!loc)return;$('pLocVal').value=loc.name;const ax=$('addrX');if(loc.type==='address'){ax.classList.add('show');$('addrVal').required=true}else{ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value=''}};
-
-/* DELIVERY MODE */
-window.setMode=function(m){dMode=m;document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));$(m==='cargo'?'dmCargo':'dmBoat').classList.add('active');$('cargoDest').style.display=m==='cargo'?'block':'none';$('boatSec').classList.toggle('show',m==='boat');if(m==='boat'){selAtoll=null;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'))}};
-
-/* DELIVERY LOCATIONS (admin-managed chips) */
+window.setMode=function(m){dMode=m;document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));$(m==='cargo'?'dmCargo':'dmBoat').classList.add('active');$('cargoDest').style.display=m==='cargo'?'block':'none';$('boatSec').classList.toggle('show',m==='boat');if(m==='boat'){selAtoll=null;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'))}if(m==='cargo'){const w=$('houseAddrWrap');if(w)w.style.display='none'}};
 function loadDlocGrid(){const g=$('dlocGrid');if(!allDelLocs.length){g.innerHTML='<div class="empty-s" style="padding:.6rem"><p>No delivery locations set.</p></div>';return}g.innerHTML=allDelLocs.map(l=>`<button type="button" class="dloc-btn" onclick="selDloc(this,'${l.name||l}')">${l.name||l}</button>`).join('');$('dLocVal').value=''}
-window.selDloc=function(el,v){document.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('dLocVal').value=v};
-
-/* BOAT: ATOLL SEARCH → BOATS → ISLANDS */
+window.selDloc=function(el,v){document.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('dLocVal').value=v;const w=$('houseAddrWrap');if(w)w.style.display='block'};
 function buildAtollChips(){
   const atolls=[...new Set(allBoats.filter(b=>b.active!==false&&b.atoll).map(b=>b.atoll))].sort();
-  // If no atoll field on boats, fall back to showing all boats
   const g=$('atollChips');
-  if(!atolls.length){
-    // no atoll grouping — show all boats directly
-    $('boatGridWrap').style.display='block';g.innerHTML='';
-    renderBoatGrid(allBoats.filter(b=>b.active!==false));return
-  }
+  if(!atolls.length){$('boatGridWrap').style.display='block';g.innerHTML='';renderBoatGrid(allBoats.filter(b=>b.active!==false));return}
   g.innerHTML=atolls.map(a=>`<button type="button" class="atoll-chip" onclick="selAtollFn(this,'${a.replace(/'/g,"\\'")}')">${a}</button>`).join('')
 }
 window.filterAtolls=function(){const q=$('atollSearch').value.toLowerCase();document.querySelectorAll('.atoll-chip').forEach(c=>{c.style.display=c.textContent.toLowerCase().includes(q)?'':'none'})}
 window.selAtollFn=function(el,a){document.querySelectorAll('.atoll-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');selAtoll=a;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';document.querySelectorAll('.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));const boats=allBoats.filter(b=>b.atoll===a&&b.active!==false);$('boatGridWrap').style.display='block';renderBoatGrid(boats)};
 function renderBoatGrid(boats){const g=$('boatGrid');if(!boats.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No boats for this atoll.</p></div>';return}g.innerHTML=boats.map(b=>`<div class="boat-card" data-id="${b.id}" onclick="selBoat('${b.id}')">${b.imageUrl?`<img class="b-img" src="${b.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="b-no-img" style="${b.imageUrl?'display:none':''}"><i class="fas fa-ship"></i></div><div class="b-name">${b.name}</div><div class="b-route">${b.route||''}</div><div class="boat-ck"><i class="fas fa-check"></i></div></div>`).join('')}
-window.selBoat=function(id){document.querySelectorAll('.boat-card').forEach(c=>c.classList.remove('active'));document.querySelector(`.boat-card[data-id="${id}"]`)?.classList.add('active');const boat=allBoats.find(b=>String(b.id)===String(id));if(!boat)return;$('selBoat').value=boat.name;$('islSec').style.display='block';$('boatInfoTxt').textContent=`${boat.name}${boat.route?' — '+boat.route:''}`;const ig=$('islGrid');const isls=boat.islands||[];if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';return}ig.innerHTML=isls.map(i=>`<button type="button" class="isl-btn" onclick="selIsl(this,'${i.replace(/'/g,"\\'")}')">${i}</button>`).join('');$('selIsl').value=''};
-window.selIsl=function(el,i){document.querySelectorAll('.isl-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('selIsl').value=i};
-
-/* FORM SUBMIT */
+window.selBoat=function(id){
+  document.querySelectorAll('.boat-card').forEach(c=>c.classList.remove('active'));
+  const card=document.querySelector('.boat-card[data-id="'+id+'"]');if(card)card.classList.add('active');
+  const boat=allBoats.find(b=>String(b.id)===String(id));if(!boat)return;
+  $('selBoat').value=boat.name;$('islSec').style.display='block';
+  $('boatInfoTxt').textContent=boat.name+(boat.route?' — '+boat.route:'');
+  const ig=$('islGrid');const isls=boat.islands||[];
+  if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selIsl').value='';return}
+  ig.innerHTML=isls.map(function(isl){return'<button type="button" class="isl-btn" data-isl="'+encodeURIComponent(isl)+'">'+isl+'</button>'}).join('');
+  ig.querySelectorAll('.isl-btn').forEach(function(btn){
+    btn.addEventListener('click',function(ev){
+      ev.preventDefault();ev.stopPropagation();
+      ig.querySelectorAll('.isl-btn').forEach(function(b){b.classList.remove('active')});
+      this.classList.add('active');
+      $('selIsl').value=decodeURIComponent(this.getAttribute('data-isl'));
+    });
+  });
+  $('selIsl').value='';
+};
 $('cargoForm').addEventListener('submit',e=>{
   e.preventDefault();if(busy)return;
   const cap=siteSettings.dailyCapacity||0;if(cap){const today=new Date().toISOString().split('T')[0];if(allD.filter(d=>(d.createdAt||'').startsWith(today)).length>=cap){showToast('Daily capacity full.','err');return}}
@@ -876,42 +814,57 @@ $('cargoForm').addEventListener('submit',e=>{
   if(dMode==='cargo'&&!$('dLocVal').value){showToast('Select delivery location','err');return}
   if(dMode==='boat'){if(!$('selBoat').value){showToast('Select a boat','err');return}if(!$('selIsl').value){showToast('Select destination island','err');return}}
   const price=calcTotal();
-  const dest=dMode==='boat'?`${$('selBoat').value} → ${$('selIsl').value}`:$('dLocVal').value;
+  const hAddr=$('houseAddr')?$('houseAddr').value.trim():'';
+  const dest=dMode==='boat'?`${$('selBoat').value} → ${$('selIsl').value}`:($('dLocVal').value+(hAddr?' — '+hAddr:''));
   tmpD={referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,pickupLocation:$('pLocVal').value,pickupAddress:$('addrVal').value,deliveryMode:dMode,deliveryLocation:dest,boatName:dMode==='boat'?$('selBoat').value:'',destinationIsland:dMode==='boat'?$('selIsl').value:'',cargoType:$('ctV').value,isExpress:isExp,selectedHrLabel:$('selHrLabel').value,packageWeight:isExp?'—':$('selW').value,packageDescription:$('pkgDesc').value,deliveryPrice:price,deliveryDate:$('dDate').value,status:'Order Placed',progress:1,id:Date.now(),createdAt:new Date().toISOString(),paymentStatus:'under_review',createdBy:me.email};
   $('payAmt').textContent=`${price} MVR`;$('payMod').classList.add('show')
 });
-$('slipFile').addEventListener('change',function(){$('slipFN').textContent=this.files[0]?this.files[0].name:'Tap to attach'});
+$('slipFile').addEventListener('change',function(){$('slipFN').textContent=this.files[0]?this.files[0].name:'Tap to attach slip'});
 $('payClose').onclick=$('payCancel').onclick=()=>{$('payMod').classList.remove('show');tmpD=null;busy=false};
-$('payConfirm').onclick=()=>{if(busy)return;const f=$('slipFile').files[0];if(!f){showToast('Upload payment slip','err');return}busy=true;$('payConfirm').innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';const rd=new FileReader();rd.onload=async ev=>{tmpD.paymentSlip=ev.target.result;tmpD.paidAt=new Date().toISOString();const arr=toArr((await db.ref('cargoDeliveries').once('value')).val());if(!arr.find(d=>d.referenceNumber===tmpD.referenceNumber)){arr.push(tmpD);await db.ref('cargoDeliveries').set(arr);pushN('Delivery Created',`Ref: ${tmpD.referenceNumber} — payment under review.`,me.email)}$('payMod').classList.remove('show');$('slipFile').value='';$('slipFN').textContent='Tap to attach';$('cargoForm').reset();$('cNm').value=me.username;$('cCt').value=me.contact||'';$('selW').value='';$('selWP').value='0';$('ctPrice').value='0';$('ctV').value='';$('ctIsExpress').value='0';$('selHrId').value='';$('selHrPrice').value='0';$('selHrLabel').value='';$('pLocVal').value='';$('dLocVal').value='';$('selBoat').value='';$('selIsl').value='';document.querySelectorAll('.w-btn,.ct-card,.pickup-card,.boat-card,.isl-btn,.hr-btn,.dloc-btn,.atoll-chip').forEach(b=>b.classList.remove('active'));$('etaInfo').classList.remove('show');$('expressHrsWrap').classList.remove('show');$('weightSec').classList.remove('show');$('addrX').classList.remove('show');$('islSec').style.display='none';$('boatGridWrap').style.display='none';setMode('cargo');$('pDisp').textContent='0';busy=false;$('payConfirm').innerHTML='<i class="fas fa-check-circle"></i> Confirm';tmpD=null;showToast('Delivery saved!','ok')};rd.readAsDataURL(f)};
-
-/* MY DELIVERIES TABLE */
+$('payConfirm').onclick=()=>{
+  if(busy)return;const f=$('slipFile').files[0];if(!f){showToast('Upload payment slip','err');return}
+  busy=true;$('payConfirm').innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';
+  const rd=new FileReader();
+  rd.onload=async ev=>{
+    tmpD.paymentSlip=ev.target.result;tmpD.paidAt=new Date().toISOString();
+    const arr=toArr((await db.ref('cargoDeliveries').once('value')).val());
+    if(!arr.find(d=>d.referenceNumber===tmpD.referenceNumber)){
+      arr.push(tmpD);await db.ref('cargoDeliveries').set(arr);
+      pushN('Delivery Created',`Ref: ${tmpD.referenceNumber} — payment under review.`,me.email)
+    }
+    $('payMod').classList.remove('show');$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';
+    $('cargoForm').reset();$('cNm').value=me.username;$('cCt').value=me.contact||'';
+    $('selW').value='';$('selWP').value='0';$('ctPrice').value='0';$('ctV').value='';$('ctIsExpress').value='0';
+    $('selHrId').value='';$('selHrPrice').value='0';$('selHrLabel').value='';
+    $('pLocVal').value='';$('dLocVal').value='';
+    if($('houseAddr'))$('houseAddr').value='';const hw=$('houseAddrWrap');if(hw)hw.style.display='none';
+    $('selBoat').value='';$('selIsl').value='';
+    document.querySelectorAll('.w-btn,.ct-card,.pickup-card,.boat-card,.isl-btn,.hr-btn,.dloc-btn,.atoll-chip').forEach(b=>b.classList.remove('active'));
+    $('etaInfo').classList.remove('show');$('expressHrsWrap').classList.remove('show');$('weightSec').classList.remove('show');
+    $('addrX').classList.remove('show');$('islSec').style.display='none';$('boatGridWrap').style.display='none';
+    setMode('cargo');$('pDisp').textContent='0';
+    busy=false;$('payConfirm').innerHTML='<i class="fas fa-check-circle"></i> Confirm';tmpD=null;
+    showToast('Delivery saved!','ok')
+  };
+  rd.readAsDataURL(f)
+};
 function loadRefs(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email);const el=$('myRefs');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-inbox"></i><p>No deliveries yet.</p></div>';return}el.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem">'+[...mine].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div style="font-family:monospace;font-size:.7rem;font-weight:700;padding:5px 11px;border-radius:17px;cursor:pointer;${d.status==='Delivered'?'background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.22);color:#27ae60':'background:rgba(231,76,60,.13);border:1px solid rgba(231,76,60,.26);color:#e74c3c'}" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</div>`).join('')+'</div>'}
 function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myTB');if(!mine.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,.28);padding:2rem">No records</td></tr>';return}tb.innerHTML=mine.map(d=>`<tr><td style="font-family:monospace;font-size:.65rem;color:#f39c12;cursor:pointer" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</td><td style="font-size:.7rem">${d.pickupLocation||''}→${d.deliveryLocation||''}</td><td style="font-size:.7rem">${d.cargoType||'—'}</td><td>${d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'}</td><td style="font-family:monospace">${d.deliveryPrice} MVR</td><td>${sBadge(d.status)}</td><td>${pBadge(d.paymentStatus)}${d.paymentSlip?` <button onclick="viewSlip('${d.paymentSlip}')" style="margin-left:3px;background:rgba(243,156,18,.14);border:1px solid rgba(243,156,18,.28);color:#f39c12;padding:2px 7px;border-radius:10px;font-size:.6rem;cursor:pointer;font-weight:700">Slip</button>`:''}</td></tr>`).join('')}
-
-/* MY INVOICES — separate section */
 function loadMyInvoices(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email&&d.invoice);const el=$('invListWrap');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet. Invoices are generated when payment is approved.</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.invoice.issuedAt)-new Date(a.invoice.issuedAt)).map(d=>`<div class="inv-card"><div class="inv-card-hd"><span class="inv-card-no">${d.invoice.invoiceNo}</span><span class="inv-card-date">${fmtD(d.invoice.issuedAt)}</span></div><div style="font-size:.76rem;color:rgba(255,255,255,.55);margin-bottom:.5rem">${d.referenceNumber} · ${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:monospace;font-weight:800;color:#27ae60">MVR ${d.deliveryPrice}</span><button onclick="viewInvoice('${d.referenceNumber}')" style="background:rgba(39,174,96,.14);border:1px solid rgba(39,174,96,.28);color:#27ae60;padding:5px 12px;border-radius:12px;font-size:.72rem;cursor:pointer;font-weight:700"><i class='fas fa-eye' style='margin-right:4px'></i>View</button></div></div>`).join('')}
-
-/* INVOICE VIEW + PDF */
-window.viewInvoice=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d||!d.invoice)return;curInvoiceD=d;const inv=d.invoice;$('invContent').innerHTML=`<div class="invoice-box" id="invPrintArea"><div class="invoice-header"><div><div class="invoice-brand">Easy<span>Cargo</span></div><div class="invoice-no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="invoice-date">${fmtD(inv.issuedAt)}</div><div class="invoice-date" style="margin-top:2px">Payment Approved</div></div></div><div style="margin-bottom:.8rem">${[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Pickup',d.pickupLocation],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Duration/Weight',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Delivery Date',fmtD(d.deliveryDate)]].map(([k,v])=>`<div class="inv-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div><div class="inv-total"><span class="k">Total Paid</span><span class="v">MVR ${d.deliveryPrice}</span></div><div class="inv-stamp"><span><i class="fas fa-check-circle"></i> PAYMENT VERIFIED</span></div></div>`;$('invMod').classList.add('show')};
+window.viewInvoice=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d||!d.invoice)return;curInvoiceD=d;const inv=d.invoice;$('invContent').innerHTML=`<div class="invoice-box"><div class="invoice-header"><div><div class="invoice-brand">Easy<span>Cargo</span></div><div class="invoice-no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="invoice-date">${fmtD(inv.issuedAt)}</div><div class="invoice-date" style="margin-top:2px">Payment Approved</div></div></div><div style="margin-bottom:.8rem">${[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Pickup',d.pickupLocation],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Duration/Weight',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Delivery Date',fmtD(d.deliveryDate)]].map(([k,v])=>`<div class="inv-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div><div class="inv-total"><span class="k">Total Paid</span><span class="v">MVR ${d.deliveryPrice}</span></div><div class="inv-stamp"><span><i class="fas fa-check-circle"></i> PAYMENT VERIFIED</span></div></div>`;$('invMod').classList.add('show')};
 $('invClose').onclick=$('invClose2').onclick=()=>$('invMod').classList.remove('show');
-$('invDownload').onclick=()=>{if(!curInvoiceD)return;const inv=curInvoiceD.invoice;const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice ${inv.invoiceNo}</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1a1a2e;max-width:600px;margin:0 auto}h1{font-size:1.8rem;color:#1a1a2e;margin-bottom:4px}h1 span{color:#e67e22}.no{font-size:.85rem;color:#666;margin-bottom:4px}.date{font-size:.8rem;color:#888;margin-bottom:20px}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #e67e22;padding-bottom:12px;margin-bottom:16px}table{width:100%;border-collapse:collapse;margin-bottom:16px}td{padding:7px 0;border-bottom:1px solid #eee;font-size:.85rem}td:first-child{color:#666}td:last-child{text-align:right;font-weight:600}.total{font-size:1.1rem;font-weight:800;color:#27ae60}.stamp{text-align:center;margin-top:20px;padding:10px;background:#f0fdf4;border:1px solid #27ae60;border-radius:8px;color:#27ae60;font-weight:700;font-size:.85rem}</style></head><body><div class="hd"><div><h1>Easy<span>Cargo</span></h1><div class="no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="date">${fmtD(inv.issuedAt)}</div></div></div><table>${[['Reference',curInvoiceD.referenceNumber],['Customer',curInvoiceD.customerName],['Contact',curInvoiceD.customerContact],['Pickup',curInvoiceD.pickupLocation||'—'],['Destination',curInvoiceD.deliveryLocation||'—'],['Cargo Type',curInvoiceD.cargoType||'—'],['Duration / Weight',curInvoiceD.isExpress?curInvoiceD.selectedHrLabel||'—':curInvoiceD.packageWeight||'—'],['Delivery Date',fmtD(curInvoiceD.deliveryDate)]].map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table><table><tr><td class="total">Total Paid</td><td class="total" style="text-align:right">MVR ${curInvoiceD.deliveryPrice}</td></tr></table><div class="stamp">✓ PAYMENT VERIFIED</div></body></html>`;const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>{w.focus();w.print()},400)};
-
-/* TRACK */
+$('invDownload').onclick=()=>{if(!curInvoiceD)return;const inv=curInvoiceD.invoice;const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice ${inv.invoiceNo}</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1a1a2e;max-width:600px;margin:0 auto}h1{font-size:1.8rem;color:#1a1a2e;margin-bottom:4px}h1 span{color:#e67e22}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #e67e22;padding-bottom:12px;margin-bottom:16px}table{width:100%;border-collapse:collapse;margin-bottom:16px}td{padding:7px 0;border-bottom:1px solid #eee;font-size:.85rem}td:first-child{color:#666}td:last-child{text-align:right;font-weight:600}.total{font-size:1.1rem;font-weight:800;color:#27ae60}.stamp{text-align:center;margin-top:20px;padding:10px;background:#f0fdf4;border:1px solid #27ae60;border-radius:8px;color:#27ae60;font-weight:700;font-size:.85rem}</style></head><body><div class="hd"><div><h1>Easy<span>Cargo</span></h1><div style="font-size:.85rem;color:#666">${inv.invoiceNo}</div></div><div style="text-align:right"><div style="font-size:.8rem;color:#888">${fmtD(inv.issuedAt)}</div></div></div><table>${[['Reference',curInvoiceD.referenceNumber],['Customer',curInvoiceD.customerName],['Contact',curInvoiceD.customerContact],['Pickup',curInvoiceD.pickupLocation||'—'],['Destination',curInvoiceD.deliveryLocation||'—'],['Cargo Type',curInvoiceD.cargoType||'—'],['Duration / Weight',curInvoiceD.isExpress?curInvoiceD.selectedHrLabel||'—':curInvoiceD.packageWeight||'—'],['Delivery Date',fmtD(curInvoiceD.deliveryDate)]].map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table><table><tr><td class="total">Total Paid</td><td class="total" style="text-align:right">MVR ${curInvoiceD.deliveryPrice}</td></tr></table><div class="stamp">✓ PAYMENT VERIFIED</div></body></html>`;const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>{w.focus();w.print()},400)};
 window.jmpTrk=function(ref){switchTab('sTrk');const d=allD.find(x=>x.referenceNumber===ref);if(d){$('srchIn').value=d.customerContact;doSearch()}};
 $('srchBtn').onclick=doSearch;$('srchIn').addEventListener('keyup',e=>{if(e.key==='Enter')doSearch()});
 function doSearch(){const q=$('srchIn').value.trim();if(!q){showToast('Enter contact number','err');return}const found=allD.filter(d=>d.customerContact===q);if(!found.length){showToast('No deliveries found','err');$('rcWrap').style.display='none';$('trkCard').style.display='none';return}$('rcGrid').innerHTML=found.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div class="rcard" onclick="renderTrk('${d.referenceNumber}')"><div class="rn">${d.referenceNumber}</div><div class="rd">${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div class="rd">${d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'} | ${d.deliveryPrice} MVR</div>${sBadge(d.status)}</div>`).join('');$('rcWrap').style.display='block';if(found.length===1)renderTrk(found[0].referenceNumber)}
 window.renderTrk=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d)return;$('trkCard').style.display='block';const fs=[['Reference',`<span style="font-family:monospace;color:#f39c12;font-size:.74rem">${d.referenceNumber}</span>`],['Customer',d.customerName],['Contact',`<a href="tel:${d.customerContact}" style="color:#f39c12">${d.customerContact}</a>`],['Mode',`<span class="badge ${d.deliveryMode==='boat'?'b-boat':'b-norm'}">${d.deliveryMode==='boat'?'Boat':'Cargo'}</span>`],['Pickup',d.pickupLocation+(d.pickupAddress?` (${d.pickupAddress})`:'')],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Duration/Weight',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Price',d.deliveryPrice+' MVR'],['Expected',fmtD(d.deliveryDate)],['Status',sBadge(d.status)],['Payment',pBadge(d.paymentStatus)]];$('trkGrid').innerHTML=fs.map(([l,v])=>`<div class="i-cell"><div class="il">${l}</div><div class="iv">${v}</div></div>`).join('');const p=d.progress||1;document.querySelectorAll('.trk-step').forEach((s,i)=>{s.classList.remove('active','done');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('active')});document.querySelectorAll('.ls').forEach((s,i)=>{s.classList.remove('done','cur');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('cur')});const pct=Math.round(((p-1)/4)*100);$('progFill').style.width=pct+'%';$('progPct').textContent=pct+'%';$('progLbl').textContent=['Order Placed','Processing','In Transit','Out for Delivery','Delivered'][p-1]||'';if(p===5)$('progFill').classList.add('done');else $('progFill').classList.remove('done');if(d.deliveryImage){$('proofImg').src=d.deliveryImage;$('proofSec').style.display='block'}else $('proofSec').style.display='none'};
-
-/* NOTIFICATIONS — with relative time, clear per item, clear all */
 function pushN(title,msg,email){const n={id:Date.now(),title,message:msg,userEmail:email,timestamp:new Date().toISOString(),read:false};db.ref('notifications').set([...allN,n])}
-function loadNotifs(){if(!me)return;const mine=allN.filter(n=>n.userEmail===me.email||n.userEmail==='all');const unread=mine.filter(n=>!n.read).length;$('nDot').className=`n-dot ${unread?'show':''}`;if(unread)$('nDot').textContent=unread>9?'9+':unread;const el=$('nList');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-bell-slash"></i><p>No notifications</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).map(n=>`<div class="n-item ${n.read?'':'unread'}" onclick="markNRead(${n.id})"><button class="n-rm" onclick="rmN(event,${n.id})"><i class="fas fa-times"></i></button><div class="nt">${n.title}</div><div class="nm">${n.message}</div><div class="nd">${timeAgo(n.timestamp)}</div></div>`).join('');// Update times every 30s
-if(!window._nTimer)window._nTimer=setInterval(()=>{if($('nPanel').classList.contains('open'))loadNotifs()},30000)}
+function loadNotifs(){if(!me)return;const mine=allN.filter(n=>n.userEmail===me.email||n.userEmail==='all');const unread=mine.filter(n=>!n.read).length;$('nDot').className=`n-dot ${unread?'show':''}`;if(unread)$('nDot').textContent=unread>9?'9+':unread;const el=$('nList');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-bell-slash"></i><p>No notifications</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).map(n=>`<div class="n-item ${n.read?'':'unread'}" onclick="markNRead(${n.id})"><button class="n-rm" onclick="rmN(event,${n.id})"><i class="fas fa-times"></i></button><div class="nt">${n.title}</div><div class="nm">${n.message}</div><div class="nd">${timeAgo(n.timestamp)}</div></div>`).join('');if(!window._nTimer)window._nTimer=setInterval(()=>{if($('nPanel').classList.contains('open'))loadNotifs()},30000)}
 $('nBtn').onclick=()=>{$('nPanel').classList.add('open');allN.forEach(n=>{if(n.userEmail===me?.email||n.userEmail==='all')n.read=true});db.ref('notifications').set(allN);loadNotifs()};
 $('nClose').onclick=()=>$('nPanel').classList.remove('open');
 window.markNRead=function(id){const n=allN.find(x=>x.id===id);if(n&&!n.read){n.read=true;db.ref('notifications').set(allN);loadNotifs()}};
 window.rmN=function(e,id){e.stopPropagation();allN=allN.filter(n=>n.id!==id);db.ref('notifications').set(allN);loadNotifs()};
 $('nClearAll').onclick=()=>{allN=allN.filter(n=>n.userEmail!==me?.email&&n.userEmail!=='all');db.ref('notifications').set(allN);loadNotifs()};
-
 window.viewSlip=src=>{$('slipViewImg').src=src;$('slipMod').classList.add('show')};
 $('slipClose').onclick=$('slipClose2').onclick=()=>$('slipMod').classList.remove('show');
 function doLogout(){localStorage.removeItem('ecu');me=null;$('dashboard').style.display='none';$('homePage').style.display='flex';$('authScreen').classList.remove('show');$('loginBtn').disabled=false}
