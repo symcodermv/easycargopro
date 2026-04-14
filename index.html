@@ -547,7 +547,7 @@ a{color:#f39c12;text-decoration:none}
             </div>
             <div class="boat-sec" id="boatSec" style="margin-top:.7rem">
               <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-compass" style="color:#3498db;margin-right:4px"></i>Select Atoll</label>
-              <div class="atoll-srch"><input type="text" id="atollSearch" placeholder="Search atoll…" oninput="filterAtolls()"></div>
+              <div class="atoll-srch"><input type="text" id="atollSearch" placeholder="Search atoll or boat name…" oninput="filterAtolls()"></div>
               <div class="atoll-chips" id="atollChips"></div>
               <div id="boatGridWrap" style="display:none">
                 <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-ship" style="color:#3498db;margin-right:4px"></i>Select Boat</label>
@@ -564,7 +564,7 @@ a{color:#f39c12;text-decoration:none}
             <!-- SPEED BOAT SECTION -->
             <div class="boat-sec" id="speedboatSec" style="margin-top:.7rem">
               <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-compass" style="color:#f39c12;margin-right:4px"></i>Select Atoll</label>
-              <div class="atoll-srch"><input type="text" id="sbAtollSearch" placeholder="Search atoll…" oninput="filterSBAtolls()"></div>
+              <div class="atoll-srch"><input type="text" id="sbAtollSearch" placeholder="Search atoll or speed boat name…" oninput="filterSBAtolls()"></div>
               <div class="atoll-chips sb-atoll-chips" id="sbAtollChips"></div>
               <div id="sbGridWrap" style="display:none">
                 <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-bolt" style="color:#f39c12;margin-right:4px"></i>Select Speed Boat</label>
@@ -832,7 +832,7 @@ function loadDlocGrid(){const g=$('dlocGrid');if(!allDelLocs.length){g.innerHTML
 window.selDloc=function(el,v){document.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('dLocVal').value=v;const w=$('houseAddrWrap');if(w)w.style.display='block'};
 function buildSBAtollChips(){
   var g=$('sbAtollChips');if(!g)return;
-  var atolls=[...new Set(allSpeedBoats.filter(function(b){return b.active!==false&&b.atoll;}).map(function(b){return b.atoll;}))].sort();
+  var atolls=[...new Set(allSpeedBoats.filter(function(b){return b.active!==false;}).flatMap(function(b){return b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[])}))].sort();
   if(!atolls.length){
     g.innerHTML='';
     $('sbGridWrap').style.display='none';
@@ -854,14 +854,36 @@ window.selSBAtoll=function(el,a){
   $('sbIslSec').style.display='none';
   document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(function(c){c.classList.remove('active');});
   $('sbGridWrap').style.display='block';
-  renderSBGrid(allSpeedBoats.filter(function(b){return b.atoll===a&&b.active!==false;}));
+  renderSBGrid(allSpeedBoats.filter(function(b){return b.active!==false&&(b.atolls?b.atolls.includes(a):b.atoll===a);}));
 };
 function buildSBGrid(){buildSBAtollChips();}
 window.filterSBAtolls=function(){
-  var q=$('sbAtollSearch').value.toLowerCase();
+  var q=$('sbAtollSearch').value.trim().toLowerCase();
+  if(!q){
+    document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.style.display='';});
+    $('sbGridWrap').style.display='none';
+    $('sbIslSec').style.display='none';
+    document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(function(c){c.classList.remove('active');});
+    return;
+  }
+  // Filter atoll chips
   document.querySelectorAll('.sb-atoll-chip').forEach(function(c){
-    c.style.display=(!q||c.textContent.toLowerCase().includes(q))?'':'none';
+    c.style.display=c.textContent.toLowerCase().includes(q)?'':'none';
   });
+  // Also search speed boats by name or atoll
+  var matched=allSpeedBoats.filter(function(b){
+    if(b.active===false)return false;
+    if(b.name&&b.name.toLowerCase().includes(q))return true;
+    var batols=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);
+    return batols.some(function(a){return a.toLowerCase().includes(q);});
+  });
+  if(matched.length){
+    $('sbGridWrap').style.display='block';
+    renderSBGrid(matched);
+    document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.classList.remove('active');});
+  } else {
+    $('sbGridWrap').style.display='none';
+  }
 };
 function renderSBGrid(boats){
   var g=$('sbGrid');if(!g)return;
@@ -918,13 +940,41 @@ window.selSpeedBoat=function(id){
 };
 
 function buildAtollChips(){
-  const atolls=[...new Set(allBoats.filter(b=>b.active!==false&&b.atoll).map(b=>b.atoll))].sort();
+  const atolls=[...new Set(allBoats.filter(b=>b.active!==false).flatMap(b=>b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[])))].sort();
   const g=$('atollChips');
   if(!atolls.length){$('boatGridWrap').style.display='block';g.innerHTML='';renderBoatGrid(allBoats.filter(b=>b.active!==false));return}
   g.innerHTML=atolls.map(a=>`<button type="button" class="atoll-chip" onclick="selAtollFn(this,'${a.replace(/'/g,"\\'")}')">${a}</button>`).join('')
 }
-window.filterAtolls=function(){const q=$('atollSearch').value.toLowerCase();document.querySelectorAll('.atoll-chip').forEach(c=>{c.style.display=c.textContent.toLowerCase().includes(q)?'':'none'})}
-window.selAtollFn=function(el,a){document.querySelectorAll('.atoll-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');selAtoll=a;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';document.querySelectorAll('.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));const boats=allBoats.filter(b=>b.atoll===a&&b.active!==false);$('boatGridWrap').style.display='block';renderBoatGrid(boats)};
+window.filterAtolls=function(){
+  var q=$('atollSearch').value.trim().toLowerCase();
+  if(!q){
+    // Reset — show all atoll chips, hide boat grid
+    document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.style.display='';});
+    $('boatGridWrap').style.display='none';
+    $('islSec').style.display='none';
+    document.querySelectorAll('.boat-card,.isl-btn').forEach(function(c){c.classList.remove('active');});
+    return;
+  }
+  // Filter atoll chips by name
+  document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){
+    c.style.display=c.textContent.toLowerCase().includes(q)?'':'none';
+  });
+  // Also search boats by name — show all matching boats directly
+  var matched=allBoats.filter(function(b){
+    if(b.active===false)return false;
+    if(b.name&&b.name.toLowerCase().includes(q))return true;
+    var batols=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);
+    return batols.some(function(a){return a.toLowerCase().includes(q);});
+  });
+  if(matched.length){
+    $('boatGridWrap').style.display='block';
+    renderBoatGrid(matched);
+    document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.classList.remove('active');});
+  } else {
+    $('boatGridWrap').style.display='none';
+  }
+}
+window.selAtollFn=function(el,a){document.querySelectorAll('.atoll-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');selAtoll=a;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';document.querySelectorAll('.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));const boats=allBoats.filter(b=>b.active!==false&&(b.atolls?b.atolls.includes(a):b.atoll===a));$('boatGridWrap').style.display='block';renderBoatGrid(boats)};
 function renderBoatGrid(boats){const g=$('boatGrid');if(!boats.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No boats for this atoll.</p></div>';return}g.innerHTML=boats.map(b=>`<div class="boat-card" data-id="${b.id}" onclick="selBoat('${b.id}')">${b.imageUrl?`<img class="b-img" src="${b.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="b-no-img" style="${b.imageUrl?'display:none':''}"><i class="fas fa-ship"></i></div><div class="b-name">${b.name}</div><div class="b-route">${b.route||''}</div><div class="boat-ck"><i class="fas fa-check"></i></div></div>`).join('')}
 window.selBoat=function(id){
   document.querySelectorAll('.boat-card').forEach(c=>c.classList.remove('active'));
