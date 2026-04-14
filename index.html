@@ -771,7 +771,28 @@ function weightIcon(mn,mx){if(mx<=2)return'fa-feather';if(mx<=10)return'fa-box';
 function weightLabel(mn,mx){if(mx<=2)return'Light';if(mx<=10)return'Medium';if(mx<=30)return'Heavy';return'Oversized'}
 function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return}const sorted=[...allP].sort((a,b)=>a.min-b.min);g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${weightIcon(x.min,x.max)}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${weightLabel(x.min,x.max)}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');$('selW').value=`${this.dataset.mn}-${this.dataset.mx} kg`;$('selWP').value=this.dataset.pr;calcTotal()}));$('selW').value='';$('selWP').value='0';calcTotal()}
 function loadPickupGrid(){const g=$('pickupGrid');if(!allPickups.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div>';return}g.innerHTML=allPickups.map(loc=>`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`).join('')}
-window.selPickup=function(el,id){document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');const loc=allPickups.find(l=>String(l.id)===String(id));if(!loc)return;$('pLocVal').value=loc.name;const ax=$('addrX');if(loc.type==='address'){ax.classList.add('show');$('addrVal').required=true}else{ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value=''}};
+window.selPickup=function(el,id){
+  document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  const loc=allPickups.find(l=>String(l.id)===String(id));if(!loc)return;
+  $('pLocVal').value=loc.name;
+  const ax=$('addrX');
+  const lbl=ax.querySelector('label');
+  if(loc.type==='address'||loc.type==='postal'){
+    ax.classList.add('show');
+    $('addrVal').required=true;
+    if(lbl){
+      if(loc.type==='postal'){
+        lbl.innerHTML='<i class="fas fa-envelope" style="color:#f39c12;margin-right:4px"></i>Post/Pickpost Number or Message';
+        $('addrVal').placeholder='Enter Post/Pickpost number or message…';
+      } else {
+        lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address';
+        $('addrVal').placeholder='Enter full address…';
+      }
+    }
+  } else {
+    ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value='';
+  }
+};
 window.setMode=function(m){dMode=m;document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));$(m==='cargo'?'dmCargo':'dmBoat').classList.add('active');$('cargoDest').style.display=m==='cargo'?'block':'none';$('boatSec').classList.toggle('show',m==='boat');if(m==='boat'){selAtoll=null;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'))}if(m==='cargo'){const w=$('houseAddrWrap');if(w)w.style.display='none'}};
 function loadDlocGrid(){const g=$('dlocGrid');if(!allDelLocs.length){g.innerHTML='<div class="empty-s" style="padding:.6rem"><p>No delivery locations set.</p></div>';return}g.innerHTML=allDelLocs.map(l=>`<button type="button" class="dloc-btn" onclick="selDloc(this,'${l.name||l}')">${l.name||l}</button>`).join('');$('dLocVal').value=''}
 window.selDloc=function(el,v){document.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('dLocVal').value=v;const w=$('houseAddrWrap');if(w)w.style.display='block'};
@@ -830,7 +851,13 @@ $('payConfirm').onclick=()=>{
     const arr=toArr((await db.ref('cargoDeliveries').once('value')).val());
     if(!arr.find(d=>d.referenceNumber===tmpD.referenceNumber)){
       arr.push(tmpD);await db.ref('cargoDeliveries').set(arr);
-      pushN('Delivery Created',`Ref: ${tmpD.referenceNumber} — payment under review.`,me.email)
+      pushN('Delivery Created',`Ref: ${tmpD.referenceNumber} — payment under review.`,me.email);
+      // Telegram alert
+      const _tgTok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+      const _tgCid=965429044;
+      const _tgD=tmpD;
+      const _tgMsg='New EasyCargo Delivery\n\nRef: '+_tgD.referenceNumber+'\nCustomer: '+_tgD.customerName+'\nContact: '+_tgD.customerContact+'\nCargo: '+_tgD.cargoType+'\nPickup: '+_tgD.pickupLocation+'\nDestination: '+_tgD.deliveryLocation+'\nWeight/Duration: '+((_tgD.isExpress)?(_tgD.selectedHrLabel||'-'):(_tgD.packageWeight||'-'))+'\nPrice: MVR '+_tgD.deliveryPrice+'\nDelivery Date: '+_tgD.deliveryDate+'\nStatus: Payment slip submitted';
+      fetch('https://api.telegram.org/bot'+_tgTok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:_tgCid,text:_tgMsg})}).then(r=>r.json()).then(j=>{if(!j.ok)console.warn('TG:',j.description);else console.log('TG ok')}).catch(e=>console.warn('TG err:',e.message))
     }
     $('payMod').classList.remove('show');$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';
     $('cargoForm').reset();$('cNm').value=me.username;$('cCt').value=me.contact||'';
