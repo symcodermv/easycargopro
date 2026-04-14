@@ -3,256 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<title>EasyCargo</title>
+<title>EasyCargo — Admin</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 body{background:#0a0f1e;min-height:100vh;overflow-x:hidden;color:white}
-#homePage{position:fixed;inset:0;z-index:3000;background:#000;display:flex;align-items:center;justify-content:center}
-.slideshow{position:absolute;inset:0;overflow:hidden}
-.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.5s;filter:brightness(.55)}
-.slide.active{opacity:1}
-.home-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(10,15,30,.85),rgba(0,0,0,.35));z-index:10}
-.home-content{position:absolute;bottom:14%;left:0;right:0;text-align:center;z-index:20;padding:1.5rem;animation:fadeUp 1s ease}
-.home-logo{display:inline-flex;align-items:center;gap:11px;background:rgba(243,156,18,.14);border:1px solid rgba(243,156,18,.38);border-radius:50px;padding:10px 24px;margin-bottom:1.2rem;backdrop-filter:blur(8px)}
-.home-logo i{color:#f39c12;font-size:1.4rem}
-.home-logo span{color:white;font-size:1.25rem;font-weight:800;letter-spacing:1px}
-.home-content h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800;color:white;text-shadow:0 4px 24px rgba(0,0,0,.5);margin-bottom:.8rem;line-height:1.15}
-.home-content h1 span{color:#f39c12}
-.home-content p{font-size:.92rem;color:rgba(255,255,255,.78);margin-bottom:1.6rem;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6}
-.home-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
-.btn-home{padding:12px 32px;border-radius:50px;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .3s;border:none;background:#f39c12;color:#1e2a3a;box-shadow:0 6px 20px rgba(243,156,18,.38)}
-.btn-home:hover{transform:translateY(-3px);background:#e67e22;color:white}
-.btn-home-ol{background:transparent;border:2px solid rgba(255,255,255,.55);color:white;box-shadow:none}
-.btn-home-ol:hover{background:rgba(255,255,255,.1);border-color:white;transform:translateY(-3px)}
-.slide-dots{position:absolute;bottom:22px;left:0;right:0;text-align:center;z-index:20;display:flex;justify-content:center;gap:7px}
-.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.38);cursor:pointer;transition:all .3s}
-.dot.active{background:#f39c12;width:24px;border-radius:7px}
-.how-panel{position:absolute;bottom:0;left:0;right:0;z-index:22;max-height:0;overflow:hidden;transition:max-height .45s ease;background:rgba(8,12,24,.97);backdrop-filter:blur(28px);border-top:1px solid rgba(243,156,18,.18)}
-.how-panel.open{max-height:80vh;overflow-y:auto}
-.how-inner{padding:1.2rem}
-.how-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem}
-.how-hd h3{color:#f39c12;font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:6px}
-.how-close{background:rgba(255,255,255,.07);border:none;color:white;font-size:1.1rem;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.how-img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px}
-.how-img-item{border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.07);background:#1a2535}
-.how-img-item img{width:100%;display:block;object-fit:cover;min-height:120px}
-.how-empty{text-align:center;padding:1.8rem 1rem;color:rgba(255,255,255,.28);font-size:.82rem;grid-column:1/-1}
-@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-#truckAnim{position:fixed;inset:0;background:#0a0f1e;z-index:9999;display:none;align-items:center;justify-content:center;overflow:hidden}
-#truckAnim.show{display:flex}
-.road{position:absolute;bottom:0;left:0;right:0;height:60px;background:#1a2535;border-top:3px solid #f39c12}
-.rstrip{position:absolute;bottom:25px;height:4px;background:#f39c12;animation:rmv .44s linear infinite}
-@keyframes rmv{from{left:-60px;width:48px}to{left:calc(100%+60px);width:48px}}
-.t-wrap{position:absolute;bottom:58px;animation:tdrive 1.75s cubic-bezier(.4,0,.6,1) forwards}
-@keyframes tdrive{0%{left:-200px;opacity:1}60%{left:calc(50% - 60px)}90%{left:calc(100%+50px);opacity:.7}100%{left:110%;opacity:0}}
-.t-wrap svg{width:118px;height:52px}
-.anim-lbl{position:absolute;top:38%;color:white;font-size:1.05rem;font-weight:700;text-align:center;animation:ftxt 1.75s ease forwards}
-@keyframes ftxt{0%{opacity:0;transform:translateY(10px)}25%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0}}
-.anim-lbl span{color:#f39c12}
-#authScreen{min-height:100vh;display:none;align-items:center;justify-content:center;background:#0a0f1e;padding:1rem;position:relative}
-#authScreen.show{display:flex}
-#authScreen::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(243,156,18,.06),transparent 60%);pointer-events:none}
-.auth-wrap{width:100%;max-width:445px;position:relative;z-index:1}
-.login-box{background:#141b2b;border-radius:26px;border:1px solid #2a3a55;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.6)}
-.login-strip{background:linear-gradient(135deg,#0e1524,#1a2747);padding:1.5rem;text-align:center;border-bottom:1px solid #253241}
-.login-strip .ico{width:52px;height:52px;background:rgba(243,156,18,.14);border:2px solid rgba(243,156,18,.48);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .6rem;color:#f39c12;font-size:1.45rem}
-.login-strip h2{color:white;font-size:1.3rem;font-weight:800}
-.login-strip h2 span{color:#f39c12}
-.login-strip p{color:rgba(255,255,255,.32);font-size:.7rem;margin-top:2px;font-family:monospace}
-.login-logo-img{margin:8px auto 0;display:block;max-height:48px;max-width:160px;object-fit:contain}
-.social-row{display:flex;justify-content:center;gap:8px;padding:10px 0 4px;flex-wrap:wrap}
-.social-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;font-size:.72rem;font-weight:700;text-decoration:none;border:1px solid;transition:all .2s}
-.social-btn:hover{transform:translateY(-2px);opacity:.9}
-.s-fb{background:rgba(59,89,152,.2);border-color:rgba(59,89,152,.5);color:#6589d0}
-.s-ig{background:rgba(193,53,132,.2);border-color:rgba(193,53,132,.5);color:#e060a3}
-.s-tg{background:rgba(0,136,204,.2);border-color:rgba(0,136,204,.5);color:#40b3e0}
-.s-wa{background:rgba(37,211,102,.2);border-color:rgba(37,211,102,.5);color:#25d366}
-.s-tw{background:rgba(29,161,242,.2);border-color:rgba(29,161,242,.5);color:#1da1f2}
-.s-yt{background:rgba(255,0,0,.15);border-color:rgba(255,0,0,.4);color:#ff4444}
-.s-ot{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
-.login-inner{padding:1.35rem}
-.seg-tabs{display:flex;background:#1e2a3a;border-radius:50px;padding:4px;margin-bottom:1.2rem}
-.seg-btn{flex:1;padding:9px;border:none;background:transparent;color:rgba(255,255,255,.48);font-size:.84rem;font-weight:600;border-radius:50px;cursor:pointer;transition:.2s}
-.seg-btn.active{background:#f39c12;color:#1e2a3a}
-.pane{display:none}.pane.active{display:block}
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0f1e;padding:1rem}
+#loginScreen::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(243,156,18,.07),transparent 60%);pointer-events:none}
+.l-wrap{width:100%;max-width:400px;position:relative;z-index:1}
+.l-card{background:#141b2b;border-radius:26px;border:1px solid #2a3a55;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.6)}
+.l-top{background:linear-gradient(135deg,#0e1524,#1a2747);padding:1.6rem;text-align:center;border-bottom:1px solid #253241}
+.l-ico{width:58px;height:58px;background:rgba(243,156,18,.13);border:2px solid rgba(243,156,18,.45);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .6rem;color:#f39c12;font-size:1.55rem}
+.l-top h2{color:white;font-size:1.3rem;font-weight:800}
+.l-top h2 em{color:#f39c12;font-style:normal}
+.l-top p{color:rgba(255,255,255,.3);font-size:.68rem;margin-top:3px;font-family:monospace}
+.admin-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(243,156,18,.1);border:1px solid rgba(243,156,18,.3);border-radius:25px;padding:4px 12px;color:#f39c12;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:8px}
+.l-body{padding:1.3rem}
 .fg{margin-bottom:.88rem}
-.fg label{display:block;color:rgba(255,255,255,.6);font-size:.75rem;margin-bottom:.32rem;font-weight:600}
-.fi{width:100%;padding:11px 15px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:25px;color:white;font-size:.86rem;outline:none;transition:.2s;font-family:inherit}
+.fg label{display:block;color:rgba(255,255,255,.55);font-size:.74rem;margin-bottom:.3rem;font-weight:600}
+.fi{width:100%;padding:11px 15px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:24px;color:white;font-size:.84rem;outline:none;transition:.2s;font-family:inherit}
 .fi:focus{border-color:#f39c12;background:#23324a;box-shadow:0 0 0 3px rgba(243,156,18,.09)}
-.fi::placeholder{color:rgba(255,255,255,.2)}
-.fi:disabled{opacity:.55;cursor:not-allowed;background:#1a2535}
+.fi::placeholder{color:rgba(255,255,255,.18)}
 select.fi option{background:#1e2a3a}
-.fi-ta{border-radius:13px;resize:vertical;min-height:60px}
+textarea.fi{border-radius:12px;resize:vertical;min-height:58px}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:400px){.fr{grid-template-columns:1fr}}
-.btn{padding:12px 18px;border:none;border-radius:35px;font-weight:700;cursor:pointer;font-size:.86rem;transition:.2s;width:100%;display:flex;align-items:center;justify-content:center;gap:7px}
-.btn-gold{background:#f39c12;color:#1e2a3a;box-shadow:0 5px 17px rgba(243,156,18,.28)}
+.btn{padding:11px 17px;border:none;border-radius:33px;font-weight:700;cursor:pointer;font-size:.84rem;transition:.2s;width:100%;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-gold{background:#f39c12;color:#1e2a3a;box-shadow:0 5px 16px rgba(243,156,18,.27)}
 .btn-gold:hover{background:#e67e22;transform:translateY(-2px);color:white}
 .btn-sec{background:#2e3f55;color:white}
 .btn-sec:hover{background:#3a4f6a}
-.forgot-lnk{text-align:right;margin-bottom:.85rem}
-.forgot-lnk a{color:#f39c12;font-size:.74rem;text-decoration:none;font-weight:600}
-.msg{padding:9px 14px;border-radius:14px;margin-bottom:.82rem;font-size:.78rem;text-align:center;display:none}
-.msg.ok{background:rgba(39,174,96,.13);border:1px solid #27ae60;color:#2ecc71;display:block}
-.msg.err{background:rgba(231,76,60,.13);border:1px solid #e74c3c;color:#e74c3c;display:block}
-.pending-box{background:rgba(243,156,18,.07);border:1px solid rgba(243,156,18,.26);border-radius:15px;padding:1rem;text-align:center;margin:.8rem 0}
-.pending-box i{font-size:1.7rem;color:#f39c12;display:block;margin-bottom:.45rem}
-.pending-box h3{color:white;font-size:.9rem;font-weight:700;margin-bottom:.32rem}
-.pending-box p{color:rgba(255,255,255,.48);font-size:.74rem;line-height:1.5}
-#dashboard{display:none;width:100%;min-height:100vh;background:#0a0f1e}
-.top-bar{background:#141b2b;padding:0 .9rem;display:flex;align-items:center;gap:.7rem;border-bottom:1px solid #253241;position:sticky;top:0;z-index:200;height:54px}
-.menu-toggle{background:none;border:none;color:white;font-size:1.3rem;cursor:pointer;width:37px;height:37px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.menu-toggle:hover{background:#1e2a3a}
-.tb-brand{flex:1;display:flex;align-items:center;gap:7px;font-size:1rem;font-weight:800;color:white}
-.tb-brand span{color:#f39c12}
-.user-chip{display:flex;align-items:center;gap:6px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:50px;padding:4px 11px 4px 4px}
-.user-av{width:26px;height:26px;background:rgba(243,156,18,.2);border:1.5px solid rgba(243,156,18,.38);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#f39c12;font-size:.7rem}
-.user-nm{font-size:.78rem;font-weight:600;color:white;max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn-ico{background:#1e2a3a;border:1px solid #2e3f55;color:rgba(255,255,255,.55);width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;font-size:.82rem;flex-shrink:0}
-.btn-ico:hover{border-color:#f39c12;color:#f39c12}
-.sidebar{width:268px;background:#141b2b;height:100vh;position:fixed;left:-268px;top:0;transition:.3s;z-index:1000;border-right:1px solid #2a3a55;overflow-y:auto;display:flex;flex-direction:column}
-.sidebar.open{left:0}
-.s-hd{padding:1rem;border-bottom:1px solid #253241;display:flex;align-items:center;gap:.75rem}
-.s-av{width:40px;height:40px;background:rgba(243,156,18,.13);border:2px solid rgba(243,156,18,.28);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#f39c12;font-size:1rem;flex-shrink:0}
-.s-hd h3{color:white;font-size:.88rem;font-weight:700}
-.s-hd p{color:rgba(255,255,255,.42);font-size:.7rem}
-.s-nav{flex:1;padding:.3rem 0}
-.s-lbl{padding:.42rem 1.1rem;font-size:.58rem;font-weight:700;color:#f39c12;letter-spacing:1.5px;text-transform:uppercase}
-.s-item{padding:.8rem 1.1rem;display:flex;align-items:center;gap:.75rem;color:rgba(255,255,255,.62);cursor:pointer;transition:.15s;font-size:.82rem;border-left:3px solid transparent}
-.s-item:hover{background:#1e2a3a;color:white}
-.s-item.active{background:#1e2a3a;border-left-color:#f39c12;color:#f39c12}
-.s-item i{width:16px;color:#f39c12;font-size:.82rem}
-.s-div{height:1px;background:#253241;margin:.32rem .9rem}
-.s-foot{padding:.75rem 1.1rem;border-top:1px solid #253241}
+.msg{padding:9px 13px;border-radius:12px;margin-bottom:.8rem;font-size:.76rem;text-align:center;display:none}
+.msg.ok{background:rgba(39,174,96,.12);border:1px solid #27ae60;color:#2ecc71;display:block}
+.msg.err{background:rgba(231,76,60,.12);border:1px solid #e74c3c;color:#e74c3c;display:block}
+#adminApp{display:none;min-height:100vh;background:#0a0f1e}
 .ovl{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:999}
 .ovl.show{display:block}
-.nav-bar{background:#141b2b;border-bottom:1px solid #253241;overflow-x:auto;scrollbar-width:none}
-.nav-bar::-webkit-scrollbar{display:none}
-.nav-tabs{display:flex;min-width:max-content}
-.ntab{padding:11px 15px;border:none;background:transparent;color:rgba(255,255,255,.47);font-size:.8rem;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.2s;display:flex;align-items:center;gap:5px}
-.ntab.active{color:#f39c12;border-bottom-color:#f39c12}
-.content{padding:.9rem;padding-bottom:5.5rem}
-.sec{display:none}.sec.active{display:block}
-.sec-title{color:white;font-size:1.05rem;font-weight:700;margin-bottom:.82rem;display:flex;align-items:center;gap:.45rem}
-.sec-title i{color:#f39c12}
-.card{background:#141b2b;border-radius:18px;padding:1rem;margin-bottom:.9rem;border:1px solid #2e3f55}
-.c-hd{display:flex;align-items:center;gap:8px;margin-bottom:.85rem;padding-bottom:.78rem;border-bottom:1px solid #253241}
-.c-ico{width:28px;height:28px;background:rgba(243,156,18,.11);border:1px solid rgba(243,156,18,.22);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.78rem;color:#f39c12;flex-shrink:0}
-.c-hd h3{font-size:.84rem;font-weight:700;color:white}
-.cap-wrap{background:#1a2535;border:1px solid #2a3a55;border-radius:13px;padding:.9rem;margin-bottom:.9rem}
-.cap-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.cap-lbl{font-size:.76rem;font-weight:600;color:white}
-.cap-pct{font-size:.76rem;font-weight:700}
-.cap-bar{height:9px;background:#2e3f55;border-radius:9px;overflow:hidden}
-.cap-fill{height:100%;border-radius:9px;transition:width .5s;background:linear-gradient(90deg,#27ae60,#2ecc71)}
-.cap-fill.warn{background:linear-gradient(90deg,#e67e22,#f39c12)}
-.cap-fill.full{background:linear-gradient(90deg,#e74c3c,#c0392b)}
-.cap-note{font-size:.68rem;color:rgba(255,255,255,.38);margin-top:5px}
-.ctype-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.3rem}
-.ct-card{background:#1e2a3a;border:2px solid #2e3f55;border-radius:14px;padding:.9rem .7rem;cursor:pointer;text-align:center;transition:.22s;position:relative}
-.ct-card:hover{border-color:rgba(243,156,18,.4)}
-.ct-card.active{border-color:#f39c12;background:rgba(243,156,18,.09)}
-.ct-card i{font-size:1.25rem;color:#f39c12;display:block;margin-bottom:5px}
-.ct-card .ct-name{font-size:.76rem;font-weight:700;color:white;margin-bottom:3px}
-.ct-card .ct-eta{font-size:.62rem;color:rgba(255,255,255,.4);font-family:monospace;margin-bottom:4px}
-.ct-card .ct-pr{font-size:.7rem;font-family:monospace;font-weight:700;color:#f39c12}
-.ct-ck{position:absolute;top:5px;right:5px;width:16px;height:16px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center}
-.ct-ck i{font-size:.42rem;color:#1e2a3a}
-.ct-card.active .ct-ck{display:flex}
-.weight-sec{display:none}.weight-sec.show{display:block}
-.w-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.85rem}
-@media(min-width:380px){.w-grid{grid-template-columns:repeat(3,1fr)}}
-.w-btn{background:#1e2a3a;border:2px solid #2e3f55;border-radius:13px;padding:10px 6px;cursor:pointer;text-align:center;transition:.2s;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px}
-.w-btn:hover{border-color:rgba(243,156,18,.4)}
-.w-btn.active{background:rgba(243,156,18,.1);border-color:#f39c12}
-.w-btn .w-icon{font-size:1.1rem;color:#f39c12}
-.w-btn .w-rng{font-size:.72rem;font-weight:700;color:white}
-.w-btn .w-lbl{font-size:.6rem;color:rgba(255,255,255,.45)}
-.w-btn .w-pr{font-size:.68rem;font-family:monospace;color:#f39c12;font-weight:700}
-.express-hrs-wrap{display:none;margin-bottom:.3rem}.express-hrs-wrap.show{display:block}
-.express-hrs-title{font-size:.74rem;color:rgba(255,255,255,.5);margin-bottom:.5rem;display:flex;align-items:center;gap:5px}
-.express-hrs-title i{color:#f39c12}
-.hr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.hr-btn{background:#1e2a3a;border:2px solid #2e3f55;border-radius:11px;padding:10px 6px;cursor:pointer;text-align:center;transition:.2s;font-family:inherit}
-.hr-btn:hover{border-color:rgba(243,156,18,.4)}
-.hr-btn.active{border-color:#f39c12;background:rgba(243,156,18,.1)}
-.hr-btn .hr-val{display:block;font-size:.88rem;font-weight:800;color:white;margin-bottom:1px}
-.hr-btn .hr-label{display:block;font-size:.6rem;color:rgba(255,255,255,.4);margin-bottom:3px}
-.hr-btn .hr-price{display:block;font-size:.68rem;font-family:monospace;color:#f39c12;font-weight:700}
-.eta-info{background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.18);border-radius:9px;padding:8px 12px;margin:.6rem 0 .3rem;display:none;justify-content:space-between;align-items:center;font-size:.76rem}
-.eta-info.show{display:flex}
-.eta-info.express{background:rgba(243,156,18,.07);border-color:rgba(243,156,18,.2)}
-.eta-info .lbl{color:rgba(255,255,255,.52)}
-.eta-info .val{font-weight:700;font-family:monospace;color:#2ecc71}
-.eta-info.express .val{color:#f39c12}
-.pickup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:.85rem}
-@media(max-width:360px){.pickup-grid{grid-template-columns:repeat(2,1fr)}}
-.pickup-card{background:#1e2a3a;border:2px solid #2e3f55;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .22s;position:relative}
-.pickup-card:hover{border-color:rgba(243,156,18,.45);transform:translateY(-2px)}
-.pickup-card.active{border-color:#f39c12;box-shadow:0 0 0 1px rgba(243,156,18,.25)}
-.pickup-card .p-img{width:100%;height:56px;object-fit:cover;display:block}
-.pickup-card .p-no-img{width:100%;height:56px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#f39c12;background:#253445}
-.pickup-card .p-name{font-size:.66rem;font-weight:700;color:white;text-align:center;padding:.42rem .3rem;line-height:1.2}
-.pickup-card .p-type{font-size:.58rem;color:rgba(255,255,255,.38);text-align:center;padding-bottom:.38rem}
-.pickup-ck{position:absolute;top:4px;right:4px;width:17px;height:17px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center}
-.pickup-ck i{font-size:.45rem;color:#1e2a3a}
-.pickup-card.active .pickup-ck{display:flex}
-.addr-x{display:none;margin-top:.5rem}.addr-x.show{display:block}
-.dmode{display:flex;gap:7px;margin-bottom:.3rem}
-.dm-btn{flex:1;padding:10px 7px;background:#1e2a3a;border:2px solid #2e3f55;border-radius:12px;cursor:pointer;text-align:center;transition:.2s;font-family:inherit}
-.dm-btn:hover{border-color:rgba(243,156,18,.38)}
-.dm-btn.active{border-color:#f39c12;background:rgba(243,156,18,.09)}
-.dm-btn i{font-size:1.15rem;color:#f39c12;display:block;margin-bottom:4px}
-.dm-btn strong{display:block;font-size:.74rem;font-weight:700;color:white}
-.dm-btn small{font-size:.6rem;color:rgba(255,255,255,.32)}
-.dloc-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:.85rem}
-.dloc-btn{padding:7px 14px;background:#1e2a3a;border:1.5px solid #2e3f55;border-radius:20px;cursor:pointer;font-size:.76rem;font-weight:600;color:rgba(255,255,255,.6);transition:.2s;font-family:inherit}
-.dloc-btn:hover{border-color:rgba(243,156,18,.4);color:white}
-.dloc-btn.active{border-color:#f39c12;background:rgba(243,156,18,.1);color:#f39c12}
-.boat-sec{display:none}.boat-sec.show{display:block}
-.atoll-srch{display:flex;gap:7px;margin-bottom:.7rem}
-.atoll-srch input{flex:1;padding:9px 13px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:22px;color:white;font-size:.82rem;outline:none;transition:.2s;font-family:inherit}
-.atoll-srch input:focus{border-color:#3498db;box-shadow:0 0 0 3px rgba(52,152,219,.09)}
-.atoll-srch input::placeholder{color:rgba(255,255,255,.22)}
-.atoll-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.75rem}
-.atoll-chip{padding:6px 13px;background:#1e2a3a;border:1.5px solid #2e3f55;border-radius:18px;cursor:pointer;font-size:.74rem;font-weight:600;color:rgba(255,255,255,.58);transition:.2s;font-family:inherit}
-.atoll-chip:hover{border-color:rgba(52,152,219,.4);color:white}
-.atoll-chip.active{border-color:#3498db;background:rgba(52,152,219,.12);color:#3498db}
-.boat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.7rem}
-.boat-card{background:#1e2a3a;border:2px solid #2e3f55;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .22s;position:relative}
-.boat-card:hover{border-color:rgba(52,152,219,.45);transform:translateY(-2px)}
-.boat-card.active{border-color:#3498db;box-shadow:0 0 0 1px rgba(52,152,219,.25)}
-.boat-card .b-img{width:100%;height:62px;object-fit:cover;display:block}
-.boat-card .b-no-img{width:100%;height:62px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#3498db;background:#1a2535}
-.boat-card .b-name{font-size:.68rem;font-weight:700;color:white;text-align:center;padding:.42rem .3rem;line-height:1.2}
-.boat-card .b-route{font-size:.58rem;color:rgba(255,255,255,.35);text-align:center;padding-bottom:.38rem}
-.boat-ck{position:absolute;top:4px;right:4px;width:17px;height:17px;background:#3498db;border-radius:50%;display:none;align-items:center;justify-content:center}
-.boat-ck i{font-size:.45rem;color:white}
-.boat-card.active .boat-ck{display:flex}
-.boat-info-bar{background:rgba(52,152,219,.08);border:1px solid rgba(52,152,219,.18);border-radius:10px;padding:8px 12px;margin-bottom:.75rem;font-size:.76rem;display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.65)}
-.boat-info-bar i{color:#3498db;flex-shrink:0}
-.isl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:.85rem}
-.isl-btn{background:#1a2535;border:1.5px solid #2e3f55;border-radius:10px;padding:8px;cursor:pointer;text-align:center;transition:.2s;font-family:inherit;font-size:.73rem;font-weight:600;color:rgba(255,255,255,.62)}
-.isl-btn:hover{border-color:rgba(243,156,18,.45);color:white}
-.isl-btn.active{border-color:#f39c12;background:rgba(243,156,18,.12);color:#f39c12}
-.price-box{background:linear-gradient(135deg,#1a2335,#1e2d42);border:1px solid rgba(243,156,18,.22);border-radius:15px;padding:1rem;text-align:center;margin-bottom:.85rem;position:relative;overflow:hidden}
-.price-box::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(243,156,18,.06),transparent 60%)}
-.price-box .plbl{font-size:.62rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1.5px;font-family:monospace;margin-bottom:4px;position:relative}
-.price-box .pnum{font-size:2rem;font-weight:800;color:#f39c12;letter-spacing:-1px;position:relative}
-.price-box .pcur{font-size:.9rem;color:rgba(255,255,255,.38)}
-.btn-submit{width:100%;padding:13px;background:#f39c12;color:#1e2a3a;border:none;border-radius:35px;font-size:.9rem;font-weight:800;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 5px 18px rgba(243,156,18,.26)}
-.btn-submit:hover{background:#e67e22;transform:translateY(-2px);color:white}
-.btn-submit:disabled{background:#2e3f55;color:rgba(255,255,255,.38);box-shadow:none;transform:none;cursor:not-allowed}
+.sidebar{width:255px;background:#141b2b;height:100vh;position:fixed;left:-255px;top:0;transition:.3s;z-index:1000;border-right:1px solid #2a3a55;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar.open{left:0}
+.s-hd{padding:.95rem;border-bottom:1px solid #253241;display:flex;align-items:center;gap:.7rem}
+.s-av{width:37px;height:37px;background:rgba(243,156,18,.12);border:2px solid rgba(243,156,18,.26);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#f39c12;font-size:.9rem;flex-shrink:0}
+.s-hd h3{color:white;font-size:.84rem;font-weight:700}
+.s-hd p{color:#f39c12;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.s-nav{flex:1;padding:.28rem 0}
+.s-lbl{padding:.4rem 1rem;font-size:.56rem;font-weight:700;color:#f39c12;letter-spacing:1.5px;text-transform:uppercase}
+.s-item{padding:.74rem 1rem;display:flex;align-items:center;gap:.72rem;color:rgba(255,255,255,.58);cursor:pointer;transition:.15s;font-size:.78rem;border-left:3px solid transparent}
+.s-item:hover{background:#1e2a3a;color:white}
+.s-item.active{background:#1e2a3a;border-left-color:#f39c12;color:#f39c12}
+.s-item i{width:15px;color:#f39c12;font-size:.78rem}
+.s-div{height:1px;background:#253241;margin:.3rem .88rem}
+.s-foot{padding:.7rem 1rem;border-top:1px solid #253241}
+.top-bar{background:#141b2b;padding:0 .88rem;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid #253241;position:sticky;top:0;z-index:200;height:52px}
+.menu-toggle{background:none;border:none;color:white;font-size:1.22rem;cursor:pointer;width:35px;height:35px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.menu-toggle:hover{background:#1e2a3a}
+.tb-title{flex:1;font-size:.86rem;font-weight:800;color:white;display:flex;align-items:center;gap:5px}
+.tb-title i{color:#f39c12}
+.admin-chip{display:flex;align-items:center;gap:4px;background:rgba(243,156,18,.09);border:1px solid rgba(243,156,18,.2);border-radius:14px;padding:3px 9px;color:#f39c12;font-size:.6rem;font-weight:700}
+.tb-nm{font-size:.72rem;font-weight:600;color:rgba(255,255,255,.5);max-width:56px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main{padding:.85rem;padding-bottom:1.5rem}
+.page{display:none}.page.active{display:block}
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.85rem}
+@media(min-width:600px){.sg{grid-template-columns:repeat(4,1fr)}}
+.sc{background:#141b2b;border-radius:16px;padding:.82rem;border:1px solid #2e4057;display:flex;align-items:center;gap:.6rem}
+.si{width:37px;height:37px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.si.c{background:rgba(52,152,219,.13);color:#3498db}
+.si.g{background:rgba(39,174,96,.13);color:#27ae60}
+.si.a{background:rgba(243,156,18,.13);color:#f39c12}
+.si.r{background:rgba(231,76,60,.1);color:#e74c3c}
+.si.b{background:rgba(52,152,219,.1);color:#3498db}
+.sv{font-size:1.25rem;font-weight:800;color:white;line-height:1}
+.sl{font-size:.58rem;color:rgba(255,255,255,.36);margin-top:3px;text-transform:uppercase;letter-spacing:.5px;font-family:monospace}
+.card{background:#141b2b;border-radius:17px;padding:.9rem;margin-bottom:.85rem;border:1px solid #2e3f55}
+.c-hd{display:flex;align-items:center;gap:7px;margin-bottom:.78rem;padding-bottom:.72rem;border-bottom:1px solid #253241}
+.c-ico{width:27px;height:27px;background:rgba(243,156,18,.1);border:1px solid rgba(243,156,18,.2);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#f39c12;flex-shrink:0}
+.c-hd h3{font-size:.82rem;font-weight:700;color:white}
 .tbl-s{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;min-width:560px;font-size:.74rem}
-th{padding:8px 9px;text-align:left;font-size:.6rem;font-weight:700;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid #253241;background:rgba(255,255,255,.02);font-family:monospace}
+table{width:100%;border-collapse:collapse;min-width:560px;font-size:.72rem}
+th{padding:7px 9px;text-align:left;font-size:.58rem;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid #253241;background:rgba(255,255,255,.02);font-family:monospace}
 td{padding:8px 9px;border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.7);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.02);color:white}
-.badge{display:inline-block;padding:2px 8px;border-radius:14px;font-size:.6rem;font-weight:700;font-family:monospace}
+.badge{display:inline-block;padding:2px 7px;border-radius:12px;font-size:.58rem;font-weight:700;font-family:monospace}
 .b-placed{background:rgba(243,156,18,.13);color:#f39c12;border:1px solid rgba(243,156,18,.18)}
 .b-proc{background:rgba(52,152,219,.13);color:#3498db;border:1px solid rgba(52,152,219,.18)}
 .b-trans{background:rgba(142,68,173,.13);color:#9b59b6;border:1px solid rgba(142,68,173,.18)}
@@ -261,431 +95,611 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .b-rev{background:rgba(243,156,18,.1);color:#f39c12;border:1px solid rgba(243,156,18,.14)}
 .b-paid{background:rgba(39,174,96,.1);color:#27ae60;border:1px solid rgba(39,174,96,.14)}
 .b-pnd{background:rgba(231,76,60,.1);color:#e74c3c;border:1px solid rgba(231,76,60,.14)}
-.b-norm{background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid #2e3f55}
+.b-norm{background:rgba(255,255,255,.06);color:rgba(255,255,255,.48);border:1px solid #2e3f55}
 .b-exp{background:rgba(52,152,219,.1);color:#3498db;border:1px solid rgba(52,152,219,.14)}
 .b-boat{background:rgba(52,152,219,.13);color:#3498db;border:1px solid rgba(52,152,219,.18)}
 .b-speed{background:rgba(243,156,18,.13);color:#f39c12;border:1px solid rgba(243,156,18,.18)}
-.srch-row{display:flex;gap:7px;margin-bottom:.85rem}
-.srch-row input{flex:1;padding:10px 14px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:25px;color:white;font-size:.84rem;outline:none;transition:.2s;font-family:inherit}
-.srch-row input:focus{border-color:#f39c12;box-shadow:0 0 0 3px rgba(243,156,18,.09)}
-.srch-row input::placeholder{color:rgba(255,255,255,.2)}
-.btn-srch{padding:10px 15px;background:#f39c12;color:#1e2a3a;border:none;border-radius:25px;font-weight:700;font-size:.8rem;cursor:pointer}
-.ref-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-bottom:.85rem}
-.rcard{background:#1b2537;border-radius:14px;padding:.85rem;cursor:pointer;border:1px solid #2e3f55;transition:.2s}
-.rcard:hover{border-color:#f39c12;transform:translateY(-2px)}
-.rcard .rn{font-family:monospace;font-size:.72rem;font-weight:700;color:#f39c12;margin-bottom:5px}
-.rcard .rd{font-size:.7rem;color:rgba(255,255,255,.4);margin-bottom:3px}
-.tracker{display:flex;justify-content:space-between;margin:.85rem 0;padding:8px;background:#1e2a3a;border-radius:14px}
-.trk-step{text-align:center;flex:1;color:#607080;font-size:.58rem}
-.trk-step.active{color:#f39c12}.trk-step.done{color:#27ae60}
-.trk-step i{font-size:.88rem;display:block;margin-bottom:3px}
-.prog-wrap{background:#1a2535;border-radius:12px;padding:.85rem;margin:.65rem 0;border:1px solid #2a3a55}
-.prog-hd{display:flex;justify-content:space-between;margin-bottom:5px}
-.prog-lbl{color:white;font-size:.74rem;font-weight:600}
-.prog-pct{color:#f39c12;font-size:.75rem;font-weight:700}
-.prog-bar{height:8px;background:#2e3f55;border-radius:8px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,#f39c12,#e67e22);transition:width .5s}
-.prog-fill.done{background:linear-gradient(90deg,#27ae60,#2ecc71)}
-.live-steps{display:flex;justify-content:space-between;margin-top:6px}
-.ls{display:flex;flex-direction:column;align-items:center;font-size:.55rem;color:#607080;gap:2px;flex:1;text-align:center}
-.ls.done{color:#27ae60}.ls.cur{color:#f39c12}
-.ls .sd{width:6px;height:6px;border-radius:50%;background:#2e3f55}
-.ls.done .sd{background:#27ae60}
-.ls.cur .sd{background:#f39c12;box-shadow:0 0 0 3px rgba(243,156,18,.2)}
-.i-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:.85rem}
-.i-cell{background:#1e2a3a;border:1px solid #2e3f55;border-radius:9px;padding:8px 10px}
-.i-cell .il{font-size:.55rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;font-family:monospace}
-.i-cell .iv{font-size:.76rem;font-weight:600;color:white}
-.n-bell{position:relative;cursor:pointer}
-.n-bell-btn{background:rgba(243,156,18,.09);border:1px solid rgba(243,156,18,.2);border-radius:50%;width:33px;height:33px;display:flex;align-items:center;justify-content:center;color:#f39c12;font-size:.82rem;cursor:pointer;transition:.2s}
-.n-bell-btn:hover{background:rgba(243,156,18,.18)}
-.n-dot{position:absolute;top:-3px;right:-3px;background:#e74c3c;color:white;border-radius:50px;min-width:16px;height:16px;padding:0 3px;font-size:.55rem;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid #141b2b}
-.n-dot.show{display:flex}
-.n-panel{position:fixed;top:0;right:-320px;width:305px;height:100vh;background:#141b2b;z-index:1500;border-left:1px solid #2a3a55;transition:right .3s;overflow-y:auto;display:flex;flex-direction:column}
-.n-panel.open{right:0}
-@media(max-width:340px){.n-panel{width:100%;right:-100%}}
-.n-hd{padding:.85rem;border-bottom:1px solid #253241;display:flex;justify-content:space-between;align-items:center;background:#0f1624;position:sticky;top:0;z-index:2}
-.n-hd-t{color:white;font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:6px}
-.n-hd-t i{color:#f39c12}
-.n-hd-actions{display:flex;align-items:center;gap:7px}
-.n-close{background:none;border:none;color:rgba(255,255,255,.38);font-size:1.2rem;cursor:pointer}
-.n-clear-all{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.22);color:#e74c3c;font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:12px;cursor:pointer;font-family:inherit}
-.n-clear-all:hover{background:rgba(231,76,60,.22)}
-.n-list{flex:1;padding:.65rem}
-.n-item{background:#1b2537;border-radius:11px;padding:.75rem;margin-bottom:.45rem;border-left:3px solid #2e3f55;position:relative;cursor:pointer;transition:.15s}
-.n-item:hover{background:#1e2d42}
-.n-item.unread{border-left-color:#f39c12;background:#1e2d42}
-.n-item .nt{font-size:.76rem;font-weight:700;color:white;margin-bottom:2px;padding-right:20px}
-.n-item .nm{font-size:.7rem;color:rgba(255,255,255,.52);line-height:1.4}
-.n-item .nd{font-size:.6rem;color:rgba(255,255,255,.28);margin-top:4px;font-family:monospace}
-.n-rm{position:absolute;top:7px;right:8px;background:none;border:none;color:rgba(255,255,255,.25);font-size:.9rem;cursor:pointer;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%}
-.n-rm:hover{background:rgba(231,76,60,.2);color:#e74c3c}
-.invoice-box{background:linear-gradient(135deg,#1a2335,#1d2940);border:1px solid rgba(39,174,96,.25);border-radius:15px;padding:1.1rem;margin-top:.8rem}
-.invoice-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;padding-bottom:.7rem;border-bottom:1px solid rgba(255,255,255,.06)}
-.invoice-brand{font-size:1rem;font-weight:800;color:white}
-.invoice-brand span{color:#f39c12}
-.invoice-no{font-family:monospace;font-size:.7rem;color:rgba(255,255,255,.4)}
-.invoice-date{font-size:.68rem;color:rgba(255,255,255,.35);margin-top:2px}
-.inv-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.76rem}
-.inv-row:last-child{border-bottom:none}
-.inv-row .k{color:rgba(255,255,255,.48)}
-.inv-row .v{color:white;font-weight:600;text-align:right;max-width:60%}
-.inv-total{display:flex;justify-content:space-between;padding-top:.7rem;border-top:1px solid rgba(39,174,96,.25);font-size:.9rem;font-weight:800}
-.inv-total .k{color:rgba(255,255,255,.6)}
-.inv-total .v{color:#27ae60}
-.inv-stamp{margin-top:.7rem;text-align:center}
-.inv-stamp span{display:inline-flex;align-items:center;gap:5px;background:rgba(39,174,96,.12);border:1px solid rgba(39,174,96,.3);border-radius:20px;padding:4px 14px;font-size:.7rem;font-weight:700;color:#27ae60}
-.inv-card{background:#1b2537;border:1px solid rgba(39,174,96,.2);border-radius:13px;padding:.85rem;margin-bottom:.7rem}
-.inv-card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
-.inv-card-no{font-family:monospace;font-size:.72rem;font-weight:700;color:#f39c12}
-.inv-card-date{font-size:.65rem;color:rgba(255,255,255,.35)}
+.b-pend-a{background:rgba(243,156,18,.12);color:#f39c12;border:1px solid rgba(243,156,18,.18)}
+.b-active-u{background:rgba(39,174,96,.1);color:#27ae60;border:1px solid rgba(39,174,96,.14)}
+.b-blocked{background:rgba(231,76,60,.1);color:#e74c3c;border:1px solid rgba(231,76,60,.14)}
+.a-row{display:flex;gap:4px;flex-wrap:wrap}
+.a-btn{padding:3px 8px;border-radius:10px;font-size:.58rem;font-weight:700;cursor:pointer;border:1px solid;transition:.15s;font-family:inherit}
+.a-btn:hover{filter:brightness(1.12)}
+.ab-stat{background:rgba(52,152,219,.11);border-color:rgba(52,152,219,.2);color:#3498db}
+.ab-app{background:rgba(39,174,96,.11);border-color:rgba(39,174,96,.2);color:#27ae60}
+.ab-del{background:rgba(231,76,60,.1);border-color:rgba(231,76,60,.18);color:#e74c3c}
+.ab-view{background:rgba(243,156,18,.1);border-color:rgba(243,156,18,.2);color:#f39c12}
+.ab-edit{background:rgba(142,68,173,.1);border-color:rgba(142,68,173,.18);color:#9b59b6}
+.ab-grant{background:rgba(39,174,96,.11);border-color:rgba(39,174,96,.2);color:#27ae60}
+.ab-block{background:rgba(231,76,60,.1);border-color:rgba(231,76,60,.18);color:#e74c3c}
+.fgsm{display:flex;flex-direction:column;gap:3px}
+.fgsm label{font-size:.6rem;font-weight:700;color:rgba(255,255,255,.36);letter-spacing:.8px;text-transform:uppercase;font-family:monospace}
+.fgsm input,.fgsm select,.fgsm textarea{padding:8px 10px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:17px;color:white;font-size:.8rem;outline:none;transition:.2s;font-family:inherit}
+.fgsm textarea{border-radius:10px;resize:vertical}
+.fgsm input:focus,.fgsm select:focus,.fgsm textarea:focus{border-color:#f39c12;box-shadow:0 0 0 2px rgba(243,156,18,.07)}
+.fgsm select option{background:#1e2a3a}
+.p-form{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:.85rem}
+@media(min-width:500px){.p-form{grid-template-columns:1fr 1fr 1fr 1fr auto}}
+.btn-add{padding:8px 12px;background:#f39c12;color:#1e2a3a;border:none;border-radius:17px;font-size:.76rem;font-weight:800;cursor:pointer;transition:.2s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.btn-add:hover{background:#e67e22;transform:translateY(-1px);color:white}
+.btn-add.sec{background:#2e3f55;color:rgba(255,255,255,.65)}
+.btn-add.sec:hover{background:#3a4f6a;color:white}
+/* IMAGE CARD GRID */
+.img-card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:.5rem}
+@media(min-width:500px){.img-card-grid{grid-template-columns:repeat(4,1fr)}}
+.img-card-item{background:#1b2537;border:1px solid #2e3f55;border-radius:13px;overflow:hidden;position:relative}
+.img-card-item img{width:100%;height:55px;object-fit:cover;display:block}
+.img-card-item .no-img{width:100%;height:55px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#f39c12;background:#1a2535}
+.img-card-item .card-lbl{padding:.4rem .5rem;font-size:.66rem;font-weight:700;color:white;line-height:1.2}
+.img-card-item .card-sub{font-size:.58rem;color:rgba(255,255,255,.36);padding:0 .5rem .42rem}
+.card-rm{position:absolute;top:4px;right:4px;background:rgba(231,76,60,.88);border:none;color:white;width:18px;height:18px;border-radius:50%;cursor:pointer;font-size:.55rem;display:flex;align-items:center;justify-content:center}
+.card-rm:hover{background:#e74c3c}
+.p-item{display:flex;justify-content:space-between;align-items:center;padding:8px 11px;background:#1b2537;border:1px solid #2e3f55;border-radius:11px;margin-bottom:5px;transition:.15s;flex-wrap:wrap;gap:6px}
+.p-item:hover{border-color:rgba(243,156,18,.2)}
+.p-item .rng{font-weight:700;color:white;font-size:.78rem}
+.p-item .amt{font-family:monospace;font-weight:700;color:#f39c12;font-size:.8rem}
+/* EXPRESS HOUR ITEM */
+.hr-item{display:flex;align-items:center;gap:9px;padding:9px 12px;background:#1b2537;border:1px solid rgba(243,156,18,.15);border-radius:11px;margin-bottom:5px}
+.hr-item .hr-num{width:38px;height:38px;background:rgba(243,156,18,.15);border:1px solid rgba(243,156,18,.3);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.hr-item .hr-num span{font-size:.95rem;font-weight:800;color:#f39c12;line-height:1}
+.hr-item .hr-num small{font-size:.52rem;color:rgba(243,156,18,.6)}
+.hr-item .hr-info{flex:1}
+.hr-item .hr-info .hn{font-weight:700;color:white;font-size:.8rem}
+.hr-item .hr-info .hp{font-family:monospace;color:#f39c12;font-size:.75rem;margin-top:1px}
+.isl-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.isl-tag{background:rgba(52,152,219,.1);border:1px solid rgba(52,152,219,.2);color:#3498db;padding:2px 7px;border-radius:9px;font-size:.62rem;font-weight:700;font-family:monospace;display:inline-flex;align-items:center;gap:3px}
+.isl-tag button{background:none;border:none;color:rgba(52,152,219,.55);cursor:pointer;font-size:.6rem;padding:0;line-height:1}
+.isl-tag button:hover{color:#e74c3c}
+.u-item{display:flex;justify-content:space-between;align-items:center;padding:9px 11px;background:#1b2537;border:1px solid #2e3f55;border-radius:11px;margin-bottom:5px;transition:.15s;flex-wrap:wrap;gap:6px}
+.u-nm{font-weight:700;color:white;font-size:.8rem}
+.u-em{font-family:monospace;font-size:.65rem;color:rgba(255,255,255,.36)}
+.r-chip{padding:2px 8px;border-radius:10px;font-family:monospace;font-size:.58rem;font-weight:800}
+.rc-a{background:rgba(243,156,18,.13);border:1px solid rgba(243,156,18,.18);color:#f39c12}
+.rc-u{background:rgba(52,152,219,.1);border:1px solid rgba(52,152,219,.14);color:#3498db}
+.rc-s{background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.18);color:#27ae60}
+/* Social link item */
+.social-item{display:flex;align-items:center;gap:9px;padding:8px 11px;background:#1b2537;border:1px solid #2e3f55;border-radius:11px;margin-bottom:5px}
+.social-item .si-icon{width:30px;height:30px;background:rgba(243,156,18,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#f39c12;flex-shrink:0}
+.social-item .si-info{flex:1;min-width:0}
+.social-item .si-pl{font-weight:700;color:white;font-size:.78rem}
+.social-item .si-url{font-size:.65rem;color:rgba(255,255,255,.35);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srch-row{display:flex;gap:6px;margin-bottom:.85rem}
+.srch-row input{flex:1;padding:9px 13px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:22px;color:white;font-size:.8rem;outline:none;transition:.2s;font-family:inherit}
+.srch-row input:focus{border-color:#f39c12;box-shadow:0 0 0 2px rgba(243,156,18,.07)}
+.srch-row input::placeholder{color:rgba(255,255,255,.18)}
+.btn-srch{padding:9px 14px;background:#f39c12;color:#1e2a3a;border:none;border-radius:22px;font-weight:700;font-size:.78rem;cursor:pointer;transition:.2s}
+.btn-srch:hover{background:#e67e22}
+.t-res{background:#1b2537;border:1px solid #2e3f55;border-radius:12px;padding:.85rem;margin-bottom:7px}
+.t-igrid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;margin-bottom:8px}
+@media(min-width:480px){.t-igrid{grid-template-columns:repeat(3,1fr)}}
+.t-cell{background:#1e2a3a;border:1px solid #2a3a55;border-radius:8px;padding:7px 9px}
+.t-cell .tl{font-size:.54rem;color:rgba(255,255,255,.26);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;font-family:monospace}
+.t-cell .tv{font-size:.74rem;font-weight:600;color:white}
+.df-row{display:flex;gap:6px;align-items:flex-end;margin-bottom:.85rem;flex-wrap:wrap}
+.df-row .fgsm{min-width:130px}
+.chart-box{position:relative;height:205px}
+.slide-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#1b2537;border:1px solid #2e3f55;border-radius:11px;margin-bottom:5px}
+.slide-item img{width:46px;height:33px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid #2e3f55}
+.slide-item .si-url{font-size:.68rem;color:rgba(255,255,255,.42);font-family:monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.84);align-items:flex-end;justify-content:center;z-index:2000;padding:0}
 .modal-overlay.show{display:flex}
 @media(min-width:540px){.modal-overlay{align-items:center;padding:1rem}}
-.modal-box{background:#141b2b;border-radius:22px 22px 0 0;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;border:1px solid #2e3f55;border-bottom:none;padding:1.1rem;animation:slideUp .3s ease}
-@media(min-width:540px){.modal-box{border-radius:22px;border-bottom:1px solid #2e3f55;animation:fadeIn .25s ease}}
+.modal-box{background:#141b2b;border-radius:21px 21px 0 0;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;border:1px solid #2e3f55;border-bottom:none;padding:1.1rem;animation:slideUp .3s ease}
+@media(min-width:540px){.modal-box{border-radius:21px;border-bottom:1px solid #2e3f55;animation:fadeIn .25s ease}}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
-.modal-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem;padding-bottom:.8rem;border-bottom:1px solid #253241}
-.modal-title{color:white;font-size:.94rem;font-weight:700;display:flex;align-items:center;gap:6px}
+.modal-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;padding-bottom:.75rem;border-bottom:1px solid #253241}
+.modal-title{color:white;font-size:.9rem;font-weight:700;display:flex;align-items:center;gap:6px}
 .modal-title i{color:#f39c12}
-.close-btn{background:rgba(255,255,255,.07);border:none;color:white;font-size:1.2rem;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.modal-btns{display:flex;gap:8px;margin-top:.9rem}
-.bank-box{background:#1b2537;border-radius:14px;padding:.85rem;margin:.65rem 0}
-.bank-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #2e3f55;font-size:.8rem}
-.bank-row:last-child{border-bottom:none}
-.bank-row .bk{color:rgba(255,255,255,.42)}
-.bank-row .bv{color:white;font-weight:700;display:flex;align-items:center;gap:5px}
-.copy-btn{background:#f39c12;border:none;color:#1e2a3a;padding:2px 9px;border-radius:12px;font-size:.62rem;cursor:pointer;font-weight:700}
-.file-zone{border:2px dashed rgba(243,156,18,.25);border-radius:14px;padding:.9rem;text-align:center;cursor:pointer;background:#1b2537;position:relative;transition:.2s;margin:.4rem 0}
-.file-zone:hover{border-color:rgba(243,156,18,.5);background:#223040}
+.close-btn{background:rgba(255,255,255,.07);border:none;color:white;font-size:1.15rem;cursor:pointer;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.modal-btns{display:flex;gap:7px;margin-top:.85rem}
+.file-zone{border:2px dashed rgba(243,156,18,.22);border-radius:13px;padding:.85rem;text-align:center;cursor:pointer;background:#1b2537;position:relative;transition:.2s;margin-top:4px}
+.file-zone:hover{border-color:rgba(243,156,18,.48);background:#223040}
 .file-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.file-zone i{font-size:1.3rem;color:#f39c12;display:block;margin-bottom:4px}
-.file-zone span{font-size:.74rem;color:rgba(255,255,255,.38)}
+.file-zone i{font-size:1.25rem;color:#f39c12;display:block;margin-bottom:4px}
+.file-zone span{font-size:.7rem;color:rgba(255,255,255,.36)}
 .slip-img{max-width:100%;border-radius:10px;margin:8px 0;border:1px solid #2e3f55}
-.toast{position:fixed;top:62px;left:50%;transform:translateX(-50%) translateY(-16px);z-index:3000;max-width:310px;width:92%;background:#1e2a3a;border-radius:15px;padding:.78rem .9rem;border:1px solid #2e4057;box-shadow:0 12px 40px rgba(0,0,0,.6);display:flex;align-items:center;gap:7px;opacity:0;transition:all .3s;pointer-events:none}
+.prev-img{width:100%;max-height:110px;object-fit:cover;border-radius:10px;margin-top:6px;display:none;border:1px solid #2e3f55}
+.toast{position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-16px);z-index:3000;max-width:295px;width:92%;background:#1e2a3a;border-radius:14px;padding:.75rem .85rem;border:1px solid #2e4057;box-shadow:0 12px 40px rgba(0,0,0,.6);display:flex;align-items:center;gap:7px;opacity:0;transition:all .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.ok{border-color:rgba(39,174,96,.32);background:linear-gradient(135deg,#0d2218,#142b1e)}
-.toast.err{border-color:rgba(231,76,60,.32);background:linear-gradient(135deg,#230d0d,#2b1212)}
-.toast.info{border-color:rgba(243,156,18,.26)}
-.t-ico{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0}
+.toast.ok{border-color:rgba(39,174,96,.3);background:linear-gradient(135deg,#0d2218,#142b1e)}
+.toast.err{border-color:rgba(231,76,60,.3);background:linear-gradient(135deg,#230d0d,#2b1212)}
+.toast.info{border-color:rgba(243,156,18,.24)}
+.t-ico{width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
 .toast.ok .t-ico{background:rgba(39,174,96,.18);color:#27ae60}
 .toast.err .t-ico{background:rgba(231,76,60,.18);color:#e74c3c}
 .toast.info .t-ico{background:rgba(243,156,18,.1);color:#f39c12}
-.t-msg{flex:1;font-size:.76rem;color:white;font-weight:500}
-.mob-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#141b2b;border-top:1px solid #253241;padding:7px 0 10px;z-index:300}
-@media(min-width:768px){.mob-nav{display:none}}
-.m-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(255,255,255,.35);font-size:.56rem;font-weight:600;cursor:pointer;padding:2px;border:none;background:none;font-family:inherit}
-.m-tab i{font-size:1rem}
-.m-tab.active{color:#f39c12}
-.empty-s{text-align:center;padding:1.8rem 1rem;color:rgba(255,255,255,.28)}
-.empty-s i{font-size:2rem;display:block;margin-bottom:.45rem;opacity:.2}
-.empty-s p{font-size:.78rem}
+.t-msg{flex:1;font-size:.74rem;color:white;font-weight:500}
+.empty-s{text-align:center;padding:1.6rem 1rem;color:rgba(255,255,255,.26)}
+.empty-s i{font-size:1.85rem;display:block;margin-bottom:.42rem;opacity:.18}
+.empty-s p{font-size:.76rem}
 p,span,div,h1,h2,h3,h4,label{color:inherit}
 a{color:#f39c12;text-decoration:none}
 </style>
 </head>
 <body>
 
-<!-- TRUCK ANIM -->
-<div id="truckAnim">
-  <div class="road"><div class="rstrip"></div></div>
-  <div class="t-wrap">
-    <svg viewBox="0 0 118 52" fill="none"><rect x="0" y="15" width="76" height="27" rx="4" fill="#1e2a3a"/><rect x="76" y="19" width="32" height="23" rx="4" fill="#253445"/><rect x="78" y="21" width="13" height="11" rx="2" fill="#3498db" opacity=".8"/><rect x="2" y="17" width="72" height="4" fill="#f39c12" opacity=".22"/><circle cx="19" cy="43" r="7" fill="#2e3f55"/><circle cx="19" cy="43" r="4" fill="#1a2535"/><circle cx="19" cy="43" r="2" fill="#f39c12"/><circle cx="89" cy="43" r="7" fill="#2e3f55"/><circle cx="89" cy="43" r="4" fill="#1a2535"/><circle cx="89" cy="43" r="2" fill="#f39c12"/><rect x="0" y="25" width="5" height="6" rx="2" fill="#f39c12" opacity=".88"/><text x="12" y="33" font-family="monospace" font-size="8" fill="#f39c12" font-weight="bold">EASY</text><text x="5" y="41" font-family="monospace" font-size="6" fill="rgba(255,255,255,0.38)">CARGO</text></svg>
-  </div>
-  <div class="anim-lbl">Signing in to <span>EasyCargo</span>…</div>
-</div>
-
-<!-- HOME PAGE -->
-<div id="homePage">
-  <div class="slideshow" id="slideshow"></div>
-  <div class="home-overlay"></div>
-  <div class="home-content">
-    <div class="home-logo"><i class="fas fa-truck"></i><span>EasyCargo</span></div>
-    <h1>Fast &amp; Reliable<br><span>Cargo Delivery</span></h1>
-    <p id="homeTagline">Your trusted cargo delivery partner across the Maldives.</p>
-    <div class="home-btns">
-      <button class="btn-home" onclick="showAuth()"><i class="fas fa-sign-in-alt"></i> Get Started</button>
-      <button class="btn-home btn-home-ol" onclick="toggleHow()"><i class="fas fa-question-circle"></i> How It Works</button>
+<!-- LOGIN -->
+<div id="loginScreen">
+<div class="l-wrap">
+  <div class="l-card">
+    <div class="l-top">
+      <div class="l-ico"><i class="fas fa-shield-halved"></i></div>
+      <h2>Easy<em>Cargo</em></h2>
+      <p>// admin control panel</p>
+      <div class="admin-badge"><i class="fas fa-crown"></i> ADMINISTRATOR</div>
     </div>
-  </div>
-  <div class="slide-dots" id="slideDots"></div>
-  <div class="how-panel" id="howPanel">
-    <div class="how-inner">
-      <div class="how-hd"><h3><i class="fas fa-images"></i> How To Use</h3><button class="how-close" onclick="toggleHow()"><i class="fas fa-times"></i></button></div>
-      <div class="how-img-grid" id="howImgGrid"><div class="how-empty">No guide images yet.</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- AUTH -->
-<div id="authScreen">
-<div class="auth-wrap">
-  <div class="login-box">
-    <div class="login-strip">
-      <div class="ico"><i class="fas fa-truck"></i></div>
-      <h2>Easy<span>Cargo</span></h2>
-      <img id="loginLogoImg" class="login-logo-img" src="" alt="" style="display:none">
-      <p>// cargo delivery portal</p>
-      <div class="social-row" id="socialRow" style="display:none"></div>
-    </div>
-    <div class="login-inner">
-      <div class="seg-tabs">
-        <button class="seg-btn active" id="tLogin">Sign In</button>
-        <button class="seg-btn" id="tReg">Register</button>
-      </div>
-      <div class="pane active" id="pLogin">
-        <div id="loginMsg"></div>
-        <div class="fg"><label>Username or Email</label><input class="fi" type="text" id="lUsr" placeholder="Enter credentials…"></div>
-        <div class="fg"><label>Password</label><input class="fi" type="password" id="lPwd" placeholder="••••••••"></div>
-        <div class="forgot-lnk"><a href="#" id="forgotA">Forgot password?</a></div>
-        <button class="btn btn-gold" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Sign In</button>
-      </div>
-      <div class="pane" id="pReg">
-        <div id="regMsg"></div>
-        <div class="fr">
-          <div class="fg"><label>Username</label><input class="fi" type="text" id="rUsr" placeholder="Username"></div>
-          <div class="fg"><label>Email</label><input class="fi" type="email" id="rEml" placeholder="email@…"></div>
-        </div>
-        <div class="fg"><label>Contact Number</label><input class="fi" type="tel" id="rCnt" placeholder="7XXXXXXX"></div>
-        <div class="fr">
-          <div class="fg"><label>Password</label><input class="fi" type="password" id="rPwd" placeholder="Password"></div>
-          <div class="fg"><label>Confirm</label><input class="fi" type="password" id="rCfm" placeholder="Repeat"></div>
-        </div>
-        <button class="btn btn-gold" id="regBtn"><i class="fas fa-user-plus"></i> Register</button>
-      </div>
+    <div class="l-body">
+      <div id="loginMsg"></div>
+      <div class="fg"><label>Username or Email</label><input class="fi" type="text" id="aUsr" placeholder="Admin username…"></div>
+      <div class="fg"><label>Password</label><input class="fi" type="password" id="aPwd" placeholder="••••••••"></div>
+      <button class="btn btn-gold" id="aLoginBtn"><i class="fas fa-lock"></i> Access Admin Panel</button>
     </div>
   </div>
 </div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard">
-  <div class="ovl" id="sideOvl"></div>
+<!-- ADMIN APP -->
+<div id="adminApp">
+  <div class="ovl" id="sOver"></div>
   <div class="sidebar" id="sidebar">
-    <div class="s-hd"><div class="s-av"><i class="fas fa-user"></i></div><div><h3 id="sidebarName">User</h3><p>Member</p></div></div>
+    <div class="s-hd"><div class="s-av"><i class="fas fa-shield-halved"></i></div><div><h3 id="sNm">Admin</h3><p>ADMINISTRATOR</p></div></div>
     <div class="s-nav">
-      <div class="s-lbl">Navigation</div>
-      <div class="s-item active" onclick="switchTab('sNew');closeSB()"><i class="fas fa-plus-circle"></i> New Delivery</div>
-      <div class="s-item" onclick="switchTab('sMine');closeSB()"><i class="fas fa-list"></i> My Deliveries</div>
-      <div class="s-item" onclick="switchTab('sInv');closeSB()"><i class="fas fa-file-invoice"></i> My Invoices</div>
-      <div class="s-item" onclick="switchTab('sTrk');closeSB()"><i class="fas fa-search-location"></i> Track</div>
+      <div class="s-lbl">OVERVIEW</div>
+      <div class="s-item active" onclick="goPage('dashboard')"><i class="fas fa-gauge-high"></i> Dashboard</div>
+      <div class="s-item" onclick="goPage('revenue')"><i class="fas fa-chart-line"></i> Revenue</div>
+      <div class="s-lbl">RECORDS</div>
+      <div class="s-item" onclick="goPage('records')"><i class="fas fa-database"></i> All Records</div>
+      <div class="s-item" onclick="goPage('track')"><i class="fas fa-location-crosshairs"></i> Track Delivery</div>
+      <div class="s-lbl">CONFIGURATION</div>
+      <div class="s-item" onclick="goPage('homepage')"><i class="fas fa-home"></i> Home Page</div>
+      <div class="s-item" onclick="goPage('loginpage')"><i class="fas fa-sign-in-alt"></i> Login Page</div>
+      <div class="s-item" onclick="goPage('pickups')"><i class="fas fa-map-marker-alt"></i> Pickup Locations</div>
+      <div class="s-item" onclick="goPage('dellocs')"><i class="fas fa-map-pin"></i> Delivery Locations</div>
+      <div class="s-item" onclick="goPage('boats')"><i class="fas fa-ship"></i> Boats &amp; Islands</div>
+      <div class="s-item" onclick="goPage('speedboats')"><i class="fas fa-bolt"></i> Speed Boats</div>
+      <div class="s-item" onclick="goPage('cargotypes')"><i class="fas fa-box"></i> Cargo Types</div>
+      <div class="s-item" onclick="goPage('expresshrs')"><i class="fas fa-clock"></i> Express Hours</div>
+      <div class="s-item" onclick="goPage('prices')"><i class="fas fa-weight-hanging"></i> Weight Ranges</div>
+      <div class="s-item" onclick="goPage('capacity')"><i class="fas fa-box-open"></i> Daily Capacity</div>
+      <div class="s-item" onclick="goPage('telegram')"><i class="fab fa-telegram-plane"></i> Telegram Alerts</div>
+      <div class="s-item" onclick="goPage('users')"><i class="fas fa-users"></i> Users &amp; Access</div>
       <div class="s-div"></div>
     </div>
-    <div class="s-foot"><button class="btn btn-sec" style="font-size:.78rem;padding:9px" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button></div>
+    <div class="s-foot"><button class="btn btn-sec" style="font-size:.76rem;padding:8px" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button></div>
   </div>
+
   <div class="top-bar">
     <button class="menu-toggle" onclick="toggleSB()"><i class="fas fa-bars"></i></button>
-    <div class="tb-brand"><i class="fas fa-truck" style="color:#f39c12"></i> Easy<span>Cargo</span></div>
-    <div class="user-chip"><div class="user-av"><i class="fas fa-user"></i></div><div class="user-nm" id="hName">User</div></div>
-    <div class="n-bell"><div class="n-bell-btn" id="nBtn"><i class="fas fa-bell"></i></div><div class="n-dot" id="nDot"></div></div>
-    <button class="btn-ico" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i></button>
+    <div class="tb-title"><i class="fas fa-truck"></i><span id="pgTitle">Dashboard</span></div>
+    <div class="tb-nm" id="aNm">Admin</div>
+    <div class="admin-chip"><i class="fas fa-crown"></i> ADMIN</div>
   </div>
-  <div class="nav-bar"><div class="nav-tabs">
-    <button class="ntab active" data-s="sNew"><i class="fas fa-plus-circle"></i> New</button>
-    <button class="ntab" data-s="sMine"><i class="fas fa-list"></i> Mine</button>
-    <button class="ntab" data-s="sInv"><i class="fas fa-file-invoice"></i> Invoices</button>
-    <button class="ntab" data-s="sTrk"><i class="fas fa-search-location"></i> Track</button>
-  </div></div>
 
-  <div class="content">
-    <div class="sec active" id="sNew">
-      <div class="sec-title"><i class="fas fa-plus-circle"></i> New Delivery</div>
-      <div class="cap-wrap" id="capWrap" style="display:none">
-        <div class="cap-hd"><span class="cap-lbl"><i class="fas fa-box-open" style="margin-right:4px;color:#f39c12"></i>Today's Capacity</span><span class="cap-pct" id="capPct">0%</span></div>
-        <div class="cap-bar"><div class="cap-fill" id="capFill" style="width:0%"></div></div>
-        <div class="cap-note" id="capNote"></div>
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="sg" id="statsG"></div>
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-clock-rotate-left"></i></div><h3>Recent Deliveries</h3></div><div class="tbl-s"><table><thead><tr><th>Reference</th><th>Customer</th><th>Mode</th><th>Route</th><th>Type</th><th>Price</th><th>Status</th><th>Payment</th><th>Actions</th></tr></thead><tbody id="recTB"></tbody></table></div></div>
+    </div>
+
+    <!-- REVENUE -->
+    <div class="page" id="page-revenue">
+      <div class="df-row">
+        <div class="fgsm"><label>Start Date</label><input type="date" id="rStart"></div>
+        <div class="fgsm"><label>End Date</label><input type="date" id="rEnd"></div>
+        <button class="btn-add" id="applyRev">Apply</button>
+        <button class="btn-add sec" id="resetRev">Reset</button>
       </div>
-      <div class="card">
-        <div class="c-hd"><div class="c-ico"><i class="fas fa-truck"></i></div><h3>Delivery Form</h3></div>
-        <form id="cargoForm">
-          <div class="fr">
-            <div class="fg"><label><i class="fas fa-user" style="color:#f39c12;margin-right:4px"></i>Customer Name</label><input class="fi" type="text" id="cNm" disabled></div>
-            <div class="fg"><label><i class="fas fa-phone" style="color:#f39c12;margin-right:4px"></i>Contact Number</label><input class="fi" type="tel" id="cCt" disabled></div>
-          </div>
-          <div class="fg">
-            <label><i class="fas fa-box" style="color:#f39c12;margin-right:4px"></i>Cargo Type</label>
-            <div class="ctype-grid" id="ctypeGrid"><div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div></div>
-            <input type="hidden" id="ctV"><input type="hidden" id="ctPrice" value="0"><input type="hidden" id="ctIsExpress" value="0">
-            <div class="eta-info" id="etaInfo"><span class="lbl"><i class="fas fa-clock" style="margin-right:4px"></i>Estimated</span><span class="val" id="etaV">—</span></div>
-          </div>
-          <div class="express-hrs-wrap" id="expressHrsWrap">
-            <div class="express-hrs-title"><i class="fas fa-clock"></i> Select Duration</div>
-            <div class="hr-grid" id="hrGrid"></div>
-            <input type="hidden" id="selHrId"><input type="hidden" id="selHrPrice" value="0"><input type="hidden" id="selHrLabel" value="">
-          </div>
-          <div class="weight-sec" id="weightSec">
-            <div class="fg"><label><i class="fas fa-weight-hanging" style="color:#f39c12;margin-right:4px"></i>Package Weight Range</label>
-              <div class="w-grid" id="wGrid"></div>
-              <input type="hidden" id="selW"><input type="hidden" id="selWP" value="0">
-            </div>
-          </div>
-          <div class="fg">
-            <label><i class="fas fa-map-marker-alt" style="color:#f39c12;margin-right:4px"></i>Pickup Location</label>
-            <div class="pickup-grid" id="pickupGrid"><div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div></div>
-            <input type="hidden" id="pLocVal">
-            <div class="addr-x" id="addrX"><div class="fg" style="margin-top:.5rem"><label>Address</label><input class="fi" type="text" id="addrVal" placeholder="Enter full address…"></div></div>
-          </div>
-          <div class="fg">
-            <label><i class="fas fa-route" style="color:#f39c12;margin-right:4px"></i>Delivery Mode</label>
-            <div class="dmode">
-              <button type="button" class="dm-btn active" id="dmCargo" onclick="setMode('cargo')"><i class="fas fa-truck"></i><strong>Cargo</strong><small>Island delivery</small></button>
-              <button type="button" class="dm-btn" id="dmBoat" onclick="setMode('boat')"><i class="fas fa-ship"></i><strong>Boat</strong><small>Island to island</small></button>
-              <button type="button" class="dm-btn" id="dmSpeedboat" onclick="setMode('speedboat')"><i class="fas fa-bolt"></i><strong>Speed Boat</strong><small>Express island</small></button>
-            </div>
-            <div id="cargoDest" style="margin-top:.7rem">
-              <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Delivery Location (Island / City)</label>
-              <div class="dloc-grid" id="dlocGrid"><div class="empty-s" style="padding:.6rem"><p>No delivery locations set.</p></div></div>
-              <input type="hidden" id="dLocVal">
-              <div class="fg" style="margin-top:.6rem;display:none" id="houseAddrWrap">
-                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.32rem;display:block"><i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>House / Flat Address</label>
-                <input class="fi" type="text" id="houseAddr" placeholder="e.g. Roashanee Magu, Flat 3B…">
-              </div>
-            </div>
-            <div class="boat-sec" id="boatSec" style="margin-top:.7rem">
-              <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-compass" style="color:#3498db;margin-right:4px"></i>Select Atoll</label>
-              <div class="atoll-srch"><input type="text" id="atollSearch" placeholder="Search atoll…" oninput="filterAtolls()"></div>
-              <div class="atoll-chips" id="atollChips"></div>
-              <div id="boatGridWrap" style="display:none">
-                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-ship" style="color:#3498db;margin-right:4px"></i>Select Boat</label>
-                <div class="boat-grid" id="boatGrid"></div>
-                <input type="hidden" id="selBoat">
-              </div>
-              <div id="islSec" style="display:none">
-                <div class="boat-info-bar" id="boatInfoBar"><i class="fas fa-info-circle"></i><span id="boatInfoTxt">—</span></div>
-                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Destination Island</label>
-                <div class="isl-grid" id="islGrid"></div>
-                <input type="hidden" id="selIsl">
-              </div>
-            </div>
-            <!-- SPEED BOAT SECTION -->
-            <div class="boat-sec" id="speedboatSec" style="margin-top:.7rem">
-              <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-bolt" style="color:#f39c12;margin-right:4px"></i>Select Speed Boat</label>
-              <div class="boat-grid" id="sbGrid"></div>
-              <input type="hidden" id="selSB">
-              <div id="sbIslSec" style="display:none">
-                <div class="boat-info-bar" style="border-color:rgba(243,156,18,.2);background:rgba(243,156,18,.07)"><i class="fas fa-bolt" style="color:#f39c12"></i><span id="sbInfoTxt">—</span></div>
-                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Destination Island</label>
-                <div class="isl-grid" id="sbIslGrid"></div>
-                <input type="hidden" id="selSBIsl">
-              </div>
-            </div>
-          </div>
-          <div class="fg"><label>Package Description <span style="opacity:.35;font-size:.65rem">(optional)</span></label>
-            <textarea class="fi fi-ta" id="pkgDesc" placeholder="Describe contents…"></textarea>
-          </div>
-          <div class="price-box"><div class="plbl">Total Delivery Price</div><div class="pnum"><span class="pcur">MVR </span><span id="pDisp">0</span></div></div>
-          <div class="fg" style="margin-top:.9rem"><label><i class="fas fa-calendar-alt" style="color:#f39c12;margin-right:4px"></i>Expected Delivery Date</label><input class="fi" type="date" id="dDate" required style="width:100%;display:block"></div>
-          <button type="submit" class="btn-submit" id="submitBtn"><i class="fas fa-paper-plane"></i> Save &amp; Pay</button>
-        </form>
-      </div>
-      <div class="card">
-        <div class="c-hd"><div class="c-ico"><i class="fas fa-hashtag"></i></div><h3>My Reference Numbers</h3></div>
-        <div id="myRefs"><div class="empty-s"><i class="fas fa-inbox"></i><p>No deliveries yet.</p></div></div>
+      <div class="sg" id="revSG"></div>
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-chart-bar"></i></div><h3>Revenue — Last 14 Days</h3></div><div class="chart-box"><canvas id="revChart"></canvas></div></div>
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-receipt"></i></div><h3>Payment Records</h3></div><div class="tbl-s"><table><thead><tr><th>Reference</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody id="payTB"></tbody></table></div></div>
+    </div>
+
+    <!-- RECORDS -->
+    <div class="page" id="page-records">
+      <div class="srch-row"><input type="text" id="recSrch" placeholder="Search name, contact, reference…"><button class="btn-srch" id="recSrchBtn"><i class="fas fa-search"></i></button></div>
+      <div class="card"><div class="tbl-s"><table><thead><tr><th>Reference</th><th>Customer</th><th>Contact</th><th>Mode</th><th>Route</th><th>Type</th><th>Wt/Dur</th><th>Price</th><th>Del.Date</th><th>Status</th><th>Payment</th><th>Invoice</th><th>Created</th><th>Actions</th></tr></thead><tbody id="allRecTB"></tbody></table></div></div>
+    </div>
+
+    <!-- TRACK -->
+    <div class="page" id="page-track">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-magnifying-glass"></i></div><h3>Search Delivery</h3></div>
+        <div class="srch-row"><input type="text" id="trkSrch" placeholder="Contact or reference…"><button class="btn-srch" id="trkSrchBtn"><i class="fas fa-search"></i></button></div>
+        <div id="trkResult"></div>
       </div>
     </div>
-    <div class="sec" id="sMine">
-      <div class="sec-title"><i class="fas fa-list"></i> My Deliveries</div>
-      <div class="card"><div class="tbl-s"><table>
-        <thead><tr><th>Reference</th><th>Route</th><th>Type</th><th>Wt/Duration</th><th>Price</th><th>Status</th><th>Payment</th></tr></thead>
-        <tbody id="myTB"></tbody>
-      </table></div></div>
-    </div>
-    <div class="sec" id="sInv">
-      <div class="sec-title"><i class="fas fa-file-invoice"></i> My Invoices</div>
-      <div id="invListWrap"><div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet.</p></div></div>
-    </div>
-    <div class="sec" id="sTrk">
-      <div class="sec-title"><i class="fas fa-search-location"></i> Track Delivery</div>
+
+    <!-- HOME PAGE -->
+    <div class="page" id="page-homepage">
+
+      <!-- HOME SLIDES -->
       <div class="card">
-        <div class="c-hd"><div class="c-ico"><i class="fas fa-magnifying-glass"></i></div><h3>Search</h3></div>
-        <div class="srch-row"><input type="text" id="srchIn" placeholder="Enter contact number…"><button class="btn-srch" id="srchBtn"><i class="fas fa-search"></i></button></div>
-        <div id="rcWrap" style="display:none"><div class="ref-cards" id="rcGrid"></div></div>
-      </div>
-      <div class="card" id="trkCard" style="display:none">
-        <div class="c-hd"><div class="c-ico"><i class="fas fa-route"></i></div><h3>Delivery Details</h3></div>
-        <div class="i-grid" id="trkGrid"></div>
-        <div style="border-top:1px solid #253241;padding-top:.85rem">
-          <div class="tracker">
-            <div class="trk-step" data-s="1"><i class="fas fa-box"></i>Placed</div>
-            <div class="trk-step" data-s="2"><i class="fas fa-warehouse"></i>Processing</div>
-            <div class="trk-step" data-s="3"><i class="fas fa-truck"></i>Transit</div>
-            <div class="trk-step" data-s="4"><i class="fas fa-map-pin"></i>Out</div>
-            <div class="trk-step" data-s="5"><i class="fas fa-check-circle"></i>Done</div>
-          </div>
-          <div class="prog-wrap">
-            <div class="prog-hd"><span class="prog-lbl" id="progLbl">Placed</span><span class="prog-pct" id="progPct">0%</span></div>
-            <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
-            <div class="live-steps">
-              <div class="ls" data-s="1"><div class="sd"></div>Placed</div>
-              <div class="ls" data-s="2"><div class="sd"></div>Processing</div>
-              <div class="ls" data-s="3"><div class="sd"></div>Transit</div>
-              <div class="ls" data-s="4"><div class="sd"></div>Out</div>
-              <div class="ls" data-s="5"><div class="sd"></div>Done</div>
-            </div>
+        <div class="c-hd"><div class="c-ico"><i class="fas fa-image"></i></div><h3>Home Slides</h3></div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin-bottom:.75rem;line-height:1.5">Add background slideshow images for the home page. Use Option 1 (URL) or Option 2 (Upload).</p>
+
+        <!-- OPTION 1: URL -->
+        <div style="background:#1a2535;border:1px solid #2e3f55;border-radius:13px;padding:.85rem;margin-bottom:.75rem">
+          <div style="font-size:.7rem;font-weight:700;color:#f39c12;margin-bottom:.6rem;display:flex;align-items:center;gap:5px"><i class="fas fa-link"></i> Option 1 — Add by URL</div>
+          <div style="display:flex;gap:7px">
+            <input type="text" id="slideUrl" placeholder="https://example.com/image.jpg" style="flex:1;padding:9px 12px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:17px;color:white;font-size:.8rem;outline:none;font-family:inherit">
+            <button class="btn-add" onclick="addSlideUrl()"><i class="fas fa-plus"></i> Add</button>
           </div>
         </div>
-        <div id="proofSec" style="display:none;border-top:1px solid #253241;padding-top:.85rem;margin-top:.4rem">
-          <div style="font-size:.55rem;color:rgba(255,255,255,.26);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;font-family:monospace">DELIVERY PROOF</div>
-          <img id="proofImg" class="slip-img" alt="">
+
+        <!-- OPTION 2: UPLOAD -->
+        <div style="background:#1a2535;border:1px solid #2e3f55;border-radius:13px;padding:.85rem;margin-bottom:.75rem">
+          <div style="font-size:.7rem;font-weight:700;color:#f39c12;margin-bottom:.6rem;display:flex;align-items:center;gap:5px"><i class="fas fa-cloud-arrow-up"></i> Option 2 — Upload Image</div>
+          <label style="display:block;background:#f39c12;color:#1e2a3a;border:none;border-radius:17px;padding:9px 16px;font-size:.8rem;font-weight:800;cursor:pointer;text-align:center;transition:.2s" onmouseover="this.style.background='#e67e22'" onmouseout="this.style.background='#f39c12'">
+            <i class="fas fa-upload" style="margin-right:5px"></i><span id="slideImgFNlbl">Choose Image to Upload</span>
+            <input type="file" id="slideImgFile" accept="image/*" style="display:none" onchange="uploadSlide(this)">
+          </label>
+        </div>
+
+        <div id="slideList"></div>
+      </div>
+
+      <!-- HOW-TO IMAGES -->
+      <div class="card">
+        <div class="c-hd"><div class="c-ico"><i class="fas fa-question-circle"></i></div><h3>How-To Guide Images</h3></div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin-bottom:.75rem;line-height:1.5">Upload step-by-step guide images shown in the "How It Works" panel on the home page. Each image = one step.</p>
+
+        <!-- OPTION 1: URL -->
+        <div style="background:#1a2535;border:1px solid #2e3f55;border-radius:13px;padding:.85rem;margin-bottom:.75rem">
+          <div style="font-size:.7rem;font-weight:700;color:#f39c12;margin-bottom:.6rem;display:flex;align-items:center;gap:5px"><i class="fas fa-link"></i> Option 1 — Add by URL</div>
+          <div style="display:flex;gap:7px">
+            <input type="text" id="howImgUrl" placeholder="https://example.com/guide-step.jpg" style="flex:1;padding:9px 12px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:17px;color:white;font-size:.8rem;outline:none;font-family:inherit">
+            <button class="btn-add" onclick="addHowImgUrl()"><i class="fas fa-plus"></i> Add</button>
+          </div>
+        </div>
+
+        <!-- OPTION 2: UPLOAD -->
+        <div style="background:#1a2535;border:1px solid #2e3f55;border-radius:13px;padding:.85rem;margin-bottom:.75rem">
+          <div style="font-size:.7rem;font-weight:700;color:#f39c12;margin-bottom:.6rem;display:flex;align-items:center;gap:5px"><i class="fas fa-cloud-arrow-up"></i> Option 2 — Upload Image</div>
+          <label style="display:block;background:#f39c12;color:#1e2a3a;border:none;border-radius:17px;padding:9px 16px;font-size:.8rem;font-weight:800;cursor:pointer;text-align:center;transition:.2s" onmouseover="this.style.background='#e67e22'" onmouseout="this.style.background='#f39c12'">
+            <i class="fas fa-upload" style="margin-right:5px"></i><span id="howImgFNlbl">Choose Guide Image</span>
+            <input type="file" id="howImgFile" accept="image/*" style="display:none" onchange="uploadHowImg(this)">
+          </label>
+        </div>
+
+        <div id="howImgList"></div>
+      </div>
+
+      <!-- TAGLINE -->
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-pen"></i></div><h3>Home Tagline</h3></div>
+        <div class="fr" style="gap:7px">
+          <input type="text" id="taglineInput" class="fi" placeholder="Your trusted cargo partner…" style="border-radius:22px">
+          <button class="btn-add" onclick="saveTagline()"><i class="fas fa-save"></i> Save</button>
         </div>
       </div>
     </div>
-  </div>
-  <nav class="mob-nav">
-    <button class="m-tab active" data-s="sNew"><i class="fas fa-plus-circle"></i>New</button>
-    <button class="m-tab" data-s="sMine"><i class="fas fa-list"></i>Mine</button>
-    <button class="m-tab" data-s="sInv"><i class="fas fa-file-invoice"></i>Invoices</button>
-    <button class="m-tab" data-s="sTrk"><i class="fas fa-search-location"></i>Track</button>
-  </nav>
-</div>
 
-<!-- NOTIFICATION PANEL -->
-<div class="n-panel" id="nPanel">
-  <div class="n-hd">
-    <div class="n-hd-t"><i class="fas fa-bell"></i> Notifications</div>
-    <div class="n-hd-actions">
-      <button class="n-clear-all" id="nClearAll">Clear All</button>
-      <button class="n-close" id="nClose"><i class="fas fa-times"></i></button>
+    <!-- LOGIN PAGE SETTINGS -->
+    <div class="page" id="page-loginpage">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-image"></i></div><h3>Logo Image (under brand name)</h3></div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin-bottom:.7rem;line-height:1.5">Upload a PNG logo to display below "EasyCargo" on the login page. Recommended: transparent PNG, max height 48px.</p>
+        <div class="file-zone" style="margin-bottom:.7rem"><input type="file" id="loginLogoFile" accept="image/*" onchange="uploadLoginLogo(this)"><i class="fas fa-image"></i><span id="loginLogoFN">Upload logo PNG</span></div>
+        <img id="loginLogoPrev" class="prev-img" alt="">
+        <div id="loginLogoStatus" style="margin-top:.5rem;font-size:.74rem;color:rgba(255,255,255,.42)"></div>
+        <div class="fr" style="gap:7px;margin-top:.6rem">
+          <button class="btn-add sec" onclick="removeLoginLogo()"><i class="fas fa-trash"></i> Remove Logo</button>
+        </div>
+      </div>
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-share-alt"></i></div><h3>Social Platform Links</h3></div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin-bottom:.7rem;line-height:1.5">Add social media links shown under the brand name on the login page.</p>
+        <div class="fr" style="gap:7px;margin-bottom:.6rem">
+          <div class="fgsm"><label>Platform</label>
+            <select id="socialPlatform">
+              <option value="facebook">Facebook</option>
+              <option value="instagram">Instagram</option>
+              <option value="telegram">Telegram</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="twitter">Twitter / X</option>
+              <option value="youtube">YouTube</option>
+              <option value="tiktok">TikTok</option>
+              <option value="viber">Viber</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="fgsm"><label>URL</label><input type="text" id="socialUrl" placeholder="https://…"></div>
+          <button class="btn-add" id="addSocialBtn"><i class="fas fa-plus"></i> Add</button>
+        </div>
+        <div id="socialList"></div>
+      </div>
     </div>
+
+    <!-- PICKUP LOCATIONS -->
+    <div class="page" id="page-pickups">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-plus"></i></div><h3>Add Pickup Location</h3></div>
+        <div class="fr" style="gap:7px;margin-bottom:.6rem">
+          <div class="fgsm"><label>Name</label><input type="text" id="locName" placeholder="e.g. Male Post Office"></div>
+          <div class="fgsm"><label>Type</label><select id="locType"><option value="standard">Standard</option><option value="address">Address Required</option><option value="postal">Post / Pickpost</option></select></div>
+        </div>
+        <div class="fgsm" style="margin-bottom:.6rem"><label>Photo</label>
+          <div class="file-zone"><input type="file" id="locImg" accept="image/*" onchange="previewI(this,'locPrev','locImgFN')"><i class="fas fa-image"></i><span id="locImgFN">Tap to upload photo</span></div>
+          <img id="locPrev" class="prev-img" alt="">
+        </div>
+        <button class="btn-add" id="addLocBtn"><i class="fas fa-plus"></i> Add Location</button>
+        <div style="margin-top:.7rem" id="locList"></div>
+      </div>
+    </div>
+
+    <!-- BOATS -->
+    <div class="page" id="page-boats">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-plus"></i></div><h3>Add Boat</h3></div>
+        <div class="fr" style="gap:7px;margin-bottom:.6rem">
+          <div class="fgsm"><label>Name</label><input type="text" id="boatName" placeholder="e.g. Fasthuri"></div>
+          <div class="fgsm"><label>Route</label><input type="text" id="boatRoute" placeholder="Male – South Atoll"></div>
+          </div>
+        <div class="fgsm" style="margin-bottom:.6rem"><label>Atolls (Enter or comma)</label>
+          <div id="boatAtollWrap" style="background:#1e2a3a;border:1px solid #2e3f55;border-radius:13px;padding:6px 10px;min-height:38px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;cursor:text" onclick="$('boatAtollIn').focus()">
+            <div id="boatAtollTagsWrap" style="display:contents"></div>
+            <input id="boatAtollIn" type="text" placeholder="Add atoll…" style="border:none;background:transparent;color:white;font-size:.78rem;outline:none;min-width:85px;flex:1">
+          </div>
+        </div>
+        <div class="fgsm" style="margin-bottom:.6rem"><label>Boat Photo</label>
+          <div class="file-zone"><input type="file" id="boatImg" accept="image/*" onchange="previewI(this,'boatPrev','boatImgFN')"><i class="fas fa-ship"></i><span id="boatImgFN">Tap to upload photo</span></div>
+          <img id="boatPrev" class="prev-img" alt="">
+        </div>
+        <div class="fgsm" style="margin-bottom:.6rem"><label>Islands (Enter or comma)</label>
+          <div id="islInputWrap" style="background:#1e2a3a;border:1px solid #2e3f55;border-radius:13px;padding:6px 10px;min-height:38px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;cursor:text" onclick="$('islIn').focus()">
+            <div id="islTagsWrap" style="display:contents"></div>
+            <input id="islIn" type="text" placeholder="Add island…" style="border:none;background:transparent;color:white;font-size:.78rem;outline:none;min-width:85px;flex:1">
+          </div>
+        </div>
+        <button class="btn-add" id="addBoatBtn"><i class="fas fa-plus"></i> Add Boat</button>
+        <div style="margin-top:.7rem" id="boatList"></div>
+      </div>
+    </div>
+
+    <!-- SPEED BOATS -->
+    <div class="page" id="page-speedboats">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-bolt"></i></div><h3>Add Speed Boat</h3></div>
+        <div class="fr" style="gap:7px;margin-bottom:.6rem">
+          <div class="fgsm"><label>Name</label><input type="text" id="sbName" placeholder="e.g. Thunder Express"></div>
+          <div class="fgsm"><label>Route</label><input type="text" id="sbRoute" placeholder="Male – North Atoll"></div>
+        </div>
+        <div class="fgsm" style="margin-bottom:.6rem"><label>Atolls (Enter or comma)</label>
+          <div id="sbAtollWrap" style="background:#1e2a3a;border:1px solid #2e3f55;border-radius:13px;padding:6px 10px;min-height:38px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;cursor:text" onclick="$('sbAtollIn').focus()">
+            <div id="sbAtollTagsWrap" style="display:contents"></div>
+            <input id="sbAtollIn" type="text" placeholder="Add atoll…" style="border:none;background:transparent;color:white;font-size:.78rem;outline:none;min-width:85px;flex:1">
+          </div>
+        </div>
+        <div class="fgsm" style="margin-bottom:.6rem"><label>Speed Boat Photo</label>
+          <div class="file-zone"><input type="file" id="sbImg" accept="image/*" onchange="previewI(this,'sbPrev','sbImgFN')"><i class="fas fa-bolt"></i><span id="sbImgFN">Tap to upload photo</span></div>
+          <img id="sbPrev" class="prev-img" alt="">
+        </div>
+        <div class="fgsm" style="margin-bottom:.6rem"><label>Islands (Enter or comma)</label>
+          <div id="sbIslInputWrap" style="background:#1e2a3a;border:1px solid #2e3f55;border-radius:13px;padding:6px 10px;min-height:38px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;cursor:text" onclick="$('sbIslIn').focus()">
+            <div id="sbIslTagsWrap" style="display:contents"></div>
+            <input id="sbIslIn" type="text" placeholder="Add island…" style="border:none;background:transparent;color:white;font-size:.78rem;outline:none;min-width:85px;flex:1">
+          </div>
+        </div>
+        <button class="btn-add" id="addSBBtn"><i class="fas fa-plus"></i> Add Speed Boat</button>
+        <div style="margin-top:.7rem" id="sbList"></div>
+      </div>
+    </div>
+
+    <!-- CARGO TYPES -->
+    <div class="page" id="page-cargotypes">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-plus"></i></div><h3>Add Cargo Type</h3></div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin-bottom:.65rem;line-height:1.5">Name must be <strong style="color:#f39c12">Express Cargo</strong> for express hourly types. Normal cargo shows weight ranges. Express cargo shows hourly duration list.</p>
+        <div class="fr" style="gap:7px;margin-bottom:.6rem">
+          <div class="fgsm"><label>Type Name</label><input type="text" id="ctName" placeholder="e.g. Express Cargo"></div>
+          <div class="fgsm"><label>Icon</label><select id="ctKey"><option value="normal">Box (Normal)</option><option value="express">Bolt (Express)</option><option value="fragile">Fragile</option><option value="oversized">Oversized</option><option value="custom">Custom</option></select></div>
+          <div class="fgsm"><label>ETA Description</label><input type="text" id="ctEta" placeholder="e.g. Same day"></div>
+          <div class="fgsm"><label>Price Type</label><select id="ctPriceType"><option value="flat">Flat (Normal)</option><option value="hourly">Per Hour (Express)</option></select></div>
+          <div class="fgsm"><label>Description</label><input type="text" id="ctDesc" placeholder="e.g. 2-3 business days"></div>
+          <div class="fgsm"><label>Sort Order</label><input type="number" id="ctOrder" placeholder="1" min="1"></div>
+          <button class="btn-add" id="addCtBtn"><i class="fas fa-plus"></i> Add</button>
+        </div>
+        <div id="ctList"></div>
+      </div>
+    </div>
+
+    <!-- EXPRESS HOURS -->
+    <div class="page" id="page-expresshrs">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-clock"></i></div><h3>Express Hourly Options</h3></div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin-bottom:.65rem;line-height:1.5">Add hourly duration options linked to a specific Express Cargo type. Users see the matching hours when they select that cargo type.</p>
+        <div class="p-form" style="grid-template-columns:1fr 1fr 1fr 1fr auto">
+          <div class="fgsm"><label>Cargo Type</label><select id="hrCargoType" style="padding:8px 10px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:17px;color:white;font-size:.8rem;outline:none;width:100%;font-family:inherit"><option value="">Select express type…</option></select></div>
+          <div class="fgsm"><label>Hours (number)</label><input type="number" id="hrHours" placeholder="1" min="1"></div>
+          <div class="fgsm"><label>Label</label><input type="text" id="hrLabel" placeholder="e.g. 1 Hour"></div>
+          <div class="fgsm"><label>Price (MVR)</label><input type="number" id="hrPrice" placeholder="200" min="0"></div>
+          <button class="btn-add" id="addHrBtn"><i class="fas fa-plus"></i> Add</button>
+        </div>
+        <div id="hrList"></div>
+      </div>
+    </div>
+
+    <!-- WEIGHT RANGES -->
+    <div class="page" id="page-prices">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-plus"></i></div><h3>Add Weight Range</h3></div>
+        <div class="p-form">
+          <div class="fgsm"><label>Min kg</label><input type="number" id="pMin" placeholder="0" min="0" step="0.1"></div>
+          <div class="fgsm"><label>Max kg</label><input type="number" id="pMax" placeholder="5" min="0" step="0.1"></div>
+          <div class="fgsm"><label>Price MVR</label><input type="number" id="pVal" placeholder="100" min="0"></div>
+          <button class="btn-add" id="addPBtn"><i class="fas fa-plus"></i> Add</button>
+        </div>
+        <div id="pList"></div>
+      </div>
+    </div>
+
+    <!-- DAILY CAPACITY -->
+    <div class="page" id="page-capacity">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-box-open"></i></div><h3>Daily Package Capacity</h3></div>
+        <p style="font-size:.76rem;color:rgba(255,255,255,.45);margin-bottom:.7rem;line-height:1.6">Set 0 to disable the limit. Users see a capacity bar and cannot submit when full.</p>
+        <div class="fr" style="gap:7px">
+          <div class="fgsm"><label>Max Packages Per Day</label><input type="number" id="capInput" placeholder="50" min="0"></div>
+          <button class="btn-add" id="saveCapBtn"><i class="fas fa-save"></i> Save</button>
+        </div>
+        <div id="capStatus" style="margin-top:.7rem;font-size:.76rem;color:rgba(255,255,255,.42)"></div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div class="page" id="page-users">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-user-plus"></i></div><h3>Add User</h3></div>
+        <div class="fr">
+          <div class="fg"><label>Username</label><input class="fi" type="text" id="nUsr" placeholder="Username"></div>
+          <div class="fg"><label>Email</label><input class="fi" type="email" id="nEml" placeholder="email@…"></div>
+          <div class="fg"><label>Contact</label><input class="fi" type="tel" id="nCnt" placeholder="7XXXXXXX"></div>
+          <div class="fg"><label>Password</label><input class="fi" type="password" id="nPwd" placeholder="Password"></div>
+          <div class="fg"><label>Role</label><select class="fi" id="nRole" onchange="document.getElementById('permWrap').style.display=this.value==='staff'?'block':'none'"><option value="user">User</option><option value="staff">Staff</option><option value="admin">Admin</option></select></div>
+        </div>
+        <div id="permWrap" style="display:none;margin-bottom:.65rem">
+          <div style="font-size:.65rem;font-weight:700;color:#f39c12;margin-bottom:.5rem;letter-spacing:.5px;text-transform:uppercase">Staff Permissions</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="pDashboard" checked style="accent-color:#f39c12"> Dashboard</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="pRecords" checked style="accent-color:#f39c12"> Records</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="pTrack" checked style="accent-color:#f39c12"> Track</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="pRevenue" style="accent-color:#f39c12"> Revenue</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="pStatus" checked style="accent-color:#f39c12"> Update Status</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="pApprove" style="accent-color:#f39c12"> Approve Payment</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="pConfig" style="accent-color:#f39c12"> Configuration</label>
+          </div>
+        </div>
+        <button class="btn-add" id="addUBtn"><i class="fas fa-plus"></i> Add User</button>
+      </div>
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-users"></i></div><h3>All Users</h3></div><div id="uList"></div></div>
+    </div>
+
+
+
+    <!-- TELEGRAM ALERTS -->
+    <div class="page" id="page-telegram">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fab fa-telegram-plane"></i></div><h3>Telegram Alert Settings</h3></div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin-bottom:.7rem;line-height:1.6">When a user submits a payment, an automatic message is sent to the configured Telegram number/chat. The bot token and chat ID are pre-configured. Use this page to update the target chat if needed.</p>
+        <div style="background:rgba(52,152,219,.08);border:1px solid rgba(52,152,219,.2);border-radius:12px;padding:.85rem;margin-bottom:.75rem">
+          <div style="font-size:.76rem;font-weight:700;color:#3498db;margin-bottom:.4rem"><i class="fas fa-check-circle" style="margin-right:4px"></i>Currently Active</div>
+          <div style="font-size:.74rem;color:rgba(255,255,255,.55)">Alerts are sent automatically to <strong style="color:white">965429044</strong> on every new payment submission.</div>
+        </div>
+        <div class="fr" style="gap:7px;margin-bottom:.6rem">
+          <div class="fgsm"><label>Bot Token</label><input type="text" id="tgToken" placeholder="Bot token…" style="padding:8px 10px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:17px;color:white;font-size:.78rem;outline:none;width:100%;font-family:monospace"></div>
+          <div class="fgsm"><label>Chat ID / Phone</label><input type="text" id="tgChat" placeholder="965429044 or chat id…" style="padding:8px 10px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:17px;color:white;font-size:.78rem;outline:none;width:100%;font-family:monospace"></div>
+          <button class="btn-add" id="saveTgBtn"><i class="fas fa-save"></i> Save</button>
+        </div>
+        <div id="tgStatus" style="font-size:.74rem;color:rgba(255,255,255,.42)"></div>
+        <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid #253241">
+          <div style="font-size:.74rem;color:rgba(255,255,255,.42);margin-bottom:.5rem">Test the alert by clicking below:</div>
+          <button class="btn-add sec" id="tgTestBtn"><i class="fab fa-telegram-plane"></i> Send Test Message</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELIVERY LOCATIONS -->
+    <div class="page" id="page-dellocs">
+      <div class="card"><div class="c-hd"><div class="c-ico"><i class="fas fa-map-pin"></i></div><h3>Delivery Locations</h3></div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin-bottom:.65rem;line-height:1.5">These locations appear as chip buttons in the user delivery form when "Cargo" mode is selected.</p>
+        <div class="fr" style="gap:7px;margin-bottom:.6rem">
+          <div class="fgsm"><label>Location Name</label><input type="text" id="dlName" placeholder="e.g. Addu City"></div>
+          <button class="btn-add" id="addDlBtn" style="align-self:flex-end"><i class="fas fa-plus"></i> Add</button>
+        </div>
+        <div id="dlList"></div>
+      </div>
+    </div>
+
   </div>
-  <div class="n-list" id="nList"></div>
 </div>
 
-<!-- PAYMENT MODAL -->
-<div class="modal-overlay" id="payMod">
+<!-- EDIT SPEED BOAT MODAL -->
+<div class="modal-overlay" id="esbMod">
 <div class="modal-box">
-  <div class="modal-hd"><div class="modal-title"><i class="fas fa-wallet"></i> Payment Required</div><button class="close-btn" id="payClose"><i class="fas fa-times"></i></button></div>
-  <div class="bank-box">
-    <div class="bank-row"><span class="bk">Bank</span><span class="bv">Bank of Maldives</span></div>
-    <div class="bank-row"><span class="bk">Account Name</span><span class="bv">EasyCargo MV</span></div>
-    <div class="bank-row"><span class="bk">Account No.</span><span class="bv"><span style="font-family:monospace">7730000770230</span><button class="copy-btn" onclick="navigator.clipboard.writeText('7730000770230');showToast('Copied!','info')">COPY</button></span></div>
-    <div class="bank-row"><span class="bk">Amount</span><span class="bv" id="payAmt" style="color:#f39c12;font-size:1rem">0 MVR</span></div>
+  <div class="modal-hd"><div class="modal-title"><i class="fas fa-bolt"></i> Edit Speed Boat</div><button class="close-btn" id="esbClose"><i class="fas fa-times"></i></button></div>
+  <div class="fg"><label>Name</label><input class="fi" type="text" id="esbName"></div>
+  <div class="fg"><label>Route</label><input class="fi" type="text" id="esbRoute"></div>
+  <div class="fg"><label>Atolls (Enter or comma)</label>
+    <div id="esbAtollWrap" style="background:#1e2a3a;border:1px solid #2e3f55;border-radius:13px;padding:6px 10px;min-height:38px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;cursor:text" onclick="$('esbAtollIn').focus()">
+      <div id="esbAtollTagsWrap" style="display:contents"></div>
+      <input id="esbAtollIn" type="text" placeholder="Add atoll…" style="border:none;background:transparent;color:white;font-size:.78rem;outline:none;min-width:85px;flex:1">
+    </div>
   </div>
-  <div class="fg"><label>Upload Payment Slip</label>
-    <div class="file-zone"><input type="file" id="slipFile" accept="image/*"><i class="fas fa-cloud-arrow-up"></i><span id="slipFN">Tap to attach slip</span></div>
+  <div class="fg"><label>Photo</label>
+    <div class="file-zone"><input type="file" id="esbImgFile" accept="image/*" onchange="previewI(this,'esbPrev','esbImgFN')"><i class="fas fa-bolt"></i><span id="esbImgFN">Tap to replace</span></div>
+    <img id="esbPrev" class="prev-img" alt="">
   </div>
-  <div class="modal-btns">
-    <button class="btn btn-sec" style="flex:1" id="payCancel">Cancel</button>
-    <button class="btn btn-gold" style="flex:2" id="payConfirm"><i class="fas fa-check-circle"></i> Confirm</button>
+  <div class="fg"><label>Islands</label>
+    <div id="esbIslWrap" style="background:#1e2a3a;border:1px solid #2e3f55;border-radius:13px;padding:6px 10px;min-height:38px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;cursor:text" onclick="$('esbIslIn').focus()">
+      <div id="esbIslTagsWrap" style="display:contents"></div>
+      <input id="esbIslIn" type="text" placeholder="Add island…" style="border:none;background:transparent;color:white;font-size:.78rem;outline:none;min-width:85px;flex:1">
+    </div>
   </div>
+  <div class="fg"><label>Status</label><select class="fi" id="esbActive"><option value="true">Active</option><option value="false">Inactive</option></select></div>
+  <div class="modal-btns"><button class="btn btn-sec" style="flex:1" id="esbCancel">Cancel</button><button class="btn btn-gold" style="flex:2" id="esbConfirm"><i class="fas fa-save"></i> Save</button></div>
 </div>
 </div>
 
-<!-- SLIP VIEW -->
+<!-- STATUS MODAL -->
+<div class="modal-overlay" id="statMod">
+<div class="modal-box">
+  <div class="modal-hd"><div class="modal-title"><i class="fas fa-pen-to-square"></i> Update Status</div><button class="close-btn" id="statClose"><i class="fas fa-times"></i></button></div>
+  <div class="fgsm" style="margin-bottom:.85rem"><label>Status</label>
+    <select id="statSel" style="padding:10px;border-radius:15px;background:#1e2a3a;border:1px solid #2e3f55;color:white;font-size:.84rem;width:100%;outline:none">
+      <option>Order Placed</option><option>Processing</option><option>In Transit</option><option>Out for Delivery</option><option>Delivered</option>
+    </select>
+  </div>
+  <div id="proofBox" style="display:none"><div class="fgsm"><label>Delivery Proof (Required)</label><div class="file-zone"><input type="file" id="proofFile" accept="image/*"><i class="fas fa-cloud-arrow-up"></i><span id="proofFN">Tap to attach proof</span></div></div></div>
+  <div class="modal-btns"><button class="btn btn-sec" style="flex:1" id="statCancel">Cancel</button><button class="btn btn-gold" style="flex:2" id="statConfirm"><i class="fas fa-check"></i> Update</button></div>
+</div>
+</div>
+
+<!-- SLIP MODAL -->
 <div class="modal-overlay" id="slipMod">
-<div class="modal-box"><div class="modal-hd"><div class="modal-title"><i class="fas fa-image"></i> Payment Slip</div><button class="close-btn" id="slipClose"><i class="fas fa-times"></i></button></div><img id="slipViewImg" class="slip-img" alt="slip"><div class="modal-btns"><button class="btn btn-sec" id="slipClose2">Close</button></div></div>
+<div class="modal-box"><div class="modal-hd"><div class="modal-title"><i class="fas fa-image"></i> Payment Slip</div><button class="close-btn" id="slipClose"><i class="fas fa-times"></i></button></div><img id="slipImg" class="slip-img" alt="slip"><div class="modal-btns"><button class="btn btn-sec" id="slipClose2">Close</button></div></div>
 </div>
 
-<!-- INVOICE MODAL -->
-<div class="modal-overlay" id="invMod">
+<!-- EDIT USER MODAL -->
+<div class="modal-overlay" id="euMod">
 <div class="modal-box">
-  <div class="modal-hd"><div class="modal-title"><i class="fas fa-file-invoice"></i> Invoice</div><button class="close-btn" id="invClose"><i class="fas fa-times"></i></button></div>
-  <div id="invContent"></div>
-  <div class="modal-btns">
-    <button class="btn btn-sec" style="flex:1" id="invClose2">Close</button>
-    <button class="btn btn-gold" style="flex:2" id="invDownload"><i class="fas fa-download"></i> Download PDF</button>
+  <div class="modal-hd"><div class="modal-title"><i class="fas fa-user-pen"></i> Edit User</div><button class="close-btn" id="euClose"><i class="fas fa-times"></i></button></div>
+  <div class="fr">
+    <div class="fg"><label>Username</label><input class="fi" type="text" id="euUsr"></div>
+    <div class="fg"><label>Email</label><input class="fi" type="email" id="euEml"></div>
+    <div class="fg"><label>Contact</label><input class="fi" type="tel" id="euCnt"></div>
+    <div class="fg"><label>New Password</label><input class="fi" type="password" id="euPwd" placeholder="Blank = keep"></div>
+    <div class="fg"><label>Role</label><select class="fi" id="euRole"><option value="user">User</option><option value="staff">Staff</option><option value="admin">Admin</option></select></div>
   </div>
+  <div id="euPermWrap" style="display:none;margin-bottom:.65rem;padding-top:.75rem;border-top:1px solid #253241">
+    <div style="font-size:.65rem;font-weight:700;color:#f39c12;margin-bottom:.5rem;letter-spacing:.5px;text-transform:uppercase">Staff Permissions</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="epDashboard" style="accent-color:#f39c12"> Dashboard</label>
+      <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="epRecords" style="accent-color:#f39c12"> Records</label>
+      <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="epTrack" style="accent-color:#f39c12"> Track</label>
+      <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="epRevenue" style="accent-color:#f39c12"> Revenue</label>
+      <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="epStatus" style="accent-color:#f39c12"> Update Status</label>
+      <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="epApprove" style="accent-color:#f39c12"> Approve Payment</label>
+      <label style="display:flex;align-items:center;gap:5px;font-size:.76rem;cursor:pointer"><input type="checkbox" id="epConfig" style="accent-color:#f39c12"> Configuration</label>
+    </div>
+  </div>
+  <div class="modal-btns"><button class="btn btn-sec" style="flex:1" id="euCancel">Cancel</button><button class="btn btn-gold" style="flex:2" id="euConfirm"><i class="fas fa-save"></i> Save</button></div>
+</div>
+</div>
+
+<!-- EDIT BOAT MODAL -->
+<div class="modal-overlay" id="ebMod">
+<div class="modal-box">
+  <div class="modal-hd"><div class="modal-title"><i class="fas fa-ship"></i> Edit Boat</div><button class="close-btn" id="ebClose"><i class="fas fa-times"></i></button></div>
+  <div class="fg"><label>Name</label><input class="fi" type="text" id="ebName"></div>
+  <div class="fg"><label>Route</label><input class="fi" type="text" id="ebRoute"></div>
+  <div class="fg"><label>Atolls (Enter or comma)</label>
+    <div id="ebAtollWrap" style="background:#1e2a3a;border:1px solid #2e3f55;border-radius:13px;padding:6px 10px;min-height:38px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;cursor:text" onclick="$('ebAtollIn').focus()">
+      <div id="ebAtollTagsWrap" style="display:contents"></div>
+      <input id="ebAtollIn" type="text" placeholder="Add atoll…" style="border:none;background:transparent;color:white;font-size:.78rem;outline:none;min-width:85px;flex:1">
+    </div>
+  </div>
+  <div class="fg"><label>Photo</label>
+    <div class="file-zone"><input type="file" id="ebImgFile" accept="image/*" onchange="previewI(this,'ebPrev','ebImgFN')"><i class="fas fa-ship"></i><span id="ebImgFN">Tap to replace</span></div>
+    <img id="ebPrev" class="prev-img" alt="">
+  </div>
+  <div class="fg"><label>Islands</label>
+    <div id="ebIslWrap" style="background:#1e2a3a;border:1px solid #2e3f55;border-radius:13px;padding:6px 10px;min-height:38px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;cursor:text" onclick="$('ebIslIn').focus()">
+      <div id="ebIslTagsWrap" style="display:contents"></div>
+      <input id="ebIslIn" type="text" placeholder="Add island…" style="border:none;background:transparent;color:white;font-size:.78rem;outline:none;min-width:85px;flex:1">
+    </div>
+  </div>
+  <div class="fg"><label>Status</label><select class="fi" id="ebActive"><option value="true">Active</option><option value="false">Inactive</option></select></div>
+  <div class="modal-btns"><button class="btn btn-sec" style="flex:1" id="ebCancel">Cancel</button><button class="btn btn-gold" style="flex:2" id="ebConfirm"><i class="fas fa-save"></i> Save</button></div>
 </div>
 </div>
 
@@ -695,272 +709,254 @@ a{color:#f39c12;text-decoration:none}
 const fbCfg={apiKey:"AIzaSyCZA8Z9AJcC97CyQUZVCRsljTuYBfxjHMw",authDomain:"easycargo-9c0cd.firebaseapp.com",databaseURL:"https://easycargo-9c0cd-default-rtdb.firebaseio.com",projectId:"easycargo-9c0cd",storageBucket:"easycargo-9c0cd.firebasestorage.app",messagingSenderId:"51689325187",appId:"1:51689325187:web:c65cb8fb0af2241a4c91b6"};
 firebase.initializeApp(fbCfg);
 const db=firebase.database();
-let me=null,allD=[],allP=[],allN=[],allBoats=[],allSpeedBoats=[],allPickups=[],allCargoTypes=[],allExpressHrs=[],allDelLocs=[],siteSettings={},tmpD=null,busy=false,dMode='cargo',slideIdx=0,slideTimer=null,selAtoll=null,curInvoiceD=null;
+const ADMIN_USER='Admin',ADMIN_PASS='8555';
+let me=null,allD=[],allU=[],allP=[],allN=[],allBoats=[],allSB=[],allPickups=[],allCT=[],allExpHrs=[],allDL=[],siteSettings={},eDelId=null,eBoatId=null,eSBId=null,rvChart=null,newBIsls=[],ebIsls=[],newSBIsls=[],esbIsls=[],eUserId=null;
 const $=id=>document.getElementById(id);
 function toArr(d){return d?(Array.isArray(d)?d:Object.values(d)):[]}
 function fmtD(d){return d?new Date(d).toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}):'—'}
-function genRef(){return`CARGO-${Date.now().toString().slice(-6)}${Math.floor(Math.random()*900+100)}`}
 function genInvNo(){return`INV-${Date.now().toString().slice(-7)}`}
-function showToast(m,t='info'){const el=$('toast');el.className=`toast ${t}`;$('tTxt').textContent=m;el.querySelector('.t-ico').innerHTML=t==='ok'?'<i class="fas fa-check-circle"></i>':t==='err'?'<i class="fas fa-times-circle"></i>':'<i class="fas fa-info-circle"></i>';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3200)}
+function showToast(m,t='info'){const el=$('toast');el.className=`toast ${t}`;$('tTxt').textContent=m;el.querySelector('.t-ico').innerHTML=t==='ok'?'<i class="fas fa-check-circle"></i>':t==='err'?'<i class="fas fa-times-circle"></i>':'<i class="fas fa-info-circle"></i>';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3000)}
+function showMsg(id,msg,t){const el=$(id);el.className=`msg ${t}`;el.textContent=msg;setTimeout(()=>el.className='msg',4000)}
 function sBadge(s){const m={'Order Placed':'b-placed','Processing':'b-proc','In Transit':'b-trans','Out for Delivery':'b-out','Delivered':'b-del'};return`<span class="badge ${m[s]||'b-placed'}">${s}</span>`}
 function pBadge(s){const m={'under_review':['b-rev','Reviewing'],'paid':['b-paid','Paid'],'pending':['b-pnd','Pending']};const[c,l]=m[s]||['b-pnd','Pending'];return`<span class="badge ${c}">${l}</span>`}
-function showMsg(id,msg,t){const el=$(id);el.className=`msg ${t}`;el.textContent=msg;setTimeout(()=>el.className='msg',4000)}
-function timeAgo(ts){if(!ts)return'';const s=Math.floor((Date.now()-new Date(ts))/1000);if(s<60)return s+'s ago';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago'}
-function calcTotal(){const isExp=$('ctIsExpress').value==='1';const cp=isExp?parseFloat($('selHrPrice').value)||0:parseFloat($('ctPrice').value)||0;const wp=isExp?0:parseFloat($('selWP').value)||0;const tot=cp+wp;$('pDisp').textContent=tot.toFixed(0);return tot}
-function initSlideshow(){const slides=siteSettings.homeSlides||[];const ss=$('slideshow');const dots=$('slideDots');if(siteSettings.homeTagline)$('homeTagline').textContent=siteSettings.homeTagline;if(!slides.length){ss.innerHTML='<div class="slide active" style="background:linear-gradient(135deg,#0a0f1e,#1a2747)"></div>';dots.innerHTML='';return}ss.innerHTML=slides.map((s,i)=>`<div class="slide${i===0?' active':''}" style="background-image:url('${s.url||s}')"></div>`).join('');dots.innerHTML=slides.map((_,i)=>`<div class="dot${i===0?' active':''}" onclick="gotoSlide(${i})"></div>`).join('');clearInterval(slideTimer);slideTimer=setInterval(()=>gotoSlide((slideIdx+1)%slides.length),5000)}
-window.gotoSlide=function(i){const sl=document.querySelectorAll('.slide');const ds=document.querySelectorAll('.dot');if(!sl.length)return;sl[slideIdx]?.classList.remove('active');ds[slideIdx]?.classList.remove('active');slideIdx=i;sl[slideIdx]?.classList.add('active');ds[slideIdx]?.classList.add('active')}
-function loadHowTo(){const imgs=siteSettings.howToImages||[];const el=$('howImgGrid');if(!imgs.length){el.innerHTML='<div class="how-empty">No guide images yet.</div>';return}el.innerHTML=imgs.map(img=>`<div class="how-img-item"><img src="${img.url||img}" loading="lazy"></div>`).join('')}
-window.toggleHow=function(){$('howPanel').classList.toggle('open')}
-window.showAuth=function(){$('homePage').style.display='none';$('authScreen').classList.add('show')}
-function loadLoginPageSettings(){
-  const logo=siteSettings.loginLogoUrl||'';const li=$('loginLogoImg');if(logo){li.src=logo;li.style.display='block'}else li.style.display='none';
-  const links=siteSettings.socialLinks||[];const row=$('socialRow');
-  if(!links.length){row.style.display='none';return}
-  const ic={facebook:'fab fa-facebook-f',instagram:'fab fa-instagram',telegram:'fab fa-telegram-plane',whatsapp:'fab fa-whatsapp',twitter:'fab fa-twitter',youtube:'fab fa-youtube',tiktok:'fab fa-tiktok',viber:'fab fa-viber'};
-  const cc={facebook:'s-fb',instagram:'s-ig',telegram:'s-tg',whatsapp:'s-wa',twitter:'s-tw',youtube:'s-yt'};
-  row.style.display='flex';
-  row.innerHTML=links.map(l=>{const pl=l.platform?.toLowerCase()||'other';return`<a href="${l.url||'#'}" target="_blank" class="social-btn ${cc[pl]||'s-ot'}"><i class="${ic[pl]||'fas fa-link'}"></i>${l.platform}</a>`}).join('')
-}
-$('tLogin').onclick=()=>{$('tLogin').classList.add('active');$('tReg').classList.remove('active');$('pLogin').classList.add('active');$('pReg').classList.remove('active')};
-$('tReg').onclick=()=>{$('tReg').classList.add('active');$('tLogin').classList.remove('active');$('pReg').classList.add('active');$('pLogin').classList.remove('active')};
-$('loginBtn').onclick=async()=>{
-  const u=$('lUsr').value.trim(),p=$('lPwd').value;
-  if(!u||!p){showMsg('loginMsg','Fill all fields','err');return}
+function renderIslTags(wrap,isls,onRm){wrap.innerHTML=isls.map((i,idx)=>`<span class="isl-tag">${i}<button onclick="${onRm}(${idx})" type="button">×</button></span>`).join('')}
+
+// LOGIN
+$('aLoginBtn').onclick=async()=>{
+  const u=$('aUsr').value.trim(),p=$('aPwd').value;if(!u||!p){showMsg('loginMsg','Fill all fields','err');return}
+  if((u===ADMIN_USER||u.toLowerCase()===ADMIN_USER.toLowerCase())&&p===ADMIN_PASS){me={username:ADMIN_USER,email:'admin@easycargo.mv',role:'admin',id:0};localStorage.setItem('ecAdmin',JSON.stringify(me));enterAdmin();return}
   const arr=toArr((await db.ref('users').once('value')).val());
-  const f=arr.find(x=>(x.username===u||x.email===u)&&x.password===p);
-  if(!f){showMsg('loginMsg','Invalid credentials','err');return}
-  if(f.role==='admin'){showMsg('loginMsg','Use the admin panel','err');return}
-  if(f.status==='pending'){$('pLogin').innerHTML=`<div class="pending-box"><i class="fas fa-hourglass-half"></i><h3>Access Pending</h3><p>Awaiting admin approval.</p></div><button class="btn btn-sec" style="margin-top:.8rem" onclick="location.reload()"><i class="fas fa-arrow-left"></i> Back</button>`;return}
-  if(f.status==='blocked'){showMsg('loginMsg','Account blocked.','err');return}
-  $('loginBtn').disabled=true;$('truckAnim').classList.add('show');
-  setTimeout(()=>{$('truckAnim').classList.remove('show');me=f;localStorage.setItem('ecu',JSON.stringify(f));enterDash()},1800)
+  const f=arr.find(x=>(x.username===u||x.email===u)&&x.password===p&&(x.role==='admin'||x.role==='staff'));
+  if(!f){showMsg('loginMsg','Invalid admin credentials','err');return}
+  me=f;localStorage.setItem('ecAdmin',JSON.stringify(f));enterAdmin()
 };
-$('regBtn').onclick=async()=>{
-  const u=$('rUsr').value.trim(),e=$('rEml').value.trim(),c=$('rCnt').value.trim(),p=$('rPwd').value,cf=$('rCfm').value;
-  if(!u||!e||!c||!p||!cf){showMsg('regMsg','Fill all fields','err');return}
-  if(p!==cf){showMsg('regMsg','Passwords do not match','err');return}
-  const arr=toArr((await db.ref('users').once('value')).val());
-  if(arr.find(x=>x.email===e)){showMsg('regMsg','Email already exists','err');return}
-  arr.push({id:Date.now(),username:u,email:e,contact:c,password:p,role:'user',status:'pending'});
-  await db.ref('users').set(arr);showMsg('regMsg','Registered! Awaiting admin approval.','ok');$('tLogin').click()
-};
-window.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('ecu');if(s){me=JSON.parse(s);$('homePage').style.display='none';enterDash()}initFB()});
-function initFB(){
-  db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}});
-  db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});
-  db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});
-  db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());if(me)buildAtollChips()});
-  db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me)loadPickupGrid()});
-  db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});
-  db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});
-  db.ref('deliveryLocations').on('value',snap=>{allDelLocs=toArr(snap.val());if(me)loadDlocGrid()});
-  db.ref('speedBoats').on('value',snap=>{allSpeedBoats=toArr(snap.val());if(me)buildSBGrid()});
-  db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});
-}
-function enterDash(){$('authScreen').classList.remove('show');$('dashboard').style.display='block';$('hName').textContent=me.username;$('sidebarName').textContent=me.username;$('cNm').value=me.username;$('cCt').value=me.contact||'';loadPickupGrid();buildAtollChips();buildSBGrid();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}
-function updateCapBar(){const cap=siteSettings.dailyCapacity||0;if(!cap){$('capWrap').style.display='none';return}const today=new Date().toISOString().split('T')[0];const tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;const pct=Math.min(100,Math.round((tc/cap)*100));$('capWrap').style.display='block';$('capFill').style.width=pct+'%';$('capPct').textContent=pct+'%';$('capPct').style.color=pct>=100?'#e74c3c':pct>=80?'#f39c12':'#27ae60';$('capFill').className='cap-fill'+(pct>=100?' full':pct>=80?' warn':'');$('capNote').textContent=pct>=100?`Full (${tc}/${cap})`:`${tc}/${cap} today`;const sb=$('submitBtn');if(pct>=100){sb.disabled=true;sb.innerHTML='<i class="fas fa-ban"></i> Capacity Full'}else{sb.disabled=false;sb.innerHTML='<i class="fas fa-paper-plane"></i> Save &amp; Pay'}}
-document.querySelectorAll('.ntab[data-s],.m-tab[data-s]').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.s)}));
-function switchTab(s){document.querySelectorAll('.ntab,.m-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll(`[data-s="${s}"]`).forEach(x=>x.classList.add('active'));document.querySelectorAll('.sec').forEach(x=>x.classList.remove('active'));$(s).classList.add('active');if(s==='sMine')loadMyTbl();if(s==='sInv')loadMyInvoices()}
-function toggleSB(){$('sidebar').classList.toggle('open');$('sideOvl').classList.toggle('show')}
-function closeSB(){$('sidebar').classList.remove('open');$('sideOvl').classList.remove('show')}
-$('sideOvl').onclick=closeSB;
-function loadCtypeGrid(){
-  const g=$('ctypeGrid');if(!allCargoTypes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div>';return}
-  const icons={'normal':'fa-box','express':'fa-bolt','fragile':'fa-wine-glass-crack','oversized':'fa-pallet','custom':'fa-cube'};
-  g.innerHTML=[...allCargoTypes].sort((a,b)=>(a.order||0)-(b.order||0)).map(ct=>`<div class="ct-card" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${ct.isExpress?'From MVR '+ct.price+'/hr':'Select weight'}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`).join('')
-}
-window.selCtype=function(el,id){
-  document.querySelectorAll('.ct-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');
-  const ct=allCargoTypes.find(c=>String(c.id)===String(id));if(!ct)return;
-  $('ctV').value=ct.name;$('ctPrice').value=ct.price||0;$('ctIsExpress').value=ct.isExpress?1:0;
-  const eta=$('etaInfo');eta.classList.add('show');eta.classList.toggle('express',!!ct.isExpress);$('etaV').textContent=ct.eta||'—';
-  document.querySelectorAll('.w-btn,.hr-btn').forEach(b=>b.classList.remove('active'));
-  $('selW').value='';$('selWP').value='0';$('selHrId').value='';$('selHrPrice').value='0';$('selHrLabel').value='';
-  if(ct.isExpress){$('expressHrsWrap').classList.add('show');$('weightSec').classList.remove('show');loadHrGrid(ct.id)}
-  else{$('expressHrsWrap').classList.remove('show');$('weightSec').classList.add('show');loadWeights()}
-  calcTotal()
-};
-function loadHrGrid(ctId){const g=$('hrGrid');const hrs=ctId?allExpressHrs.filter(h=>String(h.cargoTypeId)===String(ctId)):allExpressHrs;if(!hrs.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No hourly options for this type.</p></div>';return}g.innerHTML=[...hrs].sort((a,b)=>a.hours-b.hours).map(hr=>`<button type="button" class="hr-btn" data-id="${hr.id}" data-price="${hr.price}" data-label="${hr.label||hr.hours+'hr'}" onclick="selHr(this)"><span class="hr-val">${hr.hours}</span><span class="hr-label">${hr.label||'Hour'+(hr.hours>1?'s':'')}</span><span class="hr-price">MVR ${hr.price}</span></button>`).join('')}
-window.selHr=function(el){document.querySelectorAll('.hr-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('selHrId').value=el.dataset.id;$('selHrPrice').value=el.dataset.price;$('selHrLabel').value=el.dataset.label;calcTotal()};
-function weightIcon(mn,mx){if(mx<=2)return'fa-feather';if(mx<=10)return'fa-box';if(mx<=30)return'fa-boxes-stacked';return'fa-pallet'}
-function weightLabel(mn,mx){if(mx<=2)return'Light';if(mx<=10)return'Medium';if(mx<=30)return'Heavy';return'Oversized'}
-function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return}const sorted=[...allP].sort((a,b)=>a.min-b.min);g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${weightIcon(x.min,x.max)}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${weightLabel(x.min,x.max)}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');$('selW').value=`${this.dataset.mn}-${this.dataset.mx} kg`;$('selWP').value=this.dataset.pr;calcTotal()}));$('selW').value='';$('selWP').value='0';calcTotal()}
-function loadPickupGrid(){const g=$('pickupGrid');if(!allPickups.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div>';return}g.innerHTML=allPickups.map(loc=>`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`).join('')}
-window.selPickup=function(el,id){
-  document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');
-  const loc=allPickups.find(l=>String(l.id)===String(id));if(!loc)return;
-  $('pLocVal').value=loc.name;
-  const ax=$('addrX');
-  const lbl=ax.querySelector('label');
-  if(loc.type==='address'||loc.type==='postal'){
-    ax.classList.add('show');
-    $('addrVal').required=true;
-    if(lbl){
-      if(loc.type==='postal'){
-        lbl.innerHTML='<i class="fas fa-envelope" style="color:#f39c12;margin-right:4px"></i>Post/Pickpost Number or Message';
-        $('addrVal').placeholder='Enter Post/Pickpost number or message…';
-      } else {
-        lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address';
-        $('addrVal').placeholder='Enter full address…';
-      }
-    }
-  } else {
-    ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value='';
+window.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('ecAdmin');if(s){me=JSON.parse(s);enterAdmin()}});
+function enterAdmin(){
+  $('loginScreen').style.display='none';$('adminApp').style.display='block';
+  $('aNm').textContent=me.username;$('sNm').textContent=me.username;
+  // Restrict sidebar for staff
+  if(me.role==='staff'){
+    const p=me.permissions||{};
+    const show={dashboard:p.dashboard,revenue:p.revenue,records:p.records,track:p.track,homepage:p.config,loginpage:p.config,pickups:p.config,dellocs:p.config,boats:p.config,cargotypes:p.config,expresshrs:p.config,prices:p.config,capacity:p.config,telegram:p.config,users:false};
+    document.querySelectorAll('.s-item').forEach(item=>{
+      const pg=item.getAttribute('onclick')?.match(/goPage\('(\w+)'\)/)?.[1];
+      if(pg&&!show[pg])item.style.display='none';
+    });
   }
-};
-window.setMode=function(m){
-  dMode=m;
-  document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));
-  const btnMap={cargo:'dmCargo',boat:'dmBoat',speedboat:'dmSpeedboat'};
-  $(btnMap[m])?.classList.add('active');
-  $('cargoDest').style.display=m==='cargo'?'block':'none';
-  $('boatSec').classList.toggle('show',m==='boat');
-  $('speedboatSec').classList.toggle('show',m==='speedboat');
-  if(m==='boat'){selAtoll=null;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'))}
-  if(m==='speedboat'){$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(c=>c.classList.remove('active'));buildSBGrid()}
-  if(m==='cargo'){const w=$('houseAddrWrap');if(w)w.style.display='none'}
-};
-function loadDlocGrid(){const g=$('dlocGrid');if(!allDelLocs.length){g.innerHTML='<div class="empty-s" style="padding:.6rem"><p>No delivery locations set.</p></div>';return}g.innerHTML=allDelLocs.map(l=>`<button type="button" class="dloc-btn" onclick="selDloc(this,'${l.name||l}')">${l.name||l}</button>`).join('');$('dLocVal').value=''}
-window.selDloc=function(el,v){document.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('dLocVal').value=v;const w=$('houseAddrWrap');if(w)w.style.display='block'};
-function buildSBGrid(){
-  const g=$('sbGrid');if(!g)return;
-  const active=allSpeedBoats.filter(b=>b.active!==false);
-  if(!active.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No speed boats configured.</p></div>';return}
-  g.innerHTML=active.map(b=>'<div class="boat-card sb-card" data-sbid="'+b.id+'">'+(b.imageUrl?'<img class="b-img" src="'+b.imageUrl+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'+'<div class="b-no-img" style="display:none"><i class="fas fa-bolt"></i></div>':'<div class="b-no-img"><i class="fas fa-bolt"></i></div>')+'<div class="b-name">'+b.name+'</div><div class="b-route">'+(b.route||'')+'</div><div class="boat-ck"><i class="fas fa-check"></i></div></div>').join('');
-  g.querySelectorAll('.sb-card').forEach(function(card){
-    card.addEventListener('click',function(){selSpeedBoat(this.dataset.sbid)});
-  });
+  initFB()
 }
-window.selSpeedBoat=function(id){
-  document.querySelectorAll('.sb-card').forEach(c=>c.classList.remove('active'));
-  const card=document.querySelector('.sb-card[data-sbid="'+id+'"]');if(card)card.classList.add('active');
-  const boat=allSpeedBoats.find(b=>String(b.id)===String(id));if(!boat)return;
-  $('selSB').value=boat.name;$('sbIslSec').style.display='block';
-  $('sbInfoTxt').textContent=boat.name+(boat.route?' — '+boat.route:'');
-  const ig=$('sbIslGrid');const isls=boat.islands||[];
-  if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selSBIsl').value='';return}
-  ig.innerHTML=isls.map(function(isl){return'<button type="button" class="isl-btn sb-isl-btn" data-sbisl="'+encodeURIComponent(isl)+'">'+isl+'</button>'}).join('');
-  ig.querySelectorAll('.sb-isl-btn').forEach(function(btn){
-    btn.addEventListener('click',function(ev){
-      ev.preventDefault();ev.stopPropagation();
-      ig.querySelectorAll('.sb-isl-btn').forEach(function(b){b.classList.remove('active')});
-      this.classList.add('active');
-      $('selSBIsl').value=decodeURIComponent(this.getAttribute('data-sbisl'));
-    });
-  });
-  $('selSBIsl').value='';
-};
-function buildAtollChips(){
-  const atolls=[...new Set(allBoats.filter(b=>b.active!==false&&b.atoll).map(b=>b.atoll))].sort();
-  const g=$('atollChips');
-  if(!atolls.length){$('boatGridWrap').style.display='block';g.innerHTML='';renderBoatGrid(allBoats.filter(b=>b.active!==false));return}
-  g.innerHTML=atolls.map(a=>`<button type="button" class="atoll-chip" onclick="selAtollFn(this,'${a.replace(/'/g,"\\'")}')">${a}</button>`).join('')
+function initFB(){
+  db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());refresh()});
+  db.ref('users').on('value',snap=>{allU=toArr(snap.val());loadUsers()});
+  db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());loadPrices()});
+  db.ref('notifications').on('value',snap=>{allN=toArr(snap.val())});
+  db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());loadBoatList()});
+  db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());loadLocList()});
+  db.ref('cargoTypes').on('value',snap=>{allCT=toArr(snap.val());loadCtList();loadHrList()});
+  db.ref('expressHours').on('value',snap=>{allExpHrs=toArr(snap.val());loadHrList()});
+  db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};loadHomePageSettings();loadLoginPageSettings()});
+  db.ref('deliveryLocations').on('value',snap=>{allDL=toArr(snap.val());loadDlList()});
+  db.ref('speedBoats').on('value',snap=>{allSB=toArr(snap.val());loadSBList()});
 }
-window.filterAtolls=function(){const q=$('atollSearch').value.toLowerCase();document.querySelectorAll('.atoll-chip').forEach(c=>{c.style.display=c.textContent.toLowerCase().includes(q)?'':'none'})}
-window.selAtollFn=function(el,a){document.querySelectorAll('.atoll-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');selAtoll=a;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';document.querySelectorAll('.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));const boats=allBoats.filter(b=>b.atoll===a&&b.active!==false);$('boatGridWrap').style.display='block';renderBoatGrid(boats)};
-function renderBoatGrid(boats){const g=$('boatGrid');if(!boats.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No boats for this atoll.</p></div>';return}g.innerHTML=boats.map(b=>`<div class="boat-card" data-id="${b.id}" onclick="selBoat('${b.id}')">${b.imageUrl?`<img class="b-img" src="${b.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="b-no-img" style="${b.imageUrl?'display:none':''}"><i class="fas fa-ship"></i></div><div class="b-name">${b.name}</div><div class="b-route">${b.route||''}</div><div class="boat-ck"><i class="fas fa-check"></i></div></div>`).join('')}
-window.selBoat=function(id){
-  document.querySelectorAll('.boat-card').forEach(c=>c.classList.remove('active'));
-  const card=document.querySelector('.boat-card[data-id="'+id+'"]');if(card)card.classList.add('active');
-  const boat=allBoats.find(b=>String(b.id)===String(id));if(!boat)return;
-  $('selBoat').value=boat.name;$('islSec').style.display='block';
-  $('boatInfoTxt').textContent=boat.name+(boat.route?' — '+boat.route:'');
-  const ig=$('islGrid');const isls=boat.islands||[];
-  if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selIsl').value='';return}
-  ig.innerHTML=isls.map(function(isl){return'<button type="button" class="isl-btn" data-isl="'+encodeURIComponent(isl)+'">'+isl+'</button>'}).join('');
-  ig.querySelectorAll('.isl-btn').forEach(function(btn){
-    btn.addEventListener('click',function(ev){
-      ev.preventDefault();ev.stopPropagation();
-      ig.querySelectorAll('.isl-btn').forEach(function(b){b.classList.remove('active')});
-      this.classList.add('active');
-      $('selIsl').value=decodeURIComponent(this.getAttribute('data-isl'));
-    });
+function refresh(){const a=document.querySelector('.page.active');if(!a)return;const id=a.id;if(id==='page-dashboard')loadDash();else if(id==='page-records')loadRecords();else if(id==='page-revenue')loadRevenue()}
+function toggleSB(){$('sidebar').classList.toggle('open');$('sOver').classList.toggle('show')}
+function closeSB(){$('sidebar').classList.remove('open');$('sOver').classList.remove('show')}
+$('sOver').onclick=closeSB;
+window.goPage=function(pg){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.s-item').forEach(i=>i.classList.remove('active'));$('page-'+pg).classList.add('active');const names={dashboard:'Dashboard',revenue:'Revenue',records:'All Records',track:'Track Delivery',homepage:'Home Page',loginpage:'Login Page',pickups:'Pickup Locations',dellocs:'Delivery Locations',boats:'Boats & Islands',speedboats:'Speed Boats',cargotypes:'Cargo Types',expresshrs:'Express Hours',prices:'Weight Ranges',capacity:'Daily Capacity',telegram:'Telegram Alerts',users:'Users & Access'};$('pgTitle').textContent=names[pg]||pg;if(pg==='dashboard')loadDash();else if(pg==='revenue')loadRevenue();else if(pg==='records')loadRecords();else if(pg==='capacity')loadCapPage();else if(pg==='dellocs')loadDlList();else if(pg==='telegram')loadTgPage();closeSB()};
+
+// DASHBOARD
+function loadDash(){const total=allD.length,delv=allD.filter(d=>d.status==='Delivered').length,pend=allD.filter(d=>d.paymentStatus==='under_review').length,rev=allD.filter(d=>d.paymentStatus==='paid').reduce((s,d)=>s+(parseFloat(d.deliveryPrice)||0),0);const today=new Date().toISOString().split('T')[0],tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;$('statsG').innerHTML=`<div class="sc"><div class="si c"><i class="fas fa-truck"></i></div><div><div class="sv">${total}</div><div class="sl">TOTAL</div></div></div><div class="sc"><div class="si g"><i class="fas fa-circle-check"></i></div><div><div class="sv">${delv}</div><div class="sl">DELIVERED</div></div></div><div class="sc"><div class="si a"><i class="fas fa-hourglass-half"></i></div><div><div class="sv">${pend}</div><div class="sl">PENDING PAY</div></div></div><div class="sc"><div class="si r"><i class="fas fa-coins"></i></div><div><div class="sv">${rev.toFixed(0)}</div><div class="sl">MVR</div></div></div><div class="sc"><div class="si b"><i class="fas fa-box-open"></i></div><div><div class="sv">${tc}</div><div class="sl">TODAY</div></div></div>`;renderTbl('recTB',[...allD].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,20),true)}
+function renderTbl(tbId,data,compact=false){const tb=$(tbId);if(!data.length){tb.innerHTML=`<tr><td colspan="14" style="text-align:center;color:rgba(255,255,255,.26);padding:1.5rem;font-size:.76rem">No records</td></tr>`;return}const canStat=me.role==='admin'||(me.permissions?.status);const canApp=me.role==='admin'||(me.permissions?.approve);tb.innerHTML=data.map(d=>`<tr><td style="font-family:monospace;font-size:.62rem;color:#f39c12">${d.referenceNumber}</td><td>${d.customerName}${d.attendedBy?`<div style="font-size:.58rem;color:#27ae60;margin-top:2px"><i class="fas fa-user-check" style="margin-right:2px"></i>${d.attendedBy}</div>`:''}</td>${!compact?`<td style="font-family:monospace;font-size:.62rem"><a href="tel:${d.customerContact}" style="color:#f39c12">${d.customerContact}</a></td>`:''}<td><span class="badge ${d.deliveryMode==='boat'?'b-boat':d.deliveryMode==='speedboat'?'b-speed':'b-norm'}">${d.deliveryMode==='boat'?'Boat':d.deliveryMode==='speedboat'?'Speed Boat':'Cargo'}</span></td><td style="font-size:.68rem">${(d.pickupLocation||'')+'→'+(d.deliveryLocation||'')}</td><td style="font-size:.68rem">${d.cargoType||'—'}</td>${!compact?`<td style="font-size:.68rem">${d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'}</td>`:''}<td style="font-family:monospace;font-size:.68rem">${d.deliveryPrice} MVR</td>${!compact?`<td style="font-size:.65rem">${fmtD(d.deliveryDate)}</td>`:''}<td>${sBadge(d.status)}</td><td>${pBadge(d.paymentStatus)}${d.paymentSlip?` <button onclick="viewSlip('${d.paymentSlip}')" class="a-btn ab-view">Slip</button>`:''}</td>${!compact?`<td>${d.invoice?`<span class="badge b-paid">Issued</span>`:'<span style="color:rgba(255,255,255,.28);font-size:.6rem">—</span>'}</td><td style="font-size:.6rem;font-family:monospace">${fmtD(d.createdAt)}</td>`:''}<td><div class="a-row">${canStat?`<button class="a-btn ab-stat" onclick="openStat(${d.id})">Status</button>`:''} ${canApp&&d.paymentStatus==='under_review'?`<button class="a-btn ab-app" onclick="approvePay(${d.id})">Approve</button>`:''} ${me.role==='admin'?`<button class="a-btn ab-del" onclick="delD(${d.id})">Del</button>`:''}</div></td></tr>`).join('')}
+function loadRecords(f=''){let data=[...allD].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));if(f){const q=f.toLowerCase();data=data.filter(d=>d.customerName?.toLowerCase().includes(q)||d.customerContact?.includes(q)||d.referenceNumber?.toLowerCase().includes(q))}renderTbl('allRecTB',data,false)}
+$('recSrchBtn').onclick=()=>loadRecords($('recSrch').value.trim());
+$('recSrch').addEventListener('keyup',e=>{if(e.key==='Enter')loadRecords(e.target.value.trim())});
+
+function loadRevenue(s=null,e=null){let data=allD;if(s&&e)data=data.filter(d=>{const pd=d.paidAt||d.createdAt;return pd>=s&&pd<=e+'T23:59:59'});const paid=data.filter(d=>d.paymentStatus==='paid');const totalR=paid.reduce((x,d)=>x+(parseFloat(d.deliveryPrice)||0),0),pend=data.filter(d=>d.paymentStatus==='under_review').reduce((x,d)=>x+(parseFloat(d.deliveryPrice)||0),0);const today=new Date().toISOString().split('T')[0],todayR=paid.filter(d=>(d.paidAt||d.createdAt||'').startsWith(today)).reduce((x,d)=>x+(parseFloat(d.deliveryPrice)||0),0);$('revSG').innerHTML=`<div class="sc"><div class="si g"><i class="fas fa-coins"></i></div><div><div class="sv">${totalR.toFixed(0)}</div><div class="sl">TOTAL MVR</div></div></div><div class="sc"><div class="si c"><i class="fas fa-sun"></i></div><div><div class="sv">${todayR.toFixed(0)}</div><div class="sl">TODAY</div></div></div><div class="sc"><div class="si a"><i class="fas fa-hourglass-half"></i></div><div><div class="sv">${pend.toFixed(0)}</div><div class="sl">PENDING</div></div></div><div class="sc"><div class="si r"><i class="fas fa-receipt"></i></div><div><div class="sv">${paid.length}</div><div class="sl">PAID</div></div></div>`;const days=14,lbls=[],vals=[];for(let i=days-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().split('T')[0];lbls.push(ds.slice(5));vals.push(paid.filter(x=>(x.paidAt||x.createdAt||'').startsWith(ds)).reduce((s,x)=>s+(parseFloat(x.deliveryPrice)||0),0))}if(rvChart)rvChart.destroy();rvChart=new Chart($('revChart').getContext('2d'),{type:'bar',data:{labels:lbls,datasets:[{label:'MVR',data:vals,backgroundColor:'rgba(243,156,18,.2)',borderColor:'rgba(243,156,18,.72)',borderWidth:1.5,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.26)',font:{size:8}}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'rgba(255,255,255,.26)',font:{size:8}}}}}});$('payTB').innerHTML=[...data].sort((a,b)=>new Date(b.paidAt||b.createdAt)-new Date(a.paidAt||a.createdAt)).map(d=>`<tr><td style="font-family:monospace;font-size:.62rem;color:#f39c12">${d.referenceNumber}</td><td>${d.customerName}</td><td style="font-family:monospace;color:#f39c12">${d.deliveryPrice} MVR</td><td>${pBadge(d.paymentStatus)}</td><td style="font-size:.68rem">${fmtD(d.paidAt||d.createdAt)}</td><td><div class="a-row">${d.paymentStatus==='under_review'?`<button class="a-btn ab-app" onclick="approvePay(${d.id})">Approve</button>`:''} ${d.paymentSlip?`<button class="a-btn ab-view" onclick="viewSlip('${d.paymentSlip}')">Slip</button>`:''}</div></td></tr>`).join('')}
+$('applyRev').onclick=()=>loadRevenue($('rStart').value,$('rEnd').value);
+$('resetRev').onclick=()=>{$('rStart').value='';$('rEnd').value='';loadRevenue()};
+
+$('trkSrchBtn').onclick=doTrack;$('trkSrch').addEventListener('keyup',e=>{if(e.key==='Enter')doTrack()});
+function doTrack(){const q=$('trkSrch').value.trim().toLowerCase();if(!q)return;const found=allD.filter(d=>d.customerContact?.includes(q)||d.referenceNumber?.toLowerCase().includes(q));const el=$('trkResult');if(!found.length){el.innerHTML='<div class="empty-s"><i class="fas fa-search"></i><p>No deliveries found</p></div>';return}el.innerHTML=found.map(d=>`<div class="t-res"><div class="t-igrid">${[['Reference',`<span style="font-family:monospace;font-size:.68rem;color:#f39c12">${d.referenceNumber}</span>`],['Customer',d.customerName],['Contact',`<a href="tel:${d.customerContact}" style="color:#f39c12">${d.customerContact}</a>`],['Mode',d.deliveryMode==='boat'?'Boat':'Cargo'],['Pickup',d.pickupLocation+(d.pickupAddress?` (${d.pickupAddress})`:'')],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Wt/Duration',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Price',d.deliveryPrice+' MVR'],['Invoice',d.invoice?'Issued':'—'],['Created',fmtD(d.createdAt)]].map(([l,v])=>`<div class="t-cell"><div class="tl">${l}</div><div class="tv">${v}</div></div>`).join('')}</div><div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">${sBadge(d.status)} ${pBadge(d.paymentStatus)}<div class="a-row"><button class="a-btn ab-stat" onclick="openStat(${d.id})">Update</button>${d.paymentStatus==='under_review'?`<button class="a-btn ab-app" onclick="approvePay(${d.id})">Approve</button>`:''}</div></div></div>`).join('')}
+
+// STATUS
+$('statSel').addEventListener('change',function(){$('proofBox').style.display=this.value==='Delivered'?'block':'none'});
+$('proofFile').addEventListener('change',function(){$('proofFN').textContent=this.files[0]?this.files[0].name:'Tap'});
+window.openStat=function(id){eDelId=id;const d=allD.find(x=>x.id===id);if(!d)return;$('statSel').value=d.status||'Order Placed';$('proofBox').style.display=d.status==='Delivered'?'block':'none';$('proofFile').value='';$('statMod').classList.add('show')};
+$('statClose').onclick=$('statCancel').onclick=()=>$('statMod').classList.remove('show');
+$('statConfirm').onclick=async()=>{const ns=$('statSel').value;const d=allD.find(x=>x.id===eDelId);if(!d)return;d.attendedBy=me.username;d.attendedAt=new Date().toISOString();const sm={'Order Placed':1,'Processing':2,'In Transit':3,'Out for Delivery':4,'Delivered':5};if(ns==='Delivered'){const f=$('proofFile').files[0];if(!f){showToast('Upload proof image','err');return}const rd=new FileReader();rd.onload=async ev=>{d.status=ns;d.progress=5;d.deliveryImage=ev.target.result;d.completedAt=new Date().toISOString();await db.ref('cargoDeliveries').set(allD);pushN('Delivered',`${d.referenceNumber} delivered.`,d.createdBy);$('statMod').classList.remove('show');showToast('Marked Delivered','ok')};rd.readAsDataURL(f)}else{d.status=ns;d.progress=sm[ns]||1;await db.ref('cargoDeliveries').set(allD);pushN('Status Updated',`${d.referenceNumber}: ${ns}.`,d.createdBy);$('statMod').classList.remove('show');showToast('Updated','ok')}};
+
+// APPROVE PAYMENT → AUTO-GENERATE INVOICE
+window.approvePay=async function(id){if(!confirm('Approve this payment?'))return;const d=allD.find(x=>x.id===id);if(!d)return;d.paymentStatus='paid';d.approvedAt=new Date().toISOString();d.approvedBy=me.username;
+// Generate invoice automatically
+d.invoice={invoiceNo:genInvNo(),issuedAt:new Date().toISOString(),customerName:d.customerName,customerContact:d.customerContact,referenceNumber:d.referenceNumber,cargoType:d.cargoType,deliveryPrice:d.deliveryPrice,packageWeight:d.packageWeight,selectedHrLabel:d.selectedHrLabel,isExpress:d.isExpress,deliveryDate:d.deliveryDate,deliveryLocation:d.deliveryLocation,pickupLocation:d.pickupLocation};
+await db.ref('cargoDeliveries').set(allD);pushN('Payment Approved & Invoice Issued',`Payment for ${d.referenceNumber} approved. Your invoice is ready.`,d.createdBy);showToast('Approved & invoice generated','ok')};
+
+window.delD=async function(id){if(!confirm('Delete?'))return;await db.ref('cargoDeliveries').set(allD.filter(d=>d.id!==id));showToast('Deleted','ok')};
+
+// HOME PAGE
+window.previewI=function(input,prevId,fnId){if(!input.files[0])return;const rd=new FileReader();rd.onload=e=>{const img=$(prevId);img.src=e.target.result;img.style.display='block';if(fnId)$(fnId).textContent=input.files[0].name};rd.readAsDataURL(input.files[0])}
+function loadHomePageSettings(){if(siteSettings.homeTagline)$('taglineInput').value=siteSettings.homeTagline;loadSlideList();loadHowImgList()}
+function loadSlideList(){const el=$('slideList');const slides=siteSettings.homeSlides||[];if(!slides.length){el.innerHTML='<div class="empty-s"><i class="fas fa-images"></i><p>No slides yet.</p></div>';return}el.innerHTML=slides.map((s,i)=>`<div class="slide-item"><img src="${s.url||s}" alt="" onerror="this.style.background='#253445'"><div class="si-url">${s.url||s}</div><button class="a-btn ab-del" onclick="rmSlide(${i})">Remove</button></div>`).join('')}
+window.addSlideUrl=async function(){const url=$('slideUrl').value.trim();if(!url){showToast('Enter URL','err');return}siteSettings.homeSlides=[...(siteSettings.homeSlides||[]),{url}];await db.ref('siteSettings').set(siteSettings);$('slideUrl').value='';showToast('Slide added','ok')};
+window.uploadSlide=function(input){if(!input.files[0])return;const lbl=$('slideImgFNlbl');if(lbl)lbl.textContent='Uploading…';const rd=new FileReader();rd.onload=async e=>{siteSettings.homeSlides=[...(siteSettings.homeSlides||[]),{url:e.target.result}];await db.ref('siteSettings').set(siteSettings);input.value='';if(lbl)lbl.textContent='Choose Image to Upload';showToast('Slide added!','ok')};rd.readAsDataURL(input.files[0])};
+window.rmSlide=async function(i){const s=[...(siteSettings.homeSlides||[])];s.splice(i,1);siteSettings.homeSlides=s;await db.ref('siteSettings').set(siteSettings);showToast('Removed','ok')};
+window.saveTagline=async function(){siteSettings.homeTagline=$('taglineInput').value.trim();await db.ref('siteSettings').set(siteSettings);showToast('Saved','ok')};
+function loadHowImgList(){const el=$('howImgList');const imgs=siteSettings.howToImages||[];if(!imgs.length){el.innerHTML='<div class="empty-s"><i class="fas fa-images"></i><p>No guide images yet.</p></div>';return}el.innerHTML='<div class="img-card-grid">'+imgs.map((img,i)=>`<div class="img-card-item"><img src="${img.url||img}" alt=""><div class="card-lbl">Step ${i+1}</div><button class="card-rm" onclick="rmHowImg(${i})">×</button></div>`).join('')+'</div>'}
+window.uploadHowImg=function(input){if(!input.files[0])return;const lbl=$('howImgFNlbl');if(lbl)lbl.textContent='Uploading…';const rd=new FileReader();rd.onload=async e=>{siteSettings.howToImages=[...(siteSettings.howToImages||[]),{url:e.target.result}];await db.ref('siteSettings').set(siteSettings);input.value='';if(lbl)lbl.textContent='Choose Guide Image';showToast('Guide image added!','ok')};rd.readAsDataURL(input.files[0])};
+window.addHowImgUrl=async function(){const url=$('howImgUrl').value.trim();if(!url){showToast('Enter a URL','err');return}siteSettings.howToImages=[...(siteSettings.howToImages||[]),{url}];await db.ref('siteSettings').set(siteSettings);$('howImgUrl').value='';showToast('Guide image added','ok')};
+window.rmHowImg=async function(i){const imgs=[...(siteSettings.howToImages||[])];imgs.splice(i,1);siteSettings.howToImages=imgs;await db.ref('siteSettings').set(siteSettings);showToast('Removed','ok')};
+
+// LOGIN PAGE SETTINGS
+function loadLoginPageSettings(){
+  loadTgPage();
+  const logo=siteSettings.loginLogoUrl||'';
+  if(logo){$('loginLogoPrev').src=logo;$('loginLogoPrev').style.display='block';$('loginLogoStatus').textContent='Logo is set.'}
+  else{$('loginLogoPrev').style.display='none';$('loginLogoStatus').textContent='No logo set.'}
+  loadSocialList()
+}
+window.uploadLoginLogo=function(input){if(!input.files[0])return;const rd=new FileReader();rd.onload=async e=>{siteSettings.loginLogoUrl=e.target.result;await db.ref('siteSettings').set(siteSettings);input.value='';$('loginLogoFN').textContent='Uploaded!';showToast('Logo saved','ok')};rd.readAsDataURL(input.files[0])};
+window.removeLoginLogo=async function(){siteSettings.loginLogoUrl='';await db.ref('siteSettings').set(siteSettings);showToast('Logo removed','ok')};
+$('addSocialBtn').onclick=async()=>{const pl=$('socialPlatform').value,url=$('socialUrl').value.trim();if(!url){showToast('Enter URL','err');return}siteSettings.socialLinks=[...(siteSettings.socialLinks||[]),{platform:pl,url}];await db.ref('siteSettings').set(siteSettings);$('socialUrl').value='';showToast('Social link added','ok')};
+function loadSocialList(){const el=$('socialList');const links=siteSettings.socialLinks||[];const icons={facebook:'fab fa-facebook-f',instagram:'fab fa-instagram',telegram:'fab fa-telegram-plane',whatsapp:'fab fa-whatsapp',twitter:'fab fa-twitter',youtube:'fab fa-youtube',tiktok:'fab fa-tiktok',viber:'fab fa-viber',other:'fas fa-link'};if(!links.length){el.innerHTML='<div class="empty-s"><i class="fas fa-share-alt"></i><p>No social links yet.</p></div>';return}el.innerHTML=links.map((l,i)=>`<div class="social-item"><div class="si-icon"><i class="${icons[l.platform?.toLowerCase()]||'fas fa-link'}"></i></div><div class="si-info"><div class="si-pl">${l.platform}</div><div class="si-url">${l.url}</div></div><button class="a-btn ab-del" onclick="rmSocial(${i})">Remove</button></div>`).join('')}
+window.rmSocial=async function(i){const links=[...(siteSettings.socialLinks||[])];links.splice(i,1);siteSettings.socialLinks=links;await db.ref('siteSettings').set(siteSettings);showToast('Removed','ok')};
+
+// PICKUP LOCATIONS
+$('addLocBtn').onclick=async()=>{const name=$('locName').value.trim(),type=$('locType').value;if(!name){showToast('Enter name','err');return}let imageUrl='';const f=$('locImg').files[0];if(f){const rd=new FileReader();const p=new Promise(res=>{rd.onload=e=>res(e.target.result);rd.readAsDataURL(f)});imageUrl=await p}allPickups.push({id:Date.now(),name,type,imageUrl,active:true});await db.ref('pickupLocations').set(allPickups);$('locName').value='';$('locImg').value='';$('locImgFN').textContent='Tap to upload photo';$('locPrev').style.display='none';showToast('Location added','ok')};
+function loadLocList(){const el=$('locList');if(!allPickups.length){el.innerHTML='<div class="empty-s"><i class="fas fa-map-marker-alt"></i><p>No pickup locations yet.</p></div>';return}el.innerHTML='<div class="img-card-grid">'+allPickups.map(loc=>`<div class="img-card-item">${loc.imageUrl?`<img src="${loc.imageUrl}" alt="">`:`<div class="no-img"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div>`}<div class="card-lbl">${loc.name}</div><div class="card-sub">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><button class="card-rm" onclick="rmLoc(${loc.id})">×</button></div>`).join('')+'</div>'}
+window.rmLoc=async function(id){if(!confirm('Remove?'))return;await db.ref('pickupLocations').set(allPickups.filter(l=>l.id!==id));showToast('Removed','ok')};
+
+// BOATS
+// BOAT ATOLL TAG INPUT
+let newBAtolls=[];
+$('boatAtollIn').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();const v=this.value.trim().replace(/,|;/g,'');if(v&&!newBAtolls.includes(v)){newBAtolls.push(v);renderIslTags($('boatAtollTagsWrap'),newBAtolls,'rmNBA');this.value=''}}});
+window.rmNBA=function(i){newBAtolls.splice(i,1);renderIslTags($('boatAtollTagsWrap'),newBAtolls,'rmNBA')};
+
+// SB ATOLL TAG INPUT
+let newSBAtolls=[];
+$('sbAtollIn').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();const v=this.value.trim().replace(/,|;/g,'');if(v&&!newSBAtolls.includes(v)){newSBAtolls.push(v);renderIslTags($('sbAtollTagsWrap'),newSBAtolls,'rmNSBA');this.value=''}}});
+window.rmNSBA=function(i){newSBAtolls.splice(i,1);renderIslTags($('sbAtollTagsWrap'),newSBAtolls,'rmNSBA')};
+
+// EDIT BOAT ATOLL TAG INPUT
+let ebAtolls=[];
+$('ebAtollIn').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();const v=this.value.trim().replace(/,|;/g,'');if(v&&!ebAtolls.includes(v)){ebAtolls.push(v);renderIslTags($('ebAtollTagsWrap'),ebAtolls,'rmEBA');this.value=''}}});
+window.rmEBA=function(i){ebAtolls.splice(i,1);renderIslTags($('ebAtollTagsWrap'),ebAtolls,'rmEBA')};
+
+// EDIT SB ATOLL TAG INPUT
+let esbAtolls=[];
+$('esbAtollIn').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();const v=this.value.trim().replace(/,|;/g,'');if(v&&!esbAtolls.includes(v)){esbAtolls.push(v);renderIslTags($('esbAtollTagsWrap'),esbAtolls,'rmESBA');this.value=''}}});
+window.rmESBA=function(i){esbAtolls.splice(i,1);renderIslTags($('esbAtollTagsWrap'),esbAtolls,'rmESBA')};
+
+$('islIn').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();const v=this.value.trim().replace(/,|;/g,'');if(v&&!newBIsls.includes(v)){newBIsls.push(v);renderIslTags($('islTagsWrap'),newBIsls,'rmNBI');this.value=''}}});
+window.rmNBI=function(i){newBIsls.splice(i,1);renderIslTags($('islTagsWrap'),newBIsls,'rmNBI')};
+$('addBoatBtn').onclick=async()=>{const name=$('boatName').value.trim(),route=$('boatRoute').value.trim();const va=$('boatAtollIn').value.trim();if(va&&!newBAtolls.includes(va))newBAtolls.push(va);$('boatAtollIn').value='';const v=$('islIn').value.trim();if(v&&!newBIsls.includes(v))newBIsls.push(v);$('islIn').value='';if(!name){showToast('Enter name','err');return}if(!newBIsls.length){showToast('Add islands','err');return}let imageUrl='';const f=$('boatImg').files[0];if(f){const rd=new FileReader();const p=new Promise(res=>{rd.onload=e=>res(e.target.result);rd.readAsDataURL(f)});imageUrl=await p}allBoats.push({id:Date.now(),name,route,atolls:[...newBAtolls],atoll:newBAtolls[0]||'',islands:[...newBIsls],imageUrl,active:true});await db.ref('boats').set(allBoats);$('boatName').value='';$('boatRoute').value='';$('boatImg').value='';newBAtolls=[];$('boatAtollTagsWrap').innerHTML='';$('boatImgFN').textContent='Tap to upload photo';$('boatPrev').style.display='none';newBIsls=[];$('islTagsWrap').innerHTML='';showToast('Boat added','ok')};
+function loadBoatList(){const el=$('boatList');if(!allBoats.length){el.innerHTML='<div class="empty-s"><i class="fas fa-ship"></i><p>No boats yet.</p></div>';return}el.innerHTML='<div class="img-card-grid">'+allBoats.map(b=>`<div class="img-card-item">${b.imageUrl?`<img src="${b.imageUrl}" alt="">`:`<div class="no-img"><i class="fas fa-ship"></i></div>`}<div class="card-lbl">${b.name}</div><div class="card-sub">${b.route||''}${b.active===false?' (Off)':''}</div><button class="card-rm" onclick="openEB(${b.id})" style="background:rgba(52,152,219,.85)"><i class="fas fa-pen" style="font-size:.42rem"></i></button></div>`).join('')+'</div>'+allBoats.map(b=>`<div class="p-item"><div style="flex:1;min-width:0"><span style="font-weight:700;color:white;font-size:.78rem"><i class="fas fa-ship" style="color:#3498db;margin-right:5px"></i>${b.name}</span><div class="isl-tags" style="margin-top:4px">${(b.islands||[]).map(i=>`<span class="isl-tag">${i}</span>`).join('')}</div></div><div class="a-row"><button class="a-btn ab-edit" onclick="openEB(${b.id})">Edit</button><button class="a-btn ab-del" onclick="rmBoat(${b.id})">Remove</button></div></div>`).join('')}
+window.rmBoat=async function(id){if(!confirm('Remove?'))return;await db.ref('boats').set(allBoats.filter(b=>b.id!==id));showToast('Removed','ok')};
+window.openEB=function(id){const b=allBoats.find(x=>x.id===id);if(!b)return;eBoatId=id;$('ebName').value=b.name;$('ebRoute').value=b.route||'';ebAtolls=b.atolls?[...b.atolls]:(b.atoll?[b.atoll]:[]);renderIslTags($('ebAtollTagsWrap'),ebAtolls,'rmEBA');$('ebActive').value=String(b.active!==false);ebIsls=[...(b.islands||[])];renderIslTags($('ebIslTagsWrap'),ebIsls,'rmEBI');if(b.imageUrl){$('ebPrev').src=b.imageUrl;$('ebPrev').style.display='block'}else $('ebPrev').style.display='none';$('ebMod').classList.add('show')};
+$('ebIslIn').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();const v=this.value.trim().replace(/,|;/g,'');if(v&&!ebIsls.includes(v)){ebIsls.push(v);renderIslTags($('ebIslTagsWrap'),ebIsls,'rmEBI');this.value=''}}});
+window.rmEBI=function(i){ebIsls.splice(i,1);renderIslTags($('ebIslTagsWrap'),ebIsls,'rmEBI')};
+$('ebClose').onclick=$('ebCancel').onclick=()=>$('ebMod').classList.remove('show');
+$('ebConfirm').onclick=async()=>{const b=allBoats.find(x=>x.id===eBoatId);if(!b)return;const v=$('ebIslIn').value.trim();if(v&&!ebIsls.includes(v))ebIsls.push(v);$('ebIslIn').value='';const va=$('ebAtollIn').value.trim();if(va&&!ebAtolls.includes(va))ebAtolls.push(va);$('ebAtollIn').value='';b.name=$('ebName').value;b.route=$('ebRoute').value;b.atolls=[...ebAtolls];b.atoll=ebAtolls[0]||'';b.islands=[...ebIsls];b.active=$('ebActive').value==='true';const f=$('ebImgFile').files[0];if(f){const rd=new FileReader();const p=new Promise(res=>{rd.onload=e=>res(e.target.result);rd.readAsDataURL(f)});b.imageUrl=await p}await db.ref('boats').set(allBoats);$('ebMod').classList.remove('show');showToast('Updated','ok')};
+
+// CARGO TYPES
+$('addCtBtn').onclick=async()=>{const name=$('ctName').value.trim(),key=$('ctKey').value,eta=$('ctEta').value.trim(),desc=$('ctDesc').value.trim(),priceType=$('ctPriceType').value,price=0,order=parseInt($('ctOrder').value)||99;if(!name){showToast('Enter type name','err');return}allCT.push({id:Date.now(),name,key,eta,description:desc,price,isExpress:priceType==='hourly',order,active:true});await db.ref('cargoTypes').set(allCT);$('ctName').value='';$('ctEta').value='';$('ctDesc').value='';$('ctOrder').value='';showToast('Cargo type added','ok')};
+function loadCtList(){const el=$('ctList');if(!allCT.length){el.innerHTML='<div class="empty-s"><i class="fas fa-box"></i><p>No cargo types yet.</p></div>';return}const icons={'normal':'fa-box','express':'fa-bolt','fragile':'fa-wine-glass-crack','oversized':'fa-pallet','custom':'fa-cube'};el.innerHTML=[...allCT].sort((a,b)=>(a.order||0)-(b.order||0)).map(ct=>`<div class="p-item"><div><div style="font-weight:700;color:white;font-size:.78rem"><i class="fas ${icons[ct.key||'normal']||'fa-box'}" style="color:#f39c12;margin-right:5px"></i>${ct.name}</div><div style="font-size:.65rem;color:rgba(255,255,255,.38);margin-top:2px">${ct.eta||''}${ct.description?' · '+ct.description:''} — ${ct.isExpress?'Hourly (price per hour option)':'Weight-based pricing'}</div></div><div style="display:flex;align-items:center;gap:7px"><span class="badge ${ct.isExpress?'b-exp':'b-norm'}">${ct.isExpress?'Hourly':'Flat'}</span><button class="a-btn ab-del" onclick="rmCt(${ct.id})">Remove</button></div></div>`).join('')}
+window.rmCt=async function(id){if(!confirm('Remove?'))return;await db.ref('cargoTypes').set(allCT.filter(c=>c.id!==id));showToast('Removed','ok')};
+
+// EXPRESS HOURS
+$('addHrBtn').onclick=async()=>{const ctId=$('hrCargoType').value,hours=parseFloat($('hrHours').value),label=$('hrLabel').value.trim(),price=parseFloat($('hrPrice').value);if(!ctId){showToast('Select a cargo type','err');return}if(!hours||!price){showToast('Fill hours and price','err');return}const lbl=label||`${hours} Hour${hours>1?'s':''}`;allExpHrs.push({id:Date.now(),cargoTypeId:ctId,hours,label:lbl,price});await db.ref('expressHours').set(allExpHrs);$('hrHours').value='';$('hrLabel').value='';$('hrPrice').value='';showToast('Express hour added','ok')};
+function loadHrList(){
+  // Populate cargo type select
+  const sel=$('hrCargoType');if(sel){const expTypes=allCT.filter(c=>c.isExpress);sel.innerHTML='<option value="">Select express type…</option>'+expTypes.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}
+  const el=$('hrList');if(!allExpHrs.length){el.innerHTML='<div class="empty-s"><i class="fas fa-clock"></i><p>No express hours yet.</p></div>';return}
+  // Group by cargo type
+  const expTypes=allCT.filter(c=>c.isExpress);
+  let html='';
+  expTypes.forEach(ct=>{
+    const hrs=allExpHrs.filter(h=>String(h.cargoTypeId)===String(ct.id)).sort((a,b)=>a.hours-b.hours);
+    if(!hrs.length)return;
+    html+=`<div style="margin-bottom:.85rem"><div style="font-size:.72rem;font-weight:700;color:#f39c12;margin-bottom:.5rem;display:flex;align-items:center;gap:5px"><i class="fas fa-bolt"></i>${ct.name}</div>${hrs.map(hr=>`<div class="hr-item"><div class="hr-num"><span>${hr.hours}</span><small>HR</small></div><div class="hr-info"><div class="hn">${hr.label}</div><div class="hp">MVR ${hr.price}</div></div><button class="a-btn ab-del" onclick="rmHr(${hr.id})">Remove</button></div>`).join('')}</div>`;
   });
-  $('selIsl').value='';
-};
-$('cargoForm').addEventListener('submit',e=>{
-  e.preventDefault();if(busy)return;
-  const cap=siteSettings.dailyCapacity||0;if(cap){const today=new Date().toISOString().split('T')[0];if(allD.filter(d=>(d.createdAt||'').startsWith(today)).length>=cap){showToast('Daily capacity full.','err');return}}
-  if(!$('ctV').value){showToast('Select a cargo type','err');return}
-  const isExp=$('ctIsExpress').value==='1';
-  if(isExp&&!$('selHrId').value){showToast('Select duration for Express Cargo','err');return}
-  if(!isExp&&!$('selW').value){showToast('Select a weight range','err');return}
-  if(!$('pLocVal').value){showToast('Select a pickup location','err');return}
-  if(dMode==='cargo'&&!$('dLocVal').value){showToast('Select delivery location','err');return}
-  if(dMode==='boat'){if(!$('selBoat').value){showToast('Select a boat','err');return}if(!$('selIsl').value){showToast('Select destination island','err');return}}
-  if(dMode==='speedboat'){if(!$('selSB').value){showToast('Select a speed boat','err');return}if(!$('selSBIsl').value){showToast('Select destination island','err');return}}
-  const price=calcTotal();
-  const hAddr=$('houseAddr')?$('houseAddr').value.trim():'';
-  const dest=dMode==='boat'?`${$('selBoat').value} → ${$('selIsl').value}`:dMode==='speedboat'?`${$('selSB').value} → ${$('selSBIsl').value}`:($('dLocVal').value+(hAddr?' — '+hAddr:''));
-  tmpD={referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,pickupLocation:$('pLocVal').value,pickupAddress:$('addrVal').value,deliveryMode:dMode,deliveryLocation:dest,boatName:dMode==='boat'?$('selBoat').value:dMode==='speedboat'?$('selSB').value:'',destinationIsland:dMode==='boat'?$('selIsl').value:dMode==='speedboat'?$('selSBIsl').value:'',cargoType:$('ctV').value,isExpress:isExp,selectedHrLabel:$('selHrLabel').value,packageWeight:isExp?'—':$('selW').value,packageDescription:$('pkgDesc').value,deliveryPrice:price,deliveryDate:$('dDate').value,status:'Order Placed',progress:1,id:Date.now(),createdAt:new Date().toISOString(),paymentStatus:'under_review',createdBy:me.email};
-  $('payAmt').textContent=`${price} MVR`;$('payMod').classList.add('show')
-});
-$('slipFile').addEventListener('change',function(){$('slipFN').textContent=this.files[0]?this.files[0].name:'Tap to attach slip'});
-$('payClose').onclick=$('payCancel').onclick=()=>{$('payMod').classList.remove('show');tmpD=null;busy=false};
-$('payConfirm').onclick=()=>{
-  if(busy)return;const f=$('slipFile').files[0];if(!f){showToast('Upload payment slip','err');return}
-  busy=true;$('payConfirm').innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';
-  const rd=new FileReader();
-  rd.onload=async ev=>{
-    tmpD.paymentSlip=ev.target.result;tmpD.paidAt=new Date().toISOString();
-    const arr=toArr((await db.ref('cargoDeliveries').once('value')).val());
-    if(!arr.find(d=>d.referenceNumber===tmpD.referenceNumber)){
-      arr.push(tmpD);await db.ref('cargoDeliveries').set(arr);
-      pushN('Delivery Created',`Ref: ${tmpD.referenceNumber} — payment under review.`,me.email);
-      // Telegram alert
-      const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
-      const _cid=965429044;
-      const _d=tmpD;
-      const _msg='New EasyCargo Delivery\n'
-        +'Ref: '+_d.referenceNumber+'\n'
-        +'Customer: '+_d.customerName+'\n'
-        +'Contact: '+_d.customerContact+'\n'
-        +'Cargo: '+_d.cargoType+'\n'
-        +'Pickup: '+_d.pickupLocation+'\n'
-        +'To: '+_d.deliveryLocation+'\n'
-        +'Wt/Duration: '+(_d.isExpress?(_d.selectedHrLabel||'-'):(_d.packageWeight||'-'))+'\n'
-        +'Price: MVR '+_d.deliveryPrice+'\n'
-        +'Date: '+_d.deliveryDate+'\n'
-        +'Status: Payment slip submitted - Under Review';
-      fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:_cid,text:_msg})}).then(r=>r.json()).then(j=>console.log('TG:',JSON.stringify(j))).catch(e=>console.log('TG err:',e.message))
-    }
-    $('payMod').classList.remove('show');$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';
-    $('cargoForm').reset();$('cNm').value=me.username;$('cCt').value=me.contact||'';
-    $('selW').value='';$('selWP').value='0';$('ctPrice').value='0';$('ctV').value='';$('ctIsExpress').value='0';
-    $('selHrId').value='';$('selHrPrice').value='0';$('selHrLabel').value='';
-    $('pLocVal').value='';$('dLocVal').value='';
-    if($('houseAddr'))$('houseAddr').value='';const hw=$('houseAddrWrap');if(hw)hw.style.display='none';
-    $('selBoat').value='';$('selIsl').value='';$('selSB').value='';$('selSBIsl').value='';
-    document.querySelectorAll('.w-btn,.ct-card,.pickup-card,.boat-card,.sb-card,.isl-btn,.sb-isl-btn,.hr-btn,.dloc-btn,.atoll-chip').forEach(b=>b.classList.remove('active'));
-    $('etaInfo').classList.remove('show');$('expressHrsWrap').classList.remove('show');$('weightSec').classList.remove('show');
-    $('addrX').classList.remove('show');$('islSec').style.display='none';$('boatGridWrap').style.display='none';$('sbIslSec').style.display='none';$('speedboatSec').classList.remove('show');
-    setMode('cargo');$('pDisp').textContent='0';
-    busy=false;$('payConfirm').innerHTML='<i class="fas fa-check-circle"></i> Confirm';tmpD=null;
-    showToast('Delivery saved!','ok')
-  };
-  rd.readAsDataURL(f)
-};
-function loadRefs(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email);const el=$('myRefs');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-inbox"></i><p>No deliveries yet.</p></div>';return}el.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem">'+[...mine].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div style="font-family:monospace;font-size:.7rem;font-weight:700;padding:5px 11px;border-radius:17px;cursor:pointer;${d.status==='Delivered'?'background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.22);color:#27ae60':'background:rgba(231,76,60,.13);border:1px solid rgba(231,76,60,.26);color:#e74c3c'}" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</div>`).join('')+'</div>'}
-function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myTB');if(!mine.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,.28);padding:2rem">No records</td></tr>';return}tb.innerHTML=mine.map(d=>`<tr><td style="font-family:monospace;font-size:.65rem;color:#f39c12;cursor:pointer" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</td><td style="font-size:.7rem">${d.pickupLocation||''}→${d.deliveryLocation||''}</td><td style="font-size:.7rem">${d.cargoType||'—'}</td><td>${d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'}</td><td style="font-family:monospace">${d.deliveryPrice} MVR</td><td>${sBadge(d.status)}</td><td>${pBadge(d.paymentStatus)}${d.paymentSlip?` <button onclick="viewSlip('${d.paymentSlip}')" style="margin-left:3px;background:rgba(243,156,18,.14);border:1px solid rgba(243,156,18,.28);color:#f39c12;padding:2px 7px;border-radius:10px;font-size:.6rem;cursor:pointer;font-weight:700">Slip</button>`:''}</td></tr>`).join('')}
-function loadMyInvoices(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email&&d.invoice);const el=$('invListWrap');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet. Invoices are generated when payment is approved.</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.invoice.issuedAt)-new Date(a.invoice.issuedAt)).map(d=>`<div class="inv-card"><div class="inv-card-hd"><span class="inv-card-no">${d.invoice.invoiceNo}</span><span class="inv-card-date">${fmtD(d.invoice.issuedAt)}</span></div><div style="font-size:.76rem;color:rgba(255,255,255,.55);margin-bottom:.5rem">${d.referenceNumber} · ${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:monospace;font-weight:800;color:#27ae60">MVR ${d.deliveryPrice}</span><button onclick="viewInvoice('${d.referenceNumber}')" style="background:rgba(39,174,96,.14);border:1px solid rgba(39,174,96,.28);color:#27ae60;padding:5px 12px;border-radius:12px;font-size:.72rem;cursor:pointer;font-weight:700"><i class='fas fa-eye' style='margin-right:4px'></i>View</button></div></div>`).join('')}
-window.viewInvoice=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d||!d.invoice)return;curInvoiceD=d;const inv=d.invoice;$('invContent').innerHTML=`<div class="invoice-box"><div class="invoice-header"><div><div class="invoice-brand">Easy<span>Cargo</span></div><div class="invoice-no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="invoice-date">${fmtD(inv.issuedAt)}</div><div class="invoice-date" style="margin-top:2px">Payment Approved</div></div></div><div style="margin-bottom:.8rem">${[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Pickup',d.pickupLocation],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Duration/Weight',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Delivery Date',fmtD(d.deliveryDate)]].map(([k,v])=>`<div class="inv-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div><div class="inv-total"><span class="k">Total Paid</span><span class="v">MVR ${d.deliveryPrice}</span></div><div class="inv-stamp"><span><i class="fas fa-check-circle"></i> PAYMENT VERIFIED</span></div></div>`;$('invMod').classList.add('show')};
-$('invClose').onclick=$('invClose2').onclick=()=>$('invMod').classList.remove('show');
-$('invDownload').onclick=()=>{if(!curInvoiceD)return;const inv=curInvoiceD.invoice;const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice ${inv.invoiceNo}</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1a1a2e;max-width:600px;margin:0 auto}h1{font-size:1.8rem;color:#1a1a2e;margin-bottom:4px}h1 span{color:#e67e22}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #e67e22;padding-bottom:12px;margin-bottom:16px}table{width:100%;border-collapse:collapse;margin-bottom:16px}td{padding:7px 0;border-bottom:1px solid #eee;font-size:.85rem}td:first-child{color:#666}td:last-child{text-align:right;font-weight:600}.total{font-size:1.1rem;font-weight:800;color:#27ae60}.stamp{text-align:center;margin-top:20px;padding:10px;background:#f0fdf4;border:1px solid #27ae60;border-radius:8px;color:#27ae60;font-weight:700;font-size:.85rem}</style></head><body><div class="hd"><div><h1>Easy<span>Cargo</span></h1><div style="font-size:.85rem;color:#666">${inv.invoiceNo}</div></div><div style="text-align:right"><div style="font-size:.8rem;color:#888">${fmtD(inv.issuedAt)}</div></div></div><table>${[['Reference',curInvoiceD.referenceNumber],['Customer',curInvoiceD.customerName],['Contact',curInvoiceD.customerContact],['Pickup',curInvoiceD.pickupLocation||'—'],['Destination',curInvoiceD.deliveryLocation||'—'],['Cargo Type',curInvoiceD.cargoType||'—'],['Duration / Weight',curInvoiceD.isExpress?curInvoiceD.selectedHrLabel||'—':curInvoiceD.packageWeight||'—'],['Delivery Date',fmtD(curInvoiceD.deliveryDate)]].map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table><table><tr><td class="total">Total Paid</td><td class="total" style="text-align:right">MVR ${curInvoiceD.deliveryPrice}</td></tr></table><div class="stamp">✓ PAYMENT VERIFIED</div></body></html>`;const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>{w.focus();w.print()},400)};
-window.jmpTrk=function(ref){switchTab('sTrk');const d=allD.find(x=>x.referenceNumber===ref);if(d){$('srchIn').value=d.customerContact;doSearch()}};
-$('srchBtn').onclick=doSearch;$('srchIn').addEventListener('keyup',e=>{if(e.key==='Enter')doSearch()});
-function doSearch(){const q=$('srchIn').value.trim();if(!q){showToast('Enter contact number','err');return}const found=allD.filter(d=>d.customerContact===q);if(!found.length){showToast('No deliveries found','err');$('rcWrap').style.display='none';$('trkCard').style.display='none';return}$('rcGrid').innerHTML=found.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div class="rcard" onclick="renderTrk('${d.referenceNumber}')"><div class="rn">${d.referenceNumber}</div><div class="rd">${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div class="rd">${d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'} | ${d.deliveryPrice} MVR</div>${sBadge(d.status)}</div>`).join('');$('rcWrap').style.display='block';if(found.length===1)renderTrk(found[0].referenceNumber)}
-window.renderTrk=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d)return;$('trkCard').style.display='block';const fs=[['Reference',`<span style="font-family:monospace;color:#f39c12;font-size:.74rem">${d.referenceNumber}</span>`],['Customer',d.customerName],['Contact',`<a href="tel:${d.customerContact}" style="color:#f39c12">${d.customerContact}</a>`],['Mode',`<span class="badge ${d.deliveryMode==='boat'?'b-boat':d.deliveryMode==='speedboat'?'b-speed':'b-norm'}">${d.deliveryMode==='boat'?'Boat':d.deliveryMode==='speedboat'?'Speed Boat':'Cargo'}</span>`],['Pickup',d.pickupLocation+(d.pickupAddress?` (${d.pickupAddress})`:'')],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Duration/Weight',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Price',d.deliveryPrice+' MVR'],['Expected',fmtD(d.deliveryDate)],['Status',sBadge(d.status)],['Payment',pBadge(d.paymentStatus)]];$('trkGrid').innerHTML=fs.map(([l,v])=>`<div class="i-cell"><div class="il">${l}</div><div class="iv">${v}</div></div>`).join('');const p=d.progress||1;document.querySelectorAll('.trk-step').forEach((s,i)=>{s.classList.remove('active','done');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('active')});document.querySelectorAll('.ls').forEach((s,i)=>{s.classList.remove('done','cur');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('cur')});const pct=Math.round(((p-1)/4)*100);$('progFill').style.width=pct+'%';$('progPct').textContent=pct+'%';$('progLbl').textContent=['Order Placed','Processing','In Transit','Out for Delivery','Delivered'][p-1]||'';if(p===5)$('progFill').classList.add('done');else $('progFill').classList.remove('done');if(d.deliveryImage){$('proofImg').src=d.deliveryImage;$('proofSec').style.display='block'}else $('proofSec').style.display='none'};
-function pushN(title,msg,email){const n={id:Date.now(),title,message:msg,userEmail:email,timestamp:new Date().toISOString(),read:false};db.ref('notifications').set([...allN,n])}
-function loadNotifs(){if(!me)return;const mine=allN.filter(n=>n.userEmail===me.email||n.userEmail==='all');const unread=mine.filter(n=>!n.read).length;$('nDot').className=`n-dot ${unread?'show':''}`;if(unread)$('nDot').textContent=unread>9?'9+':unread;const el=$('nList');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-bell-slash"></i><p>No notifications</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).map(n=>`<div class="n-item ${n.read?'':'unread'}" onclick="markNRead(${n.id})"><button class="n-rm" onclick="rmN(event,${n.id})"><i class="fas fa-times"></i></button><div class="nt">${n.title}</div><div class="nm">${n.message}</div><div class="nd">${timeAgo(n.timestamp)}</div></div>`).join('');if(!window._nTimer)window._nTimer=setInterval(()=>{if($('nPanel').classList.contains('open'))loadNotifs()},30000)}
-$('nBtn').onclick=()=>{$('nPanel').classList.add('open');allN.forEach(n=>{if(n.userEmail===me?.email||n.userEmail==='all')n.read=true});db.ref('notifications').set(allN);loadNotifs()};
-$('nClose').onclick=()=>$('nPanel').classList.remove('open');
-window.markNRead=function(id){const n=allN.find(x=>x.id===id);if(n&&!n.read){n.read=true;db.ref('notifications').set(allN);loadNotifs()}};
-window.rmN=function(e,id){e.stopPropagation();allN=allN.filter(n=>n.id!==id);db.ref('notifications').set(allN);loadNotifs()};
-$('nClearAll').onclick=()=>{allN=allN.filter(n=>n.userEmail!==me?.email&&n.userEmail!=='all');db.ref('notifications').set(allN);loadNotifs()};
-window.viewSlip=src=>{$('slipViewImg').src=src;$('slipMod').classList.add('show')};
+  // Orphans (no type assigned)
+  const orphans=allExpHrs.filter(h=>!h.cargoTypeId||!allCT.find(c=>String(c.id)===String(h.cargoTypeId)));
+  if(orphans.length){html+=`<div style="margin-bottom:.5rem;font-size:.72rem;color:rgba(255,255,255,.3)">Unassigned</div>${orphans.map(hr=>`<div class="hr-item"><div class="hr-num"><span>${hr.hours}</span><small>HR</small></div><div class="hr-info"><div class="hn">${hr.label}</div><div class="hp">MVR ${hr.price}</div></div><button class="a-btn ab-del" onclick="rmHr(${hr.id})">Remove</button></div>`).join('')}`}
+  el.innerHTML=html||'<div class="empty-s"><i class="fas fa-clock"></i><p>No express hours yet.</p></div>'
+}
+window.rmHr=async function(id){if(!confirm('Remove?'))return;await db.ref('expressHours').set(allExpHrs.filter(h=>h.id!==id));showToast('Removed','ok')};
+
+// WEIGHT RANGES
+$('addPBtn').onclick=async()=>{const mn=parseFloat($('pMin').value),mx=parseFloat($('pMax').value),pv=parseFloat($('pVal').value);if(isNaN(mn)||isNaN(mx)||isNaN(pv)){showToast('Fill all fields','err');return}if(mn>=mx){showToast('Min must be < max','err');return}const ovlp=allP.find(r=>(mn>=r.min&&mn<=r.max)||(mx>=r.min&&mx<=r.max)||(mn<=r.min&&mx>=r.max));if(ovlp){showToast('Range overlaps existing','err');return}allP.push({id:Date.now(),min:mn,max:mx,price:pv});await db.ref('cargoPriceRanges').set(allP);$('pMin').value='';$('pMax').value='';$('pVal').value='';showToast('Range added','ok')};
+function loadPrices(){const el=$('pList');if(!allP.length){el.innerHTML='<div class="empty-s"><i class="fas fa-weight-hanging"></i><p>No weight ranges yet.</p></div>';return}el.innerHTML=[...allP].sort((a,b)=>a.min-b.min).map(r=>`<div class="p-item"><div class="rng">${r.min}–${r.max} kg</div><div style="display:flex;align-items:center;gap:8px"><div class="amt">${r.price} MVR</div><button class="a-btn ab-del" onclick="rmP(${r.id})">Remove</button></div></div>`).join('')}
+window.rmP=async function(id){if(!confirm('Remove?'))return;await db.ref('cargoPriceRanges').set(allP.filter(r=>r.id!==id));showToast('Removed','ok')};
+
+// CAPACITY
+function loadCapPage(){const cap=siteSettings.dailyCapacity||0;$('capInput').value=cap||'';const today=new Date().toISOString().split('T')[0],tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;$('capStatus').innerHTML=cap?`<strong style="color:white">Today:</strong> ${tc}/${cap} (${Math.round(tc/cap*100)}%)`:'No limit set'}
+$('saveCapBtn').onclick=async()=>{const v=parseInt($('capInput').value);if(isNaN(v)||v<0){showToast('Enter valid number','err');return}siteSettings.dailyCapacity=v;await db.ref('siteSettings').set(siteSettings);showToast(v===0?'Limit disabled':'Set to '+v,'ok');loadCapPage()};
+
+// USERS
+$('addUBtn').onclick=async()=>{const u=$('nUsr').value.trim(),e=$('nEml').value.trim(),c=$('nCnt').value.trim(),p=$('nPwd').value,r=$('nRole').value;if(!u||!e||!c||!p){showToast('Fill all fields','err');return}if(allU.find(x=>x.email===e)){showToast('Email exists','err');return}const perms=r==='staff'?{dashboard:$('pDashboard').checked,records:$('pRecords').checked,track:$('pTrack').checked,revenue:$('pRevenue').checked,status:$('pStatus').checked,approve:$('pApprove').checked,config:$('pConfig').checked}:null;await db.ref('users').set([...allU,{id:Date.now(),username:u,email:e,contact:c,password:p,role:r,status:'active',permissions:perms}]);$('nUsr').value='';$('nEml').value='';$('nCnt').value='';$('nPwd').value='';document.getElementById('permWrap').style.display='none';$('nRole').value='user';showToast('User added','ok')};
+function loadUsers(){const el=$('uList');const filtered=allU.filter(u=>u.email!==me?.email);if(!filtered.length){el.innerHTML='<div class="empty-s"><i class="fas fa-users"></i><p>No users.</p></div>';return}el.innerHTML=filtered.map(u=>{const rClass=u.role==='admin'?'rc-a':u.role==='staff'?'rc-s':'rc-u';const permList=u.role==='staff'&&u.permissions?Object.entries(u.permissions).filter(([k,v])=>v).map(([k])=>k).join(', '):'';return`<div class="u-item"><div style="flex:1;min-width:0"><div class="u-nm">${u.username}</div><div class="u-em">${u.email} · ${u.contact}</div>${permList?`<div style="font-size:.62rem;color:rgba(243,156,18,.7);margin-top:3px"><i class="fas fa-key" style="margin-right:3px"></i>${permList}</div>`:''}</div><div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap"><span class="r-chip ${rClass}">${u.role.toUpperCase()}</span><span class="badge ${u.status==='pending'?'b-pend-a':u.status==='blocked'?'b-blocked':'b-active-u'}">${u.status==='pending'?'Pending':u.status==='blocked'?'Blocked':'Active'}</span>${u.status==='pending'?`<button class="a-btn ab-grant" onclick="grantAccess(${u.id})">Grant</button>`:''} ${u.status!=='blocked'?`<button class="a-btn ab-block" onclick="blockUser(${u.id})">Block</button>`:`<button class="a-btn ab-grant" onclick="unblockUser(${u.id})">Unblock</button>`}<button class="a-btn ab-edit" onclick="openEU(${u.id})">Edit</button><button class="a-btn ab-del" onclick="rmU(${u.id})">Remove</button></div></div>`}).join('')}
+window.grantAccess=async function(id){const u=allU.find(x=>x.id===id);if(!u)return;u.status='active';await db.ref('users').set(allU);pushN('Access Granted','Your account is approved. You can now sign in.',u.email);showToast('Access granted','ok')};
+window.blockUser=async function(id){if(!confirm('Block?'))return;const u=allU.find(x=>x.id===id);if(!u)return;u.status='blocked';await db.ref('users').set(allU);showToast('Blocked','ok')};
+window.unblockUser=async function(id){const u=allU.find(x=>x.id===id);if(!u)return;u.status='active';await db.ref('users').set(allU);showToast('Unblocked','ok')};
+window.openEU=function(id){const u=allU.find(x=>x.id===id);if(!u)return;eUserId=id;$('euUsr').value=u.username;$('euEml').value=u.email;$('euCnt').value=u.contact;$('euPwd').value='';$('euRole').value=u.role||'user';const pw=$('euPermWrap');if(pw)pw.style.display=u.role==='staff'?'block':'none';if(u.role==='staff'&&u.permissions){const pm=u.permissions;['Dashboard','Records','Track','Revenue','Status','Approve','Config'].forEach(k=>{const el=$('ep'+k);if(el)el.checked=!!(pm[k.toLowerCase()])});}$('euMod').classList.add('show')};
+$('euRole').addEventListener('change',function(){const pw=$('euPermWrap');if(pw)pw.style.display=this.value==='staff'?'block':'none'});
+$('euClose').onclick=$('euCancel').onclick=()=>$('euMod').classList.remove('show');
+$('euConfirm').onclick=async()=>{const u=allU.find(x=>x.id===eUserId);if(!u)return;u.username=$('euUsr').value;u.email=$('euEml').value;u.contact=$('euCnt').value;u.role=$('euRole').value;if(u.role==='staff'){u.permissions={dashboard:$('epDashboard').checked,records:$('epRecords').checked,track:$('epTrack').checked,revenue:$('epRevenue').checked,status:$('epStatus').checked,approve:$('epApprove').checked,config:$('epConfig').checked}}else{u.permissions=null}const np=$('euPwd').value;if(np)u.password=np;await db.ref('users').set(allU);$('euMod').classList.remove('show');showToast('Updated','ok')};
+window.rmU=async function(id){if(!confirm('Remove?'))return;await db.ref('users').set(allU.filter(u=>u.id!==id));showToast('Removed','ok')};
+
+// DELIVERY LOCATIONS
+$('addDlBtn')?.addEventListener('click',async()=>{const name=$('dlName').value.trim();if(!name){showToast('Enter location name','err');return}allDL.push({id:Date.now(),name});await db.ref('deliveryLocations').set(allDL);$('dlName').value='';showToast('Location added','ok')});
+function loadDlList(){const el=$('dlList');if(!el)return;if(!allDL.length){el.innerHTML='<div class="empty-s"><i class="fas fa-map-pin"></i><p>No delivery locations yet.</p></div>';return}el.innerHTML=allDL.map(l=>`<div class="p-item"><div class="rng">${l.name}</div><button class="a-btn ab-del" onclick="rmDl(${l.id})">Remove</button></div>`).join('')}
+window.rmDl=async function(id){if(!confirm('Remove?'))return;await db.ref('deliveryLocations').set(allDL.filter(l=>l.id!==id));showToast('Removed','ok')};
+
+// CARGO TYPE PRICE TYPE CHANGE
+
+window.viewSlip=src=>{$('slipImg').src=src;$('slipMod').classList.add('show')};
 $('slipClose').onclick=$('slipClose2').onclick=()=>$('slipMod').classList.remove('show');
-function doLogout(){localStorage.removeItem('ecu');me=null;$('dashboard').style.display='none';$('homePage').style.display='flex';$('authScreen').classList.remove('show');$('loginBtn').disabled=false}
-$('forgotA').onclick=e=>{e.preventDefault();showToast('Contact your admin to reset password.','info')}
+function pushN(title,msg,email){const n={id:Date.now(),title,message:msg,userEmail:email||'all',timestamp:new Date().toISOString(),read:false};db.ref('notifications').set([...allN,n])}
+// TELEGRAM SETTINGS
+function loadTgPage(){
+  const t=siteSettings.tgToken||'8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+  const c=siteSettings.tgChatId||'965429044';
+  if($('tgToken'))$('tgToken').value=t;
+  if($('tgChat'))$('tgChat').value=c;
+  if($('tgStatus'))$('tgStatus').textContent=`Sending to: ${c}`;
+}
+$('saveTgBtn')?.addEventListener('click',async()=>{const t=$('tgToken').value.trim(),c=$('tgChat').value.trim();if(!t||!c){showToast('Fill both fields','err');return}siteSettings.tgToken=t;siteSettings.tgChatId=c;await db.ref('siteSettings').set(siteSettings);showToast('Telegram settings saved','ok');$('tgStatus').textContent=`Sending to: ${c}`});
+$('tgTestBtn')?.addEventListener('click',async()=>{
+  const token='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+  const chat_id=965429044;
+  if($('tgStatus'))$('tgStatus').textContent='Sending...';
+  try{
+    const r=await fetch('https://api.telegram.org/bot'+token+'/sendMessage',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:chat_id,text:'EasyCargo test - it works!'})
+    });
+    const j=await r.json();
+    if($('tgStatus'))$('tgStatus').textContent=JSON.stringify(j);
+    if(j.ok)showToast('Message sent!','ok');
+    else showToast('Failed: '+j.description,'err');
+  }catch(e){
+    if($('tgStatus'))$('tgStatus').textContent='Exception: '+e.message;
+    showToast('Error: '+e.message,'err');
+  }
+});
+
+function doLogout(){localStorage.removeItem('ecAdmin');me=null;$('adminApp').style.display='none';$('loginScreen').style.display='flex'}
+// SPEED BOATS
+$('sbIslIn').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();const v=this.value.trim().replace(/,|;/g,'');if(v&&!newSBIsls.includes(v)){newSBIsls.push(v);renderIslTags($('sbIslTagsWrap'),newSBIsls,'rmNSBI');this.value=''}}});
+window.rmNSBI=function(i){newSBIsls.splice(i,1);renderIslTags($('sbIslTagsWrap'),newSBIsls,'rmNSBI')};
+$('addSBBtn').onclick=async()=>{const name=$('sbName').value.trim(),route=$('sbRoute').value.trim();const vsa=$('sbAtollIn').value.trim();if(vsa&&!newSBAtolls.includes(vsa))newSBAtolls.push(vsa);$('sbAtollIn').value='';const v=$('sbIslIn').value.trim();if(v&&!newSBIsls.includes(v))newSBIsls.push(v);$('sbIslIn').value='';if(!name){showToast('Enter name','err');return}let imageUrl='';const f=$('sbImg').files[0];if(f){const rd=new FileReader();const p=new Promise(res=>{rd.onload=e=>res(e.target.result);rd.readAsDataURL(f)});imageUrl=await p}allSB.push({id:Date.now(),name,route,atolls:[...newSBAtolls],atoll:newSBAtolls[0]||'',islands:[...newSBIsls],imageUrl,active:true});await db.ref('speedBoats').set(allSB);$('sbName').value='';$('sbRoute').value='';$('sbImg').value='';newSBAtolls=[];$('sbAtollTagsWrap').innerHTML='';$('sbImgFN').textContent='Tap to upload photo';$('sbPrev').style.display='none';newSBIsls=[];$('sbIslTagsWrap').innerHTML='';showToast('Speed Boat added','ok')};
+function loadSBList(){const el=$('sbList');if(!el)return;if(!allSB.length){el.innerHTML='<div class="empty-s"><i class="fas fa-bolt"></i><p>No speed boats yet.</p></div>';return}el.innerHTML='<div class="img-card-grid">'+allSB.map(b=>`<div class="img-card-item">${b.imageUrl?`<img src="${b.imageUrl}" alt="">`:`<div class="no-img"><i class="fas fa-bolt"></i></div>`}<div class="card-lbl">${b.name}</div><div class="card-sub">${b.atoll?'<i class="fas fa-compass" style="margin-right:2px;color:#f39c12"></i>'+b.atoll+'<br>':''} ${b.route||''}${b.active===false?' (Off)':''}</div><button class="card-rm" onclick="openESB(${b.id})" style="background:rgba(243,156,18,.85)"><i class="fas fa-pen" style="font-size:.42rem"></i></button></div>`).join('')+'</div>'+allSB.map(b=>`<div class="p-item"><div style="flex:1;min-width:0"><span style="font-weight:700;color:white;font-size:.78rem"><i class="fas fa-bolt" style="color:#f39c12;margin-right:5px"></i>${b.name}</span>${b.atoll?`<span style="margin-left:7px;font-size:.62rem;background:rgba(243,156,18,.12);border:1px solid rgba(243,156,18,.25);color:#f39c12;padding:1px 7px;border-radius:8px">${b.atoll}</span>`:''}<div style="font-size:.64rem;color:rgba(255,255,255,.4);margin-top:2px">${b.route||''}</div><div class="isl-tags" style="margin-top:4px">${(b.islands||[]).map(i=>`<span class="isl-tag">${i}</span>`).join('')}</div></div><div class="a-row"><button class="a-btn ab-edit" onclick="openESB(${b.id})">Edit</button><button class="a-btn ab-del" onclick="rmSB(${b.id})">Remove</button></div></div>`).join('')}
+window.rmSB=async function(id){if(!confirm('Remove?'))return;await db.ref('speedBoats').set(allSB.filter(b=>b.id!==id));showToast('Removed','ok')};
+window.openESB=function(id){const b=allSB.find(x=>x.id===id);if(!b)return;eSBId=id;$('esbName').value=b.name;$('esbRoute').value=b.route||'';esbAtolls=b.atolls?[...b.atolls]:(b.atoll?[b.atoll]:[]);renderIslTags($('esbAtollTagsWrap'),esbAtolls,'rmESBA');$('esbActive').value=String(b.active!==false);esbIsls=[...(b.islands||[])];renderIslTags($('esbIslTagsWrap'),esbIsls,'rmESBI');if(b.imageUrl){$('esbPrev').src=b.imageUrl;$('esbPrev').style.display='block'}else $('esbPrev').style.display='none';$('esbMod').classList.add('show')};
+$('esbIslIn').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===','||e.key===';'){e.preventDefault();const v=this.value.trim().replace(/,|;/g,'');if(v&&!esbIsls.includes(v)){esbIsls.push(v);renderIslTags($('esbIslTagsWrap'),esbIsls,'rmESBI');this.value=''}}});
+window.rmESBI=function(i){esbIsls.splice(i,1);renderIslTags($('esbIslTagsWrap'),esbIsls,'rmESBI')};
+$('esbClose').onclick=$('esbCancel').onclick=()=>$('esbMod').classList.remove('show');
+$('esbConfirm').onclick=async()=>{const b=allSB.find(x=>x.id===eSBId);if(!b)return;const v=$('esbIslIn').value.trim();if(v&&!esbIsls.includes(v))esbIsls.push(v);$('esbIslIn').value='';const vsa=$('esbAtollIn').value.trim();if(vsa&&!esbAtolls.includes(vsa))esbAtolls.push(vsa);$('esbAtollIn').value='';b.name=$('esbName').value;b.route=$('esbRoute').value;b.atolls=[...esbAtolls];b.atoll=esbAtolls[0]||'';b.islands=[...esbIsls];b.active=$('esbActive').value==='true';const f=$('esbImgFile').files[0];if(f){const rd=new FileReader();const p=new Promise(res=>{rd.onload=e=>res(e.target.result);rd.readAsDataURL(f)});b.imageUrl=await p}await db.ref('speedBoats').set(allSB);$('esbMod').classList.remove('show');showToast('Updated','ok')};
+
+function doLogout(){localStorage.removeItem('ecAdmin');me=null;$('adminApp').style.display='none';$('loginScreen').style.display='flex'}
 </script>
 </body>
 </html>
