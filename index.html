@@ -264,6 +264,7 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .b-norm{background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid #2e3f55}
 .b-exp{background:rgba(52,152,219,.1);color:#3498db;border:1px solid rgba(52,152,219,.14)}
 .b-boat{background:rgba(52,152,219,.13);color:#3498db;border:1px solid rgba(52,152,219,.18)}
+.b-speed{background:rgba(243,156,18,.13);color:#f39c12;border:1px solid rgba(243,156,18,.18)}
 .srch-row{display:flex;gap:7px;margin-bottom:.85rem}
 .srch-row input{flex:1;padding:10px 14px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:25px;color:white;font-size:.84rem;outline:none;transition:.2s;font-family:inherit}
 .srch-row input:focus{border-color:#f39c12;box-shadow:0 0 0 3px rgba(243,156,18,.09)}
@@ -530,6 +531,7 @@ a{color:#f39c12;text-decoration:none}
             <div class="dmode">
               <button type="button" class="dm-btn active" id="dmCargo" onclick="setMode('cargo')"><i class="fas fa-truck"></i><strong>Cargo</strong><small>Island delivery</small></button>
               <button type="button" class="dm-btn" id="dmBoat" onclick="setMode('boat')"><i class="fas fa-ship"></i><strong>Boat</strong><small>Island to island</small></button>
+              <button type="button" class="dm-btn" id="dmSpeedboat" onclick="setMode('speedboat')"><i class="fas fa-bolt"></i><strong>Speed Boat</strong><small>Express island</small></button>
             </div>
             <div id="cargoDest" style="margin-top:.7rem">
               <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Delivery Location (Island / City)</label>
@@ -554,6 +556,18 @@ a{color:#f39c12;text-decoration:none}
                 <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Destination Island</label>
                 <div class="isl-grid" id="islGrid"></div>
                 <input type="hidden" id="selIsl">
+              </div>
+            </div>
+            <!-- SPEED BOAT SECTION -->
+            <div class="boat-sec" id="speedboatSec" style="margin-top:.7rem">
+              <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-bolt" style="color:#f39c12;margin-right:4px"></i>Select Speed Boat</label>
+              <div class="boat-grid" id="sbGrid"></div>
+              <input type="hidden" id="selSB">
+              <div id="sbIslSec" style="display:none">
+                <div class="boat-info-bar" style="border-color:rgba(243,156,18,.2);background:rgba(243,156,18,.07)"><i class="fas fa-bolt" style="color:#f39c12"></i><span id="sbInfoTxt">—</span></div>
+                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Destination Island</label>
+                <div class="isl-grid" id="sbIslGrid"></div>
+                <input type="hidden" id="selSBIsl">
               </div>
             </div>
           </div>
@@ -681,7 +695,7 @@ a{color:#f39c12;text-decoration:none}
 const fbCfg={apiKey:"AIzaSyCZA8Z9AJcC97CyQUZVCRsljTuYBfxjHMw",authDomain:"easycargo-9c0cd.firebaseapp.com",databaseURL:"https://easycargo-9c0cd-default-rtdb.firebaseio.com",projectId:"easycargo-9c0cd",storageBucket:"easycargo-9c0cd.firebasestorage.app",messagingSenderId:"51689325187",appId:"1:51689325187:web:c65cb8fb0af2241a4c91b6"};
 firebase.initializeApp(fbCfg);
 const db=firebase.database();
-let me=null,allD=[],allP=[],allN=[],allBoats=[],allPickups=[],allCargoTypes=[],allExpressHrs=[],allDelLocs=[],siteSettings={},tmpD=null,busy=false,dMode='cargo',slideIdx=0,slideTimer=null,selAtoll=null,curInvoiceD=null;
+let me=null,allD=[],allP=[],allN=[],allBoats=[],allSpeedBoats=[],allPickups=[],allCargoTypes=[],allExpressHrs=[],allDelLocs=[],siteSettings={},tmpD=null,busy=false,dMode='cargo',slideIdx=0,slideTimer=null,selAtoll=null,curInvoiceD=null;
 const $=id=>document.getElementById(id);
 function toArr(d){return d?(Array.isArray(d)?d:Object.values(d)):[]}
 function fmtD(d){return d?new Date(d).toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}):'—'}
@@ -740,9 +754,10 @@ function initFB(){
   db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});
   db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});
   db.ref('deliveryLocations').on('value',snap=>{allDelLocs=toArr(snap.val());if(me)loadDlocGrid()});
+  db.ref('speedBoats').on('value',snap=>{allSpeedBoats=toArr(snap.val());if(me)buildSBGrid()});
   db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});
 }
-function enterDash(){$('authScreen').classList.remove('show');$('dashboard').style.display='block';$('hName').textContent=me.username;$('sidebarName').textContent=me.username;$('cNm').value=me.username;$('cCt').value=me.contact||'';loadPickupGrid();buildAtollChips();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}
+function enterDash(){$('authScreen').classList.remove('show');$('dashboard').style.display='block';$('hName').textContent=me.username;$('sidebarName').textContent=me.username;$('cNm').value=me.username;$('cCt').value=me.contact||'';loadPickupGrid();buildAtollChips();buildSBGrid();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}
 function updateCapBar(){const cap=siteSettings.dailyCapacity||0;if(!cap){$('capWrap').style.display='none';return}const today=new Date().toISOString().split('T')[0];const tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;const pct=Math.min(100,Math.round((tc/cap)*100));$('capWrap').style.display='block';$('capFill').style.width=pct+'%';$('capPct').textContent=pct+'%';$('capPct').style.color=pct>=100?'#e74c3c':pct>=80?'#f39c12':'#27ae60';$('capFill').className='cap-fill'+(pct>=100?' full':pct>=80?' warn':'');$('capNote').textContent=pct>=100?`Full (${tc}/${cap})`:`${tc}/${cap} today`;const sb=$('submitBtn');if(pct>=100){sb.disabled=true;sb.innerHTML='<i class="fas fa-ban"></i> Capacity Full'}else{sb.disabled=false;sb.innerHTML='<i class="fas fa-paper-plane"></i> Save &amp; Pay'}}
 document.querySelectorAll('.ntab[data-s],.m-tab[data-s]').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.s)}));
 function switchTab(s){document.querySelectorAll('.ntab,.m-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll(`[data-s="${s}"]`).forEach(x=>x.classList.add('active'));document.querySelectorAll('.sec').forEach(x=>x.classList.remove('active'));$(s).classList.add('active');if(s==='sMine')loadMyTbl();if(s==='sInv')loadMyInvoices()}
@@ -793,9 +808,48 @@ window.selPickup=function(el,id){
     ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value='';
   }
 };
-window.setMode=function(m){dMode=m;document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));$(m==='cargo'?'dmCargo':'dmBoat').classList.add('active');$('cargoDest').style.display=m==='cargo'?'block':'none';$('boatSec').classList.toggle('show',m==='boat');if(m==='boat'){selAtoll=null;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'))}if(m==='cargo'){const w=$('houseAddrWrap');if(w)w.style.display='none'}};
+window.setMode=function(m){
+  dMode=m;
+  document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));
+  const btnMap={cargo:'dmCargo',boat:'dmBoat',speedboat:'dmSpeedboat'};
+  $(btnMap[m])?.classList.add('active');
+  $('cargoDest').style.display=m==='cargo'?'block':'none';
+  $('boatSec').classList.toggle('show',m==='boat');
+  $('speedboatSec').classList.toggle('show',m==='speedboat');
+  if(m==='boat'){selAtoll=null;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'))}
+  if(m==='speedboat'){$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(c=>c.classList.remove('active'));buildSBGrid()}
+  if(m==='cargo'){const w=$('houseAddrWrap');if(w)w.style.display='none'}
+};
 function loadDlocGrid(){const g=$('dlocGrid');if(!allDelLocs.length){g.innerHTML='<div class="empty-s" style="padding:.6rem"><p>No delivery locations set.</p></div>';return}g.innerHTML=allDelLocs.map(l=>`<button type="button" class="dloc-btn" onclick="selDloc(this,'${l.name||l}')">${l.name||l}</button>`).join('');$('dLocVal').value=''}
 window.selDloc=function(el,v){document.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('dLocVal').value=v;const w=$('houseAddrWrap');if(w)w.style.display='block'};
+function buildSBGrid(){
+  const g=$('sbGrid');if(!g)return;
+  const active=allSpeedBoats.filter(b=>b.active!==false);
+  if(!active.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No speed boats configured.</p></div>';return}
+  g.innerHTML=active.map(b=>'<div class="boat-card sb-card" data-sbid="'+b.id+'">'+(b.imageUrl?'<img class="b-img" src="'+b.imageUrl+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'+'<div class="b-no-img" style="display:none"><i class="fas fa-bolt"></i></div>':'<div class="b-no-img"><i class="fas fa-bolt"></i></div>')+'<div class="b-name">'+b.name+'</div><div class="b-route">'+(b.route||'')+'</div><div class="boat-ck"><i class="fas fa-check"></i></div></div>').join('');
+  g.querySelectorAll('.sb-card').forEach(function(card){
+    card.addEventListener('click',function(){selSpeedBoat(this.dataset.sbid)});
+  });
+}
+window.selSpeedBoat=function(id){
+  document.querySelectorAll('.sb-card').forEach(c=>c.classList.remove('active'));
+  const card=document.querySelector('.sb-card[data-sbid="'+id+'"]');if(card)card.classList.add('active');
+  const boat=allSpeedBoats.find(b=>String(b.id)===String(id));if(!boat)return;
+  $('selSB').value=boat.name;$('sbIslSec').style.display='block';
+  $('sbInfoTxt').textContent=boat.name+(boat.route?' — '+boat.route:'');
+  const ig=$('sbIslGrid');const isls=boat.islands||[];
+  if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selSBIsl').value='';return}
+  ig.innerHTML=isls.map(function(isl){return'<button type="button" class="isl-btn sb-isl-btn" data-sbisl="'+encodeURIComponent(isl)+'">'+isl+'</button>'}).join('');
+  ig.querySelectorAll('.sb-isl-btn').forEach(function(btn){
+    btn.addEventListener('click',function(ev){
+      ev.preventDefault();ev.stopPropagation();
+      ig.querySelectorAll('.sb-isl-btn').forEach(function(b){b.classList.remove('active')});
+      this.classList.add('active');
+      $('selSBIsl').value=decodeURIComponent(this.getAttribute('data-sbisl'));
+    });
+  });
+  $('selSBIsl').value='';
+};
 function buildAtollChips(){
   const atolls=[...new Set(allBoats.filter(b=>b.active!==false&&b.atoll).map(b=>b.atoll))].sort();
   const g=$('atollChips');
@@ -834,10 +888,11 @@ $('cargoForm').addEventListener('submit',e=>{
   if(!$('pLocVal').value){showToast('Select a pickup location','err');return}
   if(dMode==='cargo'&&!$('dLocVal').value){showToast('Select delivery location','err');return}
   if(dMode==='boat'){if(!$('selBoat').value){showToast('Select a boat','err');return}if(!$('selIsl').value){showToast('Select destination island','err');return}}
+  if(dMode==='speedboat'){if(!$('selSB').value){showToast('Select a speed boat','err');return}if(!$('selSBIsl').value){showToast('Select destination island','err');return}}
   const price=calcTotal();
   const hAddr=$('houseAddr')?$('houseAddr').value.trim():'';
-  const dest=dMode==='boat'?`${$('selBoat').value} → ${$('selIsl').value}`:($('dLocVal').value+(hAddr?' — '+hAddr:''));
-  tmpD={referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,pickupLocation:$('pLocVal').value,pickupAddress:$('addrVal').value,deliveryMode:dMode,deliveryLocation:dest,boatName:dMode==='boat'?$('selBoat').value:'',destinationIsland:dMode==='boat'?$('selIsl').value:'',cargoType:$('ctV').value,isExpress:isExp,selectedHrLabel:$('selHrLabel').value,packageWeight:isExp?'—':$('selW').value,packageDescription:$('pkgDesc').value,deliveryPrice:price,deliveryDate:$('dDate').value,status:'Order Placed',progress:1,id:Date.now(),createdAt:new Date().toISOString(),paymentStatus:'under_review',createdBy:me.email};
+  const dest=dMode==='boat'?`${$('selBoat').value} → ${$('selIsl').value}`:dMode==='speedboat'?`${$('selSB').value} → ${$('selSBIsl').value}`:($('dLocVal').value+(hAddr?' — '+hAddr:''));
+  tmpD={referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,pickupLocation:$('pLocVal').value,pickupAddress:$('addrVal').value,deliveryMode:dMode,deliveryLocation:dest,boatName:dMode==='boat'?$('selBoat').value:dMode==='speedboat'?$('selSB').value:'',destinationIsland:dMode==='boat'?$('selIsl').value:dMode==='speedboat'?$('selSBIsl').value:'',cargoType:$('ctV').value,isExpress:isExp,selectedHrLabel:$('selHrLabel').value,packageWeight:isExp?'—':$('selW').value,packageDescription:$('pkgDesc').value,deliveryPrice:price,deliveryDate:$('dDate').value,status:'Order Placed',progress:1,id:Date.now(),createdAt:new Date().toISOString(),paymentStatus:'under_review',createdBy:me.email};
   $('payAmt').textContent=`${price} MVR`;$('payMod').classList.add('show')
 });
 $('slipFile').addEventListener('change',function(){$('slipFN').textContent=this.files[0]?this.files[0].name:'Tap to attach slip'});
@@ -853,11 +908,21 @@ $('payConfirm').onclick=()=>{
       arr.push(tmpD);await db.ref('cargoDeliveries').set(arr);
       pushN('Delivery Created',`Ref: ${tmpD.referenceNumber} — payment under review.`,me.email);
       // Telegram alert
-      const _tgTok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
-      const _tgCid=965429044;
-      const _tgD=tmpD;
-      const _tgMsg='New EasyCargo Delivery\n\nRef: '+_tgD.referenceNumber+'\nCustomer: '+_tgD.customerName+'\nContact: '+_tgD.customerContact+'\nCargo: '+_tgD.cargoType+'\nPickup: '+_tgD.pickupLocation+'\nDestination: '+_tgD.deliveryLocation+'\nWeight/Duration: '+((_tgD.isExpress)?(_tgD.selectedHrLabel||'-'):(_tgD.packageWeight||'-'))+'\nPrice: MVR '+_tgD.deliveryPrice+'\nDelivery Date: '+_tgD.deliveryDate+'\nStatus: Payment slip submitted';
-      fetch('https://api.telegram.org/bot'+_tgTok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:_tgCid,text:_tgMsg})}).then(r=>r.json()).then(j=>{if(!j.ok)console.warn('TG:',j.description);else console.log('TG ok')}).catch(e=>console.warn('TG err:',e.message))
+      const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+      const _cid=965429044;
+      const _d=tmpD;
+      const _msg='New EasyCargo Delivery\n'
+        +'Ref: '+_d.referenceNumber+'\n'
+        +'Customer: '+_d.customerName+'\n'
+        +'Contact: '+_d.customerContact+'\n'
+        +'Cargo: '+_d.cargoType+'\n'
+        +'Pickup: '+_d.pickupLocation+'\n'
+        +'To: '+_d.deliveryLocation+'\n'
+        +'Wt/Duration: '+(_d.isExpress?(_d.selectedHrLabel||'-'):(_d.packageWeight||'-'))+'\n'
+        +'Price: MVR '+_d.deliveryPrice+'\n'
+        +'Date: '+_d.deliveryDate+'\n'
+        +'Status: Payment slip submitted - Under Review';
+      fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:_cid,text:_msg})}).then(r=>r.json()).then(j=>console.log('TG:',JSON.stringify(j))).catch(e=>console.log('TG err:',e.message))
     }
     $('payMod').classList.remove('show');$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';
     $('cargoForm').reset();$('cNm').value=me.username;$('cCt').value=me.contact||'';
@@ -865,10 +930,10 @@ $('payConfirm').onclick=()=>{
     $('selHrId').value='';$('selHrPrice').value='0';$('selHrLabel').value='';
     $('pLocVal').value='';$('dLocVal').value='';
     if($('houseAddr'))$('houseAddr').value='';const hw=$('houseAddrWrap');if(hw)hw.style.display='none';
-    $('selBoat').value='';$('selIsl').value='';
-    document.querySelectorAll('.w-btn,.ct-card,.pickup-card,.boat-card,.isl-btn,.hr-btn,.dloc-btn,.atoll-chip').forEach(b=>b.classList.remove('active'));
+    $('selBoat').value='';$('selIsl').value='';$('selSB').value='';$('selSBIsl').value='';
+    document.querySelectorAll('.w-btn,.ct-card,.pickup-card,.boat-card,.sb-card,.isl-btn,.sb-isl-btn,.hr-btn,.dloc-btn,.atoll-chip').forEach(b=>b.classList.remove('active'));
     $('etaInfo').classList.remove('show');$('expressHrsWrap').classList.remove('show');$('weightSec').classList.remove('show');
-    $('addrX').classList.remove('show');$('islSec').style.display='none';$('boatGridWrap').style.display='none';
+    $('addrX').classList.remove('show');$('islSec').style.display='none';$('boatGridWrap').style.display='none';$('sbIslSec').style.display='none';$('speedboatSec').classList.remove('show');
     setMode('cargo');$('pDisp').textContent='0';
     busy=false;$('payConfirm').innerHTML='<i class="fas fa-check-circle"></i> Confirm';tmpD=null;
     showToast('Delivery saved!','ok')
@@ -884,7 +949,7 @@ $('invDownload').onclick=()=>{if(!curInvoiceD)return;const inv=curInvoiceD.invoi
 window.jmpTrk=function(ref){switchTab('sTrk');const d=allD.find(x=>x.referenceNumber===ref);if(d){$('srchIn').value=d.customerContact;doSearch()}};
 $('srchBtn').onclick=doSearch;$('srchIn').addEventListener('keyup',e=>{if(e.key==='Enter')doSearch()});
 function doSearch(){const q=$('srchIn').value.trim();if(!q){showToast('Enter contact number','err');return}const found=allD.filter(d=>d.customerContact===q);if(!found.length){showToast('No deliveries found','err');$('rcWrap').style.display='none';$('trkCard').style.display='none';return}$('rcGrid').innerHTML=found.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div class="rcard" onclick="renderTrk('${d.referenceNumber}')"><div class="rn">${d.referenceNumber}</div><div class="rd">${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div class="rd">${d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'} | ${d.deliveryPrice} MVR</div>${sBadge(d.status)}</div>`).join('');$('rcWrap').style.display='block';if(found.length===1)renderTrk(found[0].referenceNumber)}
-window.renderTrk=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d)return;$('trkCard').style.display='block';const fs=[['Reference',`<span style="font-family:monospace;color:#f39c12;font-size:.74rem">${d.referenceNumber}</span>`],['Customer',d.customerName],['Contact',`<a href="tel:${d.customerContact}" style="color:#f39c12">${d.customerContact}</a>`],['Mode',`<span class="badge ${d.deliveryMode==='boat'?'b-boat':'b-norm'}">${d.deliveryMode==='boat'?'Boat':'Cargo'}</span>`],['Pickup',d.pickupLocation+(d.pickupAddress?` (${d.pickupAddress})`:'')],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Duration/Weight',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Price',d.deliveryPrice+' MVR'],['Expected',fmtD(d.deliveryDate)],['Status',sBadge(d.status)],['Payment',pBadge(d.paymentStatus)]];$('trkGrid').innerHTML=fs.map(([l,v])=>`<div class="i-cell"><div class="il">${l}</div><div class="iv">${v}</div></div>`).join('');const p=d.progress||1;document.querySelectorAll('.trk-step').forEach((s,i)=>{s.classList.remove('active','done');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('active')});document.querySelectorAll('.ls').forEach((s,i)=>{s.classList.remove('done','cur');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('cur')});const pct=Math.round(((p-1)/4)*100);$('progFill').style.width=pct+'%';$('progPct').textContent=pct+'%';$('progLbl').textContent=['Order Placed','Processing','In Transit','Out for Delivery','Delivered'][p-1]||'';if(p===5)$('progFill').classList.add('done');else $('progFill').classList.remove('done');if(d.deliveryImage){$('proofImg').src=d.deliveryImage;$('proofSec').style.display='block'}else $('proofSec').style.display='none'};
+window.renderTrk=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d)return;$('trkCard').style.display='block';const fs=[['Reference',`<span style="font-family:monospace;color:#f39c12;font-size:.74rem">${d.referenceNumber}</span>`],['Customer',d.customerName],['Contact',`<a href="tel:${d.customerContact}" style="color:#f39c12">${d.customerContact}</a>`],['Mode',`<span class="badge ${d.deliveryMode==='boat'?'b-boat':d.deliveryMode==='speedboat'?'b-speed':'b-norm'}">${d.deliveryMode==='boat'?'Boat':d.deliveryMode==='speedboat'?'Speed Boat':'Cargo'}</span>`],['Pickup',d.pickupLocation+(d.pickupAddress?` (${d.pickupAddress})`:'')],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Duration/Weight',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Price',d.deliveryPrice+' MVR'],['Expected',fmtD(d.deliveryDate)],['Status',sBadge(d.status)],['Payment',pBadge(d.paymentStatus)]];$('trkGrid').innerHTML=fs.map(([l,v])=>`<div class="i-cell"><div class="il">${l}</div><div class="iv">${v}</div></div>`).join('');const p=d.progress||1;document.querySelectorAll('.trk-step').forEach((s,i)=>{s.classList.remove('active','done');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('active')});document.querySelectorAll('.ls').forEach((s,i)=>{s.classList.remove('done','cur');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('cur')});const pct=Math.round(((p-1)/4)*100);$('progFill').style.width=pct+'%';$('progPct').textContent=pct+'%';$('progLbl').textContent=['Order Placed','Processing','In Transit','Out for Delivery','Delivered'][p-1]||'';if(p===5)$('progFill').classList.add('done');else $('progFill').classList.remove('done');if(d.deliveryImage){$('proofImg').src=d.deliveryImage;$('proofSec').style.display='block'}else $('proofSec').style.display='none'};
 function pushN(title,msg,email){const n={id:Date.now(),title,message:msg,userEmail:email,timestamp:new Date().toISOString(),read:false};db.ref('notifications').set([...allN,n])}
 function loadNotifs(){if(!me)return;const mine=allN.filter(n=>n.userEmail===me.email||n.userEmail==='all');const unread=mine.filter(n=>!n.read).length;$('nDot').className=`n-dot ${unread?'show':''}`;if(unread)$('nDot').textContent=unread>9?'9+':unread;const el=$('nList');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-bell-slash"></i><p>No notifications</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).map(n=>`<div class="n-item ${n.read?'':'unread'}" onclick="markNRead(${n.id})"><button class="n-rm" onclick="rmN(event,${n.id})"><i class="fas fa-times"></i></button><div class="nt">${n.title}</div><div class="nm">${n.message}</div><div class="nd">${timeAgo(n.timestamp)}</div></div>`).join('');if(!window._nTimer)window._nTimer=setInterval(()=>{if($('nPanel').classList.contains('open'))loadNotifs()},30000)}
 $('nBtn').onclick=()=>{$('nPanel').classList.add('open');allN.forEach(n=>{if(n.userEmail===me?.email||n.userEmail==='all')n.read=true});db.ref('notifications').set(allN);loadNotifs()};
