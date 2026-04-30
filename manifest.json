@@ -1,0 +1,26 @@
+{
+  "name": "EasyCargo",
+  "short_name": "EasyCargo",
+  "description": "Fast & Reliable Cargo Delivery across the Maldives",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0f1e",
+  "theme_color": "#f39c12",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://www.easycargomv.com/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://www.easycargomv.com/favicon-192.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "logistics"],
+  "lang": "en"
+}
