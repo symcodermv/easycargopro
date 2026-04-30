@@ -4,9 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
   
-
+<link rel="canonical" href="https://www.easycargomv.com/">
+<link rel="manifest" href="manifest.json">
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}</script>
   
 <title>EasyCargo — Fast &amp; Reliable Cargo Delivery | Maldives</title>
+
   
 
 <!-- Favicon -->
@@ -1151,55 +1154,6 @@ $('slipClose').onclick=$('slipClose2').onclick=()=>$('slipMod').classList.remove
 function doLogout(){localStorage.removeItem('ecu');me=null;$('dashboard').style.display='none';$('homePage').style.display='flex';$('authScreen').classList.remove('show');$('loginBtn').disabled=false}
 $('forgotA').onclick=e=>{e.preventDefault();showToast('Contact your admin to reset password.','info')}
 </script>
-  <script>
-{
-  "name": "EasyCargo",
-  "short_name": "EasyCargo",
-  "description": "Fast & Reliable Cargo Delivery across the Maldives",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#0a0f1e",
-  "theme_color": "#f39c12",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "https://www.easycargomv.com/favicon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "https://www.easycargomv.com/favicon-192.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "categories": ["business", "logistics"],
-  "lang": "en"
-}
-    
-  </script>
-
-  <script>
-    // EasyCargo Service Worker
-const CACHE_NAME = 'easycargo-v1';
-
-self.addEventListener('install', function(e) {
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', function(e) {
-  self.clients.claim();
-});
-
-self.addEventListener('fetch', function(e) {
-  e.respondWith(
-    fetch(e.request).catch(function() {
-      return caches.match(e.request);
-    })
-  );
-});
-  </script>
+ 
 </body>
 </html>
