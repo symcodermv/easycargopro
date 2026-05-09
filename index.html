@@ -51,9 +51,9 @@ const MANUAL_SLIDES = [
 // ============================================================
 const MANUAL_HOW_IMAGES = [
    { url: 'A.png' },
-  { url: 'B.png' },
+   { url: 'B.png' },
    { url: 'C.png' },
-    { url: 'D.png' },
+   { url: 'A.png' },
 ];
 
 // ============================================================
@@ -462,6 +462,8 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .manual-boat-box{background:#1a2535;border:1.5px solid rgba(52,152,219,.25);border-radius:14px;padding:.9rem;margin-top:.3rem}
 .manual-boat-note{background:rgba(52,152,219,.07);border:1px solid rgba(52,152,219,.18);border-radius:9px;padding:8px 11px;font-size:.72rem;color:rgba(255,255,255,.55);display:flex;align-items:flex-start;gap:6px;margin-bottom:.8rem;line-height:1.5}
 .manual-boat-note i{color:#3498db;flex-shrink:0;margin-top:1px}
+input[type="date"].fi{-webkit-appearance:none;appearance:none;min-height:44px}
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.5);cursor:pointer;flex-shrink:0}
 p,span,div,h1,h2,h3,h4,label{color:inherit}
 a{color:#f39c12;text-decoration:none}
 </style>
@@ -703,7 +705,7 @@ a{color:#f39c12;text-decoration:none}
           </div>
           <div class="fg"><label>Package Description <span style="opacity:.35;font-size:.65rem">(optional)</span></label><textarea class="fi fi-ta" id="pkgDesc" placeholder="Describe contents…"></textarea></div>
           <div class="price-box"><div class="plbl">Total Delivery Price</div><div class="pnum"><span class="pcur">MVR </span><span id="pDisp">0</span></div></div>
-          <div class="fg" style="margin-top:.9rem"><label><i class="fas fa-calendar-alt" style="color:#f39c12;margin-right:4px"></i>Expected Delivery Date</label><input class="fi" type="date" id="dDate" required style="width:100%;display:block"></div>
+          <div class="fg" style="margin-top:.9rem"><label><i class="fas fa-calendar-alt" style="color:#f39c12;margin-right:4px"></i>Expected Delivery Date</label><input class="fi" type="date" id="dDate" required></div>
           <button type="submit" class="btn-submit" id="submitBtn"><i class="fas fa-paper-plane"></i> Save &amp; Pay</button>
         </form>
       </div>
@@ -831,7 +833,7 @@ function loadLoginPageSettings(){const logo=siteSettings.loginLogoUrl||'';const 
 $('tLogin').onclick=()=>{$('tLogin').classList.add('active');$('tReg').classList.remove('active');$('pLogin').classList.add('active');$('pReg').classList.remove('active')};
 $('tReg').onclick=()=>{$('tReg').classList.add('active');$('tLogin').classList.remove('active');$('pReg').classList.add('active');$('pLogin').classList.remove('active')};
 $('loginBtn').onclick=async()=>{const contact=$('lContact').value.trim();const pwd=$('lPwd').value;if(!contact||!pwd){showMsg('loginMsg','Fill all fields','err');return}const arr=toArr((await db.ref('users').once('value')).val());const f=arr.find(x=>x.contact===contact&&x.password===pwd);if(!f){showMsg('loginMsg','Invalid contact number or password','err');return}if(f.role==='admin'){showMsg('loginMsg','Use the admin panel','err');return}if(f.status==='pending'){$('pLogin').innerHTML=`<div class="pending-box"><i class="fas fa-hourglass-half"></i><h3>Access Pending</h3><p>Awaiting admin approval.</p></div><button class="btn btn-sec" style="margin-top:.8rem" onclick="location.reload()"><i class="fas fa-arrow-left"></i> Back</button>`;return}if(f.status==='blocked'){showMsg('loginMsg','Account blocked. Contact admin.','err');return}$('loginBtn').disabled=true;$('truckAnim').classList.add('show');setTimeout(()=>{$('truckAnim').classList.remove('show');me=f;localStorage.setItem('ecu',JSON.stringify(f));enterDash()},1800)};
-$('regBtn').onclick=async()=>{const u=$('rUsr').value.trim(),e=$('rEml').value.trim(),c=$('rCnt').value.trim(),p=$('rPwd').value,cf=$('rCfm').value;if(!u||!e||!c||!p||!cf){showMsg('regMsg','Fill all fields','err');return}if(p!==cf){showMsg('regMsg','Passwords do not match','err');return}const arr=toArr((await db.ref('users').once('value')).val());if(arr.find(x=>x.email===e)){showMsg('regMsg','Email already exists','err');return}if(arr.find(x=>x.contact===c)){showMsg('regMsg','Contact number already registered','err');return}arr.push({id:Date.now(),username:u,email:e,contact:c,password:p,role:'user',status:'pending'});await db.ref('users').set(arr);showMsg('regMsg','Registered! Awaiting admin approval.','ok');$('tLogin').click();};
+$('regBtn').onclick=async()=>{const u=$('rUsr').value.trim(),e=$('rEml').value.trim(),c=$('rCnt').value.trim(),p=$('rPwd').value,cf=$('rCfm').value;if(!u||!e||!c||!p||!cf){showMsg('regMsg','Fill all fields','err');return}if(p!==cf){showMsg('regMsg','Passwords do not match','err');return}const arr=toArr((await db.ref('users').once('value')).val());if(arr.find(x=>x.email===e)){showMsg('regMsg','Email already exists','err');return}if(arr.find(x=>x.contact===c)){showMsg('regMsg','Contact number already registered','err');return}arr.push({id:Date.now(),username:u,email:e,contact:c,password:p,role:'user',status:'pending'});await db.ref('users').set(arr);const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';const _cid=965429044;fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:_cid,text:'🆕 New EasyCargo Registration\nUsername: '+u+'\nContact: '+c+'\nEmail: '+e+'\nStatus: Pending Approval ⏳'})}).catch(()=>{});showMsg('regMsg','Registered! Awaiting admin approval.','ok');$('tLogin').click();};
 window.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('ecu');if(s){me=JSON.parse(s);$('homePage').style.display='none';enterDash()}initFB();});
 function initFB(){db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}});db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());if(me)buildAtollChips()});db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me)loadPickupGrid()});db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});db.ref('expressSizes').on('value',snap=>{allExpressSizes=toArr(snap.val())});db.ref('deliveryLocations').on('value',snap=>{allDelLocs=toArr(snap.val());if(me)loadDlocGrid()});db.ref('speedBoats').on('value',snap=>{allSpeedBoats=toArr(snap.val());if(me)buildSBGrid()});db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});initSlideshow();loadHowTo();}
 function enterDash(){$('authScreen').classList.remove('show');$('dashboard').style.display='block';$('hName').textContent=me.username;$('sidebarName').textContent=me.username;$('cNm').value=me.username;$('cCt').value=me.contact||'';loadPickupGrid();buildAtollChips();buildSBGrid();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}
