@@ -3,85 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-  
 <link rel="canonical" href="https://www.easycargomv.com/">
 <link rel="manifest" href="manifest.json">
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}</script>
-  
 <title>EasyCargo — Fast &amp; Reliable Cargo Delivery | Maldives</title>
-
-  
-
-<!-- Favicon -->
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAFbklEQVR4nO2Xb4xUVxnGf+fce2cXZme77roUVkLL2ioBFWNjgzX+Iyl+QDSp6QdrC00MGBPTmBpLP2iqqQaNpsY0NbEmVUz/pDaxDalaaUIRqzQLxIoLSLGUYHdhkd2Z2ZmdP/fecx4/3Nmly87CYkj6pW8ymbl3zrnP88553+d5x0gSb2PYtxP8HQLvEAAIr2i1BPKAwFgwJvus1gsL9spyMgtuQ+/ABrP5TD/k4rtqEbwqBKQWgiGNPcmRF3HDL6Azx1CzCsZiuvqw191EuHYT0eDa7FzbEL5yAvJgLF5Q3/MY6Z92oMkx7NLVmPd8CJvvRl6ofAZ/+hB+4jTBDZ8gd9sP6bzxIzP7L5PgPOG9JKlZLqn0k02a2GJV2fkNNUdel2+zPE28av/cq9IPPq3i3YEqz/9MTpJcOi+EJLUn4L3kneLKpIoPrFPx3kHVjh+68L2LpTSevpBckr1LSp1UeXaHSneiyWe+m5G9BIl5CDg5ScWHv6TSPUvVHD/XSjO+sERSMllWWm+0oGdHZfejKt6Fqi//tsWzPYm5bdgqnsaB5+HgU+Tue5lcb392XEFEOnKc5NifcUd2488chlwB09WP6V6C6VmO6b4WO7CK/K1bqY4cJnnqayRr1hP19LYKenbPzC1CCY+h+uDHMV19dN27C1+r0hh6jsbhvZixYcL6CEZNrBJoliHsAO8zKYhj0v7VdH//VVy9ztT2lUQbvkX+C/eDT8HOznn2Vatqk5HX8KcP0rH1aQyQnjtN8vgWokIfvrASN/BRKAxgCv3YRXnM/kewvgo2wromQWBRbYqo0EO4bjNu6HH8pu3YNm1p5xAA/MkhTNRJeMM6midfxY0eJyj0EoYiVzlG7j+7yf3rCYL9D2EW90L3AMR1jHdIguYUvtkAiXDt5/Dn3yA9exIwMxjtCUyXwdgJTPdSbM+1JCcOkfx1J8YY5A3edqIoD9EirKuh0WEUdiCUKaOxKK3h4yoYg+lfmQnS+KmZI74sATVrEOSwgWHxZ7+C+dRXcbKAz0RRHnkHQYjKo+CT1n0y0DSGxhQAJuoEE+Lr5XZQ7c3IFPqR9yhNcdUyFEexYZgBz2QgsAGaHAWlLcUTMhYUQwtQzSr4FJvvWwiBrEXssvdDfYL6ySOkw3sxuRDfaGCpQsc1GAmZEIII0yjig87MBY3FBAE0JvHFMyChsX9nj3339S2I2W04+whauh0M3ozqFey5oxQ2biM3uJbgjsdwKz6DSRtZxpWzGJ+Aq6GkhglzmLSGyv/FLb8Fu+KDYAzp0T2Y3usI+1cwY+PzE8iqNOpbRrBqPfGLD2E6FhG99yb8K7/CfPIeXJDHdy5BGx4k7XkfYXOcqHkWVymR9qzC3P5L8ve/RMeK1SS1Ku7Ak4Q334W1JhO5i2JuEUoYINr4bXTqIPW/PAnRIpLXh6B6Fm75OmbjDnAeNnyPRJ2oaznm9kfJb99Hfv0WwpxBQOPp+/CI3Pptrezb2PN8XuAllX/zTZXuNqodH1KSeLlaWZLUnCxp/Muo+sefqzr8N8XF8zP75GJ5SdWXfq3iZjR14PeX9IL53dClSpqxij+9TcWtHaodemGWDddeO6h47NScrWkqVXb9WBObUeUPD18SfH4C0yTkFTdilX+xVaXNqPLInaqf+LvcRfbnJcWlCU3te0Kl73xYE9vyquzZeVkrlqTLTESZe3mgsf93JLseQOdPYJbciFm2Bha/CyOHxt/Av/kPaFawH/g8nV/8EbmB6xc0li1sJmy1j3OQHNtHenQ3evNwSzEt9poB7ODHCNfcSjQwmKnJVZkJ3xoLnYqnzeaqTcUXQ/rp/wXmAvRbfqWFAv+fBK5+/A9RwMYrxj+G8gAAAABJRU5ErkJggg==">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta name="msapplication-TileImage" content="/favicon-192.png">
 <meta name="msapplication-TileColor" content="#0a0f1e">
-
-<!-- SEO Meta Tags -->
 <meta name="description" content="EasyCargo — Your trusted cargo delivery partner across the Maldives. Fast, reliable, and affordable cargo delivery by boat, speed boat, and island courier.">
 <meta name="keywords" content="EasyCargo, cargo delivery Maldives, island delivery, boat cargo, speed boat delivery, Maldives courier, cargo service Maldives, easycargomv">
 <meta name="author" content="EasyCargo MV">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0f1e">
-<link rel="canonical" href="https://www.easycargomv.com/">
 <link rel="sitemap" type="application/xml" href="https://www.easycargomv.com/sitemap.xml">
-
-<!-- Open Graph (WhatsApp, Facebook preview) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.easycargomv.com/">
 <meta property="og:title" content="EasyCargo — Fast &amp; Reliable Cargo Delivery | Maldives">
 <meta property="og:description" content="Your trusted cargo delivery partner across the Maldives. Book deliveries online — by boat, speed boat, or island courier.">
 <meta property="og:site_name" content="EasyCargo MV">
 <meta property="og:locale" content="en_US">
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="EasyCargo — Cargo Delivery Maldives">
 <meta name="twitter:description" content="Fast &amp; reliable cargo delivery across the Maldives. Book online at easycargomv.com">
-
-<!-- Google Search Console: easycargomv.com already verified -->
-
-<!-- Structured Data for Google -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "EasyCargo",
-  "alternateName": "EasyCargo MV",
-  "description": "Fast and reliable cargo delivery service across the Maldives. Book online for boat, speed boat, and island courier delivery.",
-  "url": "https://www.easycargomv.com",
-  "logo": "https://www.easycargomv.com/favicon.svg",
-  "image": "https://www.easycargomv.com/favicon.svg",
-  "telephone": "",
-  "address": {
-    "@type": "PostalAddress",
-    "addressCountry": "MV",
-    "addressLocality": "Male"
-  },
-  "areaServed": {
-    "@type": "Country",
-    "name": "Maldives"
-  },
-  "priceRange": "$$",
-  "openingHours": "Mo-Su 00:00-23:59",
-  "serviceType": ["Cargo Delivery", "Island Courier", "Boat Delivery", "Speed Boat Delivery"],
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Delivery Services",
-    "itemListElement": [
-      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Cargo Delivery"}},
-      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Boat Delivery"}},
-      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Speed Boat Delivery"}}
-    ]
-  }
-}
-</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"EasyCargo","alternateName":"EasyCargo MV","description":"Fast and reliable cargo delivery service across the Maldives.","url":"https://www.easycargomv.com","address":{"@type":"PostalAddress","addressCountry":"MV","addressLocality":"Male"},"areaServed":{"@type":"Country","name":"Maldives"},"priceRange":"$$","openingHours":"Mo-Su 00:00-23:59"}</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<!-- ============================================================
+  MANUAL HOME PAGE SLIDES
+  Add, remove or change image URLs below.
+  Each entry: { url: 'YOUR_IMAGE_URL' }
+  You can also use relative paths: { url: 'images/slide1.jpg' }
+============================================================ -->
+<script>
+const MANUAL_SLIDES = [
+   { url: '2.png' },
+   { url: 'photos.jpg' },
+   { url: 'Advertisemnet.png' },
+];
+
+// ============================================================
+//  MANUAL HOW-TO GUIDE IMAGES
+//  Add image URLs/paths for the "How It Works" panel below.
+// ============================================================
+const MANUAL_HOW_IMAGES = [
+   { url: 'A.png' },
+  { url: 'B.png' },
+   { url: 'C.png' },
+    { url: 'D.png' },
+];
+
+// ============================================================
+//  HOME PAGE TAGLINE  (shown under the heading on home screen)
+// ============================================================
+const HOME_TAGLINE = 'Your trusted cargo delivery partner across the Maldives.';
+</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 body{background:#0a0f1e;min-height:100vh;overflow-x:hidden;color:white}
@@ -237,6 +217,32 @@ select.fi option{background:#1e2a3a}
 .ct-ck{position:absolute;top:5px;right:5px;width:16px;height:16px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center}
 .ct-ck i{font-size:.42rem;color:#1e2a3a}
 .ct-card.active .ct-ck{display:flex}
+.express-flow-wrap{display:none}.express-flow-wrap.show{display:block}
+.express-section-label{font-size:.74rem;color:rgba(255,255,255,.5);margin-bottom:.55rem;display:flex;align-items:center;gap:5px;font-weight:600}
+.express-section-label i{color:#f39c12}
+.pkg-size-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.85rem}
+@media(min-width:380px){.pkg-size-grid{grid-template-columns:repeat(4,1fr)}}
+.pkg-size-card{background:#1e2a3a;border:2px solid #2e3f55;border-radius:14px;padding:.85rem .5rem .7rem;cursor:pointer;text-align:center;transition:.22s;position:relative}
+.pkg-size-card:hover{border-color:rgba(243,156,18,.45);transform:translateY(-2px)}
+.pkg-size-card.active{border-color:#f39c12;background:rgba(243,156,18,.08);box-shadow:0 0 0 1px rgba(243,156,18,.18)}
+.pkg-size-card .psz-icon{font-size:1.2rem;color:#f39c12;display:block;margin-bottom:5px}
+.pkg-size-card .psz-name{font-size:.82rem;font-weight:800;color:white;margin-bottom:3px;letter-spacing:.2px}
+.pkg-size-card .psz-weight{font-size:.72rem;color:#7eb8f7;font-weight:600}
+.pkg-size-ck{position:absolute;top:5px;right:5px;width:16px;height:16px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center}
+.pkg-size-ck i{font-size:.42rem;color:#1e2a3a}
+.pkg-size-card.active .pkg-size-ck{display:flex}
+.express-time-wrap{display:none;margin-bottom:.85rem}.express-time-wrap.show{display:block}
+.time-slot-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+@media(min-width:380px){.time-slot-grid{grid-template-columns:repeat(3,1fr)}}
+.time-slot-btn{background:#1e2a3a;border:2px solid #2e3f55;border-radius:13px;padding:.8rem .5rem;cursor:pointer;text-align:center;transition:.22s;font-family:inherit;position:relative}
+.time-slot-btn:hover{border-color:rgba(243,156,18,.45)}
+.time-slot-btn.active{border-color:#f39c12;background:rgba(243,156,18,.1)}
+.time-slot-btn .ts-dur{display:block;font-size:.88rem;font-weight:800;color:white;margin-bottom:2px}
+.time-slot-btn .ts-lbl{display:block;font-size:.6rem;color:rgba(255,255,255,.38);margin-bottom:4px}
+.time-slot-btn .ts-price{display:block;font-size:.76rem;font-family:monospace;font-weight:700;color:#f39c12}
+.time-slot-ck{position:absolute;top:4px;right:4px;width:15px;height:15px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center}
+.time-slot-ck i{font-size:.38rem;color:#1e2a3a}
+.time-slot-btn.active .time-slot-ck{display:flex}
 .weight-sec{display:none}.weight-sec.show{display:block}
 .w-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.85rem}
 @media(min-width:380px){.w-grid{grid-template-columns:repeat(3,1fr)}}
@@ -247,16 +253,6 @@ select.fi option{background:#1e2a3a}
 .w-btn .w-rng{font-size:.72rem;font-weight:700;color:white}
 .w-btn .w-lbl{font-size:.6rem;color:rgba(255,255,255,.45)}
 .w-btn .w-pr{font-size:.68rem;font-family:monospace;color:#f39c12;font-weight:700}
-.express-hrs-wrap{display:none;margin-bottom:.3rem}.express-hrs-wrap.show{display:block}
-.express-hrs-title{font-size:.74rem;color:rgba(255,255,255,.5);margin-bottom:.5rem;display:flex;align-items:center;gap:5px}
-.express-hrs-title i{color:#f39c12}
-.hr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.hr-btn{background:#1e2a3a;border:2px solid #2e3f55;border-radius:11px;padding:10px 6px;cursor:pointer;text-align:center;transition:.2s;font-family:inherit}
-.hr-btn:hover{border-color:rgba(243,156,18,.4)}
-.hr-btn.active{border-color:#f39c12;background:rgba(243,156,18,.1)}
-.hr-btn .hr-val{display:block;font-size:.88rem;font-weight:800;color:white;margin-bottom:1px}
-.hr-btn .hr-label{display:block;font-size:.6rem;color:rgba(255,255,255,.4);margin-bottom:3px}
-.hr-btn .hr-price{display:block;font-size:.68rem;font-family:monospace;color:#f39c12;font-weight:700}
 .eta-info{background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.18);border-radius:9px;padding:8px 12px;margin:.6rem 0 .3rem;display:none;justify-content:space-between;align-items:center;font-size:.76rem}
 .eta-info.show{display:flex}
 .eta-info.express{background:rgba(243,156,18,.07);border-color:rgba(243,156,18,.2)}
@@ -459,6 +455,13 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .empty-s{text-align:center;padding:1.8rem 1rem;color:rgba(255,255,255,.28)}
 .empty-s i{font-size:2rem;display:block;margin-bottom:.45rem;opacity:.2}
 .empty-s p{font-size:.78rem}
+.boat-mode-toggle{display:flex;gap:6px;margin-bottom:.75rem}
+.bmt-btn{flex:1;padding:8px 10px;background:#1e2a3a;border:1.5px solid #2e3f55;border-radius:12px;cursor:pointer;font-size:.74rem;font-weight:700;color:rgba(255,255,255,.5);transition:.2s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px}
+.bmt-btn:hover{border-color:rgba(243,156,18,.4);color:white}
+.bmt-btn.active{border-color:#f39c12;background:rgba(243,156,18,.1);color:#f39c12}
+.manual-boat-box{background:#1a2535;border:1.5px solid rgba(52,152,219,.25);border-radius:14px;padding:.9rem;margin-top:.3rem}
+.manual-boat-note{background:rgba(52,152,219,.07);border:1px solid rgba(52,152,219,.18);border-radius:9px;padding:8px 11px;font-size:.72rem;color:rgba(255,255,255,.55);display:flex;align-items:flex-start;gap:6px;margin-bottom:.8rem;line-height:1.5}
+.manual-boat-note i{color:#3498db;flex-shrink:0;margin-top:1px}
 p,span,div,h1,h2,h3,h4,label{color:inherit}
 a{color:#f39c12;text-decoration:none}
 </style>
@@ -514,8 +517,8 @@ a{color:#f39c12;text-decoration:none}
       </div>
       <div class="pane active" id="pLogin">
         <div id="loginMsg"></div>
-        <div class="fg"><label>Username or Email</label><input class="fi" type="text" id="lUsr" placeholder="Enter credentials…"></div>
-        <div class="fg"><label>Password</label><input class="fi" type="password" id="lPwd" placeholder="••••••••"></div>
+        <div class="fg"><label><i class="fas fa-phone" style="color:#f39c12;margin-right:5px"></i>Contact Number</label><input class="fi" type="tel" id="lContact" placeholder="e.g. 7XXXXXXX" inputmode="numeric"></div>
+        <div class="fg"><label><i class="fas fa-lock" style="color:#f39c12;margin-right:5px"></i>Password</label><input class="fi" type="password" id="lPwd" placeholder="••••••••"></div>
         <div class="forgot-lnk"><a href="#" id="forgotA">Forgot password?</a></div>
         <button class="btn btn-gold" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Sign In</button>
       </div>
@@ -525,7 +528,7 @@ a{color:#f39c12;text-decoration:none}
           <div class="fg"><label>Username</label><input class="fi" type="text" id="rUsr" placeholder="Username"></div>
           <div class="fg"><label>Email</label><input class="fi" type="email" id="rEml" placeholder="email@…"></div>
         </div>
-        <div class="fg"><label>Contact Number</label><input class="fi" type="tel" id="rCnt" placeholder="7XXXXXXX"></div>
+        <div class="fg"><label>Contact Number</label><input class="fi" type="tel" id="rCnt" placeholder="7XXXXXXX" inputmode="numeric"></div>
         <div class="fr">
           <div class="fg"><label>Password</label><input class="fi" type="password" id="rPwd" placeholder="Password"></div>
           <div class="fg"><label>Confirm</label><input class="fi" type="password" id="rCfm" placeholder="Repeat"></div>
@@ -587,23 +590,36 @@ a{color:#f39c12;text-decoration:none}
             <input type="hidden" id="ctV"><input type="hidden" id="ctPrice" value="0"><input type="hidden" id="ctIsExpress" value="0">
             <div class="eta-info" id="etaInfo"><span class="lbl"><i class="fas fa-clock" style="margin-right:4px"></i>Estimated</span><span class="val" id="etaV">—</span></div>
           </div>
-          <div class="express-hrs-wrap" id="expressHrsWrap">
-            <div class="express-hrs-title"><i class="fas fa-clock"></i> Select Duration</div>
-            <div class="hr-grid" id="hrGrid"></div>
-            <input type="hidden" id="selHrId"><input type="hidden" id="selHrPrice" value="0"><input type="hidden" id="selHrLabel" value="">
+          <!-- EXPRESS FLOW: Size → Time -->
+          <div class="express-flow-wrap" id="expressFlowWrap">
+            <div class="fg">
+              <div class="express-section-label"><i class="fas fa-ruler-combined"></i> Package Size</div>
+              <div class="pkg-size-grid" id="pkgSizeGrid"><div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No sizes configured yet.</p></div></div>
+              <input type="hidden" id="selSizeId"><input type="hidden" id="selSizeName"><input type="hidden" id="selSizeWeight">
+            </div>
+            <div class="express-time-wrap" id="expressTimeWrap">
+              <div class="fg">
+                <div class="express-section-label"><i class="fas fa-clock"></i> Select Duration &amp; Price</div>
+                <div class="time-slot-grid" id="timeSlotGrid"></div>
+                <input type="hidden" id="selTimeId"><input type="hidden" id="selTimePrice" value="0"><input type="hidden" id="selTimeLabel">
+              </div>
+            </div>
           </div>
+          <!-- STANDARD WEIGHT -->
           <div class="weight-sec" id="weightSec">
             <div class="fg"><label><i class="fas fa-weight-hanging" style="color:#f39c12;margin-right:4px"></i>Package Weight Range</label>
               <div class="w-grid" id="wGrid"></div>
               <input type="hidden" id="selW"><input type="hidden" id="selWP" value="0">
             </div>
           </div>
+          <!-- PICKUP -->
           <div class="fg">
             <label><i class="fas fa-map-marker-alt" style="color:#f39c12;margin-right:4px"></i>Pickup Location</label>
             <div class="pickup-grid" id="pickupGrid"><div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div></div>
             <input type="hidden" id="pLocVal">
             <div class="addr-x" id="addrX"><div class="fg" style="margin-top:.5rem"><label>Address</label><input class="fi" type="text" id="addrVal" placeholder="Enter full address…"></div></div>
           </div>
+          <!-- DELIVERY MODE -->
           <div class="fg">
             <label><i class="fas fa-route" style="color:#f39c12;margin-right:4px"></i>Delivery Mode</label>
             <div class="dmode">
@@ -621,42 +637,71 @@ a{color:#f39c12;text-decoration:none}
               </div>
             </div>
             <div class="boat-sec" id="boatSec" style="margin-top:.7rem">
-              <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-compass" style="color:#3498db;margin-right:4px"></i>Select Atoll</label>
-              <div class="atoll-srch"><input type="text" id="atollSearch" placeholder="Search atoll or boat name…" oninput="filterAtolls()"></div>
-              <div class="atoll-chips" id="atollChips"></div>
-              <div id="boatGridWrap" style="display:none">
-                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-ship" style="color:#3498db;margin-right:4px"></i>Select Boat</label>
-                <div class="boat-grid" id="boatGrid"></div>
-                <input type="hidden" id="selBoat">
+              <div class="boat-mode-toggle" id="boatModeToggle">
+                <button type="button" class="bmt-btn active" id="boatListBtn" onclick="setBoatInputMode('list')"><i class="fas fa-list"></i> Select from List</button>
+                <button type="button" class="bmt-btn" id="boatManualBtn" onclick="setBoatInputMode('manual')"><i class="fas fa-pen"></i> Enter Manually</button>
               </div>
-              <div id="islSec" style="display:none">
-                <div class="boat-info-bar" id="boatInfoBar"><i class="fas fa-info-circle"></i><span id="boatInfoTxt">—</span></div>
-                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Destination Island</label>
-                <div class="isl-grid" id="islGrid"></div>
-                <input type="hidden" id="selIsl">
+              <div id="boatListMode">
+                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-compass" style="color:#3498db;margin-right:4px"></i>Select Atoll</label>
+                <div class="atoll-srch"><input type="text" id="atollSearch" placeholder="Search atoll or boat name…" oninput="filterAtolls()"></div>
+                <div class="atoll-chips" id="atollChips"></div>
+                <div id="boatGridWrap" style="display:none">
+                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-ship" style="color:#3498db;margin-right:4px"></i>Select Boat</label>
+                  <div class="boat-grid" id="boatGrid"></div>
+                  <input type="hidden" id="selBoat">
+                </div>
+                <div id="islSec" style="display:none">
+                  <div class="boat-info-bar" id="boatInfoBar"><i class="fas fa-info-circle"></i><span id="boatInfoTxt">—</span></div>
+                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Destination Island</label>
+                  <div class="isl-grid" id="islGrid"></div>
+                  <input type="hidden" id="selIsl">
+                </div>
+              </div>
+              <div id="boatManualMode" style="display:none">
+                <div class="manual-boat-box">
+                  <div class="manual-boat-note"><i class="fas fa-info-circle"></i> Can't find your boat in the list? Enter the details below.</div>
+                  <div class="fg" style="margin-bottom:.7rem"><label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.32rem;display:block"><i class="fas fa-ship" style="color:#3498db;margin-right:4px"></i>Boat Name</label><input class="fi" type="text" id="manualBoatName" placeholder="e.g. MV Fasthuri…"></div>
+                  <div class="fg" style="margin-bottom:.7rem"><label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.32rem;display:block"><i class="fas fa-map-pin" style="color:#3498db;margin-right:4px"></i>Destination Island</label><input class="fi" type="text" id="manualBoatIsland" placeholder="e.g. Maalhos, Baa Atoll…"></div>
+                  <div class="fg" style="margin-bottom:.5rem"><label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.32rem;display:block"><i class="fas fa-phone" style="color:#3498db;margin-right:4px"></i>Boat Contact Number</label>
+                    <div style="display:flex;gap:7px;align-items:center"><input class="fi" type="tel" id="manualBoatContact" placeholder="e.g. 9XXXXXXX" style="flex:1" inputmode="numeric"><a id="manualBoatCallBtn" href="#" onclick="callManualBoat(event,'boat')" style="display:none;background:rgba(52,152,219,.15);border:1.5px solid rgba(52,152,219,.4);color:#3498db;border-radius:50%;width:38px;height:38px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.9rem;text-decoration:none" title="Call this boat"><i class="fas fa-phone-alt"></i></a></div>
+                  </div>
+                </div>
               </div>
             </div>
-            <!-- SPEED BOAT SECTION -->
             <div class="boat-sec" id="speedboatSec" style="margin-top:.7rem">
-              <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-compass" style="color:#f39c12;margin-right:4px"></i>Select Atoll</label>
-              <div class="atoll-srch"><input type="text" id="sbAtollSearch" placeholder="Search atoll or speed boat name…" oninput="filterSBAtolls()"></div>
-              <div class="atoll-chips sb-atoll-chips" id="sbAtollChips"></div>
-              <div id="sbGridWrap" style="display:none">
-                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-bolt" style="color:#f39c12;margin-right:4px"></i>Select Speed Boat</label>
-                <div class="boat-grid" id="sbGrid"></div>
-                <input type="hidden" id="selSB">
+              <div class="boat-mode-toggle" id="sbModeToggle">
+                <button type="button" class="bmt-btn active" id="sbListBtn" onclick="setSBInputMode('list')"><i class="fas fa-list"></i> Select from List</button>
+                <button type="button" class="bmt-btn" id="sbManualBtn" onclick="setSBInputMode('manual')"><i class="fas fa-pen"></i> Enter Manually</button>
               </div>
-              <div id="sbIslSec" style="display:none">
-                <div class="boat-info-bar" style="border-color:rgba(243,156,18,.2);background:rgba(243,156,18,.07)"><i class="fas fa-bolt" style="color:#f39c12"></i><span id="sbInfoTxt">—</span></div>
-                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Destination Island</label>
-                <div class="isl-grid" id="sbIslGrid"></div>
-                <input type="hidden" id="selSBIsl">
+              <div id="sbListMode">
+                <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-compass" style="color:#f39c12;margin-right:4px"></i>Select Atoll</label>
+                <div class="atoll-srch"><input type="text" id="sbAtollSearch" placeholder="Search atoll or speed boat name…" oninput="filterSBAtolls()"></div>
+                <div class="atoll-chips sb-atoll-chips" id="sbAtollChips"></div>
+                <div id="sbGridWrap" style="display:none">
+                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-bolt" style="color:#f39c12;margin-right:4px"></i>Select Speed Boat</label>
+                  <div class="boat-grid" id="sbGrid"></div>
+                  <input type="hidden" id="selSB">
+                </div>
+                <div id="sbIslSec" style="display:none">
+                  <div class="boat-info-bar" style="border-color:rgba(243,156,18,.2);background:rgba(243,156,18,.07)"><i class="fas fa-bolt" style="color:#f39c12"></i><span id="sbInfoTxt">—</span></div>
+                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block">Destination Island</label>
+                  <div class="isl-grid" id="sbIslGrid"></div>
+                  <input type="hidden" id="selSBIsl">
+                </div>
+              </div>
+              <div id="sbManualMode" style="display:none">
+                <div class="manual-boat-box" style="border-color:rgba(243,156,18,.25)">
+                  <div class="manual-boat-note" style="background:rgba(243,156,18,.07);border-color:rgba(243,156,18,.2);color:rgba(255,255,255,.6)"><i class="fas fa-info-circle" style="color:#f39c12"></i> Can't find your speed boat? Enter the details below.</div>
+                  <div class="fg" style="margin-bottom:.7rem"><label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.32rem;display:block"><i class="fas fa-bolt" style="color:#f39c12;margin-right:4px"></i>Speed Boat Name</label><input class="fi" type="text" id="manualSBName" placeholder="e.g. Express Laila…"></div>
+                  <div class="fg" style="margin-bottom:.7rem"><label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.32rem;display:block"><i class="fas fa-map-pin" style="color:#f39c12;margin-right:4px"></i>Destination Island</label><input class="fi" type="text" id="manualSBIsland" placeholder="e.g. Dharavandhoo, Baa Atoll…"></div>
+                  <div class="fg" style="margin-bottom:.5rem"><label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.32rem;display:block"><i class="fas fa-phone" style="color:#f39c12;margin-right:4px"></i>Speed Boat Contact Number</label>
+                    <div style="display:flex;gap:7px;align-items:center"><input class="fi" type="tel" id="manualSBContact" placeholder="e.g. 9XXXXXXX" style="flex:1" inputmode="numeric" oninput="onManualContactInput('sb')"><a id="manualSBCallBtn" href="#" onclick="callManualBoat(event,'sb')" style="display:none;background:rgba(243,156,18,.13);border:1.5px solid rgba(243,156,18,.38);color:#f39c12;border-radius:50%;width:38px;height:38px;flex-shrink:0;align-items:center;justify-content:center;font-size:.9rem;text-decoration:none" title="Call this speed boat"><i class="fas fa-phone-alt"></i></a></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="fg"><label>Package Description <span style="opacity:.35;font-size:.65rem">(optional)</span></label>
-            <textarea class="fi fi-ta" id="pkgDesc" placeholder="Describe contents…"></textarea>
-          </div>
+          <div class="fg"><label>Package Description <span style="opacity:.35;font-size:.65rem">(optional)</span></label><textarea class="fi fi-ta" id="pkgDesc" placeholder="Describe contents…"></textarea></div>
           <div class="price-box"><div class="plbl">Total Delivery Price</div><div class="pnum"><span class="pcur">MVR </span><span id="pDisp">0</span></div></div>
           <div class="fg" style="margin-top:.9rem"><label><i class="fas fa-calendar-alt" style="color:#f39c12;margin-right:4px"></i>Expected Delivery Date</label><input class="fi" type="date" id="dDate" required style="width:100%;display:block"></div>
           <button type="submit" class="btn-submit" id="submitBtn"><i class="fas fa-paper-plane"></i> Save &amp; Pay</button>
@@ -669,10 +714,7 @@ a{color:#f39c12;text-decoration:none}
     </div>
     <div class="sec" id="sMine">
       <div class="sec-title"><i class="fas fa-list"></i> My Deliveries</div>
-      <div class="card"><div class="tbl-s"><table>
-        <thead><tr><th>Reference</th><th>Route</th><th>Type</th><th>Wt/Duration</th><th>Price</th><th>Status</th><th>Payment</th></tr></thead>
-        <tbody id="myTB"></tbody>
-      </table></div></div>
+      <div class="card"><div class="tbl-s"><table><thead><tr><th>Reference</th><th>Route</th><th>Type</th><th>Size/Weight/Duration</th><th>Price</th><th>Status</th><th>Payment</th></tr></thead><tbody id="myTB"></tbody></table></div></div>
     </div>
     <div class="sec" id="sInv">
       <div class="sec-title"><i class="fas fa-file-invoice"></i> My Invoices</div>
@@ -725,13 +767,7 @@ a{color:#f39c12;text-decoration:none}
 
 <!-- NOTIFICATION PANEL -->
 <div class="n-panel" id="nPanel">
-  <div class="n-hd">
-    <div class="n-hd-t"><i class="fas fa-bell"></i> Notifications</div>
-    <div class="n-hd-actions">
-      <button class="n-clear-all" id="nClearAll">Clear All</button>
-      <button class="n-close" id="nClose"><i class="fas fa-times"></i></button>
-    </div>
-  </div>
+  <div class="n-hd"><div class="n-hd-t"><i class="fas fa-bell"></i> Notifications</div><div class="n-hd-actions"><button class="n-clear-all" id="nClearAll">Clear All</button><button class="n-close" id="nClose"><i class="fas fa-times"></i></button></div></div>
   <div class="n-list" id="nList"></div>
 </div>
 
@@ -745,13 +781,8 @@ a{color:#f39c12;text-decoration:none}
     <div class="bank-row"><span class="bk">Account No.</span><span class="bv"><span style="font-family:monospace">7730000770230</span><button class="copy-btn" onclick="navigator.clipboard.writeText('7730000770230');showToast('Copied!','info')">COPY</button></span></div>
     <div class="bank-row"><span class="bk">Amount</span><span class="bv" id="payAmt" style="color:#f39c12;font-size:1rem">0 MVR</span></div>
   </div>
-  <div class="fg"><label>Upload Payment Slip</label>
-    <div class="file-zone"><input type="file" id="slipFile" accept="image/*"><i class="fas fa-cloud-arrow-up"></i><span id="slipFN">Tap to attach slip</span></div>
-  </div>
-  <div class="modal-btns">
-    <button class="btn btn-sec" style="flex:1" id="payCancel">Cancel</button>
-    <button class="btn btn-gold" style="flex:2" id="payConfirm"><i class="fas fa-check-circle"></i> Confirm</button>
-  </div>
+  <div class="fg"><label>Upload Payment Slip</label><div class="file-zone"><input type="file" id="slipFile" accept="image/*"><i class="fas fa-cloud-arrow-up"></i><span id="slipFN">Tap to attach slip</span></div></div>
+  <div class="modal-btns"><button class="btn btn-sec" style="flex:1" id="payCancel">Cancel</button><button class="btn btn-gold" style="flex:2" id="payConfirm"><i class="fas fa-check-circle"></i> Confirm</button></div>
 </div>
 </div>
 
@@ -765,10 +796,7 @@ a{color:#f39c12;text-decoration:none}
 <div class="modal-box">
   <div class="modal-hd"><div class="modal-title"><i class="fas fa-file-invoice"></i> Invoice</div><button class="close-btn" id="invClose"><i class="fas fa-times"></i></button></div>
   <div id="invContent"></div>
-  <div class="modal-btns">
-    <button class="btn btn-sec" style="flex:1" id="invClose2">Close</button>
-    <button class="btn btn-gold" style="flex:2" id="invDownload"><i class="fas fa-download"></i> Download PDF</button>
-  </div>
+  <div class="modal-btns"><button class="btn btn-sec" style="flex:1" id="invClose2">Close</button><button class="btn btn-gold" style="flex:2" id="invDownload"><i class="fas fa-download"></i> Download PDF</button></div>
 </div>
 </div>
 
@@ -778,68 +806,34 @@ a{color:#f39c12;text-decoration:none}
 const fbCfg={apiKey:"AIzaSyCZA8Z9AJcC97CyQUZVCRsljTuYBfxjHMw",authDomain:"easycargo-9c0cd.firebaseapp.com",databaseURL:"https://easycargo-9c0cd-default-rtdb.firebaseio.com",projectId:"easycargo-9c0cd",storageBucket:"easycargo-9c0cd.firebasestorage.app",messagingSenderId:"51689325187",appId:"1:51689325187:web:c65cb8fb0af2241a4c91b6"};
 firebase.initializeApp(fbCfg);
 const db=firebase.database();
-let me=null,allD=[],allP=[],allN=[],allBoats=[],allSpeedBoats=[],allPickups=[],allCargoTypes=[],allExpressHrs=[],allDelLocs=[],siteSettings={},tmpD=null,busy=false,dMode='cargo',slideIdx=0,slideTimer=null,selAtoll=null,curInvoiceD=null;
+let me=null,allD=[],allP=[],allN=[],allBoats=[],allSpeedBoats=[],allPickups=[],allCargoTypes=[],allExpressHrs=[],allExpressSizes=[],allDelLocs=[],siteSettings={},tmpD=null,busy=false,dMode='cargo',slideIdx=0,slideTimer=null,selAtoll=null,curInvoiceD=null;
 const $=id=>document.getElementById(id);
 function toArr(d){return d?(Array.isArray(d)?d:Object.values(d)):[]}
 function fmtD(d){return d?new Date(d).toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}):'—'}
 function genRef(){return`CARGO-${Date.now().toString().slice(-6)}${Math.floor(Math.random()*900+100)}`}
-function genInvNo(){return`INV-${Date.now().toString().slice(-7)}`}
 function showToast(m,t='info'){const el=$('toast');el.className=`toast ${t}`;$('tTxt').textContent=m;el.querySelector('.t-ico').innerHTML=t==='ok'?'<i class="fas fa-check-circle"></i>':t==='err'?'<i class="fas fa-times-circle"></i>':'<i class="fas fa-info-circle"></i>';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3200)}
 function sBadge(s){const m={'Order Placed':'b-placed','Processing':'b-proc','In Transit':'b-trans','Out for Delivery':'b-out','Delivered':'b-del'};return`<span class="badge ${m[s]||'b-placed'}">${s}</span>`}
 function pBadge(s){const m={'under_review':['b-rev','Reviewing'],'paid':['b-paid','Paid'],'pending':['b-pnd','Pending']};const[c,l]=m[s]||['b-pnd','Pending'];return`<span class="badge ${c}">${l}</span>`}
 function showMsg(id,msg,t){const el=$(id);el.className=`msg ${t}`;el.textContent=msg;setTimeout(()=>el.className='msg',4000)}
 function timeAgo(ts){if(!ts)return'';const s=Math.floor((Date.now()-new Date(ts))/1000);if(s<60)return s+'s ago';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago'}
-function calcTotal(){const isExp=$('ctIsExpress').value==='1';const cp=isExp?parseFloat($('selHrPrice').value)||0:parseFloat($('ctPrice').value)||0;const wp=isExp?0:parseFloat($('selWP').value)||0;const tot=cp+wp;$('pDisp').textContent=tot.toFixed(0);return tot}
-function initSlideshow(){const slides=siteSettings.homeSlides||[];const ss=$('slideshow');const dots=$('slideDots');if(siteSettings.homeTagline)$('homeTagline').textContent=siteSettings.homeTagline;if(!slides.length){ss.innerHTML='<div class="slide active" style="background:linear-gradient(135deg,#0a0f1e,#1a2747)"></div>';dots.innerHTML='';return}ss.innerHTML=slides.map((s,i)=>`<div class="slide${i===0?' active':''}" style="background-image:url('${s.url||s}')"></div>`).join('');dots.innerHTML=slides.map((_,i)=>`<div class="dot${i===0?' active':''}" onclick="gotoSlide(${i})"></div>`).join('');clearInterval(slideTimer);slideTimer=setInterval(()=>gotoSlide((slideIdx+1)%slides.length),5000)}
+function calcTotal(){const isExp=$('ctIsExpress').value==='1';let tot=0;if(isExp){tot=parseFloat($('selTimePrice').value)||0;}else{tot=(parseFloat($('ctPrice').value)||0)+(parseFloat($('selWP').value)||0);}$('pDisp').textContent=tot.toFixed(0);return tot;}
+function sizeIcon(name){const n=(name||'').toLowerCase();if(n.includes('small'))return'fa-feather';if(n.includes('medium'))return'fa-box';if(n.includes('large')&&!n.includes('x'))return'fa-boxes-stacked';if(n.includes('x')||n.includes('xl')||n.includes('extra'))return'fa-pallet';return'fa-box';}
+function loadPkgSizeGrid(ctId){const g=$('pkgSizeGrid');const sizes=allExpressSizes.filter(s=>String(s.cargoTypeId)===String(ctId)&&s.active!==false);if(!sizes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No sizes configured for this type.</p></div>';return;}const sorted=[...sizes].sort((a,b)=>(a.order||0)-(b.order||0));g.innerHTML=sorted.map(sz=>`<div class="pkg-size-card" data-szid="${sz.id}" onclick="selPkgSize(this,'${sz.id}')"><i class="fas ${sizeIcon(sz.name)} psz-icon"></i><div class="psz-name">${sz.name}</div><div class="psz-weight">Up to ${sz.maxKg} kg</div><div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>`).join('');$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('expressTimeWrap').classList.remove('show');$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';calcTotal();}
+window.selPkgSize=function(el,id){document.querySelectorAll('.pkg-size-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');const sz=allExpressSizes.find(s=>String(s.id)===String(id));if(!sz)return;$('selSizeId').value=sz.id;$('selSizeName').value=sz.name;$('selSizeWeight').value=sz.maxKg;$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));loadTimeSlots(sz.id);calcTotal();};
+function loadTimeSlots(sizeId){const g=$('timeSlotGrid');const ctId=$('ctypeGrid').querySelector('.ct-card.active')?.dataset?.id||'';const slots=allExpressHrs.filter(h=>String(h.sizeId)===String(sizeId)&&(ctId?String(h.cargoTypeId)===String(ctId):true));if(!slots.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.6rem"><p>No time options for this size.</p></div>';$('expressTimeWrap').classList.add('show');return;}const sorted=[...slots].sort((a,b)=>(a.minutes||0)-(b.minutes||0));g.innerHTML=sorted.map(ts=>{const mins=ts.minutes||((ts.hours||0)*60);const durTxt=mins<60?`${mins}`:`${Math.floor(mins/60)}h${mins%60?` ${mins%60}m`:''}`;const durUnit=mins<60?'mins':'';return`<button type="button" class="time-slot-btn" data-id="${ts.id}" data-price="${ts.price}" data-label="${ts.label||durTxt+(durUnit?' '+durUnit:'')}" onclick="selTimeSlot(this)"><span class="ts-dur">${durTxt}</span><span class="ts-lbl">${durUnit||ts.label||'Duration'}</span><span class="ts-price">MVR ${ts.price}</span><div class="time-slot-ck"><i class="fas fa-check"></i></div></button>`;}).join('');$('expressTimeWrap').classList.add('show');}
+window.selTimeSlot=function(el){document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('selTimeId').value=el.dataset.id;$('selTimePrice').value=el.dataset.price;$('selTimeLabel').value=el.dataset.label;calcTotal();};
+function initSlideshow(){const fbSlides=siteSettings.homeSlides||[];const slides=MANUAL_SLIDES.length?MANUAL_SLIDES:[...fbSlides];const ss=$('slideshow');const dots=$('slideDots');const tagline=HOME_TAGLINE||(siteSettings.homeTagline||'');if(tagline)$('homeTagline').textContent=tagline;if(!slides.length){ss.innerHTML='<div class="slide active" style="background:linear-gradient(135deg,#0a0f1e,#1a2747)"></div>';dots.innerHTML='';return}ss.innerHTML=slides.map((s,i)=>`<div class="slide${i===0?' active':''}" style="background-image:url('${s.url||s}')"></div>`).join('');dots.innerHTML=slides.map((_,i)=>`<div class="dot${i===0?' active':''}" onclick="gotoSlide(${i})"></div>`).join('');clearInterval(slideTimer);slideTimer=setInterval(()=>gotoSlide((slideIdx+1)%slides.length),5000);}
 window.gotoSlide=function(i){const sl=document.querySelectorAll('.slide');const ds=document.querySelectorAll('.dot');if(!sl.length)return;sl[slideIdx]?.classList.remove('active');ds[slideIdx]?.classList.remove('active');slideIdx=i;sl[slideIdx]?.classList.add('active');ds[slideIdx]?.classList.add('active')}
-function loadHowTo(){const imgs=siteSettings.howToImages||[];const el=$('howImgGrid');if(!imgs.length){el.innerHTML='<div class="how-empty">No guide images yet.</div>';return}el.innerHTML=imgs.map(img=>`<div class="how-img-item"><img src="${img.url||img}" loading="lazy"></div>`).join('')}
+function loadHowTo(){const fbImgs=siteSettings.howToImages||[];const imgs=MANUAL_HOW_IMAGES.length?MANUAL_HOW_IMAGES:[...fbImgs];const el=$('howImgGrid');if(!imgs.length){el.innerHTML='<div class="how-empty">No guide images yet.</div>';return}el.innerHTML=imgs.map(img=>`<div class="how-img-item"><img src="${img.url||img}" loading="lazy"></div>`).join('');}
 window.toggleHow=function(){$('howPanel').classList.toggle('open')}
 window.showAuth=function(){$('homePage').style.display='none';$('authScreen').classList.add('show')}
-function loadLoginPageSettings(){
-  const logo=siteSettings.loginLogoUrl||'';const li=$('loginLogoImg');if(logo){li.src=logo;li.style.display='block'}else li.style.display='none';
-  const links=siteSettings.socialLinks||[];const row=$('socialRow');
-  if(!links.length){row.style.display='none';return}
-  const ic={facebook:'fab fa-facebook-f',instagram:'fab fa-instagram',telegram:'fab fa-telegram-plane',whatsapp:'fab fa-whatsapp',twitter:'fab fa-twitter',youtube:'fab fa-youtube',tiktok:'fab fa-tiktok',viber:'fab fa-viber'};
-  const cc={facebook:'s-fb',instagram:'s-ig',telegram:'s-tg',whatsapp:'s-wa',twitter:'s-tw',youtube:'s-yt'};
-  row.style.display='flex';
-  row.innerHTML=links.map(l=>{const pl=l.platform?.toLowerCase()||'other';return`<a href="${l.url||'#'}" target="_blank" class="social-btn ${cc[pl]||'s-ot'}"><i class="${ic[pl]||'fas fa-link'}"></i>${l.platform}</a>`}).join('')
-}
+function loadLoginPageSettings(){const logo=siteSettings.loginLogoUrl||'';const li=$('loginLogoImg');if(logo){li.src=logo;li.style.display='block'}else li.style.display='none';const links=siteSettings.socialLinks||[];const row=$('socialRow');if(!links.length){row.style.display='none';return}const ic={facebook:'fab fa-facebook-f',instagram:'fab fa-instagram',telegram:'fab fa-telegram-plane',whatsapp:'fab fa-whatsapp',twitter:'fab fa-twitter',youtube:'fab fa-youtube'};const cc={facebook:'s-fb',instagram:'s-ig',telegram:'s-tg',whatsapp:'s-wa',twitter:'s-tw',youtube:'s-yt'};row.style.display='flex';row.innerHTML=links.map(l=>{const pl=l.platform?.toLowerCase()||'other';return`<a href="${l.url||'#'}" target="_blank" class="social-btn ${cc[pl]||'s-ot'}"><i class="${ic[pl]||'fas fa-link'}"></i>${l.platform}</a>`}).join('')}
 $('tLogin').onclick=()=>{$('tLogin').classList.add('active');$('tReg').classList.remove('active');$('pLogin').classList.add('active');$('pReg').classList.remove('active')};
 $('tReg').onclick=()=>{$('tReg').classList.add('active');$('tLogin').classList.remove('active');$('pReg').classList.add('active');$('pLogin').classList.remove('active')};
-$('loginBtn').onclick=async()=>{
-  const u=$('lUsr').value.trim(),p=$('lPwd').value;
-  if(!u||!p){showMsg('loginMsg','Fill all fields','err');return}
-  const arr=toArr((await db.ref('users').once('value')).val());
-  const f=arr.find(x=>(x.username===u||x.email===u)&&x.password===p);
-  if(!f){showMsg('loginMsg','Invalid credentials','err');return}
-  if(f.role==='admin'){showMsg('loginMsg','Use the admin panel','err');return}
-  if(f.status==='pending'){$('pLogin').innerHTML=`<div class="pending-box"><i class="fas fa-hourglass-half"></i><h3>Access Pending</h3><p>Awaiting admin approval.</p></div><button class="btn btn-sec" style="margin-top:.8rem" onclick="location.reload()"><i class="fas fa-arrow-left"></i> Back</button>`;return}
-  if(f.status==='blocked'){showMsg('loginMsg','Account blocked.','err');return}
-  $('loginBtn').disabled=true;$('truckAnim').classList.add('show');
-  setTimeout(()=>{$('truckAnim').classList.remove('show');me=f;localStorage.setItem('ecu',JSON.stringify(f));enterDash()},1800)
-};
-$('regBtn').onclick=async()=>{
-  const u=$('rUsr').value.trim(),e=$('rEml').value.trim(),c=$('rCnt').value.trim(),p=$('rPwd').value,cf=$('rCfm').value;
-  if(!u||!e||!c||!p||!cf){showMsg('regMsg','Fill all fields','err');return}
-  if(p!==cf){showMsg('regMsg','Passwords do not match','err');return}
-  const arr=toArr((await db.ref('users').once('value')).val());
-  if(arr.find(x=>x.email===e)){showMsg('regMsg','Email already exists','err');return}
-  arr.push({id:Date.now(),username:u,email:e,contact:c,password:p,role:'user',status:'pending'});
-  await db.ref('users').set(arr);showMsg('regMsg','Registered! Awaiting admin approval.','ok');$('tLogin').click()
-};
-window.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('ecu');if(s){me=JSON.parse(s);$('homePage').style.display='none';enterDash()}initFB()});
-function initFB(){
-  db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}});
-  db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});
-  db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});
-  db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());if(me)buildAtollChips()});
-  db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me)loadPickupGrid()});
-  db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});
-  db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});
-  db.ref('deliveryLocations').on('value',snap=>{allDelLocs=toArr(snap.val());if(me)loadDlocGrid()});
-  db.ref('speedBoats').on('value',snap=>{allSpeedBoats=toArr(snap.val());if(me)buildSBGrid()});
-  db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});
-}
+$('loginBtn').onclick=async()=>{const contact=$('lContact').value.trim();const pwd=$('lPwd').value;if(!contact||!pwd){showMsg('loginMsg','Fill all fields','err');return}const arr=toArr((await db.ref('users').once('value')).val());const f=arr.find(x=>x.contact===contact&&x.password===pwd);if(!f){showMsg('loginMsg','Invalid contact number or password','err');return}if(f.role==='admin'){showMsg('loginMsg','Use the admin panel','err');return}if(f.status==='pending'){$('pLogin').innerHTML=`<div class="pending-box"><i class="fas fa-hourglass-half"></i><h3>Access Pending</h3><p>Awaiting admin approval.</p></div><button class="btn btn-sec" style="margin-top:.8rem" onclick="location.reload()"><i class="fas fa-arrow-left"></i> Back</button>`;return}if(f.status==='blocked'){showMsg('loginMsg','Account blocked. Contact admin.','err');return}$('loginBtn').disabled=true;$('truckAnim').classList.add('show');setTimeout(()=>{$('truckAnim').classList.remove('show');me=f;localStorage.setItem('ecu',JSON.stringify(f));enterDash()},1800)};
+$('regBtn').onclick=async()=>{const u=$('rUsr').value.trim(),e=$('rEml').value.trim(),c=$('rCnt').value.trim(),p=$('rPwd').value,cf=$('rCfm').value;if(!u||!e||!c||!p||!cf){showMsg('regMsg','Fill all fields','err');return}if(p!==cf){showMsg('regMsg','Passwords do not match','err');return}const arr=toArr((await db.ref('users').once('value')).val());if(arr.find(x=>x.email===e)){showMsg('regMsg','Email already exists','err');return}if(arr.find(x=>x.contact===c)){showMsg('regMsg','Contact number already registered','err');return}arr.push({id:Date.now(),username:u,email:e,contact:c,password:p,role:'user',status:'pending'});await db.ref('users').set(arr);showMsg('regMsg','Registered! Awaiting admin approval.','ok');$('tLogin').click();};
+window.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('ecu');if(s){me=JSON.parse(s);$('homePage').style.display='none';enterDash()}initFB();});
+function initFB(){db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}});db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());if(me)buildAtollChips()});db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me)loadPickupGrid()});db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});db.ref('expressSizes').on('value',snap=>{allExpressSizes=toArr(snap.val())});db.ref('deliveryLocations').on('value',snap=>{allDelLocs=toArr(snap.val());if(me)loadDlocGrid()});db.ref('speedBoats').on('value',snap=>{allSpeedBoats=toArr(snap.val());if(me)buildSBGrid()});db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});initSlideshow();loadHowTo();}
 function enterDash(){$('authScreen').classList.remove('show');$('dashboard').style.display='block';$('hName').textContent=me.username;$('sidebarName').textContent=me.username;$('cNm').value=me.username;$('cCt').value=me.contact||'';loadPickupGrid();buildAtollChips();buildSBGrid();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}
 function updateCapBar(){const cap=siteSettings.dailyCapacity||0;if(!cap){$('capWrap').style.display='none';return}const today=new Date().toISOString().split('T')[0];const tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;const pct=Math.min(100,Math.round((tc/cap)*100));$('capWrap').style.display='block';$('capFill').style.width=pct+'%';$('capPct').textContent=pct+'%';$('capPct').style.color=pct>=100?'#e74c3c':pct>=80?'#f39c12':'#27ae60';$('capFill').className='cap-fill'+(pct>=100?' full':pct>=80?' warn':'');$('capNote').textContent=pct>=100?`Full (${tc}/${cap})`:`${tc}/${cap} today`;const sb=$('submitBtn');if(pct>=100){sb.disabled=true;sb.innerHTML='<i class="fas fa-ban"></i> Capacity Full'}else{sb.disabled=false;sb.innerHTML='<i class="fas fa-paper-plane"></i> Save &amp; Pay'}}
 document.querySelectorAll('.ntab[data-s],.m-tab[data-s]').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.s)}));
@@ -847,301 +841,45 @@ function switchTab(s){document.querySelectorAll('.ntab,.m-tab').forEach(x=>x.cla
 function toggleSB(){$('sidebar').classList.toggle('open');$('sideOvl').classList.toggle('show')}
 function closeSB(){$('sidebar').classList.remove('open');$('sideOvl').classList.remove('show')}
 $('sideOvl').onclick=closeSB;
-function loadCtypeGrid(){
-  const g=$('ctypeGrid');if(!allCargoTypes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div>';return}
-  const icons={'normal':'fa-box','express':'fa-bolt','fragile':'fa-wine-glass-crack','oversized':'fa-pallet','custom':'fa-cube'};
-  g.innerHTML=[...allCargoTypes].sort((a,b)=>(a.order||0)-(b.order||0)).map(ct=>`<div class="ct-card" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${ct.isExpress?'From MVR '+ct.price+'/hr':'Select weight'}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`).join('')
-}
-window.selCtype=function(el,id){
-  document.querySelectorAll('.ct-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');
-  const ct=allCargoTypes.find(c=>String(c.id)===String(id));if(!ct)return;
-  $('ctV').value=ct.name;$('ctPrice').value=ct.price||0;$('ctIsExpress').value=ct.isExpress?1:0;
-  const eta=$('etaInfo');eta.classList.add('show');eta.classList.toggle('express',!!ct.isExpress);$('etaV').textContent=ct.eta||'—';
-  document.querySelectorAll('.w-btn,.hr-btn').forEach(b=>b.classList.remove('active'));
-  $('selW').value='';$('selWP').value='0';$('selHrId').value='';$('selHrPrice').value='0';$('selHrLabel').value='';
-  if(ct.isExpress){$('expressHrsWrap').classList.add('show');$('weightSec').classList.remove('show');loadHrGrid(ct.id)}
-  else{$('expressHrsWrap').classList.remove('show');$('weightSec').classList.add('show');loadWeights()}
-  calcTotal()
-};
-function loadHrGrid(ctId){const g=$('hrGrid');const hrs=ctId?allExpressHrs.filter(h=>String(h.cargoTypeId)===String(ctId)):allExpressHrs;if(!hrs.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No hourly options for this type.</p></div>';return}g.innerHTML=[...hrs].sort((a,b)=>a.hours-b.hours).map(hr=>`<button type="button" class="hr-btn" data-id="${hr.id}" data-price="${hr.price}" data-label="${hr.label||hr.hours+'hr'}" onclick="selHr(this)"><span class="hr-val">${hr.hours}</span><span class="hr-label">${hr.label||'Hour'+(hr.hours>1?'s':'')}</span><span class="hr-price">MVR ${hr.price}</span></button>`).join('')}
-window.selHr=function(el){document.querySelectorAll('.hr-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('selHrId').value=el.dataset.id;$('selHrPrice').value=el.dataset.price;$('selHrLabel').value=el.dataset.label;calcTotal()};
-function weightIcon(mn,mx){if(mx<=2)return'fa-feather';if(mx<=10)return'fa-box';if(mx<=30)return'fa-boxes-stacked';return'fa-pallet'}
-function weightLabel(mn,mx){if(mx<=2)return'Light';if(mx<=10)return'Medium';if(mx<=30)return'Heavy';return'Oversized'}
-function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return}const sorted=[...allP].sort((a,b)=>a.min-b.min);g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${weightIcon(x.min,x.max)}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${weightLabel(x.min,x.max)}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');$('selW').value=`${this.dataset.mn}-${this.dataset.mx} kg`;$('selWP').value=this.dataset.pr;calcTotal()}));$('selW').value='';$('selWP').value='0';calcTotal()}
+function loadCtypeGrid(){const g=$('ctypeGrid');if(!allCargoTypes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div>';return}const icons={'normal':'fa-box','express':'fa-bolt','fragile':'fa-wine-glass-crack','oversized':'fa-pallet','custom':'fa-cube'};g.innerHTML=[...allCargoTypes].sort((a,b)=>(a.order||0)-(b.order||0)).map(ct=>`<div class="ct-card" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${ct.isExpress?'Select size &amp; time':'Select weight'}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`).join('')}
+window.selCtype=function(el,id){document.querySelectorAll('.ct-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');const ct=allCargoTypes.find(c=>String(c.id)===String(id));if(!ct)return;$('ctV').value=ct.name;$('ctPrice').value=ct.price||0;$('ctIsExpress').value=ct.isExpress?1:0;const eta=$('etaInfo');eta.classList.add('show');eta.classList.toggle('express',!!ct.isExpress);$('etaV').textContent=ct.eta||'—';document.querySelectorAll('.pkg-size-card,.time-slot-btn,.w-btn').forEach(b=>b.classList.remove('active'));$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';$('selW').value='';$('selWP').value='0';if(ct.isExpress){$('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.remove('show');loadPkgSizeGrid(ct.id);}else{$('expressFlowWrap').classList.remove('show');$('weightSec').classList.add('show');$('expressTimeWrap').classList.remove('show');loadWeights();}calcTotal();};
+function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return}const sorted=[...allP].sort((a,b)=>a.min-b.min);g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${x.max<=2?'fa-feather':x.max<=10?'fa-box':x.max<=30?'fa-boxes-stacked':'fa-pallet'}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${x.max<=2?'Light':x.max<=10?'Medium':x.max<=30?'Heavy':'Oversized'}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');$('selW').value=`${this.dataset.mn}-${this.dataset.mx} kg`;$('selWP').value=this.dataset.pr;calcTotal()}));$('selW').value='';$('selWP').value='0';calcTotal()}
 function loadPickupGrid(){const g=$('pickupGrid');if(!allPickups.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div>';return}g.innerHTML=allPickups.map(loc=>`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`).join('')}
-window.selPickup=function(el,id){
-  document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');
-  const loc=allPickups.find(l=>String(l.id)===String(id));if(!loc)return;
-  $('pLocVal').value=loc.name;
-  const ax=$('addrX');
-  const lbl=ax.querySelector('label');
-  if(loc.type==='address'||loc.type==='postal'){
-    ax.classList.add('show');
-    $('addrVal').required=true;
-    if(lbl){
-      if(loc.type==='postal'){
-        lbl.innerHTML='<i class="fas fa-envelope" style="color:#f39c12;margin-right:4px"></i>Post/Pickpost Number or Message';
-        $('addrVal').placeholder='Enter Post/Pickpost number or message…';
-      } else {
-        lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address';
-        $('addrVal').placeholder='Enter full address…';
-      }
-    }
-  } else {
-    ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value='';
-  }
-};
-window.setMode=function(m){
-  dMode=m;
-  document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));
-  const btnMap={cargo:'dmCargo',boat:'dmBoat',speedboat:'dmSpeedboat'};
-  $(btnMap[m])?.classList.add('active');
-  $('cargoDest').style.display=m==='cargo'?'block':'none';
-  $('boatSec').classList.toggle('show',m==='boat');
-  $('speedboatSec').classList.toggle('show',m==='speedboat');
-  if(m==='boat'){selAtoll=null;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'))}
-  if(m==='speedboat'){$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';$('sbGridWrap').style.display='none';document.querySelectorAll('.sb-atoll-chip,.sb-card,.sb-isl-btn').forEach(c=>c.classList.remove('active'));if($('sbAtollSearch'))$('sbAtollSearch').value='';buildSBAtollChips()}
-  if(m==='cargo'){const w=$('houseAddrWrap');if(w)w.style.display='none'}
-};
+window.selPickup=function(el,id){document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');const loc=allPickups.find(l=>String(l.id)===String(id));if(!loc)return;$('pLocVal').value=loc.name;const ax=$('addrX');const lbl=ax.querySelector('label');if(loc.type==='address'||loc.type==='postal'){ax.classList.add('show');$('addrVal').required=true;if(lbl){if(loc.type==='postal'){lbl.innerHTML='<i class="fas fa-envelope" style="color:#f39c12;margin-right:4px"></i>Post/Pickpost Number or Message';$('addrVal').placeholder='Enter Post/Pickpost number or message…';}else{lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address';$('addrVal').placeholder='Enter full address…';}}}else{ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value=''}};
+let boatInputMode='list',sbInputMode='list';
+window.setBoatInputMode=function(m){boatInputMode=m;document.querySelectorAll('#boatModeToggle .bmt-btn').forEach(b=>b.classList.remove('active'));if(m==='list'){$('boatListBtn').classList.add('active');$('boatListMode').style.display='block';$('boatManualMode').style.display='none';$('manualBoatName').value='';$('manualBoatIsland').value='';$('manualBoatContact').value='';$('manualBoatCallBtn').style.display='none';}else{$('boatManualBtn').classList.add('active');$('boatListMode').style.display='none';$('boatManualMode').style.display='block';$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));}};
+window.setSBInputMode=function(m){sbInputMode=m;document.querySelectorAll('#sbModeToggle .bmt-btn').forEach(b=>b.classList.remove('active'));if(m==='list'){$('sbListBtn').classList.add('active');$('sbListMode').style.display='block';$('sbManualMode').style.display='none';$('manualSBName').value='';$('manualSBIsland').value='';$('manualSBContact').value='';$('manualSBCallBtn').style.display='none';}else{$('sbManualBtn').classList.add('active');$('sbListMode').style.display='none';$('sbManualMode').style.display='block';$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';$('sbGridWrap').style.display='none';document.querySelectorAll('.sb-atoll-chip,.sb-card,.sb-isl-btn').forEach(c=>c.classList.remove('active'));}};
+window.onManualContactInput=function(type){if(type==='sb'){const v=$('manualSBContact').value.trim();const show=v.length>=7;const btn=$('manualSBCallBtn');btn.style.display=show?'flex':'none';if(show)btn.href='tel:'+v;}};
+window.callManualBoat=function(e,type){const num=type==='boat'?$('manualBoatContact').value.trim():$('manualSBContact').value.trim();if(!num){e.preventDefault();showToast('Enter a contact number first','err');return}};
+window.setMode=function(m){dMode=m;document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));const btnMap={cargo:'dmCargo',boat:'dmBoat',speedboat:'dmSpeedboat'};$(btnMap[m])?.classList.add('active');$('cargoDest').style.display=m==='cargo'?'block':'none';$('boatSec').classList.toggle('show',m==='boat');$('speedboatSec').classList.toggle('show',m==='speedboat');if(m==='boat'){boatInputMode='list';$('boatListBtn').classList.add('active');$('boatManualBtn').classList.remove('active');$('boatListMode').style.display='block';$('boatManualMode').style.display='none';selAtoll=null;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));const bc=$('manualBoatContact');if(bc&&!bc._wired){bc._wired=true;bc.addEventListener('input',()=>{const v=bc.value.trim();const btn=$('manualBoatCallBtn');btn.style.display=v.length>=7?'flex':'none';if(v.length>=7)btn.href='tel:'+v;});}}if(m==='speedboat'){sbInputMode='list';$('sbListBtn').classList.add('active');$('sbManualBtn').classList.remove('active');$('sbListMode').style.display='block';$('sbManualMode').style.display='none';$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';$('sbGridWrap').style.display='none';document.querySelectorAll('.sb-atoll-chip,.sb-card,.sb-isl-btn').forEach(c=>c.classList.remove('active'));if($('sbAtollSearch'))$('sbAtollSearch').value='';buildSBAtollChips();}if(m==='cargo'){const w=$('houseAddrWrap');if(w)w.style.display='none'}};
 function loadDlocGrid(){const g=$('dlocGrid');if(!allDelLocs.length){g.innerHTML='<div class="empty-s" style="padding:.6rem"><p>No delivery locations set.</p></div>';return}g.innerHTML=allDelLocs.map(l=>`<button type="button" class="dloc-btn" onclick="selDloc(this,'${l.name||l}')">${l.name||l}</button>`).join('');$('dLocVal').value=''}
 window.selDloc=function(el,v){document.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('dLocVal').value=v;const w=$('houseAddrWrap');if(w)w.style.display='block'};
-function buildSBAtollChips(){
-  var g=$('sbAtollChips');if(!g)return;
-  var atolls=[...new Set(allSpeedBoats.filter(function(b){return b.active!==false;}).flatMap(function(b){return b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[])}))].sort();
-  if(!atolls.length){
-    g.innerHTML='';
-    $('sbGridWrap').style.display='none';
-    renderSBGrid(allSpeedBoats.filter(function(b){return b.active!==false;}));
-    return;
-  }
-  var html='';
-  atolls.forEach(function(a){
-    var enc=a.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-    html+='<button type="button" class="sb-atoll-chip" onclick="selSBAtoll(this,\''+enc+'\')">'+a+'</button>';
-  });
-  g.innerHTML=html;
-  $('sbGridWrap').style.display='none';
-}
-window.selSBAtoll=function(el,a){
-  document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.classList.remove('active');});
-  el.classList.add('active');
-  $('selSB').value='';$('selSBIsl').value='';
-  $('sbIslSec').style.display='none';
-  document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(function(c){c.classList.remove('active');});
-  $('sbGridWrap').style.display='block';
-  renderSBGrid(allSpeedBoats.filter(function(b){return b.active!==false&&(b.atolls?b.atolls.includes(a):b.atoll===a);}));
-};
+function buildSBAtollChips(){var g=$('sbAtollChips');if(!g)return;var atolls=[...new Set(allSpeedBoats.filter(function(b){return b.active!==false;}).flatMap(function(b){return b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[])}))].sort();if(!atolls.length){g.innerHTML='';$('sbGridWrap').style.display='none';renderSBGrid(allSpeedBoats.filter(function(b){return b.active!==false;}));return;}var html='';atolls.forEach(function(a){var enc=a.replace(/\\/g,'\\\\').replace(/'/g,"\\'");html+='<button type="button" class="sb-atoll-chip" onclick="selSBAtoll(this,\''+enc+'\')">'+a+'</button>';});g.innerHTML=html;$('sbGridWrap').style.display='none';}
+window.selSBAtoll=function(el,a){document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.classList.remove('active');});el.classList.add('active');$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(function(c){c.classList.remove('active');});$('sbGridWrap').style.display='block';renderSBGrid(allSpeedBoats.filter(function(b){return b.active!==false&&(b.atolls?b.atolls.includes(a):b.atoll===a);}));};
 function buildSBGrid(){buildSBAtollChips();}
-window.filterSBAtolls=function(){
-  var q=$('sbAtollSearch').value.trim().toLowerCase();
-  if(!q){
-    document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.style.display='';});
-    $('sbGridWrap').style.display='none';
-    $('sbIslSec').style.display='none';
-    document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(function(c){c.classList.remove('active');});
-    return;
-  }
-  // Filter atoll chips
-  document.querySelectorAll('.sb-atoll-chip').forEach(function(c){
-    c.style.display=c.textContent.toLowerCase().includes(q)?'':'none';
-  });
-  // Also search speed boats by name or atoll
-  var matched=allSpeedBoats.filter(function(b){
-    if(b.active===false)return false;
-    if(b.name&&b.name.toLowerCase().includes(q))return true;
-    var batols=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);
-    return batols.some(function(a){return a.toLowerCase().includes(q);});
-  });
-  if(matched.length){
-    $('sbGridWrap').style.display='block';
-    renderSBGrid(matched);
-    document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.classList.remove('active');});
-  } else {
-    $('sbGridWrap').style.display='none';
-  }
-};
-function renderSBGrid(boats){
-  var g=$('sbGrid');if(!g)return;
-  if(!boats.length){
-    g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No speed boats for this atoll.</p></div>';
-    return;
-  }
-  var html='';
-  boats.forEach(function(b){
-    var sid=String(b.id);
-    html+='<div class="boat-card sb-card" data-sbid="'+sid+'" onclick="selSpeedBoat(\''+sid+'\')">';
-    if(b.imageUrl){
-      html+='<img class="b-img" src="'+b.imageUrl+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
-      html+='<div class="b-no-img" style="display:none"><i class="fas fa-bolt"></i></div>';
-    }else{
-      html+='<div class="b-no-img"><i class="fas fa-bolt"></i></div>';
-    }
-    html+='<div class="b-name">'+b.name+'</div>';
-    html+='<div class="b-route">'+(b.route||'')+'</div>';
-    html+='<div class="boat-ck"><i class="fas fa-check"></i></div>';
-    html+='</div>';
-  });
-  g.innerHTML=html;
-}
-window.selSpeedBoat=function(id){
-  document.querySelectorAll('.sb-card').forEach(function(c){c.classList.remove('active');});
-  var card=document.querySelector('.sb-card[data-sbid="'+id+'"]');
-  if(card)card.classList.add('active');
-  var boat=allSpeedBoats.find(function(b){return String(b.id)===String(id);});
-  if(!boat)return;
-  $('selSB').value=boat.name;
-  $('sbIslSec').style.display='block';
-  $('sbInfoTxt').textContent=boat.name+(boat.route?' \u2014 '+boat.route:'');
-  var ig=$('sbIslGrid');
-  var isls=boat.islands||[];
-  if(!isls.length){
-    ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';
-    $('selSBIsl').value='';return;
-  }
-  var ih='';
-  isls.forEach(function(isl){
-    ih+='<button type="button" class="isl-btn sb-isl-btn" data-sbisl="'+encodeURIComponent(isl)+'">'+isl+'</button>';
-  });
-  ig.innerHTML=ih;
-  ig.querySelectorAll('.sb-isl-btn').forEach(function(btn){
-    btn.addEventListener('click',function(ev){
-      ev.preventDefault();ev.stopPropagation();
-      ig.querySelectorAll('.sb-isl-btn').forEach(function(b){b.classList.remove('active');});
-      this.classList.add('active');
-      $('selSBIsl').value=decodeURIComponent(this.getAttribute('data-sbisl'));
-    });
-  });
-  $('selSBIsl').value='';
-};
-
-function buildAtollChips(){
-  const atolls=[...new Set(allBoats.filter(b=>b.active!==false).flatMap(b=>b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[])))].sort();
-  const g=$('atollChips');
-  if(!atolls.length){$('boatGridWrap').style.display='block';g.innerHTML='';renderBoatGrid(allBoats.filter(b=>b.active!==false));return}
-  g.innerHTML=atolls.map(a=>`<button type="button" class="atoll-chip" onclick="selAtollFn(this,'${a.replace(/'/g,"\\'")}')">${a}</button>`).join('')
-}
-window.filterAtolls=function(){
-  var q=$('atollSearch').value.trim().toLowerCase();
-  if(!q){
-    // Reset — show all atoll chips, hide boat grid
-    document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.style.display='';});
-    $('boatGridWrap').style.display='none';
-    $('islSec').style.display='none';
-    document.querySelectorAll('.boat-card,.isl-btn').forEach(function(c){c.classList.remove('active');});
-    return;
-  }
-  // Filter atoll chips by name
-  document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){
-    c.style.display=c.textContent.toLowerCase().includes(q)?'':'none';
-  });
-  // Also search boats by name — show all matching boats directly
-  var matched=allBoats.filter(function(b){
-    if(b.active===false)return false;
-    if(b.name&&b.name.toLowerCase().includes(q))return true;
-    var batols=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);
-    return batols.some(function(a){return a.toLowerCase().includes(q);});
-  });
-  if(matched.length){
-    $('boatGridWrap').style.display='block';
-    renderBoatGrid(matched);
-    document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.classList.remove('active');});
-  } else {
-    $('boatGridWrap').style.display='none';
-  }
-}
+window.filterSBAtolls=function(){var q=$('sbAtollSearch').value.trim().toLowerCase();if(!q){document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.style.display='';});$('sbGridWrap').style.display='none';$('sbIslSec').style.display='none';document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(function(c){c.classList.remove('active');});return;}document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.style.display=c.textContent.toLowerCase().includes(q)?'':'none';});var matched=allSpeedBoats.filter(function(b){if(b.active===false)return false;if(b.name&&b.name.toLowerCase().includes(q))return true;var batols=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);return batols.some(function(a){return a.toLowerCase().includes(q);});});if(matched.length){$('sbGridWrap').style.display='block';renderSBGrid(matched);document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.classList.remove('active');});}else{$('sbGridWrap').style.display='none';}};
+function renderSBGrid(boats){var g=$('sbGrid');if(!g)return;if(!boats.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No speed boats for this atoll.</p></div>';return;}var html='';boats.forEach(function(b){var sid=String(b.id);html+='<div class="boat-card sb-card" data-sbid="'+sid+'" onclick="selSpeedBoat(\''+sid+'\')">';if(b.imageUrl){html+='<img class="b-img" src="'+b.imageUrl+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';html+='<div class="b-no-img" style="display:none"><i class="fas fa-bolt"></i></div>';}else{html+='<div class="b-no-img"><i class="fas fa-bolt"></i></div>';}html+='<div class="b-name">'+b.name+'</div>';html+='<div class="b-route">'+(b.route||'')+'</div>';html+='<div class="boat-ck"><i class="fas fa-check"></i></div>';html+='</div>';});g.innerHTML=html;}
+window.selSpeedBoat=function(id){document.querySelectorAll('.sb-card').forEach(function(c){c.classList.remove('active');});var card=document.querySelector('.sb-card[data-sbid="'+id+'"]');if(card)card.classList.add('active');var boat=allSpeedBoats.find(function(b){return String(b.id)===String(id);});if(!boat)return;$('selSB').value=boat.name;$('sbIslSec').style.display='block';$('sbInfoTxt').textContent=boat.name+(boat.route?' \u2014 '+boat.route:'');var ig=$('sbIslGrid');var isls=boat.islands||[];if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selSBIsl').value='';return;}var ih='';isls.forEach(function(isl){ih+='<button type="button" class="isl-btn sb-isl-btn" data-sbisl="'+encodeURIComponent(isl)+'">'+isl+'</button>';});ig.innerHTML=ih;ig.querySelectorAll('.sb-isl-btn').forEach(function(btn){btn.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ig.querySelectorAll('.sb-isl-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');$('selSBIsl').value=decodeURIComponent(this.getAttribute('data-sbisl'));});});$('selSBIsl').value='';};
+function buildAtollChips(){const atolls=[...new Set(allBoats.filter(b=>b.active!==false).flatMap(b=>b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[])))].sort();const g=$('atollChips');if(!atolls.length){$('boatGridWrap').style.display='block';g.innerHTML='';renderBoatGrid(allBoats.filter(b=>b.active!==false));return}g.innerHTML=atolls.map(a=>`<button type="button" class="atoll-chip" onclick="selAtollFn(this,'${a.replace(/'/g,"\\'")}')">${a}</button>`).join('')}
+window.filterAtolls=function(){var q=$('atollSearch').value.trim().toLowerCase();if(!q){document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.style.display='';});$('boatGridWrap').style.display='none';$('islSec').style.display='none';document.querySelectorAll('.boat-card,.isl-btn').forEach(function(c){c.classList.remove('active');});return;}document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.style.display=c.textContent.toLowerCase().includes(q)?'':'none';});var matched=allBoats.filter(function(b){if(b.active===false)return false;if(b.name&&b.name.toLowerCase().includes(q))return true;var batols=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);return batols.some(function(a){return a.toLowerCase().includes(q);});});if(matched.length){$('boatGridWrap').style.display='block';renderBoatGrid(matched);document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.classList.remove('active');});}else{$('boatGridWrap').style.display='none';}};
 window.selAtollFn=function(el,a){document.querySelectorAll('.atoll-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');selAtoll=a;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';document.querySelectorAll('.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));const boats=allBoats.filter(b=>b.active!==false&&(b.atolls?b.atolls.includes(a):b.atoll===a));$('boatGridWrap').style.display='block';renderBoatGrid(boats)};
 function renderBoatGrid(boats){const g=$('boatGrid');if(!boats.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No boats for this atoll.</p></div>';return}g.innerHTML=boats.map(b=>`<div class="boat-card" data-id="${b.id}" onclick="selBoat('${b.id}')">${b.imageUrl?`<img class="b-img" src="${b.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="b-no-img" style="${b.imageUrl?'display:none':''}"><i class="fas fa-ship"></i></div><div class="b-name">${b.name}</div><div class="b-route">${b.route||''}</div><div class="boat-ck"><i class="fas fa-check"></i></div></div>`).join('')}
-window.selBoat=function(id){
-  document.querySelectorAll('.boat-card').forEach(c=>c.classList.remove('active'));
-  const card=document.querySelector('.boat-card[data-id="'+id+'"]');if(card)card.classList.add('active');
-  const boat=allBoats.find(b=>String(b.id)===String(id));if(!boat)return;
-  $('selBoat').value=boat.name;$('islSec').style.display='block';
-  $('boatInfoTxt').textContent=boat.name+(boat.route?' — '+boat.route:'');
-  const ig=$('islGrid');const isls=boat.islands||[];
-  if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selIsl').value='';return}
-  ig.innerHTML=isls.map(function(isl){return'<button type="button" class="isl-btn" data-isl="'+encodeURIComponent(isl)+'">'+isl+'</button>'}).join('');
-  ig.querySelectorAll('.isl-btn').forEach(function(btn){
-    btn.addEventListener('click',function(ev){
-      ev.preventDefault();ev.stopPropagation();
-      ig.querySelectorAll('.isl-btn').forEach(function(b){b.classList.remove('active')});
-      this.classList.add('active');
-      $('selIsl').value=decodeURIComponent(this.getAttribute('data-isl'));
-    });
-  });
-  $('selIsl').value='';
-};
-$('cargoForm').addEventListener('submit',e=>{
-  e.preventDefault();if(busy)return;
-  const cap=siteSettings.dailyCapacity||0;if(cap){const today=new Date().toISOString().split('T')[0];if(allD.filter(d=>(d.createdAt||'').startsWith(today)).length>=cap){showToast('Daily capacity full.','err');return}}
-  if(!$('ctV').value){showToast('Select a cargo type','err');return}
-  const isExp=$('ctIsExpress').value==='1';
-  if(isExp&&!$('selHrId').value){showToast('Select duration for Express Cargo','err');return}
-  if(!isExp&&!$('selW').value){showToast('Select a weight range','err');return}
-  if(!$('pLocVal').value){showToast('Select a pickup location','err');return}
-  if(dMode==='cargo'&&!$('dLocVal').value){showToast('Select delivery location','err');return}
-  if(dMode==='boat'){if(!$('selBoat').value){showToast('Select a boat','err');return}if(!$('selIsl').value){showToast('Select destination island','err');return}}
-  if(dMode==='speedboat'){if(!$('selSB').value){showToast('Select a speed boat','err');return}if(!$('selSBIsl').value){showToast('Select destination island','err');return}}
-  const price=calcTotal();
-  const hAddr=$('houseAddr')?$('houseAddr').value.trim():'';
-  const dest=dMode==='boat'?`${$('selBoat').value} → ${$('selIsl').value}`:dMode==='speedboat'?`${$('selSB').value} → ${$('selSBIsl').value}`:($('dLocVal').value+(hAddr?' — '+hAddr:''));
-  tmpD={referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,pickupLocation:$('pLocVal').value,pickupAddress:$('addrVal').value,deliveryMode:dMode,deliveryLocation:dest,boatName:dMode==='boat'?$('selBoat').value:dMode==='speedboat'?$('selSB').value:'',destinationIsland:dMode==='boat'?$('selIsl').value:dMode==='speedboat'?$('selSBIsl').value:'',cargoType:$('ctV').value,isExpress:isExp,selectedHrLabel:$('selHrLabel').value,packageWeight:isExp?'—':$('selW').value,packageDescription:$('pkgDesc').value,deliveryPrice:price,deliveryDate:$('dDate').value,status:'Order Placed',progress:1,id:Date.now(),createdAt:new Date().toISOString(),paymentStatus:'under_review',createdBy:me.email};
-  $('payAmt').textContent=`${price} MVR`;$('payMod').classList.add('show')
-});
+window.selBoat=function(id){document.querySelectorAll('.boat-card').forEach(c=>c.classList.remove('active'));const card=document.querySelector('.boat-card[data-id="'+id+'"]');if(card)card.classList.add('active');const boat=allBoats.find(b=>String(b.id)===String(id));if(!boat)return;$('selBoat').value=boat.name;$('islSec').style.display='block';$('boatInfoTxt').textContent=boat.name+(boat.route?' — '+boat.route:'');const ig=$('islGrid');const isls=boat.islands||[];if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selIsl').value='';return}ig.innerHTML=isls.map(function(isl){return'<button type="button" class="isl-btn" data-isl="'+encodeURIComponent(isl)+'">'+isl+'</button>'}).join('');ig.querySelectorAll('.isl-btn').forEach(function(btn){btn.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ig.querySelectorAll('.isl-btn').forEach(function(b){b.classList.remove('active')});this.classList.add('active');$('selIsl').value=decodeURIComponent(this.getAttribute('data-isl'));});});$('selIsl').value='';};
+$('cargoForm').addEventListener('submit',e=>{e.preventDefault();if(busy)return;const cap=siteSettings.dailyCapacity||0;if(cap){const today=new Date().toISOString().split('T')[0];if(allD.filter(d=>(d.createdAt||'').startsWith(today)).length>=cap){showToast('Daily capacity full.','err');return}}if(!$('ctV').value){showToast('Select a cargo type','err');return}const isExp=$('ctIsExpress').value==='1';if(isExp){if(!$('selSizeId').value){showToast('Select a package size','err');return}if(!$('selTimeId').value){showToast('Select a duration/time slot','err');return}}else{if(!$('selW').value){showToast('Select a weight range','err');return}}if(!$('pLocVal').value){showToast('Select a pickup location','err');return}if(dMode==='cargo'&&!$('dLocVal').value){showToast('Select delivery location','err');return}if(dMode==='boat'){if(boatInputMode==='list'){if(!$('selBoat').value){showToast('Select a boat','err');return}if(!$('selIsl').value){showToast('Select destination island','err');return}}else{if(!$('manualBoatName').value.trim()){showToast('Enter the boat name','err');return}if(!$('manualBoatIsland').value.trim()){showToast('Enter the destination island','err');return}}}if(dMode==='speedboat'){if(sbInputMode==='list'){if(!$('selSB').value){showToast('Select a speed boat','err');return}if(!$('selSBIsl').value){showToast('Select destination island','err');return}}else{if(!$('manualSBName').value.trim()){showToast('Enter the speed boat name','err');return}if(!$('manualSBIsland').value.trim()){showToast('Enter the destination island','err');return}}}const price=calcTotal();const hAddr=$('houseAddr')?$('houseAddr').value.trim():'';let dest='',boatNameVal='',boatIslandVal='',boatContactVal='';if(dMode==='boat'){if(boatInputMode==='list'){boatNameVal=$('selBoat').value;boatIslandVal=$('selIsl').value;dest=boatNameVal+' → '+boatIslandVal;}else{boatNameVal=$('manualBoatName').value.trim();boatIslandVal=$('manualBoatIsland').value.trim();boatContactVal=$('manualBoatContact').value.trim();dest=boatNameVal+' → '+boatIslandVal+(boatContactVal?' (contact: '+boatContactVal+')':'');}}else if(dMode==='speedboat'){if(sbInputMode==='list'){boatNameVal=$('selSB').value;boatIslandVal=$('selSBIsl').value;dest=boatNameVal+' → '+boatIslandVal;}else{boatNameVal=$('manualSBName').value.trim();boatIslandVal=$('manualSBIsland').value.trim();boatContactVal=$('manualSBContact').value.trim();dest=boatNameVal+' → '+boatIslandVal+(boatContactVal?' (contact: '+boatContactVal+')':'');}}else{dest=$('dLocVal').value+(hAddr?' — '+hAddr:'');}const sizeLabel=isExp?($('selSizeName').value+' (up to '+$('selSizeWeight').value+' kg)'):'';const durationLabel=isExp?$('selTimeLabel').value:'';tmpD={referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,pickupLocation:$('pLocVal').value,pickupAddress:$('addrVal').value,deliveryMode:dMode,deliveryLocation:dest,boatName:boatNameVal,boatContact:boatContactVal||'',destinationIsland:boatIslandVal,manualBoatEntry:(dMode==='boat'&&boatInputMode==='manual')||(dMode==='speedboat'&&sbInputMode==='manual'),cargoType:$('ctV').value,isExpress:isExp,packageSize:sizeLabel,selectedHrLabel:durationLabel,packageWeight:isExp?'—':$('selW').value,packageDescription:$('pkgDesc').value,deliveryPrice:price,deliveryDate:$('dDate').value,status:'Order Placed',progress:1,id:Date.now(),createdAt:new Date().toISOString(),paymentStatus:'under_review',createdBy:me.email};$('payAmt').textContent=`${price} MVR`;$('payMod').classList.add('show')});
 $('slipFile').addEventListener('change',function(){$('slipFN').textContent=this.files[0]?this.files[0].name:'Tap to attach slip'});
 $('payClose').onclick=$('payCancel').onclick=()=>{$('payMod').classList.remove('show');tmpD=null;busy=false};
-$('payConfirm').onclick=()=>{
-  if(busy)return;const f=$('slipFile').files[0];if(!f){showToast('Upload payment slip','err');return}
-  busy=true;$('payConfirm').innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';
-  const rd=new FileReader();
-  rd.onload=async ev=>{
-    tmpD.paymentSlip=ev.target.result;tmpD.paidAt=new Date().toISOString();
-    const arr=toArr((await db.ref('cargoDeliveries').once('value')).val());
-    if(!arr.find(d=>d.referenceNumber===tmpD.referenceNumber)){
-      arr.push(tmpD);await db.ref('cargoDeliveries').set(arr);
-      pushN('Delivery Created',`Ref: ${tmpD.referenceNumber} — payment under review.`,me.email);
-      // Telegram alert
-      const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
-      const _cid=965429044;
-      const _d=tmpD;
-      const _msg='New EasyCargo Delivery\n'
-        +'Ref: '+_d.referenceNumber+'\n'
-        +'Customer: '+_d.customerName+'\n'
-        +'Contact: '+_d.customerContact+'\n'
-        +'Cargo: '+_d.cargoType+'\n'
-        +'Pickup: '+_d.pickupLocation+'\n'
-        +'To: '+_d.deliveryLocation+'\n'
-        +'Wt/Duration: '+(_d.isExpress?(_d.selectedHrLabel||'-'):(_d.packageWeight||'-'))+'\n'
-        +'Price: MVR '+_d.deliveryPrice+'\n'
-        +'Date: '+_d.deliveryDate+'\n'
-        +'Status: Payment slip submitted - Under Review';
-      fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:_cid,text:_msg})}).then(r=>r.json()).then(j=>console.log('TG:',JSON.stringify(j))).catch(e=>console.log('TG err:',e.message))
-    }
-    $('payMod').classList.remove('show');$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';
-    $('cargoForm').reset();$('cNm').value=me.username;$('cCt').value=me.contact||'';
-    $('selW').value='';$('selWP').value='0';$('ctPrice').value='0';$('ctV').value='';$('ctIsExpress').value='0';
-    $('selHrId').value='';$('selHrPrice').value='0';$('selHrLabel').value='';
-    $('pLocVal').value='';$('dLocVal').value='';
-    if($('houseAddr'))$('houseAddr').value='';const hw=$('houseAddrWrap');if(hw)hw.style.display='none';
-    $('selBoat').value='';$('selIsl').value='';$('selSB').value='';$('selSBIsl').value='';
-    document.querySelectorAll('.w-btn,.ct-card,.pickup-card,.boat-card,.sb-card,.isl-btn,.sb-isl-btn,.hr-btn,.dloc-btn,.atoll-chip').forEach(b=>b.classList.remove('active'));
-    $('etaInfo').classList.remove('show');$('expressHrsWrap').classList.remove('show');$('weightSec').classList.remove('show');
-    $('addrX').classList.remove('show');$('islSec').style.display='none';$('boatGridWrap').style.display='none';$('sbIslSec').style.display='none';$('sbGridWrap').style.display='none';$('speedboatSec').classList.remove('show');
-    setMode('cargo');$('pDisp').textContent='0';
-    busy=false;$('payConfirm').innerHTML='<i class="fas fa-check-circle"></i> Confirm';tmpD=null;
-    showToast('Delivery saved!','ok')
-  };
-  rd.readAsDataURL(f)
-};
+$('payConfirm').onclick=()=>{if(busy)return;const f=$('slipFile').files[0];if(!f){showToast('Upload payment slip','err');return}busy=true;$('payConfirm').innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';const rd=new FileReader();rd.onload=async ev=>{tmpD.paymentSlip=ev.target.result;tmpD.paidAt=new Date().toISOString();const arr=toArr((await db.ref('cargoDeliveries').once('value')).val());if(!arr.find(d=>d.referenceNumber===tmpD.referenceNumber)){arr.push(tmpD);await db.ref('cargoDeliveries').set(arr);pushN('Delivery Created',`Ref: ${tmpD.referenceNumber} — payment under review.`,me.email);const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';const _cid=965429044;const _d=tmpD;const _msg='New EasyCargo Delivery\nRef: '+_d.referenceNumber+'\nCustomer: '+_d.customerName+'\nContact: '+_d.customerContact+'\nCargo: '+_d.cargoType+(_d.isExpress?'\nSize: '+_d.packageSize+'\nDuration: '+_d.selectedHrLabel:'\nWeight: '+_d.packageWeight)+'\nPickup: '+_d.pickupLocation+'\nTo: '+_d.deliveryLocation+'\nPrice: MVR '+_d.deliveryPrice+'\nDate: '+_d.deliveryDate+'\nStatus: Payment slip submitted';fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:_cid,text:_msg})}).catch(()=>{})}$('payMod').classList.remove('show');$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';$('cargoForm').reset();$('cNm').value=me.username;$('cCt').value=me.contact||'';['selW','selWP','ctPrice','ctV','ctIsExpress','pLocVal','dLocVal','selBoat','selIsl','selSB','selSBIsl','selSizeId','selSizeName','selSizeWeight','selTimeId','selTimePrice','selTimeLabel'].forEach(id=>{const el=$(id);if(el)el.value=id.includes('Price')||id.includes('WP')||id.includes('TimePrice')?'0':''});if($('houseAddr'))$('houseAddr').value='';const hw=$('houseAddrWrap');if(hw)hw.style.display='none';if($('manualBoatName'))$('manualBoatName').value='';if($('manualBoatIsland'))$('manualBoatIsland').value='';if($('manualBoatContact'))$('manualBoatContact').value='';if($('manualBoatCallBtn'))$('manualBoatCallBtn').style.display='none';if($('manualSBName'))$('manualSBName').value='';if($('manualSBIsland'))$('manualSBIsland').value='';if($('manualSBContact'))$('manualSBContact').value='';if($('manualSBCallBtn'))$('manualSBCallBtn').style.display='none';document.querySelectorAll('.w-btn,.ct-card,.pickup-card,.boat-card,.sb-card,.isl-btn,.sb-isl-btn,.dloc-btn,.atoll-chip,.pkg-size-card,.time-slot-btn').forEach(b=>b.classList.remove('active'));$('etaInfo').classList.remove('show');$('expressFlowWrap').classList.remove('show');$('expressTimeWrap').classList.remove('show');$('weightSec').classList.remove('show');$('addrX').classList.remove('show');$('islSec').style.display='none';$('boatGridWrap').style.display='none';$('sbIslSec').style.display='none';$('sbGridWrap').style.display='none';$('speedboatSec').classList.remove('show');setMode('cargo');$('pDisp').textContent='0';busy=false;$('payConfirm').innerHTML='<i class="fas fa-check-circle"></i> Confirm';tmpD=null;showToast('Delivery saved!','ok')};rd.readAsDataURL(f)};
 function loadRefs(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email);const el=$('myRefs');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-inbox"></i><p>No deliveries yet.</p></div>';return}el.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem">'+[...mine].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div style="font-family:monospace;font-size:.7rem;font-weight:700;padding:5px 11px;border-radius:17px;cursor:pointer;${d.status==='Delivered'?'background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.22);color:#27ae60':'background:rgba(231,76,60,.13);border:1px solid rgba(231,76,60,.26);color:#e74c3c'}" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</div>`).join('')+'</div>'}
-function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myTB');if(!mine.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,.28);padding:2rem">No records</td></tr>';return}tb.innerHTML=mine.map(d=>`<tr><td style="font-family:monospace;font-size:.65rem;color:#f39c12;cursor:pointer" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</td><td style="font-size:.7rem">${d.pickupLocation||''}→${d.deliveryLocation||''}</td><td style="font-size:.7rem">${d.cargoType||'—'}</td><td>${d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'}</td><td style="font-family:monospace">${d.deliveryPrice} MVR</td><td>${sBadge(d.status)}</td><td>${pBadge(d.paymentStatus)}${d.paymentSlip?` <button onclick="viewSlip('${d.paymentSlip}')" style="margin-left:3px;background:rgba(243,156,18,.14);border:1px solid rgba(243,156,18,.28);color:#f39c12;padding:2px 7px;border-radius:10px;font-size:.6rem;cursor:pointer;font-weight:700">Slip</button>`:''}</td></tr>`).join('')}
-function loadMyInvoices(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email&&d.invoice);const el=$('invListWrap');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet. Invoices are generated when payment is approved.</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.invoice.issuedAt)-new Date(a.invoice.issuedAt)).map(d=>`<div class="inv-card"><div class="inv-card-hd"><span class="inv-card-no">${d.invoice.invoiceNo}</span><span class="inv-card-date">${fmtD(d.invoice.issuedAt)}</span></div><div style="font-size:.76rem;color:rgba(255,255,255,.55);margin-bottom:.5rem">${d.referenceNumber} · ${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:monospace;font-weight:800;color:#27ae60">MVR ${d.deliveryPrice}</span><button onclick="viewInvoice('${d.referenceNumber}')" style="background:rgba(39,174,96,.14);border:1px solid rgba(39,174,96,.28);color:#27ae60;padding:5px 12px;border-radius:12px;font-size:.72rem;cursor:pointer;font-weight:700"><i class='fas fa-eye' style='margin-right:4px'></i>View</button></div></div>`).join('')}
-window.viewInvoice=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d||!d.invoice)return;curInvoiceD=d;const inv=d.invoice;$('invContent').innerHTML=`<div class="invoice-box"><div class="invoice-header"><div><div class="invoice-brand">Easy<span>Cargo</span></div><div class="invoice-no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="invoice-date">${fmtD(inv.issuedAt)}</div><div class="invoice-date" style="margin-top:2px">Payment Approved</div></div></div><div style="margin-bottom:.8rem">${[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Pickup',d.pickupLocation],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Duration/Weight',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Delivery Date',fmtD(d.deliveryDate)]].map(([k,v])=>`<div class="inv-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div><div class="inv-total"><span class="k">Total Paid</span><span class="v">MVR ${d.deliveryPrice}</span></div><div class="inv-stamp"><span><i class="fas fa-check-circle"></i> PAYMENT VERIFIED</span></div></div>`;$('invMod').classList.add('show')};
+function getSizeWeightDisplay(d){if(d.isExpress)return(d.packageSize||'')+(d.selectedHrLabel?' — '+d.selectedHrLabel:'');return d.packageWeight||'—';}
+function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myTB');if(!mine.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,.28);padding:2rem">No records</td></tr>';return}tb.innerHTML=mine.map(d=>`<tr><td style="font-family:monospace;font-size:.65rem;color:#f39c12;cursor:pointer" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</td><td style="font-size:.7rem">${d.pickupLocation||''}→${d.deliveryLocation||''}</td><td style="font-size:.7rem">${d.cargoType||'—'}</td><td style="font-size:.68rem">${getSizeWeightDisplay(d)}</td><td style="font-family:monospace">${d.deliveryPrice} MVR</td><td>${sBadge(d.status)}</td><td>${pBadge(d.paymentStatus)}${d.paymentSlip?` <button onclick="viewSlip('${d.paymentSlip}')" style="margin-left:3px;background:rgba(243,156,18,.14);border:1px solid rgba(243,156,18,.28);color:#f39c12;padding:2px 7px;border-radius:10px;font-size:.6rem;cursor:pointer;font-weight:700">Slip</button>`:''}</td></tr>`).join('')}
+function loadMyInvoices(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email&&d.invoice);const el=$('invListWrap');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet.</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.invoice.issuedAt)-new Date(a.invoice.issuedAt)).map(d=>`<div class="inv-card"><div class="inv-card-hd"><span class="inv-card-no">${d.invoice.invoiceNo}</span><span class="inv-card-date">${fmtD(d.invoice.issuedAt)}</span></div><div style="font-size:.76rem;color:rgba(255,255,255,.55);margin-bottom:.5rem">${d.referenceNumber} · ${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:monospace;font-weight:800;color:#27ae60">MVR ${d.deliveryPrice}</span><button onclick="viewInvoice('${d.referenceNumber}')" style="background:rgba(39,174,96,.14);border:1px solid rgba(39,174,96,.28);color:#27ae60;padding:5px 12px;border-radius:12px;font-size:.72rem;cursor:pointer;font-weight:700"><i class='fas fa-eye' style='margin-right:4px'></i>View</button></div></div>`).join('')}
+window.viewInvoice=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d||!d.invoice)return;curInvoiceD=d;const inv=d.invoice;$('invContent').innerHTML=`<div class="invoice-box"><div class="invoice-header"><div><div class="invoice-brand">Easy<span>Cargo</span></div><div class="invoice-no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="invoice-date">${fmtD(inv.issuedAt)}</div></div></div><div style="margin-bottom:.8rem">${[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Pickup',d.pickupLocation],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Size / Weight',d.isExpress?d.packageSize||'—':d.packageWeight||'—'],['Duration',d.isExpress?d.selectedHrLabel||'—':'—'],['Delivery Date',fmtD(d.deliveryDate)]].map(([k,v])=>`<div class="inv-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div><div class="inv-total"><span class="k">Total Paid</span><span class="v">MVR ${d.deliveryPrice}</span></div><div class="inv-stamp"><span><i class="fas fa-check-circle"></i> PAYMENT VERIFIED</span></div></div>`;$('invMod').classList.add('show')};
 $('invClose').onclick=$('invClose2').onclick=()=>$('invMod').classList.remove('show');
-$('invDownload').onclick=()=>{if(!curInvoiceD)return;const inv=curInvoiceD.invoice;const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice ${inv.invoiceNo}</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1a1a2e;max-width:600px;margin:0 auto}h1{font-size:1.8rem;color:#1a1a2e;margin-bottom:4px}h1 span{color:#e67e22}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #e67e22;padding-bottom:12px;margin-bottom:16px}table{width:100%;border-collapse:collapse;margin-bottom:16px}td{padding:7px 0;border-bottom:1px solid #eee;font-size:.85rem}td:first-child{color:#666}td:last-child{text-align:right;font-weight:600}.total{font-size:1.1rem;font-weight:800;color:#27ae60}.stamp{text-align:center;margin-top:20px;padding:10px;background:#f0fdf4;border:1px solid #27ae60;border-radius:8px;color:#27ae60;font-weight:700;font-size:.85rem}</style></head><body><div class="hd"><div><h1>Easy<span>Cargo</span></h1><div style="font-size:.85rem;color:#666">${inv.invoiceNo}</div></div><div style="text-align:right"><div style="font-size:.8rem;color:#888">${fmtD(inv.issuedAt)}</div></div></div><table>${[['Reference',curInvoiceD.referenceNumber],['Customer',curInvoiceD.customerName],['Contact',curInvoiceD.customerContact],['Pickup',curInvoiceD.pickupLocation||'—'],['Destination',curInvoiceD.deliveryLocation||'—'],['Cargo Type',curInvoiceD.cargoType||'—'],['Duration / Weight',curInvoiceD.isExpress?curInvoiceD.selectedHrLabel||'—':curInvoiceD.packageWeight||'—'],['Delivery Date',fmtD(curInvoiceD.deliveryDate)]].map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table><table><tr><td class="total">Total Paid</td><td class="total" style="text-align:right">MVR ${curInvoiceD.deliveryPrice}</td></tr></table><div class="stamp">✓ PAYMENT VERIFIED</div></body></html>`;const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>{w.focus();w.print()},400)};
+$('invDownload').onclick=()=>{if(!curInvoiceD)return;const inv=curInvoiceD.invoice;const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice ${inv.invoiceNo}</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1a1a2e;max-width:600px;margin:0 auto}h1{font-size:1.8rem;color:#1a1a2e;margin-bottom:4px}h1 span{color:#e67e22}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #e67e22;padding-bottom:12px;margin-bottom:16px}table{width:100%;border-collapse:collapse;margin-bottom:16px}td{padding:7px 0;border-bottom:1px solid #eee;font-size:.85rem}td:first-child{color:#666}td:last-child{text-align:right;font-weight:600}.total{font-size:1.1rem;font-weight:800;color:#27ae60}.stamp{text-align:center;margin-top:20px;padding:10px;background:#f0fdf4;border:1px solid #27ae60;border-radius:8px;color:#27ae60;font-weight:700;font-size:.85rem}</style></head><body><div class="hd"><div><h1>Easy<span>Cargo</span></h1><div style="font-size:.85rem;color:#666">${inv.invoiceNo}</div></div><div style="text-align:right"><div style="font-size:.8rem;color:#888">${fmtD(inv.issuedAt)}</div></div></div><table>${[['Reference',curInvoiceD.referenceNumber],['Customer',curInvoiceD.customerName],['Contact',curInvoiceD.customerContact],['Pickup',curInvoiceD.pickupLocation||'—'],['Destination',curInvoiceD.deliveryLocation||'—'],['Cargo Type',curInvoiceD.cargoType||'—'],['Size / Weight',curInvoiceD.isExpress?curInvoiceD.packageSize||'—':curInvoiceD.packageWeight||'—'],['Duration',curInvoiceD.isExpress?curInvoiceD.selectedHrLabel||'—':'—'],['Delivery Date',fmtD(curInvoiceD.deliveryDate)]].map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table><table><tr><td class="total">Total Paid</td><td class="total" style="text-align:right">MVR ${curInvoiceD.deliveryPrice}</td></tr></table><div class="stamp">✓ PAYMENT VERIFIED</div></body></html>`;const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>{w.focus();w.print()},400)};
 window.jmpTrk=function(ref){switchTab('sTrk');const d=allD.find(x=>x.referenceNumber===ref);if(d){$('srchIn').value=d.customerContact;doSearch()}};
 $('srchBtn').onclick=doSearch;$('srchIn').addEventListener('keyup',e=>{if(e.key==='Enter')doSearch()});
-function doSearch(){const q=$('srchIn').value.trim();if(!q){showToast('Enter contact number','err');return}const found=allD.filter(d=>d.customerContact===q);if(!found.length){showToast('No deliveries found','err');$('rcWrap').style.display='none';$('trkCard').style.display='none';return}$('rcGrid').innerHTML=found.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div class="rcard" onclick="renderTrk('${d.referenceNumber}')"><div class="rn">${d.referenceNumber}</div><div class="rd">${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div class="rd">${d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'} | ${d.deliveryPrice} MVR</div>${sBadge(d.status)}</div>`).join('');$('rcWrap').style.display='block';if(found.length===1)renderTrk(found[0].referenceNumber)}
-window.renderTrk=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d)return;$('trkCard').style.display='block';const fs=[['Reference',`<span style="font-family:monospace;color:#f39c12;font-size:.74rem">${d.referenceNumber}</span>`],['Customer',d.customerName],['Contact',`<a href="tel:${d.customerContact}" style="color:#f39c12">${d.customerContact}</a>`],['Mode',`<span class="badge ${d.deliveryMode==='boat'?'b-boat':d.deliveryMode==='speedboat'?'b-speed':'b-norm'}">${d.deliveryMode==='boat'?'Boat':d.deliveryMode==='speedboat'?'Speed Boat':'Cargo'}</span>`],['Pickup',d.pickupLocation+(d.pickupAddress?` (${d.pickupAddress})`:'')],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Duration/Weight',d.isExpress?d.selectedHrLabel||'—':d.packageWeight||'—'],['Price',d.deliveryPrice+' MVR'],['Expected',fmtD(d.deliveryDate)],['Status',sBadge(d.status)],['Payment',pBadge(d.paymentStatus)]];$('trkGrid').innerHTML=fs.map(([l,v])=>`<div class="i-cell"><div class="il">${l}</div><div class="iv">${v}</div></div>`).join('');const p=d.progress||1;document.querySelectorAll('.trk-step').forEach((s,i)=>{s.classList.remove('active','done');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('active')});document.querySelectorAll('.ls').forEach((s,i)=>{s.classList.remove('done','cur');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('cur')});const pct=Math.round(((p-1)/4)*100);$('progFill').style.width=pct+'%';$('progPct').textContent=pct+'%';$('progLbl').textContent=['Order Placed','Processing','In Transit','Out for Delivery','Delivered'][p-1]||'';if(p===5)$('progFill').classList.add('done');else $('progFill').classList.remove('done');if(d.deliveryImage){$('proofImg').src=d.deliveryImage;$('proofSec').style.display='block'}else $('proofSec').style.display='none'};
+function doSearch(){const q=$('srchIn').value.trim();if(!q){showToast('Enter contact number','err');return}const found=allD.filter(d=>d.customerContact===q);if(!found.length){showToast('No deliveries found','err');$('rcWrap').style.display='none';$('trkCard').style.display='none';return}$('rcGrid').innerHTML=found.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div class="rcard" onclick="renderTrk('${d.referenceNumber}')"><div class="rn">${d.referenceNumber}</div><div class="rd">${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div class="rd">${getSizeWeightDisplay(d)} | ${d.deliveryPrice} MVR</div>${sBadge(d.status)}</div>`).join('');$('rcWrap').style.display='block';if(found.length===1)renderTrk(found[0].referenceNumber)}
+window.renderTrk=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d)return;$('trkCard').style.display='block';const fs=[['Reference',`<span style="font-family:monospace;color:#f39c12;font-size:.74rem">${d.referenceNumber}</span>`],['Customer',d.customerName],['Contact',`<a href="tel:${d.customerContact}" style="color:#f39c12">${d.customerContact}</a>`],['Mode',`<span class="badge ${d.deliveryMode==='boat'?'b-boat':d.deliveryMode==='speedboat'?'b-speed':'b-norm'}">${d.deliveryMode==='boat'?'Boat':d.deliveryMode==='speedboat'?'Speed Boat':'Cargo'}</span>`],['Pickup',d.pickupLocation+(d.pickupAddress?` (${d.pickupAddress})`:'')],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Size/Weight',d.isExpress?d.packageSize||'—':d.packageWeight||'—'],['Duration',d.isExpress?d.selectedHrLabel||'—':'—'],['Price',d.deliveryPrice+' MVR'],['Expected',fmtD(d.deliveryDate)],['Status',sBadge(d.status)],['Payment',pBadge(d.paymentStatus)]];$('trkGrid').innerHTML=fs.map(([l,v])=>`<div class="i-cell"><div class="il">${l}</div><div class="iv">${v}</div></div>`).join('');const p=d.progress||1;document.querySelectorAll('.trk-step').forEach((s,i)=>{s.classList.remove('active','done');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('active')});document.querySelectorAll('.ls').forEach((s,i)=>{s.classList.remove('done','cur');if(i<p-1)s.classList.add('done');else if(i===p-1)s.classList.add('cur')});const pct=Math.round(((p-1)/4)*100);$('progFill').style.width=pct+'%';$('progPct').textContent=pct+'%';$('progLbl').textContent=['Order Placed','Processing','In Transit','Out for Delivery','Delivered'][p-1]||'';if(p===5)$('progFill').classList.add('done');else $('progFill').classList.remove('done');if(d.deliveryImage){$('proofImg').src=d.deliveryImage;$('proofSec').style.display='block'}else $('proofSec').style.display='none'};
 function pushN(title,msg,email){const n={id:Date.now(),title,message:msg,userEmail:email,timestamp:new Date().toISOString(),read:false};db.ref('notifications').set([...allN,n])}
 function loadNotifs(){if(!me)return;const mine=allN.filter(n=>n.userEmail===me.email||n.userEmail==='all');const unread=mine.filter(n=>!n.read).length;$('nDot').className=`n-dot ${unread?'show':''}`;if(unread)$('nDot').textContent=unread>9?'9+':unread;const el=$('nList');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-bell-slash"></i><p>No notifications</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).map(n=>`<div class="n-item ${n.read?'':'unread'}" onclick="markNRead(${n.id})"><button class="n-rm" onclick="rmN(event,${n.id})"><i class="fas fa-times"></i></button><div class="nt">${n.title}</div><div class="nm">${n.message}</div><div class="nd">${timeAgo(n.timestamp)}</div></div>`).join('');if(!window._nTimer)window._nTimer=setInterval(()=>{if($('nPanel').classList.contains('open'))loadNotifs()},30000)}
 $('nBtn').onclick=()=>{$('nPanel').classList.add('open');allN.forEach(n=>{if(n.userEmail===me?.email||n.userEmail==='all')n.read=true});db.ref('notifications').set(allN);loadNotifs()};
@@ -1154,6 +892,5 @@ $('slipClose').onclick=$('slipClose2').onclick=()=>$('slipMod').classList.remove
 function doLogout(){localStorage.removeItem('ecu');me=null;$('dashboard').style.display='none';$('homePage').style.display='flex';$('authScreen').classList.remove('show');$('loginBtn').disabled=false}
 $('forgotA').onclick=e=>{e.preventDefault();showToast('Contact your admin to reset password.','info')}
 </script>
- 
 </body>
 </html>
