@@ -1060,7 +1060,59 @@ $('regBtn').onclick=async()=>{
   showMsg('regMsg','Registered! You earned '+regPts+' welcome points! 🎉','ok');
   $('tLogin').click();
 };
-window.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('ecu');if(s){me=JSON.parse(s);$('homePage').style.display='none';enterDash()}initFB();});
+window.addEventListener('DOMContentLoaded',()=>{
+  const s=localStorage.getItem('ecu');
+  if(s){me=JSON.parse(s);$('homePage').style.display='none';enterDash()}
+  // ── REFERRAL LINK DETECTION ──
+  const urlParams=new URLSearchParams(window.location.search);
+  const refCode=urlParams.get('ref')||'';
+  if(refCode&&!s){
+    // Skip home page, go straight to Register tab
+    $('homePage').style.display='none';
+    $('authScreen').classList.add('show');
+    // Switch to Register tab
+    $('tReg').click();
+    // Look up referrer name from Firebase and show banner
+    db.ref('userRewards').once('value').then(snap=>{
+      const allRw=snap.val()||{};
+      let referrerName='';
+      for(const [key,rData] of Object.entries(allRw)){
+        if(rData.referralCode===refCode){
+          // Try to match to username
+          db.ref('users').once('value').then(uSnap=>{
+            const users=toArr(uSnap.val());
+            const emailDot=key.replace(/_/g,'.');
+            const u=users.find(x=>x.email===emailDot||x.email.replace(/\./g,'_')===key);
+            referrerName=u?u.username:'a friend';
+            showRefBanner(referrerName,refCode);
+          });
+          return;
+        }
+      }
+      // Code not matched yet still show register
+      if(!referrerName)showRefBanner('a friend',refCode);
+    }).catch(()=>showRefBanner('a friend',refCode));
+  }
+  initFB();
+});
+
+function showRefBanner(name,code){
+  // Remove old banner if any
+  const old=document.getElementById('refBanner');
+  if(old)old.remove();
+  const banner=document.createElement('div');
+  banner.id='refBanner';
+  banner.style.cssText='margin:-0.5rem 0 1rem;background:linear-gradient(135deg,rgba(52,152,219,.12),rgba(155,89,182,.08));border:1.5px solid rgba(52,152,219,.3);border-radius:16px;padding:.85rem 1rem;display:flex;align-items:center;gap:10px';
+  banner.innerHTML=`
+    <div style="width:38px;height:38px;border-radius:50%;background:rgba(52,152,219,.15);border:1.5px solid rgba(52,152,219,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;color:#3498db"><i class="fas fa-user-plus"></i></div>
+    <div style="flex:1">
+      <div style="font-size:.78rem;font-weight:800;color:white;margin-bottom:2px">🎉 You were invited by <span style="color:#3498db">${name}</span>!</div>
+      <div style="font-size:.68rem;color:rgba(255,255,255,.45);line-height:1.4">Register now and you <strong style="color:#27ae60">both earn bonus points</strong> — code: <span style="font-family:monospace;color:#3498db;font-weight:700">${code}</span></div>
+    </div>`;
+  // Insert before the register pane form fields
+  const regPane=$('pReg');
+  if(regPane)regPane.insertBefore(banner,regPane.firstChild);
+}
 function initFB(){db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}});db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());if(me)buildAtollChips()});db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me)loadPickupGrid()});db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});db.ref('expressSizes').on('value',snap=>{allExpressSizes=toArr(snap.val())});db.ref('deliveryLocations').on('value',snap=>{allDelLocs=toArr(snap.val());if(me)loadDlocGrid()});db.ref('speedBoats').on('value',snap=>{allSpeedBoats=toArr(snap.val());if(me)buildSBGrid()});db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});initSlideshow();loadHowTo();}
 function enterDash(){$('authScreen').classList.remove('show');$('dashboard').style.display='block';watchDeliveryPoints();$('hName').textContent=me.username;$('sidebarName').textContent=me.username;$('cNm').value=me.username;$('cCt').value=me.contact||'';loadPickupGrid();buildAtollChips();buildSBGrid();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}
 function updateCapBar(){const cap=siteSettings.dailyCapacity||0;if(!cap){$('capWrap').style.display='none';return}const today=new Date().toISOString().split('T')[0];const tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;const pct=Math.min(100,Math.round((tc/cap)*100));$('capWrap').style.display='block';$('capFill').style.width=pct+'%';$('capPct').textContent=pct+'%';$('capPct').style.color=pct>=100?'#e74c3c':pct>=80?'#f39c12':'#27ae60';$('capFill').className='cap-fill'+(pct>=100?' full':pct>=80?' warn':'');$('capNote').textContent=pct>=100?`Full (${tc}/${cap})`:`${tc}/${cap} today`;const sb=$('submitBtn');if(pct>=100){sb.disabled=true;sb.innerHTML='<i class="fas fa-ban"></i> Capacity Full'}else{sb.disabled=false;sb.innerHTML='<i class="fas fa-paper-plane"></i> Save &amp; Pay'}}
