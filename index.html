@@ -488,8 +488,150 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .manual-boat-note i{color:#3498db;flex-shrink:0;margin-top:1px}
 input[type="date"].fi{-webkit-appearance:none;appearance:none;min-height:44px}
 input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.5);cursor:pointer;flex-shrink:0}
+/* ── REWARDS 2026 STYLE ── */
+@keyframes shimmerReward{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes floatUp{0%{opacity:0;transform:translateX(-50%) translateY(20px) scale(.8)}20%{opacity:1;transform:translateX(-50%) translateY(-10px) scale(1.05)}80%{opacity:1;transform:translateX(-50%) translateY(-50px) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-80px) scale(.9)}}
+@keyframes pulseRing{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.08);opacity:1}}
+@keyframes countUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.04)}}
+
+.pts-float-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:5000;pointer-events:none;animation:floatUp 3s cubic-bezier(.4,0,.2,1) forwards}
+.pts-float-inner{background:linear-gradient(135deg,rgba(20,27,43,.95),rgba(30,42,58,.95));backdrop-filter:blur(20px);border:1px solid rgba(243,156,18,.4);border-radius:50px;padding:12px 24px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(243,156,18,.25),0 0 0 1px rgba(243,156,18,.1)}
+.pts-float-inner .pfi-star{font-size:1.3rem;animation:orbFloat 1s ease-in-out infinite}
+.pts-float-inner .pfi-text{font-size:.88rem;font-weight:700;color:white}
+.pts-float-inner .pfi-num{color:#f39c12;font-size:1rem;font-weight:900}
+
+/* ── TIER ICON CUSTOM STYLE ── */
+.tier-ico-wrap{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;position:relative;animation:orbFloat 3s ease-in-out infinite}
+.tier-ico-wrap i{font-size:1.4rem}
+.tier-ico-bronze{background:radial-gradient(135deg,#3d1f00,#6b3a0e);border:2px solid #cd7f32;box-shadow:0 0 14px rgba(205,127,50,.35)}
+.tier-ico-silver{background:radial-gradient(135deg,#0d1a26,#1c2e3e);border:2px solid #9ab4c8;box-shadow:0 0 14px rgba(154,180,200,.35)}
+.tier-ico-gold{background:radial-gradient(135deg,#2a1a00,#5a3a00);border:2px solid #f39c12;box-shadow:0 0 14px rgba(243,156,18,.45)}
+.rwd-hero{position:relative;border-radius:24px;overflow:hidden;margin-bottom:1rem;padding:1.5rem 1.2rem 1.2rem;min-height:200px}
+.rwd-hero-bg{position:absolute;inset:0;z-index:0}
+.rwd-hero-bg-bronze{background:linear-gradient(135deg,#1a1008,#2d1c0a,#3d2410)}
+.rwd-hero-bg-silver{background:linear-gradient(135deg,#0d1520,#162030,#1c2a40)}
+.rwd-hero-bg-gold{background:linear-gradient(135deg,#1a1200,#2d2000,#3d2d00)}
+.rwd-hero-orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:.35;z-index:0}
+.rwd-hero-orb1{width:180px;height:180px;top:-40px;right:-40px}
+.rwd-hero-orb2{width:120px;height:120px;bottom:-30px;left:-20px;opacity:.2}
+.rwd-hero-orb-bronze{background:#cd7f32}.rwd-hero-orb-silver{background:#9ab4c8}.rwd-hero-orb-gold{background:#f39c12}
+.rwd-hero-content{position:relative;z-index:1}
+.rwd-tier-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:50px;font-size:.65rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:.9rem;border:1px solid}
+.rwd-pts-big{font-size:3rem;font-weight:900;line-height:1;margin-bottom:.2rem;animation:countUp .6s ease}
+.rwd-pts-label{font-size:.72rem;color:rgba(255,255,255,.45);font-family:monospace;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+.rwd-next-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:50px;padding:5px 13px;font-size:.7rem;color:rgba(255,255,255,.6)}
+.rwd-next-chip i{font-size:.65rem}
+
+/* Progress bar */
+.rwd-prog-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:.9rem 1rem;margin-bottom:.85rem;position:relative;overflow:hidden}
+.rwd-prog-labels{display:flex;justify-content:space-between;margin-bottom:.55rem}
+.rwd-prog-labels span{font-size:.68rem;color:rgba(255,255,255,.4);font-family:monospace}
+.rwd-prog-track{height:12px;background:rgba(255,255,255,.08);border-radius:12px;overflow:hidden;position:relative}
+.rwd-prog-fill{height:100%;border-radius:12px;position:relative;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.rwd-prog-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);background-size:200% 100%;animation:shimmerReward 2s linear infinite;border-radius:12px}
+.rwd-prog-pct{text-align:center;margin-top:.45rem;font-size:.7rem;font-weight:700;font-family:monospace}
+
+/* Tiers */
+.rwd-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:.85rem}
+.rwd-tier-card{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.07);border-radius:16px;padding:.85rem .5rem;text-align:center;position:relative;transition:.3s}
+.rwd-tier-card.active-tier{border-color:var(--tc,#f39c12);background:rgba(255,255,255,.07);box-shadow:0 0 20px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.1)}
+.rwd-tier-card .rtc-icon{font-size:1.6rem;display:block;margin-bottom:5px;animation:orbFloat 3s ease-in-out infinite}
+.rwd-tier-card .rtc-name{font-size:.74rem;font-weight:800;margin-bottom:2px}
+.rwd-tier-card .rtc-range{font-size:.56rem;color:rgba(255,255,255,.32);font-family:monospace}
+.rwd-tier-card .rtc-tick{position:absolute;top:6px;right:6px;width:16px;height:16px;background:#27ae60;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:.4rem;color:white}
+.rwd-tier-card.active-tier .rtc-tick{display:flex}
+
+/* Benefits */
+.rwd-benefits{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:.9rem 1rem;margin-bottom:.85rem}
+.rwd-benefits-title{font-size:.6rem;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:.7rem;font-family:monospace}
+.rwd-benefit-row{display:flex;align-items:center;gap:10px;padding:.55rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.rwd-benefit-row:last-child{border-bottom:none}
+.rwd-benefit-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.rwd-benefit-text{font-size:.76rem;color:rgba(255,255,255,.7);font-weight:600}
+.rwd-benefit-badge{margin-left:auto;font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:10px;flex-shrink:0}
+
+/* How it works */
+.rwd-how{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:.9rem 1rem;margin-bottom:.85rem}
+.rwd-how-step{display:flex;align-items:center;gap:10px;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.rwd-how-step:last-child{border-bottom:none}
+.rwd-how-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;flex-shrink:0}
+.rwd-how-txt{font-size:.74rem;color:rgba(255,255,255,.6);line-height:1.4}
+
+/* History */
+.rwd-history{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:.9rem 1rem}
+.rwd-history-title{font-size:.6rem;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:.7rem;font-family:monospace}
+.rwd-hist-item{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.rwd-hist-item:last-child{border-bottom:none}
+.rwd-hist-note{font-size:.74rem;color:rgba(255,255,255,.7);font-weight:600}
+.rwd-hist-ref{font-size:.6rem;color:rgba(255,255,255,.28);font-family:monospace;margin-top:1px}
+.rwd-hist-pts{font-size:.82rem;font-weight:900;font-family:monospace;color:#27ae60}
 p,span,div,h1,h2,h3,h4,label{color:inherit}
 a{color:#f39c12;text-decoration:none}
+
+/* ── DISCOUNT BOX 2026 ── */
+.disc-box{position:relative;border-radius:22px;overflow:hidden;margin-bottom:.85rem;padding:1.2rem}
+.disc-box::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#081a0e,#0d2414,#0e2316);z-index:0}
+.disc-box::after{content:'';position:absolute;inset:0;border-radius:22px;border:1.5px solid rgba(39,174,96,.22);pointer-events:none;z-index:1}
+.disc-orb-a{position:absolute;width:160px;height:160px;border-radius:50%;background:#27ae60;filter:blur(52px);opacity:.16;top:-50px;right:-30px;z-index:0}
+.disc-orb-b{position:absolute;width:80px;height:80px;border-radius:50%;background:#f39c12;filter:blur(36px);opacity:.10;bottom:-15px;left:5px;z-index:0}
+.disc-inner{position:relative;z-index:2}
+.disc-label{font-size:.58rem;font-weight:700;color:rgba(39,174,96,.65);text-transform:uppercase;letter-spacing:1.5px;font-family:monospace;display:flex;align-items:center;gap:5px;margin-bottom:.75rem}
+.disc-top-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:.65rem}
+.disc-num{font-size:3rem;font-weight:900;line-height:1;color:#27ae60;text-shadow:0 0 28px rgba(39,174,96,.38);letter-spacing:-2px}
+.disc-num span{font-size:1.1rem;font-weight:700;color:rgba(39,174,96,.55)}
+.disc-right-col{text-align:right}
+.disc-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.22);border-radius:50px;padding:5px 11px;font-size:.7rem;font-weight:700;color:#27ae60;margin-bottom:5px}
+.disc-rate-txt{font-size:.62rem;color:rgba(255,255,255,.28);font-family:monospace}
+.disc-hr{height:1px;background:linear-gradient(90deg,transparent,rgba(39,174,96,.2),transparent);margin:.6rem 0}
+.disc-hint{display:flex;align-items:center;gap:7px;font-size:.69rem;color:rgba(255,255,255,.4);line-height:1.5}
+.disc-hint i{color:#27ae60;font-size:.82rem;flex-shrink:0}
+
+/* ── REFERRAL BOX 2026 ── */
+.ref-box{position:relative;border-radius:22px;overflow:hidden;margin-bottom:.85rem;padding:1.2rem}
+.ref-box::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#07131f,#0c1c2e,#0d1c30);z-index:0}
+.ref-box::after{content:'';position:absolute;inset:0;border-radius:22px;border:1.5px solid rgba(52,152,219,.18);pointer-events:none;z-index:1}
+.ref-orb-a{position:absolute;width:150px;height:150px;border-radius:50%;background:#3498db;filter:blur(55px);opacity:.16;top:-35px;right:-20px;z-index:0}
+.ref-orb-b{position:absolute;width:90px;height:90px;border-radius:50%;background:#9b59b6;filter:blur(40px);opacity:.12;bottom:-20px;left:-10px;z-index:0}
+.ref-inner{position:relative;z-index:2}
+.ref-label{font-size:.58rem;font-weight:700;color:rgba(52,152,219,.65);text-transform:uppercase;letter-spacing:1.5px;font-family:monospace;display:flex;align-items:center;gap:5px;margin-bottom:.6rem}
+.ref-desc{font-size:.73rem;color:rgba(255,255,255,.48);line-height:1.65;margin-bottom:.85rem}
+.ref-desc b{color:#3498db;font-weight:800}
+.ref-code-block{background:rgba(0,0,0,.32);border:1px solid rgba(52,152,219,.18);border-radius:14px;padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:.75rem}
+.ref-code-val{font-family:monospace;font-size:1.1rem;font-weight:900;color:#3498db;letter-spacing:2.5px}
+.ref-copy-btn{background:rgba(52,152,219,.13);border:1.5px solid rgba(52,152,219,.28);color:#3498db;border-radius:10px;padding:7px 13px;font-size:.7rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0}
+.ref-copy-btn:hover{background:rgba(52,152,219,.25);transform:translateY(-1px)}
+.ref-share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:.85rem}
+.ref-share-card{border-radius:13px;padding:.65rem .5rem;cursor:pointer;border:1.5px solid;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.65rem;font-weight:700;font-family:inherit;transition:.22s;text-align:center}
+.ref-share-card:hover{transform:translateY(-2px);filter:brightness(1.12)}
+.ref-share-card .rsc-ico{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.9rem;margin-bottom:1px}
+.rsw{background:rgba(37,211,102,.07);border-color:rgba(37,211,102,.2);color:rgba(255,255,255,.65)}
+.rsw .rsc-ico{background:rgba(37,211,102,.14);color:#25d366}
+.rst{background:rgba(0,136,204,.07);border-color:rgba(0,136,204,.2);color:rgba(255,255,255,.65)}
+.rst .rsc-ico{background:rgba(0,136,204,.14);color:#40b3e0}
+.rsc{background:rgba(155,89,182,.07);border-color:rgba(155,89,182,.2);color:rgba(255,255,255,.65)}
+.rsc .rsc-ico{background:rgba(155,89,182,.14);color:#9b59b6}
+.ref-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ref-stat-box{background:rgba(0,0,0,.22);border:1px solid rgba(52,152,219,.1);border-radius:14px;padding:.8rem;text-align:center}
+.ref-stat-num{font-size:1.7rem;font-weight:900;font-family:monospace;line-height:1;margin-bottom:3px}
+.ref-stat-txt{font-size:.58rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;font-family:monospace}
+
+/* ── LEADERBOARD 2026 ── */
+.ldb-wrap{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:22px;overflow:hidden;margin-bottom:.85rem}
+.ldb-header{display:flex;align-items:center;gap:8px;padding:.85rem 1rem;border-bottom:1px solid rgba(255,255,255,.07);font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6)}
+.ldb-header i{font-size:.85rem}
+.ldb-month{margin-left:auto;font-size:.6rem;color:rgba(255,255,255,.28);font-family:monospace;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.ldb-card{display:flex;align-items:center;gap:11px;padding:.85rem 1rem;border-bottom:1px solid rgba(255,255,255,.05);border-left:3px solid transparent;transition:.2s}
+.ldb-card:last-child{border-bottom:none}
+.ldb-rank-badge{width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;border:1px solid;flex-shrink:0}
+.ldb-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;border:1.5px solid;flex-shrink:0}
+.ldb-info{flex:1;min-width:0}
+.ldb-uname{font-size:.78rem;font-weight:700;color:white;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ldb-you{font-size:.52rem;font-weight:800;background:rgba(243,156,18,.2);border:1px solid rgba(243,156,18,.35);color:#f39c12;padding:1px 6px;border-radius:8px;letter-spacing:.5px}
+.ldb-sub{font-size:.62rem;color:rgba(255,255,255,.3);margin-top:2px;font-family:monospace}
+.ldb-score{text-align:right;flex-shrink:0}
+.ldb-pts-big{font-size:.95rem;font-weight:900;font-family:monospace;line-height:1}
+.ldb-pts-lbl{font-size:.55rem;color:rgba(255,255,255,.28);font-family:monospace;text-transform:uppercase;letter-spacing:.8px}
 </style>
 </head>
 <body>
@@ -577,6 +719,7 @@ a{color:#f39c12;text-decoration:none}
       <div class="s-item" onclick="switchTab('sMine');closeSB()"><i class="fas fa-list"></i> My Deliveries</div>
       <div class="s-item" onclick="switchTab('sInv');closeSB()"><i class="fas fa-file-invoice"></i> My Invoices</div>
       <div class="s-item" onclick="switchTab('sTrk');closeSB()"><i class="fas fa-search-location"></i> Track</div>
+      <div class="s-item" onclick="switchTab('sRwd');closeSB()"><i class="fas fa-medal"></i> Rewards</div>
       <div class="s-div"></div>
     </div>
     <div class="s-foot"><button class="btn btn-sec" style="font-size:.78rem;padding:9px" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button></div>
@@ -593,6 +736,7 @@ a{color:#f39c12;text-decoration:none}
     <button class="ntab" data-s="sMine"><i class="fas fa-list"></i> Mine</button>
     <button class="ntab" data-s="sInv"><i class="fas fa-file-invoice"></i> Invoices</button>
     <button class="ntab" data-s="sTrk"><i class="fas fa-search-location"></i> Track</button>
+    <button class="ntab" data-s="sRwd"><i class="fas fa-medal"></i> Rewards</button>
   </div></div>
 
   <div class="content">
@@ -782,12 +926,22 @@ a{color:#f39c12;text-decoration:none}
         </div>
       </div>
     </div>
+
+    <!-- REWARDS SECTION -->
+    <div class="sec" id="sRwd">
+      <div class="sec-title"><i class="fas fa-medal"></i> My Rewards</div>
+      <div id="rewardContent">
+        <div class="empty-s"><i class="fas fa-medal"></i><p>Loading rewards…</p></div>
+      </div>
+    </div>
   </div>
+
   <nav class="mob-nav">
     <button class="m-tab active" data-s="sNew"><i class="fas fa-plus-circle"></i>New</button>
     <button class="m-tab" data-s="sMine"><i class="fas fa-list"></i>Mine</button>
     <button class="m-tab" data-s="sInv"><i class="fas fa-file-invoice"></i>Invoices</button>
     <button class="m-tab" data-s="sTrk"><i class="fas fa-search-location"></i>Track</button>
+    <button class="m-tab" data-s="sRwd"><i class="fas fa-medal"></i>Rewards</button>
   </nav>
 </div>
 
@@ -857,13 +1011,61 @@ function loadLoginPageSettings(){const logo=siteSettings.loginLogoUrl||'';const 
 $('tLogin').onclick=()=>{$('tLogin').classList.add('active');$('tReg').classList.remove('active');$('pLogin').classList.add('active');$('pReg').classList.remove('active')};
 $('tReg').onclick=()=>{$('tReg').classList.add('active');$('tLogin').classList.remove('active');$('pReg').classList.add('active');$('pLogin').classList.remove('active')};
 $('loginBtn').onclick=async()=>{const contact=$('lContact').value.trim();const pwd=$('lPwd').value;if(!contact||!pwd){showMsg('loginMsg','Fill all fields','err');return}const arr=toArr((await db.ref('users').once('value')).val());const f=arr.find(x=>x.contact===contact&&x.password===pwd);if(!f){showMsg('loginMsg','Invalid contact number or password','err');return}if(f.role==='admin'){showMsg('loginMsg','Use the admin panel','err');return}if(f.status==='pending'){$('pLogin').innerHTML=`<div class="pending-box"><i class="fas fa-hourglass-half"></i><h3>Access Pending</h3><p>Awaiting admin approval.</p></div><button class="btn btn-sec" style="margin-top:.8rem" onclick="location.reload()"><i class="fas fa-arrow-left"></i> Back</button>`;return}if(f.status==='blocked'){showMsg('loginMsg','Account blocked. Contact admin.','err');return}$('loginBtn').disabled=true;$('truckAnim').classList.add('show');setTimeout(()=>{$('truckAnim').classList.remove('show');me=f;localStorage.setItem('ecu',JSON.stringify(f));enterDash()},1800)};
-$('regBtn').onclick=async()=>{const u=$('rUsr').value.trim(),e=$('rEml').value.trim(),c=$('rCnt').value.trim(),p=$('rPwd').value,cf=$('rCfm').value;if(!u||!e||!c||!p||!cf){showMsg('regMsg','Fill all fields','err');return}if(p!==cf){showMsg('regMsg','Passwords do not match','err');return}const arr=toArr((await db.ref('users').once('value')).val());if(arr.find(x=>x.email===e)){showMsg('regMsg','Email already exists','err');return}if(arr.find(x=>x.contact===c)){showMsg('regMsg','Contact number already registered','err');return}arr.push({id:Date.now(),username:u,email:e,contact:c,password:p,role:'user',status:'pending'});await db.ref('users').set(arr);const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';const _rmsg='🆕 New EasyCargo Registration\nUsername: '+u+'\nContact: '+c+'\nEmail: '+e+'\nStatus: Pending Approval ⏳';[965429044,7307324767,319043357].forEach(cid=>{fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_rmsg})}).catch(()=>{});});showMsg('regMsg','Registered! Awaiting admin approval.','ok');$('tLogin').click();};
+$('regBtn').onclick=async()=>{
+  const u=$('rUsr').value.trim(),e=$('rEml').value.trim(),c=$('rCnt').value.trim(),p=$('rPwd').value,cf=$('rCfm').value;
+  if(!u||!e||!c||!p||!cf){showMsg('regMsg','Fill all fields','err');return}
+  if(p!==cf){showMsg('regMsg','Passwords do not match','err');return}
+  const arr=toArr((await db.ref('users').once('value')).val());
+  if(arr.find(x=>x.email===e)){showMsg('regMsg','Email already exists','err');return}
+  if(arr.find(x=>x.contact===c)){showMsg('regMsg','Contact number already registered','err');return}
+  // Check referral code from URL
+  const urlRef=new URLSearchParams(window.location.search).get('ref')||'';
+  const newUser={id:Date.now(),username:u,email:e,contact:c,password:p,role:'user',status:'pending',referredBy:urlRef||null};
+  arr.push(newUser);
+  await db.ref('users').set(arr);
+  // Setup rewards for new user
+  const eKey=e.replace(/\./g,'_');
+  const refCode='EC'+c.slice(-6).toUpperCase();
+  const regPts=siteSettings.pointsOnRegister||50;
+  const initRwd={points:regPts,referralCode:refCode,referralCount:0,referredBy:urlRef||null,history:[{pts:regPts,note:'Welcome bonus on registration',date:new Date().toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),ref:'Welcome'}]};
+  await db.ref('userRewards/'+eKey).set(initRwd);
+  // If referred by someone, give referrer points too
+  if(urlRef){
+    const allRw=toArr((await db.ref('userRewards').once('value')).val());
+    // Find referrer by code
+    const rwSnap=(await db.ref('userRewards').once('value')).val()||{};
+    for(const [rKey,rData] of Object.entries(rwSnap)){
+      if(rData.referralCode===urlRef){
+        const refPts=siteSettings.pointsPerReferral||10;
+        rData.points=(rData.points||0)+refPts;
+        rData.referralCount=(rData.referralCount||0)+1;
+        rData.history=rData.history||[];
+        rData.history.push({pts:refPts,note:'Referral bonus — '+u+' joined!',date:new Date().toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),ref:'Referral'});
+        await db.ref('userRewards/'+rKey).set(rData);
+        // Find referrer user for notification
+        const refUser=arr.find(x=>x.email.replace(/\./g,'_')===rKey);
+        if(refUser)pushN('🎉 Referral Bonus!','Your friend '+u+' joined using your link! +'+refPts+' points added.',refUser.email);
+        // Bot notify
+        const _tok2='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+        const _refMsg='👥 New Referral!\nNew User: '+u+'\nContact: '+c+'\nReferred by code: '+urlRef+'\nBoth earned '+refPts+' bonus points!';
+        [965429044,7307324767,319043357].forEach(cid=>{fetch('https://api.telegram.org/bot'+_tok2+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_refMsg})}).catch(()=>{});});
+        break;
+      }
+    }
+  }
+  // Standard registration bot msg
+  const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+  const _rmsg='🆕 New EasyCargo Registration\nUsername: '+u+'\nContact: '+c+'\nEmail: '+e+'\nWelcome Points: '+regPts+'\nRef Code: '+refCode+(urlRef?'\nReferred by: '+urlRef:'')+'\nStatus: Pending Approval ⏳';
+  [965429044,7307324767,319043357].forEach(cid=>{fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_rmsg})}).catch(()=>{});});
+  showMsg('regMsg','Registered! You earned '+regPts+' welcome points! 🎉','ok');
+  $('tLogin').click();
+};
 window.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('ecu');if(s){me=JSON.parse(s);$('homePage').style.display='none';enterDash()}initFB();});
 function initFB(){db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}});db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());if(me)buildAtollChips()});db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me)loadPickupGrid()});db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});db.ref('expressSizes').on('value',snap=>{allExpressSizes=toArr(snap.val())});db.ref('deliveryLocations').on('value',snap=>{allDelLocs=toArr(snap.val());if(me)loadDlocGrid()});db.ref('speedBoats').on('value',snap=>{allSpeedBoats=toArr(snap.val());if(me)buildSBGrid()});db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});initSlideshow();loadHowTo();}
-function enterDash(){$('authScreen').classList.remove('show');$('dashboard').style.display='block';$('hName').textContent=me.username;$('sidebarName').textContent=me.username;$('cNm').value=me.username;$('cCt').value=me.contact||'';loadPickupGrid();buildAtollChips();buildSBGrid();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}
+function enterDash(){$('authScreen').classList.remove('show');$('dashboard').style.display='block';watchDeliveryPoints();$('hName').textContent=me.username;$('sidebarName').textContent=me.username;$('cNm').value=me.username;$('cCt').value=me.contact||'';loadPickupGrid();buildAtollChips();buildSBGrid();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}
 function updateCapBar(){const cap=siteSettings.dailyCapacity||0;if(!cap){$('capWrap').style.display='none';return}const today=new Date().toISOString().split('T')[0];const tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;const pct=Math.min(100,Math.round((tc/cap)*100));$('capWrap').style.display='block';$('capFill').style.width=pct+'%';$('capPct').textContent=pct+'%';$('capPct').style.color=pct>=100?'#e74c3c':pct>=80?'#f39c12':'#27ae60';$('capFill').className='cap-fill'+(pct>=100?' full':pct>=80?' warn':'');$('capNote').textContent=pct>=100?`Full (${tc}/${cap})`:`${tc}/${cap} today`;const sb=$('submitBtn');if(pct>=100){sb.disabled=true;sb.innerHTML='<i class="fas fa-ban"></i> Capacity Full'}else{sb.disabled=false;sb.innerHTML='<i class="fas fa-paper-plane"></i> Save &amp; Pay'}}
 document.querySelectorAll('.ntab[data-s],.m-tab[data-s]').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.s)}));
-function switchTab(s){document.querySelectorAll('.ntab,.m-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll(`[data-s="${s}"]`).forEach(x=>x.classList.add('active'));document.querySelectorAll('.sec').forEach(x=>x.classList.remove('active'));$(s).classList.add('active');if(s==='sMine')loadMyTbl();if(s==='sInv')loadMyInvoices()}
+function switchTab(s){document.querySelectorAll('.ntab,.m-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll(`[data-s="${s}"]`).forEach(x=>x.classList.add('active'));document.querySelectorAll('.sec').forEach(x=>x.classList.remove('active'));$(s).classList.add('active');if(s==='sMine')loadMyTbl();if(s==='sInv')loadMyInvoices();if(s==='sRwd')loadRewards()}
 function toggleSB(){$('sidebar').classList.toggle('open');$('sideOvl').classList.toggle('show')}
 function closeSB(){$('sidebar').classList.remove('open');$('sideOvl').classList.remove('show')}
 $('sideOvl').onclick=closeSB;
@@ -901,7 +1103,71 @@ function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===m
 function loadMyInvoices(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email&&d.invoice);const el=$('invListWrap');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet.</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.invoice.issuedAt)-new Date(a.invoice.issuedAt)).map(d=>`<div class="inv-card"><div class="inv-card-hd"><span class="inv-card-no">${d.invoice.invoiceNo}</span><span class="inv-card-date">${fmtD(d.invoice.issuedAt)}</span></div><div style="font-size:.76rem;color:rgba(255,255,255,.55);margin-bottom:.5rem">${d.referenceNumber} · ${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:monospace;font-weight:800;color:#27ae60">MVR ${d.deliveryPrice}</span><button onclick="viewInvoice('${d.referenceNumber}')" style="background:rgba(39,174,96,.14);border:1px solid rgba(39,174,96,.28);color:#27ae60;padding:5px 12px;border-radius:12px;font-size:.72rem;cursor:pointer;font-weight:700"><i class='fas fa-eye' style='margin-right:4px'></i>View</button></div></div>`).join('')}
 window.viewInvoice=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d||!d.invoice)return;curInvoiceD=d;const inv=d.invoice;$('invContent').innerHTML=`<div class="invoice-box"><div class="invoice-header"><div><div class="invoice-brand">Easy<span>Cargo</span></div><div class="invoice-no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="invoice-date">${fmtD(inv.issuedAt)}</div></div></div><div style="margin-bottom:.8rem">${[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Pickup',d.pickupLocation],['Destination',d.deliveryLocation],['Cargo Type',d.cargoType||'—'],['Size / Weight',d.isExpress?d.packageSize||'—':d.packageWeight||'—'],['Duration',d.isExpress?d.selectedHrLabel||'—':'—'],['Delivery Date',fmtD(d.deliveryDate)]].map(([k,v])=>`<div class="inv-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div><div class="inv-total"><span class="k">Total Paid</span><span class="v">MVR ${d.deliveryPrice}</span></div><div class="inv-stamp"><span><i class="fas fa-check-circle"></i> PAYMENT VERIFIED</span></div></div>`;$('invMod').classList.add('show')};
 $('invClose').onclick=$('invClose2').onclick=()=>$('invMod').classList.remove('show');
-$('invDownload').onclick=()=>{if(!curInvoiceD)return;const inv=curInvoiceD.invoice;const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice ${inv.invoiceNo}</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1a1a2e;max-width:600px;margin:0 auto}h1{font-size:1.8rem;color:#1a1a2e;margin-bottom:4px}h1 span{color:#e67e22}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #e67e22;padding-bottom:12px;margin-bottom:16px}table{width:100%;border-collapse:collapse;margin-bottom:16px}td{padding:7px 0;border-bottom:1px solid #eee;font-size:.85rem}td:first-child{color:#666}td:last-child{text-align:right;font-weight:600}.total{font-size:1.1rem;font-weight:800;color:#27ae60}.stamp{text-align:center;margin-top:20px;padding:10px;background:#f0fdf4;border:1px solid #27ae60;border-radius:8px;color:#27ae60;font-weight:700;font-size:.85rem}</style></head><body><div class="hd"><div><h1>Easy<span>Cargo</span></h1><div style="font-size:.85rem;color:#666">${inv.invoiceNo}</div></div><div style="text-align:right"><div style="font-size:.8rem;color:#888">${fmtD(inv.issuedAt)}</div></div></div><table>${[['Reference',curInvoiceD.referenceNumber],['Customer',curInvoiceD.customerName],['Contact',curInvoiceD.customerContact],['Pickup',curInvoiceD.pickupLocation||'—'],['Destination',curInvoiceD.deliveryLocation||'—'],['Cargo Type',curInvoiceD.cargoType||'—'],['Size / Weight',curInvoiceD.isExpress?curInvoiceD.packageSize||'—':curInvoiceD.packageWeight||'—'],['Duration',curInvoiceD.isExpress?curInvoiceD.selectedHrLabel||'—':'—'],['Delivery Date',fmtD(curInvoiceD.deliveryDate)]].map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table><table><tr><td class="total">Total Paid</td><td class="total" style="text-align:right">MVR ${curInvoiceD.deliveryPrice}</td></tr></table><div class="stamp">✓ PAYMENT VERIFIED</div></body></html>`;const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>{w.focus();w.print()},400)};
+$('invDownload').onclick=()=>{if(!curInvoiceD)return;const inv=curInvoiceD.invoice;const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice ${inv.invoiceNo}</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1a1a2e;max-width:600px;margin:0 auto}h1{font-size:1.8rem;color:#1a1a2e;margin-bottom:4px}h1 span{color:#e67e22}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #e67e22;padding-bottom:12px;margin-bottom:16px}table{width:100%;border-collapse:collapse;margin-bottom:16px}td{padding:7px 0;border-bottom:1px solid #eee;font-size:.85rem}td:first-child{color:#666}td:last-child{text-align:right;font-weight:600}.total{font-size:1.1rem;font-weight:800;color:#27ae60}.stamp{text-align:center;margin-top:20px;padding:10px;background:#f0fdf4;border:1px solid #27ae60;border-radius:8px;color:#27ae60;font-weight:700;font-size:.85rem}
+/* ── DISCOUNT BOX 2026 ── */
+.disc-box{position:relative;border-radius:22px;overflow:hidden;margin-bottom:.85rem;padding:1.2rem}
+.disc-box::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#081a0e,#0d2414,#0e2316);z-index:0}
+.disc-box::after{content:'';position:absolute;inset:0;border-radius:22px;border:1.5px solid rgba(39,174,96,.22);pointer-events:none;z-index:1}
+.disc-orb-a{position:absolute;width:160px;height:160px;border-radius:50%;background:#27ae60;filter:blur(52px);opacity:.16;top:-50px;right:-30px;z-index:0}
+.disc-orb-b{position:absolute;width:80px;height:80px;border-radius:50%;background:#f39c12;filter:blur(36px);opacity:.10;bottom:-15px;left:5px;z-index:0}
+.disc-inner{position:relative;z-index:2}
+.disc-label{font-size:.58rem;font-weight:700;color:rgba(39,174,96,.65);text-transform:uppercase;letter-spacing:1.5px;font-family:monospace;display:flex;align-items:center;gap:5px;margin-bottom:.75rem}
+.disc-top-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:.65rem}
+.disc-num{font-size:3rem;font-weight:900;line-height:1;color:#27ae60;text-shadow:0 0 28px rgba(39,174,96,.38);letter-spacing:-2px}
+.disc-num span{font-size:1.1rem;font-weight:700;color:rgba(39,174,96,.55)}
+.disc-right-col{text-align:right}
+.disc-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.22);border-radius:50px;padding:5px 11px;font-size:.7rem;font-weight:700;color:#27ae60;margin-bottom:5px}
+.disc-rate-txt{font-size:.62rem;color:rgba(255,255,255,.28);font-family:monospace}
+.disc-hr{height:1px;background:linear-gradient(90deg,transparent,rgba(39,174,96,.2),transparent);margin:.6rem 0}
+.disc-hint{display:flex;align-items:center;gap:7px;font-size:.69rem;color:rgba(255,255,255,.4);line-height:1.5}
+.disc-hint i{color:#27ae60;font-size:.82rem;flex-shrink:0}
+
+/* ── REFERRAL BOX 2026 ── */
+.ref-box{position:relative;border-radius:22px;overflow:hidden;margin-bottom:.85rem;padding:1.2rem}
+.ref-box::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#07131f,#0c1c2e,#0d1c30);z-index:0}
+.ref-box::after{content:'';position:absolute;inset:0;border-radius:22px;border:1.5px solid rgba(52,152,219,.18);pointer-events:none;z-index:1}
+.ref-orb-a{position:absolute;width:150px;height:150px;border-radius:50%;background:#3498db;filter:blur(55px);opacity:.16;top:-35px;right:-20px;z-index:0}
+.ref-orb-b{position:absolute;width:90px;height:90px;border-radius:50%;background:#9b59b6;filter:blur(40px);opacity:.12;bottom:-20px;left:-10px;z-index:0}
+.ref-inner{position:relative;z-index:2}
+.ref-label{font-size:.58rem;font-weight:700;color:rgba(52,152,219,.65);text-transform:uppercase;letter-spacing:1.5px;font-family:monospace;display:flex;align-items:center;gap:5px;margin-bottom:.6rem}
+.ref-desc{font-size:.73rem;color:rgba(255,255,255,.48);line-height:1.65;margin-bottom:.85rem}
+.ref-desc b{color:#3498db;font-weight:800}
+.ref-code-block{background:rgba(0,0,0,.32);border:1px solid rgba(52,152,219,.18);border-radius:14px;padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:.75rem}
+.ref-code-val{font-family:monospace;font-size:1.1rem;font-weight:900;color:#3498db;letter-spacing:2.5px}
+.ref-copy-btn{background:rgba(52,152,219,.13);border:1.5px solid rgba(52,152,219,.28);color:#3498db;border-radius:10px;padding:7px 13px;font-size:.7rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0}
+.ref-copy-btn:hover{background:rgba(52,152,219,.25);transform:translateY(-1px)}
+.ref-share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:.85rem}
+.ref-share-card{border-radius:13px;padding:.65rem .5rem;cursor:pointer;border:1.5px solid;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.65rem;font-weight:700;font-family:inherit;transition:.22s;text-align:center}
+.ref-share-card:hover{transform:translateY(-2px);filter:brightness(1.12)}
+.ref-share-card .rsc-ico{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.9rem;margin-bottom:1px}
+.rsw{background:rgba(37,211,102,.07);border-color:rgba(37,211,102,.2);color:rgba(255,255,255,.65)}
+.rsw .rsc-ico{background:rgba(37,211,102,.14);color:#25d366}
+.rst{background:rgba(0,136,204,.07);border-color:rgba(0,136,204,.2);color:rgba(255,255,255,.65)}
+.rst .rsc-ico{background:rgba(0,136,204,.14);color:#40b3e0}
+.rsc{background:rgba(155,89,182,.07);border-color:rgba(155,89,182,.2);color:rgba(255,255,255,.65)}
+.rsc .rsc-ico{background:rgba(155,89,182,.14);color:#9b59b6}
+.ref-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ref-stat-box{background:rgba(0,0,0,.22);border:1px solid rgba(52,152,219,.1);border-radius:14px;padding:.8rem;text-align:center}
+.ref-stat-num{font-size:1.7rem;font-weight:900;font-family:monospace;line-height:1;margin-bottom:3px}
+.ref-stat-txt{font-size:.58rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;font-family:monospace}
+
+/* ── LEADERBOARD 2026 ── */
+.ldb-wrap{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:22px;overflow:hidden;margin-bottom:.85rem}
+.ldb-header{display:flex;align-items:center;gap:8px;padding:.85rem 1rem;border-bottom:1px solid rgba(255,255,255,.07);font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6)}
+.ldb-header i{font-size:.85rem}
+.ldb-month{margin-left:auto;font-size:.6rem;color:rgba(255,255,255,.28);font-family:monospace;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.ldb-card{display:flex;align-items:center;gap:11px;padding:.85rem 1rem;border-bottom:1px solid rgba(255,255,255,.05);border-left:3px solid transparent;transition:.2s}
+.ldb-card:last-child{border-bottom:none}
+.ldb-rank-badge{width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;border:1px solid;flex-shrink:0}
+.ldb-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;border:1.5px solid;flex-shrink:0}
+.ldb-info{flex:1;min-width:0}
+.ldb-uname{font-size:.78rem;font-weight:700;color:white;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ldb-you{font-size:.52rem;font-weight:800;background:rgba(243,156,18,.2);border:1px solid rgba(243,156,18,.35);color:#f39c12;padding:1px 6px;border-radius:8px;letter-spacing:.5px}
+.ldb-sub{font-size:.62rem;color:rgba(255,255,255,.3);margin-top:2px;font-family:monospace}
+.ldb-score{text-align:right;flex-shrink:0}
+.ldb-pts-big{font-size:.95rem;font-weight:900;font-family:monospace;line-height:1}
+.ldb-pts-lbl{font-size:.55rem;color:rgba(255,255,255,.28);font-family:monospace;text-transform:uppercase;letter-spacing:.8px}
+</style></head><body><div class="hd"><div><h1>Easy<span>Cargo</span></h1><div style="font-size:.85rem;color:#666">${inv.invoiceNo}</div></div><div style="text-align:right"><div style="font-size:.8rem;color:#888">${fmtD(inv.issuedAt)}</div></div></div><table>${[['Reference',curInvoiceD.referenceNumber],['Customer',curInvoiceD.customerName],['Contact',curInvoiceD.customerContact],['Pickup',curInvoiceD.pickupLocation||'—'],['Destination',curInvoiceD.deliveryLocation||'—'],['Cargo Type',curInvoiceD.cargoType||'—'],['Size / Weight',curInvoiceD.isExpress?curInvoiceD.packageSize||'—':curInvoiceD.packageWeight||'—'],['Duration',curInvoiceD.isExpress?curInvoiceD.selectedHrLabel||'—':'—'],['Delivery Date',fmtD(curInvoiceD.deliveryDate)]].map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table><table><tr><td class="total">Total Paid</td><td class="total" style="text-align:right">MVR ${curInvoiceD.deliveryPrice}</td></tr></table><div class="stamp">✓ PAYMENT VERIFIED</div></body></html>`;const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>{w.focus();w.print()},400)};
 window.jmpTrk=function(ref){switchTab('sTrk');const d=allD.find(x=>x.referenceNumber===ref);if(d){$('srchIn').value=d.customerContact;doSearch()}};
 $('srchBtn').onclick=doSearch;$('srchIn').addEventListener('keyup',e=>{if(e.key==='Enter')doSearch()});
 function doSearch(){const q=$('srchIn').value.trim();if(!q){showToast('Enter contact number','err');return}const found=allD.filter(d=>d.customerContact===q);if(!found.length){showToast('No deliveries found','err');$('rcWrap').style.display='none';$('trkCard').style.display='none';return}$('rcGrid').innerHTML=found.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div class="rcard" onclick="renderTrk('${d.referenceNumber}')"><div class="rn">${d.referenceNumber}</div><div class="rd">${d.pickupLocation||''}→${d.deliveryLocation||''}</div><div class="rd">${getSizeWeightDisplay(d)} | ${d.deliveryPrice} MVR</div>${sBadge(d.status)}</div>`).join('');$('rcWrap').style.display='block';if(found.length===1)renderTrk(found[0].referenceNumber)}
@@ -915,6 +1181,252 @@ window.rmN=function(e,id){e.stopPropagation();allN=allN.filter(n=>n.id!==id);db.
 $('nClearAll').onclick=()=>{allN=allN.filter(n=>n.userEmail!==me?.email&&n.userEmail!=='all');db.ref('notifications').set(allN);loadNotifs()};
 window.viewSlip=src=>{$('slipViewImg').src=src;$('slipMod').classList.add('show')};
 $('slipClose').onclick=$('slipClose2').onclick=()=>$('slipMod').classList.remove('show');
+/* ── REWARDS HELPERS ── */
+function mkEKey(email){return email.replace(/\./g,'_');}
+async function awardPoints(email,pts,note,ref){
+  const key=mkEKey(email);
+  const snap=await db.ref('userRewards/'+key).once('value');
+  const rd=snap.val()||{points:0,history:[],referralCode:'EC'+Date.now().toString().slice(-6),referralCount:0};
+  rd.points=(rd.points||0)+pts;
+  rd.history=rd.history||[];
+  rd.history.push({pts,note,date:new Date().toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),ref:ref||''});
+  await db.ref('userRewards/'+key).set(rd);
+  showPointsPopup(pts);
+  pushN('⭐ Points Earned!','You earned +'+pts+' points! '+note,email);
+}
+// Watch for payment approval → award delivery points
+let _watchedDeliveries=new Set();
+function watchDeliveryPoints(){
+  db.ref('cargoDeliveries').on('value',snap=>{
+    const deliveries=toArr(snap.val());
+    deliveries.forEach(d=>{
+      if(d.paymentStatus==='paid'&&d.createdBy===me?.email&&!_watchedDeliveries.has(d.referenceNumber)){
+        _watchedDeliveries.add(d.referenceNumber);
+        // Check if points already awarded for this delivery
+        const key=mkEKey(d.createdBy);
+        db.ref('userRewards/'+key+'/history').once('value').then(s=>{
+          const hist=toArr(s.val());
+          const alreadyAwarded=hist.some(h=>h.ref===d.referenceNumber&&h.note&&h.note.includes('Delivery'));
+          if(!alreadyAwarded&&d.paymentStatus==='paid'){
+            const dpts=siteSettings.pointsPerDelivery||10;
+            awardPoints(d.createdBy,dpts,'Delivery reward',d.referenceNumber);
+          }
+        });
+      }
+    });
+  });
+}
+
+/* ── REWARDS 2026 ── */
+function getTierInfo(pts){
+  if(pts>=5000)return{name:'Gold',faIcon:'fa-medal',faColor:'#f39c12',icoClass:'tier-ico-gold',color:'#f39c12',color2:'#e67e22',chipBg:'rgba(243,156,18,.15)',chipBorder:'rgba(243,156,18,.4)',heroBg:'rwd-hero-bg-gold',orb:'rwd-hero-orb-gold',fillGrad:'linear-gradient(90deg,#b8860b,#f39c12,#ffd700)',next:null,nextPts:0,benefits:[{icon:'fa-rocket',iconBg:'rgba(243,156,18,.15)',iconColor:'#f39c12',text:'Priority Delivery',badge:'VIP',badgeBg:'rgba(243,156,18,.2)',badgeColor:'#f39c12'},{icon:'fa-tag',iconBg:'rgba(39,174,96,.12)',iconColor:'#27ae60',text:'Exclusive Discounts',badge:'Active',badgeBg:'rgba(39,174,96,.15)',badgeColor:'#27ae60'},{icon:'fa-headset',iconBg:'rgba(52,152,219,.12)',iconColor:'#3498db',text:'Fastest Support',badge:'24/7',badgeBg:'rgba(52,152,219,.15)',badgeColor:'#3498db'},{icon:'fa-crown',iconBg:'rgba(243,156,18,.15)',iconColor:'#f39c12',text:'VIP Badge',badge:'Gold',badgeBg:'rgba(243,156,18,.2)',badgeColor:'#f39c12'}]};
+  if(pts>=1000)return{name:'Silver',faIcon:'fa-medal',faColor:'#9ab4c8',icoClass:'tier-ico-silver',color:'#9ab4c8',color2:'#7a96b0',chipBg:'rgba(154,180,200,.12)',chipBorder:'rgba(154,180,200,.35)',heroBg:'rwd-hero-bg-silver',orb:'rwd-hero-orb-silver',fillGrad:'linear-gradient(90deg,#607d8b,#9ab4c8,#cfd8dc)',next:'Gold',nextPts:5000,benefits:[{icon:'fa-bolt',iconBg:'rgba(52,152,219,.12)',iconColor:'#3498db',text:'Faster Support',badge:'Priority',badgeBg:'rgba(52,152,219,.15)',badgeColor:'#3498db'},{icon:'fa-tag',iconBg:'rgba(39,174,96,.12)',iconColor:'#27ae60',text:'Small Discount',badge:'Active',badgeBg:'rgba(39,174,96,.15)',badgeColor:'#27ae60'},{icon:'fa-arrow-up',iconBg:'rgba(154,180,200,.12)',iconColor:'#9ab4c8',text:'Priority Queue',badge:'On',badgeBg:'rgba(154,180,200,.15)',badgeColor:'#9ab4c8'},{icon:'fa-star',iconBg:'rgba(154,180,200,.1)',iconColor:'#9ab4c8',text:'Silver Status',badge:'Silver',badgeBg:'rgba(154,180,200,.15)',badgeColor:'#9ab4c8'}]};
+  return{name:'Bronze',faIcon:'fa-medal',faColor:'#cd7f32',icoClass:'tier-ico-bronze',color:'#cd7f32',color2:'#a0522d',chipBg:'rgba(205,127,50,.12)',chipBorder:'rgba(205,127,50,.35)',heroBg:'rwd-hero-bg-bronze',orb:'rwd-hero-orb-bronze',fillGrad:'linear-gradient(90deg,#6d3b0a,#cd7f32,#daa520)',next:'Silver',nextPts:1000,benefits:[{icon:'fa-headset',iconBg:'rgba(205,127,50,.12)',iconColor:'#cd7f32',text:'Basic Support',badge:'Standard',badgeBg:'rgba(205,127,50,.12)',badgeColor:'#cd7f32'},{icon:'fa-gift',iconBg:'rgba(39,174,96,.1)',iconColor:'#27ae60',text:'Welcome Bonus',badge:'Earned',badgeBg:'rgba(39,174,96,.12)',badgeColor:'#27ae60'},{icon:'fa-location-dot',iconBg:'rgba(52,152,219,.1)',iconColor:'#3498db',text:'Delivery Tracking',badge:'Free',badgeBg:'rgba(52,152,219,.12)',badgeColor:'#3498db'},{icon:'fa-trophy',iconBg:'rgba(205,127,50,.1)',iconColor:'#cd7f32',text:'Bronze Status',badge:'New',badgeBg:'rgba(205,127,50,.12)',badgeColor:'#cd7f32'}]};
+}
+function showPointsPopup(pts){
+  const el=document.createElement('div');
+  el.className='pts-float-toast';
+  el.innerHTML=`<div class="pts-float-inner"><i class="fas fa-star pfi-star" style="color:#f39c12;font-size:1.1rem;animation:orbFloat 1s ease-in-out infinite"></i><span class="pfi-text">You earned <span class="pfi-num">+${pts} pts</span>!</span></div>`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),3100);
+}
+async function loadRewards(){
+  if(!me)return;
+  const wrap=document.getElementById('rewardContent');
+  if(!wrap)return;
+  wrap.innerHTML='<div class="empty-s"><i class="fas fa-circle-notch fa-spin" style="opacity:.4;font-size:1.5rem"></i></div>';
+  const ptsPerDelivery=siteSettings.pointsPerDelivery||10;
+  const ptsOnRegister=siteSettings.pointsOnRegister||50;
+  const ptsPerReferral=siteSettings.pointsPerReferral||10;
+  const discountRate=siteSettings.discountPerPoints||100; // 100pts = discountPct%
+  const discountPct=siteSettings.discountPercent||5;
+  const snap=await db.ref('userRewards/'+mkEKey(me.email)).once('value');
+  const rdata=snap.val()||{points:0,history:[],referralCode:'EC'+me.contact.slice(-6).toUpperCase(),referralCount:0};
+  const pts=rdata.points||0;
+  const history=rdata.history||[];
+  const refCode=rdata.referralCode||('EC'+me.contact.slice(-6).toUpperCase());
+  const refCount=rdata.referralCount||0;
+  const tier=getTierInfo(pts);
+  // Discount calc
+  const discountsAvail=Math.floor(pts/discountRate);
+  const discountValue=discountsAvail*discountPct;
+  // Progress
+  let pct=100,fromPts=0,nextLabel='MAX TIER';
+  if(tier.next){fromPts=tier.name==='Bronze'?0:1000;const range=tier.nextPts-fromPts;const prog=pts-fromPts;pct=Math.min(100,Math.round((prog/range)*100));nextLabel=`${(tier.nextPts-pts).toLocaleString()} pts to ${tier.next}`;}
+  // Referral link
+  const baseUrl=window.location.origin+window.location.pathname;
+  const refLink=baseUrl+'?ref='+refCode;
+  // Load leaderboard — match email keys to usernames
+  const rwSnap=(await db.ref('userRewards').once('value')).val()||{};
+  const usersSnap=toArr((await db.ref('users').once('value')).val());
+  const leaderboard=Object.entries(rwSnap)
+    .filter(([k,r])=>r.points>0)
+    .map(([eKey,r])=>{
+      // match email key back to username
+      const emailDot=eKey.replace(/_/g,'.');
+      const u=usersSnap.find(x=>x.email===emailDot||x.email.replace(/\./g,'_')===eKey);
+      const displayName=u?u.username:(r.referralCode||'User');
+      return{...r,displayName,eKey};
+    })
+    .sort((a,b)=>(b.referralCount||0)-(a.referralCount||0)||(b.points||0)-(a.points||0))
+    .slice(0,5);
+
+  wrap.innerHTML=`
+  <!-- HERO -->
+  <div class="rwd-hero">
+    <div class="rwd-hero-bg ${tier.heroBg}"></div>
+    <div class="rwd-hero-orb rwd-hero-orb1 ${tier.orb}" style="width:200px;height:200px;top:-60px;right:-50px"></div>
+    <div class="rwd-hero-orb rwd-hero-orb2 ${tier.orb}" style="width:100px;height:100px;bottom:-20px;left:-20px"></div>
+    <div class="rwd-hero-content">
+      <div class="rwd-tier-chip" style="background:${tier.chipBg};border-color:${tier.chipBorder};color:${tier.color}">
+        <i class="fas ${tier.faIcon}" style="color:${tier.faColor}"></i><span>${tier.name} Member</span>
+      </div>
+      <div class="rwd-pts-big" style="color:${tier.color};text-shadow:0 0 40px ${tier.color}44">${pts.toLocaleString()}</div>
+      <div class="rwd-pts-label">TOTAL POINTS</div>
+      <div class="rwd-next-chip"><i class="fas fa-arrow-right"></i>${nextLabel}</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="rwd-prog-wrap">
+    <div class="rwd-prog-labels"><span>${tier.name} ${fromPts.toLocaleString()}</span><span>${tier.next||'MAX'} ${tier.nextPts?tier.nextPts.toLocaleString():''}</span></div>
+    <div class="rwd-prog-track"><div class="rwd-prog-fill" style="width:${pct}%;background:${tier.fillGrad}"></div></div>
+    <div class="rwd-prog-pct" style="color:${tier.color}">${pct}% complete</div>
+  </div>
+
+  <!-- DISCOUNT BOX 2026 -->
+  <div class="disc-box">
+    <div class="disc-orb-a"></div><div class="disc-orb-b"></div>
+    <div class="disc-inner">
+      <div class="disc-label"><i class="fas fa-tag"></i>Your Discount Balance</div>
+      <div class="disc-top-row">
+        <div class="disc-num">${discountValue}<span>% OFF</span></div>
+        <div class="disc-right-col">
+          <div class="disc-pill"><i class="fas fa-star" style="font-size:.6rem"></i>${pts.toLocaleString()} pts</div>
+          <div class="disc-rate-txt">Every ${discountRate} pts = ${discountPct}% off</div>
+        </div>
+      </div>
+      <div class="disc-hr"></div>
+      <div class="disc-hint"><i class="fas fa-circle-info"></i>Show this screen to admin when placing your next order to redeem your discount.</div>
+    </div>
+  </div>
+
+  <!-- REFERRAL BOX 2026 -->
+  <div class="ref-box">
+    <div class="ref-orb-a"></div><div class="ref-orb-b"></div>
+    <div class="ref-inner">
+      <div class="ref-label"><i class="fas fa-share-nodes"></i>Invite Friends & Earn</div>
+      <div class="ref-desc">Share your unique code — when a friend registers, <b>you both earn ${ptsPerReferral} bonus points!</b></div>
+      <div class="ref-code-block">
+        <div class="ref-code-val">${refCode}</div>
+        <button class="ref-copy-btn" onclick="copyRefCode('${refCode}')"><i class="fas fa-copy"></i> Copy</button>
+      </div>
+      <div class="ref-share-grid">
+        <button class="ref-share-card rsw" onclick="shareRef('wa','${refLink}','${refCode}')">
+          <div class="rsc-ico"><i class="fab fa-whatsapp"></i></div>WhatsApp
+        </button>
+        <button class="ref-share-card rst" onclick="shareRef('tg','${refLink}','${refCode}')">
+          <div class="rsc-ico"><i class="fab fa-telegram-plane"></i></div>Telegram
+        </button>
+        <button class="ref-share-card rsc" onclick="shareRef('cp','${refLink}','${refCode}')">
+          <div class="rsc-ico"><i class="fas fa-link"></i></div>Copy Link
+        </button>
+      </div>
+      <div class="ref-stats-row">
+        <div class="ref-stat-box">
+          <div class="ref-stat-num" style="color:#3498db">${refCount}</div>
+          <div class="ref-stat-txt">Friends Referred</div>
+        </div>
+        <div class="ref-stat-box">
+          <div class="ref-stat-num" style="color:#27ae60">${refCount*ptsPerReferral}</div>
+          <div class="ref-stat-txt">Referral Points</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO EARN -->
+  <div class="rwd-how">
+    <div class="rwd-benefits-title">How to Earn Points</div>
+    <div class="rwd-how-step"><div class="rwd-how-num" style="background:rgba(243,156,18,.15);color:#f39c12">1</div><div class="rwd-how-txt"><strong style="color:#f39c12">+${ptsOnRegister} pts</strong> — Sign up (welcome bonus)</div></div>
+    <div class="rwd-how-step"><div class="rwd-how-num" style="background:rgba(52,152,219,.15);color:#3498db">2</div><div class="rwd-how-txt"><strong style="color:#3498db">+${ptsPerDelivery} pts</strong> — Each approved delivery payment</div></div>
+    <div class="rwd-how-step"><div class="rwd-how-num" style="background:rgba(39,174,96,.15);color:#27ae60">3</div><div class="rwd-how-txt"><strong style="color:#27ae60">+${ptsPerReferral} pts</strong> — Each friend who joins via your link</div></div>
+    <div class="rwd-how-step"><div class="rwd-how-num" style="background:rgba(243,156,18,.15);color:#f39c12">4</div><div class="rwd-how-txt"><strong style="color:#f39c12">${discountRate} pts = ${discountPct}% discount</strong> — Redeem with admin</div></div>
+  </div>
+
+  <!-- TIERS -->
+  <div class="rwd-tiers">
+    <div class="rwd-tier-card${pts<1000?' active-tier':''}" style="--tc:#cd7f32">
+      <div class="tier-ico-wrap tier-ico-bronze"><i class="fas fa-medal" style="color:#cd7f32"></i></div>
+      <div class="rtc-name" style="color:#cd7f32">Bronze</div><div class="rtc-range">0 – 999</div>
+      <div class="rtc-tick"><i class="fas fa-check"></i></div>
+    </div>
+    <div class="rwd-tier-card${pts>=1000&&pts<5000?' active-tier':''}" style="--tc:#9ab4c8">
+      <div class="tier-ico-wrap tier-ico-silver"><i class="fas fa-medal" style="color:#9ab4c8"></i></div>
+      <div class="rtc-name" style="color:#9ab4c8">Silver</div><div class="rtc-range">1000 – 4999</div>
+      <div class="rtc-tick"><i class="fas fa-check"></i></div>
+    </div>
+    <div class="rwd-tier-card${pts>=5000?' active-tier':''}" style="--tc:#f39c12">
+      <div class="tier-ico-wrap tier-ico-gold"><i class="fas fa-crown" style="color:#f39c12"></i></div>
+      <div class="rtc-name" style="color:#f39c12">Gold</div><div class="rtc-range">5000+</div>
+      <div class="rtc-tick"><i class="fas fa-check"></i></div>
+    </div>
+  </div>
+
+  <!-- BENEFITS -->
+  <div class="rwd-benefits">
+    <div class="rwd-benefits-title">Your ${tier.name} Benefits</div>
+    ${tier.benefits.map(b=>`<div class="rwd-benefit-row"><div class="rwd-benefit-icon" style="background:${b.iconBg}"><i class="fas ${b.icon}" style="color:${b.iconColor}"></i></div><div class="rwd-benefit-text">${b.text}</div><div class="rwd-benefit-badge" style="background:${b.badgeBg};color:${b.badgeColor}">${b.badge}</div></div>`).join('')}
+  </div>
+
+  <!-- LEADERBOARD 2026 -->
+  ${leaderboard.length?`<div class="ldb-wrap">
+    <div class="ldb-header">
+      <i class="fas fa-trophy" style="color:#f39c12"></i>
+      <span>Top Referrers</span>
+      <span class="ldb-month">${new Date().toLocaleString('en-US',{month:'long',year:'numeric'})}</span>
+    </div>
+    ${leaderboard.map((l,i)=>{
+      const rc=['#f39c12','#9ab4c8','#cd7f32','rgba(255,255,255,.38)','rgba(255,255,255,.28)'];
+      const bgc=['rgba(243,156,18,.08)','rgba(154,180,200,.06)','rgba(205,127,50,.06)','rgba(255,255,255,.03)','rgba(255,255,255,.02)'];
+      const bdc=['rgba(243,156,18,.22)','rgba(154,180,200,.15)','rgba(205,127,50,.14)','rgba(255,255,255,.07)','rgba(255,255,255,.05)'];
+      const rankLabel=['🥇','🥈','🥉','4','5'];
+      const name=l.displayName==='Team EasyCargo'?'Team EasyCargo':l.displayName;
+      const initials=name.slice(0,2).toUpperCase();
+      const isMe=l.eKey===me?.email?.replace(/\./g,'_');
+      return`<div class="ldb-card" style="background:${bgc[i]};border-color:${bdc[i]}${isMe?';outline:1px solid '+rc[i]:''}">
+        <div class="ldb-rank-badge" style="color:${rc[i]};background:rgba(0,0,0,.25);border-color:${bdc[i]}">${rankLabel[i]}</div>
+        <div class="ldb-avatar" style="background:linear-gradient(135deg,${rc[i]}22,${rc[i]}11);border-color:${rc[i]}44;color:${rc[i]}">${initials}</div>
+        <div class="ldb-info">
+          <div class="ldb-uname">${name}${isMe?' <span class="ldb-you">YOU</span>':''}</div>
+          <div class="ldb-sub">${l.referralCount||0} friend${(l.referralCount||0)!==1?'s':''} referred</div>
+        </div>
+        <div class="ldb-score">
+          <div class="ldb-pts-big" style="color:${rc[i]}">${(l.points||0).toLocaleString()}</div>
+          <div class="ldb-pts-lbl">pts</div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`:''}
+
+  ${history.length?`
+  <div class="rwd-history">
+    <div class="rwd-history-title">Points History</div>
+    ${[...history].reverse().slice(0,10).map(h=>`
+    <div class="rwd-hist-item">
+      <div><div class="rwd-hist-note">${h.note||'Reward'}</div><div class="rwd-hist-ref">${h.ref||''} · ${h.date||''}</div></div>
+      <div class="rwd-hist-pts">+${h.pts}</div>
+    </div>`).join('')}
+  </div>`:''}`;
+}
+window.copyRefCode=function(code){navigator.clipboard.writeText(code).then(()=>showToast('Code copied! Share it with friends 🎉','ok')).catch(()=>showToast('Copy: '+code,'info'));}
+window.shareRef=function(platform,link,code){
+  const msg='Join EasyCargo — Fast & Reliable Cargo Delivery in the Maldives! Use my referral code *'+code+'* and we both earn bonus points! 🎁\n'+link;
+  if(platform==='wa'){window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
+  else if(platform==='tg'){window.open('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent('Join EasyCargo with my code '+code+' and earn bonus points!'),'_blank');}
+  else{navigator.clipboard.writeText(link).then(()=>showToast('Link copied! Share it 🔗','ok')).catch(()=>showToast(link,'info'));}
+}
+window.addEventListener('rewardsTabOpen',loadRewards);
 function doLogout(){localStorage.removeItem('ecu');me=null;$('dashboard').style.display='none';$('homePage').style.display='flex';$('authScreen').classList.remove('show');$('loginBtn').disabled=false}
 $('forgotA').onclick=e=>{e.preventDefault();showToast('Contact your admin to reset password.','info')}
 </script>
