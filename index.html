@@ -1048,7 +1048,7 @@ firebase.initializeApp(fbCfg);
 const db=firebase.database();
 
 let me=null,allD=[],allP=[],allN=[],allBoats=[],allSpeedBoats=[],allPickups=[],allCargoTypes=[],
-    allExpressHrs=[],allExpressSizes=[],allDelLocs=[],allFloors=[],allRoutePrices=[],
+    allExpressHrs=[],allExpressSizes=[],allDelLocs=[],allFloors=[],allRoutePrices=[],allBoatRoutePrices=[],
     siteSettings={},tmpD=null,busy=false,dMode='cargo',slideIdx=0,slideTimer=null,
     selAtoll=null,curInvoiceD=null;
 
@@ -1071,6 +1071,55 @@ function lookupRoutePrice(pickup,delivery){
   if(!pickup||!delivery)return 0;
   const match=allRoutePrices.find(r=>r.pickup===pickup&&r.delivery===delivery);
   return match?parseFloat(match.price)||0:0;
+}
+
+/* ── BOAT ROUTE PRICE LOOKUP ── */
+function lookupBoatRoutePrice(pickup,boatName,boatType){
+  if(!pickup||!boatName)return null; // null = not configured, use boat default
+  const match=allBoatRoutePrices.find(r=>r.pickup===pickup&&r.boatName===boatName&&(boatType?r.boatType===boatType:true));
+  if(match)return parseFloat(match.price)||0;
+  return null;
+}
+
+/* ── UPDATE BOAT PRICE BADGE ── */
+function updateBoatPriceBadge(){
+  const pickup=$('pLocVal').value;
+  const boatName=dMode==='boat'?$('selBoat').value:$('selSB').value;
+  const boatType=dMode==='speedboat'?'speedboat':'boat';
+  const badge=$('routePriceBadge');
+  const valEl=$('routePriceVal');
+  if(!boatName){
+    if(badge)badge.classList.remove('show');
+    calcTotal();return;
+  }
+  // Look up boat route price (pickup × boat)
+  const routePrice=lookupBoatRoutePrice(pickup,boatName,boatType);
+  if(routePrice!==null){
+    // Use the boat route price from the table
+    $('boatPrice').value=routePrice;
+    if(badge&&valEl){
+      badge.classList.add('show');
+      badge.classList.remove('no-route');
+      valEl.textContent='MVR '+routePrice;
+      valEl.style.color='#3498db';
+      badge.style.borderColor='rgba(52,152,219,.2)';
+      badge.style.background='rgba(52,152,219,.08)';
+      badge.querySelector('.rpb-lbl').textContent='Route price ('+(boatType==='speedboat'?'Speed Boat':'Boat')+')';
+    }
+  }else{
+    // No route price set — use boat's default price
+    if(badge&&valEl){
+      badge.classList.add('show');
+      badge.classList.add('no-route');
+      const def=parseFloat($('boatPrice').value)||0;
+      valEl.textContent=def>0?'MVR '+def+' (default)':'No price set';
+      valEl.style.color=def>0?'#f39c12':'#e74c3c';
+      badge.style.borderColor='rgba(243,156,18,.2)';
+      badge.style.background='rgba(243,156,18,.07)';
+      if(badge.querySelector('.rpb-lbl'))badge.querySelector('.rpb-lbl').textContent='Boat default price';
+    }
+  }
+  calcTotal();
 }
 
 /* ── PRICE CALC: route price replaces separate pickup+delivery prices ── */
@@ -1118,10 +1167,14 @@ function updateRoutePrice(){
       badge.classList.remove('no-route');
       valEl.textContent='MVR '+price;
       valEl.style.color='#27ae60';
+      badge.style.borderColor='';badge.style.background='';
+      if(badge.querySelector('.rpb-lbl'))badge.querySelector('.rpb-lbl').textContent='Route price';
     }else{
       badge.classList.add('no-route');
       valEl.textContent='No price set';
       valEl.style.color='#e74c3c';
+      badge.style.borderColor='';badge.style.background='';
+      if(badge.querySelector('.rpb-lbl'))badge.querySelector('.rpb-lbl').textContent='Route price';
     }
   }
   calcTotal();
@@ -1186,9 +1239,9 @@ function initFB(){
   db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});
   db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});
   db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());if(me)buildAtollChips()});
-  db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me){// Reload with current cargo type filter if one is selected
+  db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me){
     const activeCt=document.querySelector('.ct-card.active');
-    if(activeCt){const ctId=activeCt.dataset.id;const ct=allCargoTypes.find(c=>String(c.id)===String(ctId));if(ct){const assigned=ct.isExpress?null:(ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null);loadPickupGrid(assigned);}else{loadPickupGrid(null);}}else{loadPickupGrid(null);}
+    if(activeCt){const ctId=activeCt.dataset.id;const ct=allCargoTypes.find(c=>String(c.id)===String(ctId));if(ct){const assigned=ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null;loadPickupGrid(assigned);}else{loadPickupGrid(null);}}else{loadPickupGrid(null);}
   }});
   db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});
   db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});
@@ -1198,6 +1251,7 @@ function initFB(){
   db.ref('speedBoats').on('value',snap=>{allSpeedBoats=toArr(snap.val());if(me)buildSBGrid()});
   /* ── ROUTE PRICES ── */
   db.ref('routePrices').on('value',snap=>{allRoutePrices=toArr(snap.val());updateRoutePrice();});
+  db.ref('boatRoutePrices').on('value',snap=>{allBoatRoutePrices=toArr(snap.val());});
   db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});
   initSlideshow();loadHowTo();
 }
@@ -1233,16 +1287,16 @@ window.selCtype=function(el,id){
   $('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
   $('selW').value='';$('selWP').value='0';
   const hint=$('pickupHint');if(hint)hint.style.display='none';
+  // Always filter pickups by what's assigned to THIS cargo type
+  // If none assigned → show all (fallback). This applies to BOTH express and standard.
+  const assigned=ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null;
   if(ct.isExpress){
     $('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.remove('show');
     loadPkgSizeGrid(ct.id);
-    // Express: show ALL pickups
-    loadPickupGrid(null);
+    loadPickupGrid(assigned);
   }else{
     $('expressFlowWrap').classList.remove('show');$('weightSec').classList.add('show');$('expressTimeWrap').classList.remove('show');
     loadWeights();
-    // Standard: show only assigned pickups (if any assigned), else show all
-    const assigned=ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null;
     loadPickupGrid(assigned);
   }
   calcTotal();
@@ -1274,10 +1328,18 @@ window.selPickup=function(el,id){
   if(!loc)return;
   $('pLocVal').value=loc.name;
   // Recalculate route price with new pickup
-  updateRoutePrice();
+  if(dMode==='cargo'){
+    updateRoutePrice();
+  }else{
+    updateBoatPriceBadge();
+  }
   const ax=$('addrX');const lbl=ax.querySelector('label');
   if(loc.type==='address'||loc.type==='postal'){ax.classList.add('show');$('addrVal').required=true;if(lbl){if(loc.type==='postal'){lbl.innerHTML='<i class="fas fa-envelope" style="color:#f39c12;margin-right:4px"></i>Post/Pickpost Number or Message';$('addrVal').placeholder='Enter Post/Pickpost number or message…';}else{lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address';$('addrVal').placeholder='Enter full address…';}}}else{ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value='';}
-  const gf=$('pickupGfNotice');if(gf){const nm=(loc.name||'').toLowerCase();const isLocal=nm.includes('male')||nm.includes('hulhumale')||loc.type==='address';if(isLocal)gf.classList.add('show');else gf.classList.remove('show');}
+  const gf=$('pickupGfNotice');if(gf){
+    // Only show ground floor notice for address type (not postal, not standard)
+    if(loc.type==='address')gf.classList.add('show');
+    else gf.classList.remove('show');
+  }
 };
 
 let boatInputMode='list',sbInputMode='list';
@@ -1299,7 +1361,8 @@ window.setMode=function(m){
   $('routePrice').value='0';
   $('dLocVal').value='';
   document.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));
-  const badge=$('routePriceBadge');if(badge)badge.classList.remove('show');
+  const badge=$('routePriceBadge');
+  if(badge){badge.classList.remove('show');badge.style.borderColor='';badge.style.background='';}
   if(m==='boat'){boatInputMode='list';$('boatListBtn').classList.add('active');$('boatManualBtn').classList.remove('active');$('boatListMode').style.display='block';$('boatManualMode').style.display='none';selAtoll=null;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatGridWrap').style.display='none';document.querySelectorAll('.atoll-chip,.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));const bc=$('manualBoatContact');if(bc&&!bc._wired){bc._wired=true;bc.addEventListener('input',()=>{const v=bc.value.trim();const btn=$('manualBoatCallBtn');btn.style.display=v.length>=7?'flex':'none';if(v.length>=7)btn.href='tel:'+v;});}}
   if(m==='speedboat'){sbInputMode='list';$('sbListBtn').classList.add('active');$('sbManualBtn').classList.remove('active');$('sbListMode').style.display='block';$('sbManualMode').style.display='none';$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';$('sbGridWrap').style.display='none';document.querySelectorAll('.sb-atoll-chip,.sb-card,.sb-isl-btn').forEach(c=>c.classList.remove('active'));if($('sbAtollSearch'))$('sbAtollSearch').value='';buildSBAtollChips();}
   if(m==='cargo'){const w=$('houseAddrWrap');if(w)w.style.display='none';}
@@ -1365,14 +1428,14 @@ window.selSBAtoll=function(el,a){document.querySelectorAll('.sb-atoll-chip').for
 function buildSBGrid(){buildSBAtollChips();}
 window.filterSBAtolls=function(){var q=$('sbAtollSearch').value.trim().toLowerCase();if(!q){document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.style.display='';});$('sbGridWrap').style.display='none';$('sbIslSec').style.display='none';document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(function(c){c.classList.remove('active');});return;}document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.style.display=c.textContent.toLowerCase().includes(q)?'':'none';});var matched=allSpeedBoats.filter(function(b){if(b.active===false)return false;if(b.name&&b.name.toLowerCase().includes(q))return true;var batols=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);return batols.some(function(a){return a.toLowerCase().includes(q);});});if(matched.length){$('sbGridWrap').style.display='block';renderSBGrid(matched);document.querySelectorAll('.sb-atoll-chip').forEach(function(c){c.classList.remove('active');});}else{$('sbGridWrap').style.display='none';}};
 function renderSBGrid(boats){var g=$('sbGrid');if(!g)return;if(!boats.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No speed boats for this atoll.</p></div>';return;}var html='';boats.forEach(function(b){var sid=String(b.id);html+='<div class="boat-card sb-card" data-sbid="'+sid+'" onclick="selSpeedBoat(\''+sid+'\')">';if(b.imageUrl){html+='<img class="b-img" src="'+b.imageUrl+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';html+='<div class="b-no-img" style="display:none"><i class="fas fa-bolt"></i></div>';}else{html+='<div class="b-no-img"><i class="fas fa-bolt"></i></div>';}html+='<div class="b-name">'+b.name+'</div>';html+='<div class="b-route">'+(b.route||'')+'</div>';html+='<div class="boat-ck"><i class="fas fa-check"></i></div>';html+='</div>';});g.innerHTML=html;}
-window.selSpeedBoat=function(id){document.querySelectorAll('.sb-card').forEach(function(c){c.classList.remove('active');});var card=document.querySelector('.sb-card[data-sbid="'+id+'"]');if(card)card.classList.add('active');var boat=allSpeedBoats.find(function(b){return String(b.id)===String(id);});if(!boat)return;$('selSB').value=boat.name;$('boatPrice').value=boat.price||0;calcTotal();$('sbIslSec').style.display='block';$('sbInfoTxt').textContent=boat.name+(boat.route?' \u2014 '+boat.route:'');var ig=$('sbIslGrid');var isls=boat.islands||[];if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selSBIsl').value='';return;}var ih='';isls.forEach(function(isl){ih+='<button type="button" class="isl-btn sb-isl-btn" data-sbisl="'+encodeURIComponent(isl)+'">'+isl+'</button>';});ig.innerHTML=ih;ig.querySelectorAll('.sb-isl-btn').forEach(function(btn){btn.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ig.querySelectorAll('.sb-isl-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');$('selSBIsl').value=decodeURIComponent(this.getAttribute('data-sbisl'));});});$('selSBIsl').value='';};
+window.selSpeedBoat=function(id){document.querySelectorAll('.sb-card').forEach(function(c){c.classList.remove('active');});var card=document.querySelector('.sb-card[data-sbid="'+id+'"]');if(card)card.classList.add('active');var boat=allSpeedBoats.find(function(b){return String(b.id)===String(id);});if(!boat)return;$('selSB').value=boat.name;$('boatPrice').value=boat.price||0;updateBoatPriceBadge();$('sbIslSec').style.display='block';$('sbInfoTxt').textContent=boat.name+(boat.route?' \u2014 '+boat.route:'');var ig=$('sbIslGrid');var isls=boat.islands||[];if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selSBIsl').value='';return;}var ih='';isls.forEach(function(isl){ih+='<button type="button" class="isl-btn sb-isl-btn" data-sbisl="'+encodeURIComponent(isl)+'">'+isl+'</button>';});ig.innerHTML=ih;ig.querySelectorAll('.sb-isl-btn').forEach(function(btn){btn.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ig.querySelectorAll('.sb-isl-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');$('selSBIsl').value=decodeURIComponent(this.getAttribute('data-sbisl'));});});$('selSBIsl').value='';};
 
 /* ── REGULAR BOATS ── */
 function buildAtollChips(){const atolls=[...new Set(allBoats.filter(b=>b.active!==false).flatMap(b=>b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[])))].sort();const g=$('atollChips');if(!atolls.length){$('boatGridWrap').style.display='block';g.innerHTML='';renderBoatGrid(allBoats.filter(b=>b.active!==false));return}g.innerHTML=atolls.map(a=>`<button type="button" class="atoll-chip" onclick="selAtollFn(this,'${a.replace(/'/g,"\\'")}')">${a}</button>`).join('')}
 window.filterAtolls=function(){var q=$('atollSearch').value.trim().toLowerCase();if(!q){document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.style.display='';});$('boatGridWrap').style.display='none';$('islSec').style.display='none';document.querySelectorAll('.boat-card,.isl-btn').forEach(function(c){c.classList.remove('active');});return;}document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.style.display=c.textContent.toLowerCase().includes(q)?'':'none';});var matched=allBoats.filter(function(b){if(b.active===false)return false;if(b.name&&b.name.toLowerCase().includes(q))return true;var batols=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);return batols.some(function(a){return a.toLowerCase().includes(q);});});if(matched.length){$('boatGridWrap').style.display='block';renderBoatGrid(matched);document.querySelectorAll('#atollChips .atoll-chip').forEach(function(c){c.classList.remove('active');});}else{$('boatGridWrap').style.display='none';}};
 window.selAtollFn=function(el,a){document.querySelectorAll('.atoll-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');selAtoll=a;$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';document.querySelectorAll('.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));const boats=allBoats.filter(b=>b.active!==false&&(b.atolls?b.atolls.includes(a):b.atoll===a));$('boatGridWrap').style.display='block';renderBoatGrid(boats)};
 function renderBoatGrid(boats){const g=$('boatGrid');if(!boats.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No boats for this atoll.</p></div>';return}g.innerHTML=boats.map(b=>`<div class="boat-card" data-id="${b.id}" onclick="selBoat('${b.id}')">${b.imageUrl?`<img class="b-img" src="${b.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="b-no-img" style="${b.imageUrl?'display:none':''}"><i class="fas fa-ship"></i></div><div class="b-name">${b.name}</div><div class="b-route">${b.route||''}</div><div class="boat-ck"><i class="fas fa-check"></i></div></div>`).join('')}
-window.selBoat=function(id){document.querySelectorAll('.boat-card').forEach(c=>c.classList.remove('active'));const card=document.querySelector('.boat-card[data-id="'+id+'"]');if(card)card.classList.add('active');const boat=allBoats.find(b=>String(b.id)===String(id));if(!boat)return;$('selBoat').value=boat.name;$('boatPrice').value=boat.price||0;calcTotal();$('islSec').style.display='block';$('boatInfoTxt').textContent=boat.name+(boat.route?' — '+boat.route:'');const ig=$('islGrid');const isls=boat.islands||[];if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selIsl').value='';return}ig.innerHTML=isls.map(function(isl){return'<button type="button" class="isl-btn" data-isl="'+encodeURIComponent(isl)+'">'+isl+'</button>'}).join('');ig.querySelectorAll('.isl-btn').forEach(function(btn){btn.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ig.querySelectorAll('.isl-btn').forEach(function(b){b.classList.remove('active')});this.classList.add('active');$('selIsl').value=decodeURIComponent(this.getAttribute('data-isl'));});});$('selIsl').value='';};
+window.selBoat=function(id){document.querySelectorAll('.boat-card').forEach(c=>c.classList.remove('active'));const card=document.querySelector('.boat-card[data-id="'+id+'"]');if(card)card.classList.add('active');const boat=allBoats.find(b=>String(b.id)===String(id));if(!boat)return;$('selBoat').value=boat.name;$('boatPrice').value=boat.price||0;updateBoatPriceBadge();$('islSec').style.display='block';$('boatInfoTxt').textContent=boat.name+(boat.route?' — '+boat.route:'');const ig=$('islGrid');const isls=boat.islands||[];if(!isls.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No islands.</p></div>';$('selIsl').value='';return}ig.innerHTML=isls.map(function(isl){return'<button type="button" class="isl-btn" data-isl="'+encodeURIComponent(isl)+'">'+isl+'</button>'}).join('');ig.querySelectorAll('.isl-btn').forEach(function(btn){btn.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ig.querySelectorAll('.isl-btn').forEach(function(b){b.classList.remove('active')});this.classList.add('active');$('selIsl').value=decodeURIComponent(this.getAttribute('data-isl'));});});$('selIsl').value='';};
 
 /* ── FORM SUBMIT ── */
 $('cargoForm').addEventListener('submit',e=>{
@@ -1479,6 +1542,12 @@ function doLogout(){localStorage.removeItem('ecu');me=null;$('dashboard').style.
 $('forgotA').onclick=e=>{e.preventDefault();showToast('Contact your admin to reset password.','info')}
 </script>
 
-
+<script>
+(function(){
+  document.addEventListener('contextmenu',function(e){e.preventDefault();_showProt();return false;});
+  document.addEventListener('keydown',function(e){var k=e.key,ctrl=e.ctrlKey||e.metaKey;if(ctrl&&(k==='u'||k==='U')){e.preventDefault();_showProt();return false;}if(ctrl&&(k==='s'||k==='S')){e.preventDefault();_showProt();return false;}if(ctrl&&e.shiftKey&&'iIjJcC'.indexOf(k)>=0){e.preventDefault();_showProt();return false;}if(k==='F12'){e.preventDefault();_showProt();return false;}});
+  function _showProt(){var t=document.getElementById('_pt');if(!t){t=document.createElement('div');t.id='_pt';t.style.cssText='position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a0a0a,#2b1010);border:1px solid rgba(231,76,60,.4);border-radius:15px;padding:.75rem 1.1rem;z-index:99999;font-size:.76rem;font-weight:600;color:#e74c3c;display:flex;align-items:center;gap:8px;box-shadow:0 8px 28px rgba(0,0,0,.7);pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap;max-width:90vw';t.innerHTML='<i class="fas fa-shield-halved"></i> This content is protected by EasyCargo';document.body.appendChild(t);}t.style.opacity='1';clearTimeout(t._tm);t._tm=setTimeout(function(){t.style.opacity='0';},2800);}
+})();
+</script>
 </body>
 </html>
