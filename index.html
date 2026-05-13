@@ -809,7 +809,8 @@ a{color:#f39c12;text-decoration:none}
           <!-- PICKUP -->
           <div class="fg">
             <label><i class="fas fa-map-marker-alt" style="color:#f39c12;margin-right:4px"></i>Pickup Location</label>
-            <div class="pickup-grid" id="pickupGrid"><div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div></div>
+            <div id="pickupHint" style="font-size:.7rem;color:rgba(255,255,255,.35);margin-bottom:.45rem;font-style:italic">Select a cargo type above to see available pickup locations.</div>
+            <div class="pickup-grid" id="pickupGrid"><div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>Please select a cargo type first.</p></div></div>
             <!-- hidden fields: route price replaces separate pLoc/dLoc prices -->
             <input type="hidden" id="pLocVal">
             <input type="hidden" id="routePrice" value="0">
@@ -1185,7 +1186,10 @@ function initFB(){
   db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});
   db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});
   db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());if(me)buildAtollChips()});
-  db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me)loadPickupGrid()});
+  db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me){// Reload with current cargo type filter if one is selected
+    const activeCt=document.querySelector('.ct-card.active');
+    if(activeCt){const ctId=activeCt.dataset.id;const ct=allCargoTypes.find(c=>String(c.id)===String(ctId));if(ct){const assigned=ct.isExpress?null:(ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null);loadPickupGrid(assigned);}else{loadPickupGrid(null);}}else{loadPickupGrid(null);}
+  }});
   db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});
   db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});
   db.ref('expressSizes').on('value',snap=>{allExpressSizes=toArr(snap.val())});
@@ -1203,7 +1207,8 @@ function enterDash(){
   watchDeliveryPoints();loadFloorSelector();
   $('hName').textContent=me.username;$('sidebarName').textContent=me.username;
   $('cNm').value=me.username;$('cCt').value=me.contact||'';
-  loadPickupGrid();buildAtollChips();buildSBGrid();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();
+  // Show empty pickup grid until cargo type is selected
+  loadPickupGrid(null);buildAtollChips();buildSBGrid();loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();
 }
 
 function updateCapBar(){const cap=siteSettings.dailyCapacity||0;if(!cap){$('capWrap').style.display='none';return}const today=new Date().toISOString().split('T')[0];const tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;const pct=Math.min(100,Math.round((tc/cap)*100));$('capWrap').style.display='block';$('capFill').style.width=pct+'%';$('capPct').textContent=pct+'%';$('capPct').style.color=pct>=100?'#e74c3c':pct>=80?'#f39c12':'#27ae60';$('capFill').className='cap-fill'+(pct>=100?' full':pct>=80?' warn':'');$('capNote').textContent=pct>=100?`Full (${tc}/${cap})`:`${tc}/${cap} today`;const sb=$('submitBtn');if(pct>=100){sb.disabled=true;sb.innerHTML='<i class="fas fa-ban"></i> Capacity Full'}else{sb.disabled=false;sb.innerHTML='<i class="fas fa-paper-plane"></i> Save &amp; Pay'}}
@@ -1215,11 +1220,52 @@ function closeSB(){$('sidebar').classList.remove('open');$('sideOvl').classList.
 $('sideOvl').onclick=closeSB;
 
 function loadCtypeGrid(){const g=$('ctypeGrid');if(!allCargoTypes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div>';return}const icons={'normal':'fa-box','express':'fa-bolt','fragile':'fa-wine-glass-crack','oversized':'fa-pallet','custom':'fa-cube'};g.innerHTML=[...allCargoTypes].sort((a,b)=>(a.order||0)-(b.order||0)).map(ct=>`<div class="ct-card${ct.isExpress?' express-card':''}" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${ct.isExpress?'Select size &amp; time':'Select weight'}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`).join('')}
-window.selCtype=function(el,id){document.querySelectorAll('.ct-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');const ct=allCargoTypes.find(c=>String(c.id)===String(id));if(!ct)return;$('ctV').value=ct.name;$('ctPrice').value=ct.price||0;$('ctIsExpress').value=ct.isExpress?1:0;const eta=$('etaInfo');eta.classList.add('show');eta.classList.toggle('express',!!ct.isExpress);$('etaV').textContent=ct.eta||'—';document.querySelectorAll('.pkg-size-card,.time-slot-btn,.w-btn').forEach(b=>b.classList.remove('active'));$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';$('selW').value='';$('selWP').value='0';if(ct.isExpress){$('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.remove('show');loadPkgSizeGrid(ct.id);}else{$('expressFlowWrap').classList.remove('show');$('weightSec').classList.add('show');$('expressTimeWrap').classList.remove('show');loadWeights();}calcTotal();};
+window.selCtype=function(el,id){
+  document.querySelectorAll('.ct-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const ct=allCargoTypes.find(c=>String(c.id)===String(id));
+  if(!ct)return;
+  $('ctV').value=ct.name;$('ctPrice').value=ct.price||0;$('ctIsExpress').value=ct.isExpress?1:0;
+  const eta=$('etaInfo');eta.classList.add('show');eta.classList.toggle('express',!!ct.isExpress);
+  $('etaV').textContent=ct.eta||'—';
+  document.querySelectorAll('.pkg-size-card,.time-slot-btn,.w-btn').forEach(b=>b.classList.remove('active'));
+  $('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';
+  $('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
+  $('selW').value='';$('selWP').value='0';
+  const hint=$('pickupHint');if(hint)hint.style.display='none';
+  if(ct.isExpress){
+    $('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.remove('show');
+    loadPkgSizeGrid(ct.id);
+    // Express: show ALL pickups
+    loadPickupGrid(null);
+  }else{
+    $('expressFlowWrap').classList.remove('show');$('weightSec').classList.add('show');$('expressTimeWrap').classList.remove('show');
+    loadWeights();
+    // Standard: show only assigned pickups (if any assigned), else show all
+    const assigned=ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null;
+    loadPickupGrid(assigned);
+  }
+  calcTotal();
+};
 
 function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return}const sorted=[...allP].sort((a,b)=>a.min-b.min);g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${x.max<=2?'fa-feather':x.max<=10?'fa-box':x.max<=30?'fa-boxes-stacked':'fa-pallet'}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${x.max<=2?'Light':x.max<=10?'Medium':x.max<=30?'Heavy':'Oversized'}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');$('selW').value=`${this.dataset.mn}-${this.dataset.mx} kg`;$('selWP').value=this.dataset.pr;calcTotal()}));$('selW').value='';$('selWP').value='0';calcTotal()}
 
-function loadPickupGrid(){const g=$('pickupGrid');if(!allPickups.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div>';return}g.innerHTML=allPickups.map(loc=>`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`).join('')}
+function loadPickupGrid(filteredIds){
+  const g=$('pickupGrid');
+  if(!allPickups.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div>';return}
+  // filteredIds: array of pickup id strings to show. null/undefined = show all.
+  let locs=allPickups;
+  if(filteredIds&&filteredIds.length>0){
+    locs=allPickups.filter(l=>filteredIds.includes(String(l.id)));
+  }
+  if(!locs.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations assigned to this cargo type.</p></div>';return}
+  // Reset selection
+  $('pLocVal').value='';$('routePrice').value='0';
+  const badge=$('routePriceBadge');if(badge)badge.classList.remove('show');
+  const pgf=$('pickupGfNotice');if(pgf)pgf.classList.remove('show');
+  const ax=$('addrX');if(ax)ax.classList.remove('show');
+  g.innerHTML=locs.map(loc=>`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`).join('')
+}
 
 window.selPickup=function(el,id){
   document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));
@@ -1433,12 +1479,6 @@ function doLogout(){localStorage.removeItem('ecu');me=null;$('dashboard').style.
 $('forgotA').onclick=e=>{e.preventDefault();showToast('Contact your admin to reset password.','info')}
 </script>
 
-<script>
-(function(){
-  document.addEventListener('contextmenu',function(e){e.preventDefault();_showProt();return false;});
-  document.addEventListener('keydown',function(e){var k=e.key,ctrl=e.ctrlKey||e.metaKey;if(ctrl&&(k==='u'||k==='U')){e.preventDefault();_showProt();return false;}if(ctrl&&(k==='s'||k==='S')){e.preventDefault();_showProt();return false;}if(ctrl&&e.shiftKey&&'iIjJcC'.indexOf(k)>=0){e.preventDefault();_showProt();return false;}if(k==='F12'){e.preventDefault();_showProt();return false;}});
-  function _showProt(){var t=document.getElementById('_pt');if(!t){t=document.createElement('div');t.id='_pt';t.style.cssText='position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a0a0a,#2b1010);border:1px solid rgba(231,76,60,.4);border-radius:15px;padding:.75rem 1.1rem;z-index:99999;font-size:.76rem;font-weight:600;color:#e74c3c;display:flex;align-items:center;gap:8px;box-shadow:0 8px 28px rgba(0,0,0,.7);pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap;max-width:90vw';t.innerHTML='<i class="fas fa-shield-halved"></i> This content is protected by EasyCargo';document.body.appendChild(t);}t.style.opacity='1';clearTimeout(t._tm);t._tm=setTimeout(function(){t.style.opacity='0';},2800);}
-})();
-</script>
+
 </body>
 </html>
