@@ -650,6 +650,12 @@ a{color:#f39c12;text-decoration:none}
 .floor-btn:hover{border-color:rgba(52,152,219,.45);color:white}
 .floor-btn.active{border-color:#3498db;background:rgba(52,152,219,.12);color:#3498db}
 .floor-price-note{font-size:.66rem;color:rgba(255,255,255,.35);margin-top:.3rem;font-family:monospace}
+/* ── STEP REVEAL ── */
+.step-section{display:none}.step-section.revealed{display:block}
+.step-section.revealed{animation:stepFade .3s ease}
+@keyframes stepFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.step-label{font-size:.62rem;font-weight:700;color:rgba(243,156,18,.7);text-transform:uppercase;letter-spacing:1.2px;font-family:monospace;margin-bottom:.4rem;display:flex;align-items:center;gap:5px}
+.step-label i{color:#f39c12}
 </style>
 </head>
 <body>
@@ -807,6 +813,7 @@ a{color:#f39c12;text-decoration:none}
           </div>
 
           <!-- PICKUP -->
+          <div class="step-section" id="stepPickup">
           <div class="fg">
             <label><i class="fas fa-map-marker-alt" style="color:#f39c12;margin-right:4px"></i>Pickup Location</label>
             <div id="pickupHint" style="font-size:.7rem;color:rgba(255,255,255,.35);margin-bottom:.45rem;font-style:italic">Select a cargo type above to see available pickup locations.</div>
@@ -821,7 +828,10 @@ a{color:#f39c12;text-decoration:none}
             <div class="addr-x" id="addrX"><div class="fg" style="margin-top:.5rem"><label>Address</label><input class="fi" type="text" id="addrVal" placeholder="Enter full address…"></div></div>
           </div>
 
+          </div><!-- /stepPickup -->
+
           <!-- DELIVERY MODE -->
+          <div class="step-section" id="stepMode">
           <div class="fg">
             <label><i class="fas fa-route" style="color:#f39c12;margin-right:4px"></i>Delivery Mode</label>
             <div class="dmode">
@@ -871,6 +881,7 @@ a{color:#f39c12;text-decoration:none}
                 <!-- All boats always visible -->
                 <div style="margin-bottom:.5rem">
                   <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-ship" style="color:#3498db;margin-right:4px"></i>Select Boat</label>
+                  <div class="atoll-srch" style="margin-bottom:.5rem"><input type="text" id="atollSearch" placeholder="Type atoll, boat name or island…" oninput="filterAtolls()"></div>
                   <div class="boat-grid" id="boatGrid"></div>
                   <input type="hidden" id="selBoat">
                 </div>
@@ -924,6 +935,7 @@ a{color:#f39c12;text-decoration:none}
                 <!-- All speed boats always visible -->
                 <div style="margin-bottom:.5rem">
                   <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-bolt" style="color:#f39c12;margin-right:4px"></i>Select Speed Boat</label>
+                  <div class="atoll-srch" style="margin-bottom:.5rem"><input type="text" id="sbAtollSearch" placeholder="Type atoll, speed boat name or island…" oninput="filterSBAtolls()"></div>
                   <div class="boat-grid" id="sbGrid"></div>
                   <input type="hidden" id="selSB">
                 </div>
@@ -967,6 +979,8 @@ a{color:#f39c12;text-decoration:none}
           </div>
 
           <div class="fg"><label>Package Description <span style="opacity:.35;font-size:.65rem">(optional)</span></label><textarea class="fi fi-ta" id="pkgDesc" placeholder="Describe contents…"></textarea></div>
+          </div><!-- /stepMode -->
+
           <!-- Discount banner (shows when user has points) -->
           <div id="discountBanner" style="display:none;background:linear-gradient(135deg,rgba(39,174,96,.12),rgba(39,174,96,.06));border:1.5px solid rgba(39,174,96,.3);border-radius:13px;padding:.7rem .9rem;margin-bottom:.6rem;display:none;align-items:center;gap:9px">
             <div style="width:30px;height:30px;background:rgba(39,174,96,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-tag" style="color:#27ae60;font-size:.82rem"></i></div>
@@ -1166,11 +1180,10 @@ function loadHarbourButtons(){
   showAllBoatsInGrid();
 }
 function showAllBoatsInGrid(){
-  const ab=allBoats.filter(b=>b.active!==false);
-  const as=allSpeedBoats.filter(b=>b.active!==false);
+  // Clear grids — boats only show when user searches
   const bg=$('boatGrid');const sg=$('sbGrid');
-  if(bg){if(ab.length)renderBoatGrid(ab);else bg.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No boats added yet.</p></div>';}
-  if(sg){if(as.length)renderSBGrid(as);else sg.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No speed boats added yet.</p></div>';}
+  if(bg)bg.innerHTML='';
+  if(sg)sg.innerHTML='';
 }
 /* Manual mode: user selects harbour from buttons */
 window.selectManualHarbour=function(type,harbour,btn){
@@ -1354,9 +1367,42 @@ function updateRoutePrice(){
 function sizeIcon(name){const n=(name||'').toLowerCase();if(n.includes('small'))return'fa-feather';if(n.includes('medium'))return'fa-box';if(n.includes('large')&&!n.includes('x'))return'fa-boxes-stacked';if(n.includes('x')||n.includes('xl')||n.includes('extra'))return'fa-pallet';return'fa-box';}
 
 function loadPkgSizeGrid(ctId){const g=$('pkgSizeGrid');const sizes=allExpressSizes.filter(s=>String(s.cargoTypeId)===String(ctId)&&s.active!==false);if(!sizes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No sizes configured for this type.</p></div>';return;}const sorted=[...sizes].sort((a,b)=>(a.order||0)-(b.order||0));g.innerHTML=sorted.map(sz=>`<div class="pkg-size-card" data-szid="${sz.id}" onclick="selPkgSize(this,'${sz.id}')"><i class="fas ${sizeIcon(sz.name)} psz-icon"></i><div class="psz-name">${sz.name}</div><div class="psz-weight">Up to ${sz.maxKg} kg</div><div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>`).join('');$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('expressTimeWrap').classList.remove('show');$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';calcTotal();}
-window.selPkgSize=function(el,id){document.querySelectorAll('.pkg-size-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');const sz=allExpressSizes.find(s=>String(s.id)===String(id));if(!sz)return;$('selSizeId').value=sz.id;$('selSizeName').value=sz.name;$('selSizeWeight').value=sz.maxKg;$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));loadTimeSlots(sz.id);calcTotal();};
+window.selPkgSize=function(el,id){
+  const alreadyActive=el.classList.contains('active');
+  if(alreadyActive){
+    el.classList.remove('active');
+    $('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';
+    $('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
+    $('expressTimeWrap').classList.remove('show');
+    document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));
+    hideStep('stepPickup');hideStep('stepMode');
+    calcTotal();return;
+  }
+  document.querySelectorAll('.pkg-size-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const sz=allExpressSizes.find(s=>String(s.id)===String(id));
+  if(!sz)return;
+  $('selSizeId').value=sz.id;$('selSizeName').value=sz.name;$('selSizeWeight').value=sz.maxKg;
+  $('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
+  document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));
+  hideStep('stepPickup');hideStep('stepMode');
+  loadTimeSlots(sz.id);calcTotal();
+};
 function loadTimeSlots(sizeId){const g=$('timeSlotGrid');const ctId=$('ctypeGrid').querySelector('.ct-card.active')?.dataset?.id||'';const slots=allExpressHrs.filter(h=>String(h.sizeId)===String(sizeId)&&(ctId?String(h.cargoTypeId)===String(ctId):true));if(!slots.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.6rem"><p>No time options for this size.</p></div>';$('expressTimeWrap').classList.add('show');return;}const sorted=[...slots].sort((a,b)=>(a.minutes||0)-(b.minutes||0));g.innerHTML=sorted.map(ts=>{const mins=ts.minutes||((ts.hours||0)*60);const durTxt=mins<60?`${mins}`:`${Math.floor(mins/60)}h${mins%60?` ${mins%60}m`:''}`;const durUnit=mins<60?'mins':'';return`<button type="button" class="time-slot-btn" data-id="${ts.id}" data-price="${ts.price}" data-label="${ts.label||durTxt+(durUnit?' '+durUnit:'')}" onclick="selTimeSlot(this)"><span class="ts-dur">${durTxt}</span><span class="ts-lbl">${durUnit||ts.label||'Duration'}</span><span class="ts-price">MVR ${ts.price}</span><div class="time-slot-ck"><i class="fas fa-check"></i></div></button>`;}).join('');$('expressTimeWrap').classList.add('show');}
-window.selTimeSlot=function(el){document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('selTimeId').value=el.dataset.id;$('selTimePrice').value=el.dataset.price;$('selTimeLabel').value=el.dataset.label;calcTotal();};
+window.selTimeSlot=function(el){
+  const alreadyActive=el.classList.contains('active');
+  if(alreadyActive){
+    el.classList.remove('active');
+    $('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
+    hideStep('stepPickup');hideStep('stepMode');
+    calcTotal();return;
+  }
+  document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  $('selTimeId').value=el.dataset.id;$('selTimePrice').value=el.dataset.price;$('selTimeLabel').value=el.dataset.label;
+  calcTotal();revealStep('stepPickup');
+};
+
 
 function initSlideshow(){const fbSlides=siteSettings.homeSlides||[];const slides=MANUAL_SLIDES.length?MANUAL_SLIDES:[...fbSlides];const ss=$('slideshow');const dots=$('slideDots');const tagline=HOME_TAGLINE||(siteSettings.homeTagline||'');if(tagline)$('homeTagline').textContent=tagline;if(!slides.length){ss.innerHTML='<div class="slide active" style="background:linear-gradient(135deg,#0a0f1e,#1a2747)"></div>';dots.innerHTML='';return}ss.innerHTML=slides.map((s,i)=>`<div class="slide${i===0?' active':''}" style="background-image:url('${s.url||s}')"></div>`).join('');dots.innerHTML=slides.map((_,i)=>`<div class="dot${i===0?' active':''}" onclick="gotoSlide(${i})"></div>`).join('');clearInterval(slideTimer);slideTimer=setInterval(()=>gotoSlide((slideIdx+1)%slides.length),5000);}
 window.gotoSlide=function(i){const sl=document.querySelectorAll('.slide');const ds=document.querySelectorAll('.dot');if(!sl.length)return;sl[slideIdx]?.classList.remove('active');ds[slideIdx]?.classList.remove('active');slideIdx=i;sl[slideIdx]?.classList.add('active');ds[slideIdx]?.classList.add('active')}
@@ -1449,6 +1495,15 @@ $('sideOvl').onclick=closeSB;
 
 function loadCtypeGrid(){const g=$('ctypeGrid');if(!allCargoTypes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div>';return}const icons={'normal':'fa-box','express':'fa-bolt','fragile':'fa-wine-glass-crack','oversized':'fa-pallet','custom':'fa-cube'};g.innerHTML=[...allCargoTypes].sort((a,b)=>(a.order||0)-(b.order||0)).map(ct=>`<div class="ct-card${ct.isExpress?' express-card':''}" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${ct.isExpress?'Select size &amp; time':'Select weight'}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`).join('')}
 window.selCtype=function(el,id){
+  const alreadyActive=el.classList.contains('active');
+  if(alreadyActive){
+    el.classList.remove('active');
+    $('ctV').value='';$('ctPrice').value='0';$('ctIsExpress').value='0';
+    $('etaInfo').classList.remove('show');
+    $('expressFlowWrap').classList.remove('show');$('weightSec').classList.remove('show');
+    hideStep('stepPickup');hideStep('stepMode');
+    calcTotal();return;
+  }
   document.querySelectorAll('.ct-card').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   const ct=allCargoTypes.find(c=>String(c.id)===String(id));
@@ -1461,60 +1516,74 @@ window.selCtype=function(el,id){
   $('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
   $('selW').value='';$('selWP').value='0';
   const hint=$('pickupHint');if(hint)hint.style.display='none';
-  // Always filter pickups by what's assigned to THIS cargo type
-  // If none assigned → show all (fallback). This applies to BOTH express and standard.
   const assigned=ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null;
+  hideStep('stepPickup');hideStep('stepMode');
+  $('pLocVal').value='';$('dLocVal').value='';$('selBoat').value='';$('selSB').value='';
   if(ct.isExpress){
     $('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.remove('show');
-    loadPkgSizeGrid(ct.id);
-    loadPickupGrid(assigned);
+    loadPkgSizeGrid(ct.id);loadPickupGrid(assigned);
   }else{
     $('expressFlowWrap').classList.remove('show');$('weightSec').classList.add('show');$('expressTimeWrap').classList.remove('show');
-    loadWeights();
-    loadPickupGrid(assigned);
+    loadWeights();loadPickupGrid(assigned);
   }
   calcTotal();
 };
 
-function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return}const sorted=[...allP].sort((a,b)=>a.min-b.min);g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${x.max<=2?'fa-feather':x.max<=10?'fa-box':x.max<=30?'fa-boxes-stacked':'fa-pallet'}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${x.max<=2?'Light':x.max<=10?'Medium':x.max<=30?'Heavy':'Oversized'}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');$('selW').value=`${this.dataset.mn}-${this.dataset.mx} kg`;$('selWP').value=this.dataset.pr;calcTotal()}));$('selW').value='';$('selWP').value='0';calcTotal()}
+
+function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return}const sorted=[...allP].sort((a,b)=>a.min-b.min);g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${x.max<=2?'fa-feather':x.max<=10?'fa-box':x.max<=30?'fa-boxes-stacked':'fa-pallet'}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${x.max<=2?'Light':x.max<=10?'Medium':x.max<=30?'Heavy':'Oversized'}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){
+  if(this.classList.contains('active')){
+    this.classList.remove('active');$('selW').value='';$('selWP').value='0';
+    hideStep('stepPickup');hideStep('stepMode');calcTotal();return;
+  }
+  g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));
+  this.classList.add('active');$('selW').value=`${this.dataset.mn}-${this.dataset.mx} kg`;$('selWP').value=this.dataset.pr;
+  calcTotal();revealStep('stepPickup');
+}));$('selW').value='';$('selWP').value='0';calcTotal()}
+
+/* ── STEP REVEAL HELPERS ── */
+function revealStep(id){const el=$(id);if(el&&!el.classList.contains('revealed')){el.classList.add('revealed');}}
+function hideStep(id){const el=$(id);if(el){el.classList.remove('revealed');}}
 
 function loadPickupGrid(filteredIds){
   const g=$('pickupGrid');
   if(!allPickups.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div>';return}
-  // filteredIds: array of pickup id strings to show. null/undefined = show all.
   let locs=allPickups;
-  if(filteredIds&&filteredIds.length>0){
-    locs=allPickups.filter(l=>filteredIds.includes(String(l.id)));
-  }
+  if(filteredIds&&filteredIds.length>0){locs=allPickups.filter(l=>filteredIds.includes(String(l.id)));}
   if(!locs.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations assigned to this cargo type.</p></div>';return}
-  // Reset selection
   $('pLocVal').value='';$('routePrice').value='0';
   const badge=$('routePriceBadge');if(badge)badge.classList.remove('show');
   const pgf=$('pickupGfNotice');if(pgf)pgf.classList.remove('show');
   const ax=$('addrX');if(ax)ax.classList.remove('show');
-  g.innerHTML=locs.map(loc=>`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`).join('')
+  g.innerHTML=locs.map(loc=>`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')" style="display:block">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`).join('');
 }
 
+
 window.selPickup=function(el,id){
+  const grid=$('pickupGrid');
+  const alreadyActive=el.classList.contains('active');
+  if(alreadyActive){
+    // Clicking same pickup → show all cards again
+    document.querySelectorAll('.pickup-card').forEach(c=>{c.style.display='block';c.classList.remove('active');});
+    $('pLocVal').value='';
+    hideStep('stepMode');
+    return;
+  }
   document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   const loc=allPickups.find(l=>String(l.id)===String(id));
   if(!loc)return;
   $('pLocVal').value=loc.name;
-  if(dMode==='cargo'){
-    updateRoutePrice();
-  }else{
-    // Refresh boat location buttons with new pickup prices, then update badge
-    refreshBoatLocPrices();
-    updateBoatPriceBadge();
-  }
-  const ax=$('addrX');const lbl=ax.querySelector('label');
+  // Collapse — hide non-selected cards
+  if(grid)grid.querySelectorAll('.pickup-card').forEach(c=>{c.style.display=c.classList.contains('active')?'block':'none';});
+  if(dMode==='cargo'){updateRoutePrice();}
+  else{refreshBoatLocPrices();updateBoatPriceBadge();}
+  const ax=$('addrX');const lbl=ax?ax.querySelector('label'):null;
   if(loc.type==='address'||loc.type==='postal'){ax.classList.add('show');$('addrVal').required=true;if(lbl){if(loc.type==='postal'){lbl.innerHTML='<i class="fas fa-envelope" style="color:#f39c12;margin-right:4px"></i>Post/Pickpost Number or Message';$('addrVal').placeholder='Enter Post/Pickpost number or message…';}else{lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address';$('addrVal').placeholder='Enter full address…';}}}else{ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value='';}
-  const gf=$('pickupGfNotice');if(gf){
-    if(loc.type==='address')gf.classList.add('show');
-    else gf.classList.remove('show');
-  }
+  const gf=$('pickupGfNotice');if(gf){if(loc.type==='address')gf.classList.add('show');else gf.classList.remove('show');}
+  revealStep('stepMode');
+  setTimeout(()=>{const s=$('stepMode');if(s)s.scrollIntoView({behavior:'smooth',block:'nearest'});},80);
 };
+
 
 /* Refresh boat destination button prices when pickup changes */
 function refreshBoatLocPrices(){
@@ -1613,9 +1682,21 @@ window.selectManualDest=function(type,boatName,destName,price){
 
 
 window.setMode=function(m){
+  // Toggle: if same mode clicked again, deselect it
+  const btnMap={cargo:'dmCargo',boat:'dmBoat',speedboat:'dmSpeedboat'};
+  const curBtn=$(btnMap[m]);
+  if(curBtn&&curBtn.classList.contains('active')){
+    // Deselect — hide all mode content
+    curBtn.classList.remove('active');
+    $('cargoDest').style.display='none';
+    $('boatSec').classList.remove('show');
+    $('speedboatSec').classList.remove('show');
+    $('boatPrice').value='0';$('routePrice').value='0';
+    const badge=$('routePriceBadge');if(badge){badge.classList.remove('show');badge.style.borderColor='';badge.style.background='';}
+    calcTotal();return;
+  }
   dMode=m;
   document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));
-  const btnMap={cargo:'dmCargo',boat:'dmBoat',speedboat:'dmSpeedboat'};
   $(btnMap[m])?.classList.add('active');
   $('cargoDest').style.display=m==='cargo'?'block':'none';
   $('boatSec').classList.toggle('show',m==='boat');
@@ -1694,25 +1775,34 @@ function buildSBAtollChips(){/* no-op */}
 
 window.filterAtolls=function(){
   const q=$('atollSearch')?.value.trim().toLowerCase();
-  if(!q){showAllBoatsInGrid();return;}
+  const g=$('boatGrid');
+  if(!q){if(g)g.innerHTML='';return;}// empty when no search
   const matched=allBoats.filter(b=>{
     if(b.active===false)return false;
     if((b.name||'').toLowerCase().includes(q))return true;
     const atolls=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);
-    return atolls.some(a=>a.toLowerCase().includes(q));
+    if(atolls.some(a=>a.toLowerCase().includes(q)))return true;
+    // Also search island names
+    const isls=getIslandNames(b);
+    return isls.some(i=>i.toLowerCase().includes(q));
   });
-  renderBoatGrid(matched.length?matched:allBoats.filter(b=>b.active!==false));
+  if(!matched.length){if(g)g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No boats found for "'+q+'"</p></div>';return;}
+  renderBoatGrid(matched);
 };
 window.filterSBAtolls=function(){
   const q=$('sbAtollSearch')?.value.trim().toLowerCase();
-  if(!q){const as=allSpeedBoats.filter(b=>b.active!==false);renderSBGrid(as);return;}
+  const g=$('sbGrid');
+  if(!q){if(g)g.innerHTML='';return;}// empty when no search
   const matched=allSpeedBoats.filter(b=>{
     if(b.active===false)return false;
     if((b.name||'').toLowerCase().includes(q))return true;
     const atolls=b.atolls&&b.atolls.length?b.atolls:(b.atoll?[b.atoll]:[]);
-    return atolls.some(a=>a.toLowerCase().includes(q));
+    if(atolls.some(a=>a.toLowerCase().includes(q)))return true;
+    const isls=getIslandNames(b);
+    return isls.some(i=>i.toLowerCase().includes(q));
   });
-  renderSBGrid(matched.length?matched:allSpeedBoats.filter(b=>b.active!==false));
+  if(!matched.length){if(g)g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No speed boats found for "'+q+'"</p></div>';return;}
+  renderSBGrid(matched);
 };
 window.selAtollFn=function(){/* no-op */};
 window.selSBAtoll=function(){/* no-op */};
@@ -1731,6 +1821,9 @@ function renderSBGrid(boats){
     <div class="b-name">${b.name}</div><div class="b-route">${b.route||b.atoll||''}</div>
     <div class="boat-ck"><i class="fas fa-check"></i></div></div>`).join('')
 }
+
+
+
 
 /* ── BOAT LOCATIONS: name strings only, price from boatRoutePrices table ── */
 function getIslandNames(boat){
@@ -1752,7 +1845,7 @@ window.selBoat=function(id){
   ig.innerHTML=locs.map(loc=>{
     const pr=lookupBoatRoutePrice(pickup,harbour,boat.name,'boat');
     const prLabel=pr!=null?`<span style="font-size:.6rem;font-family:monospace;font-weight:800;color:#f39c12;display:block;margin-top:2px">MVR ${pr}</span>`:'';
-    return`<button type="button" class="isl-btn" data-islname="${encodeURIComponent(loc)}">${loc}${prLabel}</button>`;
+    return`<button type="button" class="isl-btn" data-islname="${encodeURIComponent(loc)}">${loc}</button>`;
   }).join('');
   ig.querySelectorAll('.isl-btn').forEach(btn=>{
     btn.addEventListener('click',function(ev){
@@ -1781,7 +1874,7 @@ window.selSpeedBoat=function(id){
   ig.innerHTML=locs.map(loc=>{
     const pr=lookupBoatRoutePrice(pickup,sbharbour,boat.name,'speedboat');
     const prLabel=pr!=null?`<span style="font-size:.6rem;font-family:monospace;font-weight:800;color:#f39c12;display:block;margin-top:2px">MVR ${pr}</span>`:'';
-    return`<button type="button" class="isl-btn sb-isl-btn" data-sbisl="${encodeURIComponent(loc)}">${loc}${prLabel}</button>`;
+    return`<button type="button" class="isl-btn sb-isl-btn" data-sbisl="${encodeURIComponent(loc)}">${loc}</button>`;
   }).join('');
   ig.querySelectorAll('.sb-isl-btn').forEach(btn=>{
     btn.addEventListener('click',function(ev){
@@ -1818,7 +1911,118 @@ $('nClearAll').onclick=()=>{allN=allN.filter(n=>n.userEmail!==me?.email&&n.userE
 window.viewSlip=src=>{$('slipViewImg').src=src;$('slipMod').classList.add('show')};
 $('slipClose').onclick=$('slipClose2').onclick=()=>$('slipMod').classList.remove('show');
 
-/* ── REWARDS ── */
+/* ══════════════════════════════════════════
+   FORM SUBMIT — validation + pay modal
+══════════════════════════════════════════ */
+$('slipFile').addEventListener('change',function(){$('slipFN').textContent=this.files[0]?this.files[0].name:'Tap to attach slip';});
+$('payClose').onclick=$('payCancel').onclick=()=>{$('payMod').classList.remove('show');busy=false;};
+
+$('cargoForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  if(busy)return;
+  /* ── Validate ── */
+  const ctype=$('ctV').value;const pickup=$('pLocVal').value;
+  if(!ctype){showToast('Select a cargo type','err');return;}
+  if(!pickup){showToast('Select a pickup location','err');return;}
+  if(dMode==='cargo'){
+    const dest=$('dLocVal').value;
+    if(!dest){showToast('Select a delivery location','err');return;}
+    const isExp=$('ctIsExpress').value==='1';
+    if(isExp){if(!$('selSizeId').value){showToast('Select a package size','err');return;}if(!$('selTimeId').value){showToast('Select a time slot','err');return;}}
+    else{if(!$('selW').value){showToast('Select a weight range','err');return;}}
+  }else if(dMode==='boat'){
+    const boatName=$('selBoat').value||$('manualBoatName').value;
+    const island=$('selIsl').value||$('manualBoatIsland').value;
+    if(!boatName){showToast('Select or enter a boat name','err');return;}
+    if(!island){showToast('Select a destination island','err');return;}
+  }else if(dMode==='speedboat'){
+    const sbName=$('selSB').value||$('manualSBName').value;
+    const island=$('selSBIsl').value||$('manualSBIsland').value;
+    if(!sbName){showToast('Select or enter a speed boat name','err');return;}
+    if(!island){showToast('Select a destination island','err');return;}
+  }
+  const date=$('dDate').value;if(!date){showToast('Select a delivery date','err');return;}
+  const price=calcTotal();
+  if(!price||price<=0){showToast('Delivery price is 0. Please check your selections.','err');return;}
+  /* ── Build delivery record ── */
+  const isExp=$('ctIsExpress').value==='1';
+  let dest='',boatNameVal='',boatIslandVal='',boatContactVal='';
+  if(dMode==='cargo'){dest=$('dLocVal').value;}
+  else if(dMode==='boat'){
+    boatNameVal=boatInputMode==='manual'?$('manualBoatName').value:$('selBoat').value;
+    boatIslandVal=boatInputMode==='manual'?$('manualBoatIsland').value:$('selIsl').value;
+    boatContactVal=boatInputMode==='manual'?($('manualBoatContact').value||''):'';
+    dest=boatIslandVal;
+  }else{
+    boatNameVal=sbInputMode==='manual'?$('manualSBName').value:$('selSB').value;
+    boatIslandVal=sbInputMode==='manual'?$('manualSBIsland').value:$('selSBIsl').value;
+    boatContactVal=sbInputMode==='manual'?($('manualSBContact').value||''):'';
+    dest=boatIslandVal;
+  }
+  const sizeLabel=isExp?($('selSizeName').value+' / up to '+$('selSizeWeight').value+' kg'):'';
+  const durationLabel=isExp?$('selTimeLabel').value:'';
+  tmpD={
+    referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,
+    pickupLocation:pickup,pickupAddress:$('addrVal').value||'',
+    deliveryMode:dMode,deliveryLocation:dest,
+    boatName:boatNameVal,boatContact:boatContactVal||'',destinationIsland:boatIslandVal,
+    manualBoatEntry:(dMode==='boat'&&boatInputMode==='manual')||(dMode==='speedboat'&&sbInputMode==='manual'),
+    cargoType:ctype,isExpress:isExp,packageSize:sizeLabel,
+    selectedSizeName:$('selSizeName').value||'',selectedHrLabel:durationLabel,selectedTimePriceLabel:durationLabel,
+    packageWeight:isExp?'—':$('selW').value,
+    floorLevel:$('floorNum').value||'',packageDescription:$('pkgDesc').value||'',
+    deliveryPrice:price,
+    basePrice:parseFloat($('hiddenBasePrice').value)||price,
+    discountAmount:parseFloat($('hiddenDiscount').value)||0,
+    discountPercent:parseFloat($('hiddenDiscountPct').value)||0,
+    deliveryDate:date,status:'Order Placed',progress:1,
+    id:Date.now(),createdAt:new Date().toISOString(),paymentStatus:'under_review',createdBy:me.email
+  };
+  /* ── Show pay modal ── */
+  $('payAmt').textContent=price+' MVR';
+  $('slipFile').value='';$('slipFN').textContent='Tap to attach slip';
+  $('payMod').classList.add('show');
+});
+
+$('payConfirm').onclick=async()=>{
+  if(!tmpD)return;
+  const f=$('slipFile').files[0];if(!f){showToast('Attach a payment slip','err');return;}
+  busy=true;$('payConfirm').disabled=true;$('payConfirm').innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving...';
+  const rd=new FileReader();
+  rd.onload=async ev=>{
+    tmpD.paymentSlip=ev.target.result;
+    try{
+      const all=toArr((await db.ref('cargoDeliveries').once('value')).val());
+      all.push(tmpD);
+      await db.ref('cargoDeliveries').set(all);
+      /* Telegram notify */
+      const _d=tmpD;
+      const _discStr=_d.discountAmount>0?'\nDiscount: -MVR '+_d.discountAmount+' ('+_d.discountPercent+'% loyalty)\nOriginal: MVR '+_d.basePrice:'';
+      const _msg='New EasyCargo Delivery\nRef: '+_d.referenceNumber+'\nCustomer: '+_d.customerName+'\nContact: '+_d.customerContact+'\nCargo: '+_d.cargoType+(_d.isExpress?'\nSize: '+_d.packageSize+'\nDuration: '+_d.selectedHrLabel:'\nWeight: '+_d.packageWeight)+'\nMode: '+_d.deliveryMode+'\nPickup: '+_d.pickupLocation+'\nTo: '+(_d.deliveryMode==='cargo'?_d.deliveryLocation:(_d.boatName+' → '+_d.destinationIsland))+'\nPrice: MVR '+_d.deliveryPrice+_discStr+'\nDate: '+_d.deliveryDate+'\nStatus: Payment slip submitted';
+      const TBOT='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+      const TCIDS=[965429044,7307324767,319043357];
+      await Promise.all(TCIDS.map(cid=>fetch('https://api.telegram.org/bot'+TBOT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_msg})})));
+      $('payMod').classList.remove('show');
+      showToast('Order saved! We\'ll verify your payment soon.','ok');
+      $('cargoForm').reset();
+      /* Reset UI */
+      document.querySelectorAll('.ct-card,.pickup-card,.dloc-btn,.w-btn,.pkg-size-card,.time-slot-btn,.floor-btn,.boat-card,.sb-card,.isl-btn,.sb-isl-btn').forEach(x=>x.classList.remove('active'));
+      $('ctV').value='';$('ctPrice').value='0';$('ctIsExpress').value='0';$('pLocVal').value='';$('dLocVal').value='';$('routePrice').value='0';$('boatPrice').value='0';$('floorPrice').value='0';$('floorNum').value='';
+      $('selW').value='';$('selWP').value='0';$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
+      $('selBoat').value='';$('selSB').value='';$('selIsl').value='';$('selSBIsl').value='';
+      $('hiddenBasePrice').value='0';$('hiddenDiscount').value='0';$('hiddenDiscountPct').value='0';
+      $('islSec').style.display='none';$('sbIslSec').style.display='none';
+      $('etaInfo').classList.remove('show');$('expressFlowWrap').classList.remove('show');$('weightSec').classList.remove('show');$('addrX').classList.remove('show');
+      const rpb=$('routePriceBadge');if(rpb)rpb.classList.remove('show');
+      const disc=$('discountBanner');if(disc)disc.style.display='none';
+      calcTotal();
+      tmpD=null;
+    }catch(err){showToast('Error saving. Try again.','err');console.error(err);}
+    busy=false;$('payConfirm').disabled=false;$('payConfirm').innerHTML='<i class="fas fa-check-circle"></i> Confirm';
+  };
+  rd.readAsDataURL(f);
+};
+
 function mkEKey(email){return email.replace(/\./g,'_');}
 async function awardPoints(email,pts,note,ref){const key=mkEKey(email);const snap=await db.ref('userRewards/'+key).once('value');const rd=snap.val()||{points:0,history:[],referralCode:'EC'+Date.now().toString().slice(-6),referralCount:0};rd.points=(rd.points||0)+pts;rd.history=rd.history||[];rd.history.push({pts,note,date:new Date().toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),ref:ref||''});await db.ref('userRewards/'+key).set(rd);showPointsPopup(pts);pushN('⭐ Points Earned!','You earned +'+pts+' points! '+note,email);}
 let _watchedDeliveries=new Set();
