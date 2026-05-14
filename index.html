@@ -233,8 +233,8 @@ select.fi option{background:#1e2a3a}
 .time-slot-btn{background:#1e2a3a;border:2px solid #2e3f55;border-radius:13px;padding:.8rem .5rem;cursor:pointer;text-align:center;transition:.22s;font-family:inherit;position:relative}
 .time-slot-btn:hover{border-color:rgba(243,156,18,.45)}
 .time-slot-btn.active{border-color:#f39c12;background:rgba(243,156,18,.1)}
-.time-slot-btn .ts-dur{display:block;font-size:.82rem;font-weight:800;color:white;margin-bottom:3px;letter-spacing:.3px;line-height:1.2}
-.time-slot-btn .ts-lbl{display:block;font-size:.62rem;font-weight:700;color:#c0392b;margin-bottom:4px;letter-spacing:.2px}
+.time-slot-btn .ts-dur{display:block;font-size:.88rem;font-weight:800;color:white;margin-bottom:2px}
+.time-slot-btn .ts-lbl{display:block;font-size:.6rem;color:rgba(255,255,255,.38);margin-bottom:4px}
 .time-slot-btn .ts-price{display:block;font-size:.76rem;font-family:monospace;font-weight:700;color:#f39c12}
 .time-slot-ck{position:absolute;top:4px;right:4px;width:15px;height:15px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center}
 .time-slot-ck i{font-size:.38rem;color:#1e2a3a}
@@ -1431,7 +1431,7 @@ window.selPkgSize=function(el,id){
   hideStep('stepPickup');
   loadTimeSlots(sz.id);calcTotal();
 };
-function loadTimeSlots(sizeId){const g=$('timeSlotGrid');const ctId=$('ctypeGrid').querySelector('.ct-card.active')?.dataset?.id||'';const slots=allExpressHrs.filter(h=>String(h.sizeId)===String(sizeId)&&(ctId?String(h.cargoTypeId)===String(ctId):true));if(!slots.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.6rem"><p>No time options for this size.</p></div>';$('expressTimeWrap').classList.add('show');return;}const sorted=[...slots].sort((a,b)=>(a.minutes||0)-(b.minutes||0));g.innerHTML=sorted.map(ts=>{const lbl=ts.label||'';return`<button type="button" class="time-slot-btn" data-id="${ts.id}" data-price="${ts.price}" data-label="${lbl}" onclick="selTimeSlot(this)"><span class="ts-dur">${lbl}</span><span class="ts-lbl" style="color:#c0392b;font-weight:700;font-size:.62rem">Delivery time</span><span class="ts-price">MVR ${ts.price}</span><div class="time-slot-ck"><i class="fas fa-check"></i></div></button>`;}).join('');$('expressTimeWrap').classList.add('show');}
+function loadTimeSlots(sizeId){const g=$('timeSlotGrid');const ctId=$('ctypeGrid').querySelector('.ct-card.active')?.dataset?.id||'';const slots=allExpressHrs.filter(h=>String(h.sizeId)===String(sizeId)&&(ctId?String(h.cargoTypeId)===String(ctId):true));if(!slots.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.6rem"><p>No time options for this size.</p></div>';$('expressTimeWrap').classList.add('show');return;}const sorted=[...slots].sort((a,b)=>(a.minutes||0)-(b.minutes||0));g.innerHTML=sorted.map(ts=>{const mins=ts.minutes||((ts.hours||0)*60);const durTxt=mins<60?`${mins}`:`${Math.floor(mins/60)}h${mins%60?` ${mins%60}m`:''}`;const durUnit=mins<60?'mins':'';return`<button type="button" class="time-slot-btn" data-id="${ts.id}" data-price="${ts.price}" data-label="${ts.label||durTxt+(durUnit?' '+durUnit:'')}" onclick="selTimeSlot(this)"><span class="ts-dur">${durTxt}</span><span class="ts-lbl">${durUnit||ts.label||'Duration'}</span><span class="ts-price">MVR ${ts.price}</span><div class="time-slot-ck"><i class="fas fa-check"></i></div></button>`;}).join('');$('expressTimeWrap').classList.add('show');}
 window.selTimeSlot=function(el){
   const alreadyActive=el.classList.contains('active');
   if(alreadyActive){
@@ -1722,7 +1722,8 @@ function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.inner
   calcTotal();revealStep('stepPickup');
 }));$('selW').value='';$('selWP').value='0';calcTotal()}
 
-const el=$(id);if(el&&!el.classList.contains('revealed')){el.classList.add('revealed');}
+/* ── STEP REVEAL HELPERS ── */
+function revealStep(id){const el=$(id);if(el&&!el.classList.contains('revealed')){el.classList.add('revealed');}}
 function hideStep(id){const el=$(id);if(el){el.classList.remove('revealed');}}
 
 function loadPickupGrid(filteredIds){
