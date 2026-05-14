@@ -1722,7 +1722,6 @@ function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.inner
   calcTotal();revealStep('stepPickup');
 }));$('selW').value='';$('selWP').value='0';calcTotal()}
 
-/* ── STEP REVEAL HELPERS ── */
 function revealStep(id){const el=$(id);if(el&&!el.classList.contains('revealed')){el.classList.add('revealed');}}
 function hideStep(id){const el=$(id);if(el){el.classList.remove('revealed');}}
 
