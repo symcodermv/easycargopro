@@ -287,6 +287,9 @@ select.fi option{background:#1e2a3a}
 .dloc-btn:hover{border-color:rgba(243,156,18,.4);color:white}
 .dloc-btn.active{border-color:#f39c12;background:rgba(243,156,18,.1);color:#f39c12}
 .boat-sec{display:none}.boat-sec.show{display:block}
+.step-section{display:none}.step-section.revealed{display:block}
+.step-section.revealed{animation:stepFade .3s ease}
+@keyframes stepFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .atoll-srch{display:flex;gap:7px;margin-bottom:.7rem}
 .atoll-srch input{flex:1;padding:9px 13px;background:#1e2a3a;border:1px solid #2e3f55;border-radius:22px;color:white;font-size:.82rem;outline:none;transition:.2s;font-family:inherit}
 .atoll-srch input:focus{border-color:#3498db;box-shadow:0 0 0 3px rgba(52,152,219,.09)}
@@ -650,12 +653,6 @@ a{color:#f39c12;text-decoration:none}
 .floor-btn:hover{border-color:rgba(52,152,219,.45);color:white}
 .floor-btn.active{border-color:#3498db;background:rgba(52,152,219,.12);color:#3498db}
 .floor-price-note{font-size:.66rem;color:rgba(255,255,255,.35);margin-top:.3rem;font-family:monospace}
-/* ── STEP REVEAL ── */
-.step-section{display:none}.step-section.revealed{display:block}
-.step-section.revealed{animation:stepFade .3s ease}
-@keyframes stepFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.step-label{font-size:.62rem;font-weight:700;color:rgba(243,156,18,.7);text-transform:uppercase;letter-spacing:1.2px;font-family:monospace;margin-bottom:.4rem;display:flex;align-items:center;gap:5px}
-.step-label i{color:#f39c12}
 </style>
 </head>
 <body>
@@ -831,7 +828,7 @@ a{color:#f39c12;text-decoration:none}
           </div><!-- /stepPickup -->
 
           <!-- DELIVERY MODE -->
-          <div class="step-section" id="stepMode">
+          <div id="stepMode">
           <div class="fg">
             <label><i class="fas fa-route" style="color:#f39c12;margin-right:4px"></i>Delivery Mode</label>
             <div class="dmode">
@@ -872,16 +869,16 @@ a{color:#f39c12;text-decoration:none}
             <!-- BOAT -->
             <div class="boat-sec" id="boatSec" style="margin-top:.7rem">
               <div id="boatListMode">
-                <!-- Harbour buttons (from admin) -->
+                <input type="hidden" id="selBoatHarbour">
+                <!-- STEP 1: Select Harbour (always shown) -->
                 <div style="margin-bottom:.65rem">
-                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-anchor" style="color:#3498db;margin-right:4px"></i>Boat Harbour</label>
+                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-anchor" style="color:#3498db;margin-right:4px"></i>Select Harbour</label>
                   <div id="boatHarbourBtns" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-                  <input type="hidden" id="selBoatHarbour">
                 </div>
-                <!-- All boats always visible -->
-                <div style="margin-bottom:.5rem">
-                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-ship" style="color:#3498db;margin-right:4px"></i>Select Boat</label>
-                  <div class="atoll-srch" style="margin-bottom:.5rem"><input type="text" id="atollSearch" placeholder="Type atoll, boat name or island…" oninput="filterAtolls()"></div>
+                <!-- STEP 2: Search + Grid (hidden until harbour selected) -->
+                <div id="boatSearchStep" style="display:none;margin-bottom:.5rem">
+                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-ship" style="color:#3498db;margin-right:4px"></i>Search Boat</label>
+                  <div class="atoll-srch" style="margin-bottom:.5rem"><input type="text" id="atollSearch" placeholder="Type boat name, atoll or island…" oninput="filterAtolls()"></div>
                   <div class="boat-grid" id="boatGrid"></div>
                   <input type="hidden" id="selBoat">
                 </div>
@@ -926,16 +923,16 @@ a{color:#f39c12;text-decoration:none}
             <!-- SPEED BOAT -->
             <div class="boat-sec" id="speedboatSec" style="margin-top:.7rem">
               <div id="sbListMode">
-                <!-- Harbour buttons (from admin) -->
+                <input type="hidden" id="selSBHarbour">
+                <!-- STEP 1: Select Harbour (always shown) -->
                 <div style="margin-bottom:.65rem">
-                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-anchor" style="color:#f39c12;margin-right:4px"></i>Boat Harbour</label>
+                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-anchor" style="color:#f39c12;margin-right:4px"></i>Select Harbour</label>
                   <div id="sbHarbourBtns" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-                  <input type="hidden" id="selSBHarbour">
                 </div>
-                <!-- All speed boats always visible -->
-                <div style="margin-bottom:.5rem">
-                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-bolt" style="color:#f39c12;margin-right:4px"></i>Select Speed Boat</label>
-                  <div class="atoll-srch" style="margin-bottom:.5rem"><input type="text" id="sbAtollSearch" placeholder="Type atoll, speed boat name or island…" oninput="filterSBAtolls()"></div>
+                <!-- STEP 2: Search + Grid (hidden until harbour selected) -->
+                <div id="sbSearchStep" style="display:none;margin-bottom:.5rem">
+                  <label style="font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:.4rem;display:block"><i class="fas fa-bolt" style="color:#f39c12;margin-right:4px"></i>Search Speed Boat</label>
+                  <div class="atoll-srch" style="margin-bottom:.5rem"><input type="text" id="sbAtollSearch" placeholder="Type speed boat name, atoll or island…" oninput="filterSBAtolls()"></div>
                   <div class="boat-grid" id="sbGrid"></div>
                   <input type="hidden" id="selSB">
                 </div>
@@ -979,7 +976,7 @@ a{color:#f39c12;text-decoration:none}
           </div>
 
           <div class="fg"><label>Package Description <span style="opacity:.35;font-size:.65rem">(optional)</span></label><textarea class="fi fi-ta" id="pkgDesc" placeholder="Describe contents…"></textarea></div>
-          </div><!-- /stepMode -->
+          </div>
 
           <!-- Discount banner (shows when user has points) -->
           <div id="discountBanner" style="display:none;background:linear-gradient(135deg,rgba(39,174,96,.12),rgba(39,174,96,.06));border:1.5px solid rgba(39,174,96,.3);border-radius:13px;padding:.7rem .9rem;margin-bottom:.6rem;display:none;align-items:center;gap:9px">
@@ -1086,6 +1083,18 @@ a{color:#f39c12;text-decoration:none}
 </div>
 
 <!-- PAYMENT MODAL -->
+<!-- DRAFT MODAL -->
+<div class="modal-overlay" id="draftMod" style="z-index:3500">
+  <div class="modal-box" style="max-width:340px;text-align:center;padding:1.4rem">
+    <div style="width:52px;height:52px;background:rgba(243,156,18,.13);border:2px solid rgba(243,156,18,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;font-size:1.4rem;color:#f39c12"><i class="fas fa-file-pen"></i></div>
+    <div style="font-size:.96rem;font-weight:800;color:white;margin-bottom:.4rem">Unfinished Delivery</div>
+    <div style="font-size:.74rem;color:rgba(255,255,255,.5);margin-bottom:1.1rem;line-height:1.6">You have a saved draft. Continue where you left off?</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-sec" style="flex:1;font-size:.8rem" id="draftDiscard"><i class="fas fa-trash"></i> Discard</button>
+      <button class="btn btn-gold" style="flex:2;font-size:.8rem" id="draftContinue"><i class="fas fa-play"></i> Continue</button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="payMod">
 <div class="modal-box">
   <div class="modal-hd"><div class="modal-title"><i class="fas fa-wallet"></i> Payment Required</div><button class="close-btn" id="payClose"><i class="fas fa-times"></i></button></div>
@@ -1122,7 +1131,7 @@ firebase.initializeApp(fbCfg);
 const db=firebase.database();
 
 let me=null,allD=[],allP=[],allN=[],allBoats=[],allSpeedBoats=[],allPickups=[],allCargoTypes=[],
-    allExpressHrs=[],allExpressSizes=[],allDelLocs=[],allFloors=[],allRoutePrices=[],allBoatRoutePrices=[],allBoatHarbours=[],
+    allExpressHrs=[],allExpressSizes=[],allDelLocs=[],allFloors=[],allRoutePrices=[],allBoatRoutePrices=[],allBoatHarbours=[],allManualBoatPrices=[],
     siteSettings={},tmpD=null,busy=false,dMode='cargo',slideIdx=0,slideTimer=null,
     selAtoll=null,curInvoiceD=null;
 
@@ -1147,115 +1156,149 @@ function lookupRoutePrice(pickup,delivery){
   return match?parseFloat(match.price)||0:0;
 }
 
-/* ── BOAT ROUTE PRICE LOOKUP: Pickup × Harbour × Boat ── */
+/* ── BOAT PRICE LOOKUP: Pickup × Harbour × Boat from boatRoutePrices ── */
 function lookupBoatRoutePrice(pickup,harbour,boatName,boatType){
-  if(!pickup||!boatName)return null;
-  // Try: pickup + harbour + boatName
-  if(harbour){
-    const exact=allBoatRoutePrices.find(r=>r.pickup===pickup&&r.harbour===harbour&&r.boatName===boatName&&(boatType?r.boatType===boatType:true));
-    if(exact)return parseFloat(exact.price)||0;
-  }
-  // Fallback: pickup + boatName only (old format without harbour)
-  const fallback=allBoatRoutePrices.find(r=>r.pickup===pickup&&r.boatName===boatName&&(boatType?r.boatType===boatType:true));
-  if(fallback)return parseFloat(fallback.price)||0;
-  return null;
+  if(!pickup||!harbour||!boatName)return null;
+  const r=allBoatRoutePrices.find(x=>x.pickup===pickup&&x.harbour===harbour&&x.boatName===boatName&&(!boatType||x.boatType===boatType));
+  return r!=null?parseFloat(r.price)||0:null;
 }
-/* Load harbour buttons for boat/speedboat selection */
+/* Load harbour buttons - list mode shows harbours FIRST, manual mode also */
 function loadHarbourButtons(){
-  const harbourBtnHtml=h=>`<button type="button" class="dloc-btn" onclick="selectHarbour('boat',${JSON.stringify(h)},this)">${h}</button>`;
-  const sbHarbourBtnHtml=h=>`<button type="button" class="dloc-btn" onclick="selectHarbour('sb',${JSON.stringify(h)},this)">${h}</button>`;
-  const manualBtnHtml=(type,h)=>`<button type="button" class="dloc-btn" onclick="selectManualHarbour('${type}',${JSON.stringify(h)},this)">${h}</button>`;
-  const noHarbourMsg='<span style="font-size:.7rem;color:rgba(255,255,255,.38)">No harbours added yet. Add them in admin under Boat Route Pricing.</span>';
-  // List mode harbour buttons
-  const bb=$('boatHarbourBtns');
-  if(bb)bb.innerHTML=allBoatHarbours.length?allBoatHarbours.map(harbourBtnHtml).join(''):noHarbourMsg;
-  const sb=$('sbHarbourBtns');
-  if(sb)sb.innerHTML=allBoatHarbours.length?allBoatHarbours.map(sbHarbourBtnHtml).join(''):noHarbourMsg;
-  // Manual mode harbour buttons
-  const mb=$('manualBoatHarbourBtns');
-  if(mb)mb.innerHTML=allBoatHarbours.length?allBoatHarbours.map(h=>manualBtnHtml('boat',h)).join(''):noHarbourMsg;
-  const msb=$('manualSBHarbourBtns');
-  if(msb)msb.innerHTML=allBoatHarbours.length?allBoatHarbours.map(h=>manualBtnHtml('sb',h)).join(''):noHarbourMsg;
-  // Auto-show all boats in grid immediately
-  showAllBoatsInGrid();
+  const noMsg='<span style="font-size:.7rem;color:rgba(255,255,255,.38)">No harbours added yet. Add in admin → Boat Route Pricing.</span>';
+  function makeBtn(type,h,manual){
+    return`<button type="button" class="dloc-btn harbour-btn" data-type="${type}" data-harbour="${h.replace(/"/g,'&quot;')}" style="padding:7px 14px">${h}</button>`;
+  }
+  function renderBtns(wrapId,type,manual){
+    const el=$(wrapId);if(!el)return;
+    el.innerHTML=allBoatHarbours.length?allBoatHarbours.map(h=>makeBtn(type,h,manual)).join(''):noMsg;
+    el.querySelectorAll('.harbour-btn').forEach(btn=>{
+      btn.addEventListener('click',function(){
+        const h=this.getAttribute('data-harbour');
+        const t=this.getAttribute('data-type');
+        if(manual) selectManualHarbour(t,h,this);
+        else selectListHarbour(t,h,this);
+      });
+    });
+  }
+  renderBtns('boatHarbourBtns','boat',false);
+  renderBtns('sbHarbourBtns','sb',false);
+  renderBtns('manualBoatHarbourBtns','manualboat',true);
+  renderBtns('manualSBHarbourBtns','manualsb',true);
 }
-function showAllBoatsInGrid(){
-  // Clear grids — boats only show when user searches
-  const bg=$('boatGrid');const sg=$('sbGrid');
-  if(bg)bg.innerHTML='';
-  if(sg)sg.innerHTML='';
-}
-/* Manual mode: user selects harbour from buttons */
-window.selectManualHarbour=function(type,harbour,btn){
+/* List mode harbour select — show search step after harbour click */
+window.selectListHarbour=function(type,harbour,btn){
   const isB=type==='boat';
-  const wrap=$(isB?'manualBoatHarbourBtns':'manualSBHarbourBtns');
-  if(wrap)wrap.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  // Store harbour in hidden field
-  if(isB)$('manualBoatHarbour').value=harbour;
-  else $('manualSBHarbour').value=harbour;
-  // Refresh dest buttons prices with new harbour
-  const nameEl=$(isB?'manualBoatName':'manualSBName');
-  if(nameEl?.value)onManualBoatNameInput(isB?'boat':'sb');
-};
-window.selectHarbour=function(type,harbour,btn){
-  const isB=type==='boat';
-  const wrap=$(isB?'boatHarbourBtns':'sbHarbourBtns');
-  if(wrap)wrap.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));
+  const wrapId=isB?'boatHarbourBtns':'sbHarbourBtns';
+  const wrap=$(wrapId);
+  const alreadyActive=btn.classList.contains('active');
+  if(wrap)wrap.querySelectorAll('.harbour-btn').forEach(b=>b.classList.remove('active'));
+  if(alreadyActive){
+    // deselect — hide search step
+    $(isB?'selBoatHarbour':'selSBHarbour').value='';
+    $(isB?'boatSearchStep':'sbSearchStep').style.display='none';
+    $(isB?'islSec':'sbIslSec').style.display='none';
+    $(isB?'selBoat':'selSB').value='';
+    const g=$(isB?'boatGrid':'sbGrid');if(g)g.innerHTML='';
+    const srch=$(isB?'atollSearch':'sbAtollSearch');if(srch)srch.value='';
+    updateBoatPriceBadge();return;
+  }
   btn.classList.add('active');
   $(isB?'selBoatHarbour':'selSBHarbour').value=harbour;
+  // Show search step
+  $(isB?'boatSearchStep':'sbSearchStep').style.display='block';
   // Reset boat/island selection
   $(isB?'selBoat':'selSB').value='';
   $(isB?'islSec':'sbIslSec').style.display='none';
+  const g=$(isB?'boatGrid':'sbGrid');if(g)g.innerHTML='';
+  const srch=$(isB?'atollSearch':'sbAtollSearch');if(srch)srch.value='';
   document.querySelectorAll(isB?'.boat-card,.isl-btn':'.sb-card,.sb-isl-btn').forEach(c=>c.classList.remove('active'));
-  // Show all boats (grid always visible)
-  const pool=isB?allBoats:allSpeedBoats;
-  if(isB)renderBoatGrid(pool.filter(b=>b.active!==false));
-  else renderSBGrid(pool.filter(b=>b.active!==false));
   updateBoatPriceBadge();
 };
+
+function showAllBoatsInGrid(){
+  const bg=$('boatGrid');const sg=$('sbGrid');
+  if(bg)bg.innerHTML='';if(sg)sg.innerHTML='';
+}
+/* Manual mode harbour select */
+window.selectManualHarbour=function(type,harbour,btn){
+  const isB=type==='manualboat';
+  const wrapId=isB?'manualBoatHarbourBtns':'manualSBHarbourBtns';
+  const wrap=$(wrapId);
+  const alreadyActive=btn.classList.contains('active');
+  if(wrap)wrap.querySelectorAll('.harbour-btn').forEach(b=>b.classList.remove('active'));
+  if(alreadyActive){
+    if(isB)$('manualBoatHarbour').value=''; else $('manualSBHarbour').value='';
+    updateBoatPriceBadge();return;
+  }
+  btn.classList.add('active');
+  if(isB)$('manualBoatHarbour').value=harbour; else $('manualSBHarbour').value=harbour;
+  const nameEl=$(isB?'manualBoatName':'manualSBName');
+  if(nameEl?.value)onManualBoatNameInput(isB?'boat':'sb');
+  updateBoatPriceBadge();
+};
+// selectHarbour now handled by selectListHarbour
 
 /* ── UPDATE BOAT PRICE BADGE ── */
 function updateBoatPriceBadge(){
   const pickup=$('pLocVal').value;
-  const boatName=dMode==='boat'?$('selBoat').value:$('selSB').value;
-  const boatType=dMode==='speedboat'?'speedboat':'boat';
-  const harbour=dMode==='boat'?($('selBoatHarbour')?.value||''):($('selSBHarbour')?.value||'');
-  const badge=$('routePriceBadge');
-  const valEl=$('routePriceVal');
-  if(!boatName){
-    if(badge)badge.classList.remove('show');
+  const isB=dMode==='boat';
+  const isManual=isB?(boatInputMode==='manual'):(sbInputMode==='manual');
+  const boatName=isB
+    ?(isManual?($('manualBoatName')?.value||''):($('selBoat')?.value||''))
+    :(isManual?($('manualSBName')?.value||''):($('selSB')?.value||''));
+  const harbour=isB
+    ?(isManual?($('manualBoatHarbour')?.value||''):($('selBoatHarbour')?.value||''))
+    :(isManual?($('manualSBHarbour')?.value||''):($('selSBHarbour')?.value||''));
+  const boatType=isB?'boat':'speedboat';
+  const badge=$('routePriceBadge');const valEl=$('routePriceVal');
+
+  // Manual mode: lookup from manualBoatPrices (Pickup × Harbour flat price)
+  if(isManual){
+    const mp=pickup&&harbour?allManualBoatPrices?.find(r=>r.pickup===pickup&&r.harbour===harbour):null;
+    if(mp){
+      $('boatPrice').value=mp.price;
+      if(badge&&valEl){
+        badge.classList.add('show');badge.classList.remove('no-route');
+        valEl.innerHTML='<strong>MVR '+mp.price+'</strong><span style="font-size:.58rem;color:rgba(255,255,255,.45);display:block;margin-top:1px">'+pickup+' → '+harbour+'</span>';
+        valEl.style.color='#f39c12';badge.style.borderColor='rgba(243,156,18,.2)';badge.style.background='rgba(243,156,18,.07)';
+        if(badge.querySelector('.rpb-lbl'))badge.querySelector('.rpb-lbl').textContent='Manual boat price';
+      }
+      calcTotal();return;
+    }
+    $('boatPrice').value=0;
+    if(badge&&valEl&&(pickup||harbour)){
+      badge.classList.add('show');badge.classList.add('no-route');
+      valEl.innerHTML='No price set<span style="font-size:.55rem;color:rgba(255,255,255,.28);display:block;margin-top:1px">Admin → Manual Boat Prices</span>';
+      valEl.style.color='#e74c3c';badge.style.borderColor='rgba(231,76,60,.2)';badge.style.background='rgba(231,76,60,.05)';
+      if(badge.querySelector('.rpb-lbl'))badge.querySelector('.rpb-lbl').textContent='Manual boat price';
+    }else if(badge)badge.classList.remove('show');
     calcTotal();return;
   }
-  // Look up: Pickup × Harbour × Boat
-  const routePrice=lookupBoatRoutePrice(pickup,harbour,boatName,boatType);
-  if(routePrice!==null){
-    // Use the boat route price from the table
-    $('boatPrice').value=routePrice;
+
+  // List mode: lookup from boatRoutePrices (Pickup × Harbour × Boat)
+  if(!boatName){if(badge)badge.classList.remove('show');calcTotal();return;}
+  const price=lookupBoatRoutePrice(pickup,harbour,boatName,boatType);
+  if(price!=null){
+    $('boatPrice').value=price;
     if(badge&&valEl){
-      badge.classList.add('show');
-      badge.classList.remove('no-route');
-      valEl.textContent='MVR '+routePrice;
-      valEl.style.color='#3498db';
-      badge.style.borderColor='rgba(52,152,219,.2)';
-      badge.style.background='rgba(52,152,219,.08)';
-      badge.querySelector('.rpb-lbl').textContent='Route price ('+(boatType==='speedboat'?'Speed Boat':'Boat')+')';
+      badge.classList.add('show');badge.classList.remove('no-route');
+      valEl.innerHTML='<strong>MVR '+price+'</strong>';
+      valEl.style.color='#3498db';badge.style.borderColor='rgba(52,152,219,.2)';badge.style.background='rgba(52,152,219,.08)';
+      if(badge.querySelector('.rpb-lbl'))badge.querySelector('.rpb-lbl').textContent='Boat price';
     }
   }else{
-    // No route price set — use boat's default price
+    $('boatPrice').value=0;
     if(badge&&valEl){
-      badge.classList.add('show');
-      badge.classList.add('no-route');
-      const def=parseFloat($('boatPrice').value)||0;
-      valEl.textContent=def>0?'MVR '+def+' (default)':'No price set';
-      valEl.style.color=def>0?'#f39c12':'#e74c3c';
-      badge.style.borderColor='rgba(243,156,18,.2)';
-      badge.style.background='rgba(243,156,18,.07)';
-      if(badge.querySelector('.rpb-lbl'))badge.querySelector('.rpb-lbl').textContent='Boat default price';
+      badge.classList.add('show');badge.classList.add('no-route');
+      valEl.innerHTML='No price set';valEl.style.color='#e74c3c';
+      badge.style.borderColor='rgba(231,76,60,.2)';badge.style.background='rgba(231,76,60,.05)';
+      if(badge.querySelector('.rpb-lbl'))badge.querySelector('.rpb-lbl').textContent='Boat price';
     }
   }
   calcTotal();
 }
+
+
 
 /* ── PRICE CALC: route price replaces separate pickup+delivery prices ── */
 /* ── USER REWARDS: loaded once on login ── */
@@ -1375,7 +1418,7 @@ window.selPkgSize=function(el,id){
     $('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
     $('expressTimeWrap').classList.remove('show');
     document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));
-    hideStep('stepPickup');hideStep('stepMode');
+    hideStep('stepPickup');
     calcTotal();return;
   }
   document.querySelectorAll('.pkg-size-card').forEach(c=>c.classList.remove('active'));
@@ -1385,7 +1428,7 @@ window.selPkgSize=function(el,id){
   $('selSizeId').value=sz.id;$('selSizeName').value=sz.name;$('selSizeWeight').value=sz.maxKg;
   $('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
   document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));
-  hideStep('stepPickup');hideStep('stepMode');
+  hideStep('stepPickup');
   loadTimeSlots(sz.id);calcTotal();
 };
 function loadTimeSlots(sizeId){const g=$('timeSlotGrid');const ctId=$('ctypeGrid').querySelector('.ct-card.active')?.dataset?.id||'';const slots=allExpressHrs.filter(h=>String(h.sizeId)===String(sizeId)&&(ctId?String(h.cargoTypeId)===String(ctId):true));if(!slots.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.6rem"><p>No time options for this size.</p></div>';$('expressTimeWrap').classList.add('show');return;}const sorted=[...slots].sort((a,b)=>(a.minutes||0)-(b.minutes||0));g.innerHTML=sorted.map(ts=>{const mins=ts.minutes||((ts.hours||0)*60);const durTxt=mins<60?`${mins}`:`${Math.floor(mins/60)}h${mins%60?` ${mins%60}m`:''}`;const durUnit=mins<60?'mins':'';return`<button type="button" class="time-slot-btn" data-id="${ts.id}" data-price="${ts.price}" data-label="${ts.label||durTxt+(durUnit?' '+durUnit:'')}" onclick="selTimeSlot(this)"><span class="ts-dur">${durTxt}</span><span class="ts-lbl">${durUnit||ts.label||'Duration'}</span><span class="ts-price">MVR ${ts.price}</span><div class="time-slot-ck"><i class="fas fa-check"></i></div></button>`;}).join('');$('expressTimeWrap').classList.add('show');}
@@ -1394,7 +1437,7 @@ window.selTimeSlot=function(el){
   if(alreadyActive){
     el.classList.remove('active');
     $('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
-    hideStep('stepPickup');hideStep('stepMode');
+    hideStep('stepPickup');
     calcTotal();return;
   }
   document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));
@@ -1469,6 +1512,7 @@ function initFB(){
   /* ── ROUTE PRICES ── */
   db.ref('routePrices').on('value',snap=>{allRoutePrices=toArr(snap.val());updateRoutePrice();});
   db.ref('boatRoutePrices').on('value',snap=>{allBoatRoutePrices=toArr(snap.val());});
+  db.ref('manualBoatPrices').on('value',snap=>{allManualBoatPrices=toArr(snap.val());});
   db.ref('boatHarbours').on('value',snap=>{allBoatHarbours=toArr(snap.val());loadHarbourButtons();});
   db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});
   initSlideshow();loadHowTo();
@@ -1479,11 +1523,149 @@ function enterDash(){
   watchDeliveryPoints();loadFloorSelector();loadUserRewards();loadHarbourButtons();
   $('hName').textContent=me.username;$('sidebarName').textContent=me.username;
   $('cNm').value=me.username;$('cCt').value=me.contact||'';
-  // Show empty pickup grid until cargo type is selected
   loadPickupGrid(null);loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();
-  // Show all boats immediately
   showAllBoatsInGrid();
+  // Check for saved draft
+  const draft=localStorage.getItem('ec_draft');
+  if(draft){
+    try{
+      const d=JSON.parse(draft);
+      if(d&&d.version){
+        $('draftMod').classList.add('show');
+        $('draftContinue').onclick=()=>{$('draftMod').classList.remove('show');restoreDraft(d);};
+        $('draftDiscard').onclick=()=>{$('draftMod').classList.remove('show');localStorage.removeItem('ec_draft');};
+      }
+    }catch(e){localStorage.removeItem('ec_draft');}
+  }
 }
+
+/* ── DRAFT SAVE / RESTORE ── */
+const DRAFT_KEY='ec_draft';
+function saveDraft(){
+  try{
+    const d={
+      version:1,
+      ctV:$('ctV')?.value||'',ctPrice:$('ctPrice')?.value||'0',ctIsExpress:$('ctIsExpress')?.value||'0',
+      selW:$('selW')?.value||'',selWP:$('selWP')?.value||'0',
+      selSizeId:$('selSizeId')?.value||'',selSizeName:$('selSizeName')?.value||'',selSizeWeight:$('selSizeWeight')?.value||'',
+      selTimeId:$('selTimeId')?.value||'',selTimePrice:$('selTimePrice')?.value||'0',selTimeLabel:$('selTimeLabel')?.value||'',
+      pLocVal:$('pLocVal')?.value||'',addrVal:$('addrVal')?.value||'',
+      dMode,boatInputMode,sbInputMode,
+      selBoat:$('selBoat')?.value||'',selBoatHarbour:$('selBoatHarbour')?.value||'',selIsl:$('selIsl')?.value||'',
+      selSB:$('selSB')?.value||'',selSBHarbour:$('selSBHarbour')?.value||'',selSBIsl:$('selSBIsl')?.value||'',
+      manualBoatName:$('manualBoatName')?.value||'',manualBoatHarbour:$('manualBoatHarbour')?.value||'',
+      manualBoatIsland:$('manualBoatIsland')?.value||'',manualBoatContact:$('manualBoatContact')?.value||'',
+      manualSBName:$('manualSBName')?.value||'',manualSBHarbour:$('manualSBHarbour')?.value||'',
+      manualSBIsland:$('manualSBIsland')?.value||'',manualSBContact:$('manualSBContact')?.value||'',
+      dLocVal:$('dLocVal')?.value||'',floorNum:$('floorNum')?.value||'',
+      pkgDesc:$('pkgDesc')?.value||'',dDate:$('dDate')?.value||'',
+      boatPrice:$('boatPrice')?.value||'0',routePrice:$('routePrice')?.value||'0',
+    };
+    // Only save if something meaningful is filled
+    if(d.ctV||d.selBoat||d.selSB||d.manualBoatName)
+      localStorage.setItem(DRAFT_KEY,JSON.stringify(d));
+  }catch(e){}
+}
+function restoreDraft(d){
+  // Restore cargo type
+  if(d.ctV){
+    $('ctV').value=d.ctV;$('ctPrice').value=d.ctPrice;$('ctIsExpress').value=d.ctIsExpress;
+    const ctEl=document.querySelector(`.ct-card[data-id]`);
+    // Click the right cargo type card
+    document.querySelectorAll('.ct-card').forEach(el=>{
+      if(el.dataset.id){
+        const ct=allCargoTypes.find(c=>c.name===d.ctV);
+        if(ct&&String(el.dataset.id)===String(ct.id))el.classList.add('active');
+      }
+    });
+    const isExp=d.ctIsExpress==='1';
+    if(isExp){$('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');}
+    else{$('expressFlowWrap').classList.remove('show');$('weightSec').classList.add('show');loadWeights();}
+    const ct=allCargoTypes.find(c=>c.name===d.ctV);
+    if(ct){
+      loadPickupGrid(ct.pickupIds&&ct.pickupIds.length?ct.pickupIds:null);
+      revealStep('stepPickup');
+    }
+  }
+  // Restore weight
+  if(d.selW){$('selW').value=d.selW;$('selWP').value=d.selWP;}
+  // Restore pickup
+  if(d.pLocVal){
+    $('pLocVal').value=d.pLocVal;$('addrVal').value=d.addrVal||'';
+    // Highlight pickup card and collapse others
+    setTimeout(()=>{
+      const card=document.querySelector('.pickup-card[data-id]');
+      document.querySelectorAll('.pickup-card').forEach(c=>{
+        const loc=allPickups.find(l=>l.name===d.pLocVal);
+        if(loc&&String(c.dataset.id)===String(loc.id)){c.classList.add('active');c.style.display='block';}
+        else c.style.display='none';
+      });
+      revealStep('stepMode');
+    },200);
+  }
+  // Restore delivery mode
+  if(d.dMode){
+    dMode=d.dMode;
+    document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));
+    const btnMap={cargo:'dmCargo',boat:'dmBoat',speedboat:'dmSpeedboat'};
+    $(btnMap[d.dMode])?.classList.add('active');
+    $('cargoDest').style.display=d.dMode==='cargo'?'block':'none';
+    $('boatSec').classList.toggle('show',d.dMode==='boat');
+    $('speedboatSec').classList.toggle('show',d.dMode==='speedboat');
+  }
+  // Restore boat selections
+  if(d.dMode==='boat'){
+    boatInputMode=d.boatInputMode||'list';
+    setBoatInputMode(boatInputMode);
+    if(boatInputMode==='list'&&d.selBoatHarbour){
+      $('selBoatHarbour').value=d.selBoatHarbour;
+      // Highlight harbour btn
+      setTimeout(()=>{
+        $('boatHarbourBtns')?.querySelectorAll('.harbour-btn').forEach(b=>{
+          if(b.getAttribute('data-harbour')===d.selBoatHarbour){b.classList.add('active');}
+        });
+        $('boatSearchStep').style.display='block';
+      },300);
+      $('selBoat').value=d.selBoat;
+    }else if(boatInputMode==='manual'){
+      $('manualBoatName').value=d.manualBoatName;
+      $('manualBoatHarbour').value=d.manualBoatHarbour;
+      $('manualBoatIsland').value=d.manualBoatIsland;
+      $('manualBoatContact').value=d.manualBoatContact;
+    }
+  }
+  if(d.dMode==='speedboat'){
+    sbInputMode=d.sbInputMode||'list';
+    setSBInputMode(sbInputMode);
+    if(sbInputMode==='list'&&d.selSBHarbour){
+      $('selSBHarbour').value=d.selSBHarbour;
+      setTimeout(()=>{
+        $('sbHarbourBtns')?.querySelectorAll('.harbour-btn').forEach(b=>{
+          if(b.getAttribute('data-harbour')===d.selSBHarbour){b.classList.add('active');}
+        });
+        $('sbSearchStep').style.display='block';
+      },300);
+      $('selSB').value=d.selSB;
+    }else if(sbInputMode==='manual'){
+      $('manualSBName').value=d.manualSBName;
+      $('manualSBHarbour').value=d.manualSBHarbour;
+      $('manualSBIsland').value=d.manualSBIsland;
+      $('manualSBContact').value=d.manualSBContact;
+    }
+  }
+  // Restore delivery destination
+  if(d.dLocVal)$('dLocVal').value=d.dLocVal;
+  if(d.floorNum)$('floorNum').value=d.floorNum;
+  if(d.pkgDesc)$('pkgDesc').value=d.pkgDesc;
+  if(d.dDate)$('dDate').value=d.dDate;
+  setTimeout(()=>calcTotal(),400);
+}
+// Auto-save draft on any input change
+document.addEventListener('change',saveDraft);
+document.addEventListener('input',saveDraft);
+// Clear draft after successful save
+function clearDraft(){localStorage.removeItem(DRAFT_KEY);}
+
 
 function updateCapBar(){const cap=siteSettings.dailyCapacity||0;if(!cap){$('capWrap').style.display='none';return}const today=new Date().toISOString().split('T')[0];const tc=allD.filter(d=>(d.createdAt||'').startsWith(today)).length;const pct=Math.min(100,Math.round((tc/cap)*100));$('capWrap').style.display='block';$('capFill').style.width=pct+'%';$('capPct').textContent=pct+'%';$('capPct').style.color=pct>=100?'#e74c3c':pct>=80?'#f39c12':'#27ae60';$('capFill').className='cap-fill'+(pct>=100?' full':pct>=80?' warn':'');$('capNote').textContent=pct>=100?`Full (${tc}/${cap})`:`${tc}/${cap} today`;const sb=$('submitBtn');if(pct>=100){sb.disabled=true;sb.innerHTML='<i class="fas fa-ban"></i> Capacity Full'}else{sb.disabled=false;sb.innerHTML='<i class="fas fa-paper-plane"></i> Save &amp; Pay'}}
 
@@ -1501,7 +1683,7 @@ window.selCtype=function(el,id){
     $('ctV').value='';$('ctPrice').value='0';$('ctIsExpress').value='0';
     $('etaInfo').classList.remove('show');
     $('expressFlowWrap').classList.remove('show');$('weightSec').classList.remove('show');
-    hideStep('stepPickup');hideStep('stepMode');
+    hideStep('stepPickup');
     calcTotal();return;
   }
   document.querySelectorAll('.ct-card').forEach(c=>c.classList.remove('active'));
@@ -1517,7 +1699,7 @@ window.selCtype=function(el,id){
   $('selW').value='';$('selWP').value='0';
   const hint=$('pickupHint');if(hint)hint.style.display='none';
   const assigned=ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null;
-  hideStep('stepPickup');hideStep('stepMode');
+  hideStep('stepPickup');
   $('pLocVal').value='';$('dLocVal').value='';$('selBoat').value='';$('selSB').value='';
   if(ct.isExpress){
     $('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.remove('show');
@@ -1533,7 +1715,7 @@ window.selCtype=function(el,id){
 function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return}const sorted=[...allP].sort((a,b)=>a.min-b.min);g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${x.max<=2?'fa-feather':x.max<=10?'fa-box':x.max<=30?'fa-boxes-stacked':'fa-pallet'}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${x.max<=2?'Light':x.max<=10?'Medium':x.max<=30?'Heavy':'Oversized'}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){
   if(this.classList.contains('active')){
     this.classList.remove('active');$('selW').value='';$('selWP').value='0';
-    hideStep('stepPickup');hideStep('stepMode');calcTotal();return;
+    hideStep('stepPickup');calcTotal();return;
   }
   g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));
   this.classList.add('active');$('selW').value=`${this.dataset.mn}-${this.dataset.mx} kg`;$('selWP').value=this.dataset.pr;
@@ -1554,7 +1736,9 @@ function loadPickupGrid(filteredIds){
   const badge=$('routePriceBadge');if(badge)badge.classList.remove('show');
   const pgf=$('pickupGfNotice');if(pgf)pgf.classList.remove('show');
   const ax=$('addrX');if(ax)ax.classList.remove('show');
-  g.innerHTML=locs.map(loc=>`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')" style="display:block">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`).join('');
+  g.innerHTML=locs.map(loc=>{
+    return`<div class="pickup-card" data-id="${loc.id}" onclick="selPickup(this,'${loc.id}')" style="display:block">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}<div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas ${loc.type==='address'?'fa-map-marker-alt':loc.type==='postal'?'fa-envelope':'fa-store'}"></i></div><div class="p-name">${loc.name}</div><div class="p-type">${loc.type==='address'?'Addr req':loc.type==='postal'?'Post':'Standard'}</div><div class="pickup-ck"><i class="fas fa-check"></i></div></div>`;
+  }).join('');
 }
 
 
@@ -1565,7 +1749,7 @@ window.selPickup=function(el,id){
     // Clicking same pickup → show all cards again
     document.querySelectorAll('.pickup-card').forEach(c=>{c.style.display='block';c.classList.remove('active');});
     $('pLocVal').value='';
-    hideStep('stepMode');
+    
     return;
   }
   document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));
@@ -1576,12 +1760,11 @@ window.selPickup=function(el,id){
   // Collapse — hide non-selected cards
   if(grid)grid.querySelectorAll('.pickup-card').forEach(c=>{c.style.display=c.classList.contains('active')?'block':'none';});
   if(dMode==='cargo'){updateRoutePrice();}
-  else{refreshBoatLocPrices();updateBoatPriceBadge();}
+  else{updateBoatPriceBadge();}
   const ax=$('addrX');const lbl=ax?ax.querySelector('label'):null;
   if(loc.type==='address'||loc.type==='postal'){ax.classList.add('show');$('addrVal').required=true;if(lbl){if(loc.type==='postal'){lbl.innerHTML='<i class="fas fa-envelope" style="color:#f39c12;margin-right:4px"></i>Post/Pickpost Number or Message';$('addrVal').placeholder='Enter Post/Pickpost number or message…';}else{lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address';$('addrVal').placeholder='Enter full address…';}}}else{ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value='';}
   const gf=$('pickupGfNotice');if(gf){if(loc.type==='address')gf.classList.add('show');else gf.classList.remove('show');}
-  revealStep('stepMode');
-  setTimeout(()=>{const s=$('stepMode');if(s)s.scrollIntoView({behavior:'smooth',block:'nearest'});},80);
+  
 };
 
 
@@ -1619,12 +1802,12 @@ function refreshBoatLocPrices(){
 }
 
 let boatInputMode='list',sbInputMode='list';
-window.setBoatInputMode=function(m){boatInputMode=m;document.querySelectorAll('#boatSec .bmt-btn').forEach(b=>b.classList.remove('active'));if(m==='list'){$('boatListBtn').classList.add('active');$('boatListMode').style.display='block';$('boatManualMode').style.display='none';$('manualBoatName').value='';$('manualBoatIsland').value='';$('manualBoatContact').value='';$('manualBoatCallBtn').style.display='none';}else{$('boatManualBtn').classList.add('active');$('boatListMode').style.display='none';$('boatManualMode').style.display='block';$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';document.querySelectorAll('.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));}};
+window.setBoatInputMode=function(m){boatInputMode=m;document.querySelectorAll('#boatSec .bmt-btn').forEach(b=>b.classList.remove('active'));if(m==='list'){$('boatListBtn').classList.add('active');$('boatListMode').style.display='block';$('boatManualMode').style.display='none';$('manualBoatName').value='';$('manualBoatIsland').value='';$('manualBoatContact').value='';$('manualBoatCallBtn').style.display='none';}else{$('boatManualBtn').classList.add('active');$('boatListMode').style.display='none';$('boatManualMode').style.display='block';$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatSearchStep').style.display='none';if($('boatHarbourBtns'))$('boatHarbourBtns').querySelectorAll('.harbour-btn').forEach(b=>b.classList.remove('active'));$('selBoatHarbour').value='';document.querySelectorAll('.boat-card,.isl-btn').forEach(c=>c.classList.remove('active'));}};
 window.setSBInputMode=function(m){sbInputMode=m;document.querySelectorAll('#speedboatSec .bmt-btn').forEach(b=>b.classList.remove('active'));if(m==='list'){$('sbListBtn').classList.add('active');$('sbListMode').style.display='block';$('sbManualMode').style.display='none';$('manualSBName').value='';$('manualSBIsland').value='';$('manualSBContact').value='';$('manualSBCallBtn').style.display='none';}else{$('sbManualBtn').classList.add('active');$('sbListMode').style.display='none';$('sbManualMode').style.display='block';$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';document.querySelectorAll('.sb-card,.sb-isl-btn').forEach(c=>c.classList.remove('active'));}};
 window.onManualContactInput=function(type){if(type==='sb'){const v=$('manualSBContact').value.trim();const show=v.length>=7;const btn=$('manualSBCallBtn');btn.style.display=show?'flex':'none';if(show)btn.href='tel:'+v;}};
 window.callManualBoat=function(e,type){const num=type==='boat'?$('manualBoatContact').value.trim():$('manualSBContact').value.trim();if(!num){e.preventDefault();showToast('Enter a contact number first','err');return}};
 
-/* ── MANUAL MODE: type boat name → show travel islands with prices ── */
+/* ── MANUAL MODE: type boat name → show travel islands ── */
 window.onManualBoatNameInput=function(type){
   const isB=type==='boat';
   const nameEl=$(isB?'manualBoatName':'manualSBName');
@@ -1637,22 +1820,21 @@ window.onManualBoatNameInput=function(type){
   if(!matches.length)return;
   const match=matches[0];
   nameEl.value=match.name;
-  // Get harbour from manually selected harbour button
   const harbour=$(isB?'manualBoatHarbour':'manualSBHarbour')?.value||'';
-  // Store for price lookup
   if(isB)$('selBoatHarbour').value=harbour;
   else $('selSBHarbour').value=harbour;
-  // Show travel islands with prices
   const locs=getIslandNames(match);
   const pickup=$('pLocVal').value;
   const bType=isB?'boat':'speedboat';
+  // Get boat price from boat price table
+  const bpObj=allBoatRoutePrices?.find(r=>r.boatName===match.name&&r.boatType===bType);
+  const bpVal=bpObj?parseFloat(bpObj.price)||0:null;
   if(destBtns&&locs.length){
     destBtns.innerHTML=locs.map(loc=>{
-      const pr=lookupBoatRoutePrice(pickup,harbour,match.name,bType,loc);
-      const prLabel=pr!=null
-        ?`<span style="font-family:monospace;font-size:.62rem;color:#f39c12;font-weight:800;margin-left:5px">MVR ${pr}</span>`
+      const prLabel=bpVal!=null
+        ?`<span style="font-family:monospace;font-size:.62rem;color:#27ae60;font-weight:800;margin-left:5px">Boat: MVR ${bpVal}</span>`
         :'';
-      return`<button type="button" class="dloc-btn" onclick="selectManualDest('${isB?'boat':'sb'}',${JSON.stringify(match.name)},${JSON.stringify(loc)},${pr!=null?pr:'null'})">${loc}${prLabel}</button>`;
+      return`<button type="button" class="dloc-btn" onclick="selectManualDest('${isB?'boat':'sb'}',${JSON.stringify(match.name)},${JSON.stringify(loc)},${bpVal!=null?bpVal:'null'})">${loc}${prLabel}</button>`;
     }).join('');
     destBtns.style.display='flex';
   }
@@ -1807,6 +1989,7 @@ window.filterSBAtolls=function(){
 window.selAtollFn=function(){/* no-op */};
 window.selSBAtoll=function(){/* no-op */};
 
+/* ── BOAT GRID RENDERERS ── */
 function renderBoatGrid(boats){
   const g=$('boatGrid');if(!boats.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.7rem"><p>No boats found.</p></div>';return}
   g.innerHTML=boats.map(b=>`<div class="boat-card" data-id="${b.id}" onclick="selBoat('${b.id}')">
@@ -1822,8 +2005,7 @@ function renderSBGrid(boats){
     <div class="boat-ck"><i class="fas fa-check"></i></div></div>`).join('')
 }
 
-
-
+/* ── STEP REVEAL ── */
 
 /* ── BOAT LOCATIONS: name strings only, price from boatRoutePrices table ── */
 function getIslandNames(boat){
@@ -1841,12 +2023,11 @@ window.selBoat=function(id){
   const locs=getIslandNames(boat);
   if(!locs.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No locations set. Add them in admin.</p></div>';updateBoatPriceBadge();return;}
   const pickup=$('pLocVal').value;
-  const harbour=$('selBoatHarbour')?.value||boat.harbour||'';
-  ig.innerHTML=locs.map(loc=>{
-    const pr=lookupBoatRoutePrice(pickup,harbour,boat.name,'boat');
-    const prLabel=pr!=null?`<span style="font-size:.6rem;font-family:monospace;font-weight:800;color:#f39c12;display:block;margin-top:2px">MVR ${pr}</span>`:'';
-    return`<button type="button" class="isl-btn" data-islname="${encodeURIComponent(loc)}">${loc}</button>`;
-  }).join('');
+  // Find harbour automatically from boatRoutePrices for this pickup + boat
+  const priceEntry=allBoatRoutePrices.find(r=>r.pickup===pickup&&r.boatName===boat.name&&r.boatType==='boat');
+  const harbour=priceEntry?priceEntry.harbour:'';
+  $('selBoatHarbour').value=harbour;
+  ig.innerHTML=locs.map(loc=>`<button type="button" class="isl-btn" data-islname="${encodeURIComponent(loc)}">${loc}</button>`).join('');
   ig.querySelectorAll('.isl-btn').forEach(btn=>{
     btn.addEventListener('click',function(ev){
       ev.preventDefault();ev.stopPropagation();
@@ -1870,12 +2051,11 @@ window.selSpeedBoat=function(id){
   const locs=getIslandNames(boat);
   if(!locs.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No locations set. Add them in admin.</p></div>';updateBoatPriceBadge();return;}
   const pickup=$('pLocVal').value;
-  const sbharbour=$('selSBHarbour')?.value||boat.harbour||'';
-  ig.innerHTML=locs.map(loc=>{
-    const pr=lookupBoatRoutePrice(pickup,sbharbour,boat.name,'speedboat');
-    const prLabel=pr!=null?`<span style="font-size:.6rem;font-family:monospace;font-weight:800;color:#f39c12;display:block;margin-top:2px">MVR ${pr}</span>`:'';
-    return`<button type="button" class="isl-btn sb-isl-btn" data-sbisl="${encodeURIComponent(loc)}">${loc}</button>`;
-  }).join('');
+  // Find harbour automatically from boatRoutePrices for this pickup + boat
+  const priceEntry=allBoatRoutePrices.find(r=>r.pickup===pickup&&r.boatName===boat.name&&r.boatType==='speedboat');
+  const harbour=priceEntry?priceEntry.harbour:'';
+  $('selSBHarbour').value=harbour;
+  ig.innerHTML=locs.map(loc=>`<button type="button" class="isl-btn sb-isl-btn" data-sbisl="${encodeURIComponent(loc)}">${loc}</button>`).join('');
   ig.querySelectorAll('.sb-isl-btn').forEach(btn=>{
     btn.addEventListener('click',function(ev){
       ev.preventDefault();ev.stopPropagation();
@@ -2004,6 +2184,7 @@ $('payConfirm').onclick=async()=>{
       await Promise.all(TCIDS.map(cid=>fetch('https://api.telegram.org/bot'+TBOT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_msg})})));
       $('payMod').classList.remove('show');
       showToast('Order saved! We\'ll verify your payment soon.','ok');
+      clearDraft();
       $('cargoForm').reset();
       /* Reset UI */
       document.querySelectorAll('.ct-card,.pickup-card,.dloc-btn,.w-btn,.pkg-size-card,.time-slot-btn,.floor-btn,.boat-card,.sb-card,.isl-btn,.sb-isl-btn').forEach(x=>x.classList.remove('active'));
