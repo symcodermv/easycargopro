@@ -418,6 +418,17 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .close-btn{background:rgba(255,255,255,.07);border:none;color:white;font-size:1.2rem;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .modal-btns{display:flex;gap:8px;margin-top:.9rem}
 .bank-box{background:#1b2537;border-radius:14px;padding:.85rem;margin:.65rem 0}
+.pay-step{display:flex;align-items:center;gap:.75rem;padding:.55rem 0;border-bottom:1px solid rgba(255,255,255,.05);transition:opacity .4s,color .4s}
+.pay-step:last-child{border-bottom:none}
+.pay-step-ico{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;flex-shrink:0;background:rgba(255,255,255,.06);color:rgba(255,255,255,.35);transition:all .4s}
+.pay-step-txt{font-size:.78rem;color:rgba(255,255,255,.55);font-weight:500;transition:color .4s}
+.pay-step.done .pay-step-ico{background:rgba(39,174,96,.2);color:#27ae60}
+.pay-step.done .pay-step-txt{color:rgba(255,255,255,.8)}
+.pay-step.active .pay-step-ico{background:rgba(243,156,18,.15);color:#f39c12}
+.pay-step.active .pay-step-txt{color:white;font-weight:700}
+.pay-step.active{opacity:1}
+.pay-step.done{opacity:1}
+@keyframes successPop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
 .bank-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #2e3f55;font-size:.8rem}
 .bank-row:last-child{border-bottom:none}
 .bank-row .bk{color:rgba(255,255,255,.42)}
@@ -1112,16 +1123,87 @@ img{max-width:100%;height:auto}
 
 <!-- PAYMENT MODAL -->
 <div class="modal-overlay" id="payMod">
-<div class="modal-box">
-  <div class="modal-hd"><div class="modal-title"><i class="fas fa-wallet"></i> Payment Required</div><button class="close-btn" id="payClose"><i class="fas fa-times"></i></button></div>
-  <div class="bank-box">
-    <div class="bank-row"><span class="bk">Bank</span><span class="bv">Bank of Maldives</span></div>
-    <div class="bank-row"><span class="bk">Account Name</span><span class="bv">EasyCargo MV</span></div>
-    <div class="bank-row"><span class="bk">Account No.</span><span class="bv"><span style="font-family:monospace">7730000770230</span><button class="copy-btn" onclick="navigator.clipboard.writeText('7730000770230');showToast('Copied!','info')">COPY</button></span></div>
-    <div class="bank-row"><span class="bk">Amount</span><span class="bv" id="payAmt" style="color:#f39c12;font-size:1rem">0 MVR</span></div>
+<div class="modal-box" style="max-width:440px">
+  <!-- PAYMENT FORM (default view) -->
+  <div id="payFormView">
+    <div class="modal-hd">
+      <div class="modal-title"><i class="fas fa-wallet"></i> Complete Payment</div>
+      <button class="close-btn" id="payClose"><i class="fas fa-times"></i></button>
+    </div>
+    <!-- Amount highlight -->
+    <div style="text-align:center;margin-bottom:1rem;padding:.9rem;background:rgba(243,156,18,.08);border:1.5px solid rgba(243,156,18,.2);border-radius:14px">
+      <div style="font-size:.65rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;font-family:monospace;margin-bottom:4px">Amount to Pay</div>
+      <div id="payAmt" style="font-size:2rem;font-weight:900;color:#f39c12;font-family:monospace;letter-spacing:1px">0 MVR</div>
+    </div>
+    <!-- Bank details -->
+    <div class="bank-box">
+      <div class="bank-row"><span class="bk">Bank</span><span class="bv">Bank of Maldives</span></div>
+      <div class="bank-row"><span class="bk">Account Name</span><span class="bv">EasyCargo MV</span></div>
+      <div class="bank-row">
+        <span class="bk">Account No.</span>
+        <span class="bv" style="display:flex;align-items:center;gap:7px">
+          <span style="font-family:monospace;font-weight:700">7730000770230</span>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText('7730000770230').then(()=>showToast('Account number copied!','ok'))">COPY</button>
+        </span>
+      </div>
+    </div>
+    <!-- Slip upload -->
+    <div class="fg">
+      <label style="font-size:.74rem;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:.35rem;display:block"><i class="fas fa-image" style="color:#f39c12;margin-right:5px"></i>Upload Payment Slip</label>
+      <div class="file-zone"><input type="file" id="slipFile" accept="image/*"><i class="fas fa-cloud-arrow-up"></i><span id="slipFN">Tap to attach slip photo</span></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-sec" style="flex:1" id="payCancel"><i class="fas fa-times"></i> Cancel</button>
+      <button class="btn btn-gold" style="flex:2" id="payConfirm"><i class="fas fa-paper-plane"></i> Save &amp; Pay</button>
+    </div>
   </div>
-  <div class="fg"><label>Upload Payment Slip</label><div class="file-zone"><input type="file" id="slipFile" accept="image/*"><i class="fas fa-cloud-arrow-up"></i><span id="slipFN">Tap to attach slip</span></div></div>
-  <div class="modal-btns"><button class="btn btn-sec" style="flex:1" id="payCancel">Cancel</button><button class="btn btn-gold" style="flex:2" id="payConfirm"><i class="fas fa-check-circle"></i> Confirm</button></div>
+
+  <!-- SAVING PROGRESS VIEW (shown while saving) -->
+  <div id="paySavingView" style="display:none;padding:.5rem 0">
+    <div style="text-align:center;margin-bottom:1.4rem">
+      <div id="payProgressIcon" style="width:64px;height:64px;background:rgba(243,156,18,.1);border:2px solid rgba(243,156,18,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-size:1.6rem;color:#f39c12">
+        <i class="fas fa-paper-plane" id="payProgressPlaneIcon" style="transition:all .4s"></i>
+      </div>
+      <div id="payProgressTitle" style="font-size:1rem;font-weight:800;color:white;margin-bottom:.3rem">Saving your order…</div>
+      <div id="payProgressSub" style="font-size:.74rem;color:rgba(255,255,255,.45)">Please wait</div>
+    </div>
+    <!-- Step progress list -->
+    <div style="background:#1a2535;border-radius:14px;padding:.9rem;margin-bottom:.9rem">
+      <div class="pay-step" id="pstep1">
+        <div class="pay-step-ico"><i class="fas fa-circle-notch fa-spin"></i></div>
+        <div class="pay-step-txt">Reading payment slip…</div>
+      </div>
+      <div class="pay-step" id="pstep2" style="opacity:.35">
+        <div class="pay-step-ico"><i class="fas fa-circle"></i></div>
+        <div class="pay-step-txt">Saving order to database…</div>
+      </div>
+      <div class="pay-step" id="pstep3" style="opacity:.35">
+        <div class="pay-step-ico"><i class="fas fa-circle"></i></div>
+        <div class="pay-step-txt">Notifying admin team…</div>
+      </div>
+      <div class="pay-step" id="pstep4" style="opacity:.35">
+        <div class="pay-step-ico"><i class="fas fa-circle"></i></div>
+        <div class="pay-step-txt">Finalizing…</div>
+      </div>
+    </div>
+    <!-- Overall progress bar -->
+    <div style="background:#2e3f55;border-radius:20px;height:8px;overflow:hidden;margin-bottom:.5rem">
+      <div id="payProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#f39c12,#e67e22);border-radius:20px;transition:width .6s ease"></div>
+    </div>
+    <div id="payProgressPct" style="text-align:center;font-size:.68rem;color:rgba(255,255,255,.35);font-family:monospace">0%</div>
+  </div>
+
+  <!-- SUCCESS VIEW -->
+  <div id="paySuccessView" style="display:none;text-align:center;padding:.5rem 0">
+    <div style="width:72px;height:72px;background:rgba(39,174,96,.15);border:2px solid rgba(39,174,96,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.8rem;color:#27ae60;animation:successPop .5s cubic-bezier(.34,1.56,.64,1)">
+      <i class="fas fa-check"></i>
+    </div>
+    <div style="font-size:1.1rem;font-weight:800;color:white;margin-bottom:.4rem">Order Placed!</div>
+    <div style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:.35rem">Your order has been saved successfully.</div>
+    <div id="paySuccessRef" style="font-family:monospace;font-size:.82rem;color:#f39c12;font-weight:700;background:rgba(243,156,18,.08);border:1px solid rgba(243,156,18,.2);border-radius:10px;padding:6px 14px;display:inline-block;margin-bottom:1rem"></div>
+    <div style="font-size:.72rem;color:rgba(255,255,255,.38);line-height:1.6">We'll review your payment slip and confirm your order.<br>You'll be notified once approved.</div>
+    <button class="btn btn-gold" style="width:100%;margin-top:1.1rem" onclick="closePaySuccess()"><i class="fas fa-check-circle"></i> Done</button>
+  </div>
 </div>
 </div>
 
@@ -1757,8 +1839,14 @@ window.viewSlip=src=>{$('slipViewImg').src=src;$('slipMod').classList.add('show'
 $('slipClose').onclick=$('slipClose2').onclick=()=>$('slipMod').classList.remove('show');
 
 /* ═══ FORM SUBMIT ═══ */
-$('slipFile').addEventListener('change',function(){$('slipFN').textContent=this.files[0]?this.files[0].name:'Tap to attach slip';});
-$('payClose').onclick=$('payCancel').onclick=()=>{$('payMod').classList.remove('show');busy=false;};
+$('slipFile').addEventListener('change',function(){$('slipFN').textContent=this.files[0]?this.files[0].name:'Tap to attach slip photo';});
+$('payClose').onclick=$('payCancel').onclick=()=>{
+  if(busy)return; // don't allow close while saving
+  $('payMod').classList.remove('show');
+  $('payFormView').style.display='block';
+  $('paySavingView').style.display='none';
+  $('paySuccessView').style.display='none';
+};
 $('cargoForm').addEventListener('submit',function(e){
   e.preventDefault();if(busy)return;
   const isAir=$('ctIsAir').value==='1';
@@ -1807,40 +1895,119 @@ $('cargoForm').addEventListener('submit',function(e){
 });
 
 $('payConfirm').onclick=async()=>{
-  if(!tmpD)return;const f=$('slipFile').files[0];if(!f){showToast('Attach a payment slip','err');return;}
-  busy=true;$('payConfirm').disabled=true;$('payConfirm').innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving...';
-  const rd=new FileReader();
-  rd.onload=async ev=>{
-    tmpD.paymentSlip=ev.target.result;
-    try{
-      const all=toArr((await db.ref('cargoDeliveries').once('value')).val());
-      all.push(tmpD);await db.ref('cargoDeliveries').set(all);
-      const _d=tmpD;
-      const _discStr=_d.discountAmount>0?'\nDiscount: -MVR '+_d.discountAmount+' ('+_d.discountPercent+'% loyalty)\nOriginal: MVR '+_d.basePrice:'';
-      const _airStr=_d.isAir?'\nType: Air Cargo ('+_d.airSubType+')\nDest: '+_d.airDestination+'\nWeight: '+_d.airWeight+'kg':'';
-      const _msg='New EasyCargo Delivery\nRef: '+_d.referenceNumber+'\nCustomer: '+_d.customerName+'\nContact: '+_d.customerContact+'\nCargo: '+_d.cargoType+(_d.isAir?_airStr:(_d.isExpress?'\nSize: '+_d.packageSize+'\nDuration: '+_d.selectedHrLabel:'\nWeight: '+_d.packageWeight))+'\nMode: '+_d.deliveryMode+'\nPickup: '+(_d.isAir?'Male (Air)':_d.pickupLocation)+'\nTo: '+_d.deliveryLocation+'\nPrice: MVR '+_d.deliveryPrice+_discStr+'\nDate: '+_d.deliveryDate;
-      const TBOT='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
-      await Promise.all([965429044,7307324767,319043357].map(cid=>fetch('https://api.telegram.org/bot'+TBOT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_msg})})));
-      $('payMod').classList.remove('show');showToast("Order saved! We'll verify your payment soon.",'ok');
-      clearDraft();$('cargoForm').reset();
-      document.querySelectorAll('.ct-card,.pickup-card,.dloc-btn,.w-btn,.pkg-size-card,.time-slot-btn,.floor-btn,.boat-card,.sb-card,.isl-btn,.sb-isl-btn,.air-island-btn').forEach(x=>x.classList.remove('active'));
-      $('ctV').value='';$('ctPrice').value='0';$('ctIsExpress').value='0';$('ctIsAir').value='0';
-      $('pLocVal').value='';$('dLocVal').value='';$('routePrice').value='0';$('boatPrice').value='0';$('floorPrice').value='0';$('floorNum').value='';
-      $('selW').value='';$('selWP').value='0';$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
-      $('selBoat').value='';$('selSB').value='';$('selIsl').value='';$('selSBIsl').value='';
-      resetAirSteps();
-      $('hiddenBasePrice').value='0';$('hiddenDiscount').value='0';$('hiddenDiscountPct').value='0';
-      $('islSec').style.display='none';$('sbIslSec').style.display='none';$('etaInfo').classList.remove('show');
-      $('expressFlowWrap').classList.remove('show');$('weightSec').classList.remove('show');$('addrX').classList.remove('show');
-      $('airCargoWrap').classList.remove('show');$('airWeightWrap').style.display='none';$('airPriceBreakdown').style.display='none';
-      const rpb=$('routePriceBadge');if(rpb)rpb.classList.remove('show');const disc=$('discountBanner');if(disc)disc.style.display='none';
-      const sm=$('stepMode');if(sm)sm.style.display='';
-      calcTotal();tmpD=null;
-    }catch(err){showToast('Error saving. Try again.','err');console.error(err);}
-    busy=false;$('payConfirm').disabled=false;$('payConfirm').innerHTML='<i class="fas fa-check-circle"></i> Confirm';
-  };
-  rd.readAsDataURL(f);
+  if(!tmpD)return;
+  const f=$('slipFile').files[0];
+  if(!f){showToast('Attach a payment slip photo','err');return;}
+  busy=true;
+  $('payConfirm').disabled=true;
+  // Switch to progress view
+  $('payFormView').style.display='none';
+  $('paySavingView').style.display='block';
+  $('paySuccessView').style.display='none';
+
+  function setStep(stepId, state){
+    const el=$(stepId);if(!el)return;
+    el.classList.remove('done','active');el.style.opacity='1';
+    el.classList.add(state);
+    if(state==='done'){
+      el.querySelector('.pay-step-ico').innerHTML='<i class="fas fa-check"></i>';
+    } else if(state==='active'){
+      el.querySelector('.pay-step-ico').innerHTML='<i class="fas fa-circle-notch fa-spin"></i>';
+    }
+  }
+  function setProgress(pct, title, sub){
+    const bar=$('payProgressBar'),pctEl=$('payProgressPct'),titleEl=$('payProgressTitle'),subEl=$('payProgressSub');
+    if(bar)bar.style.width=pct+'%';
+    if(pctEl)pctEl.textContent=pct+'%';
+    if(titleEl)titleEl.textContent=title;
+    if(subEl)subEl.textContent=sub;
+  }
+
+  // Init all steps
+  ['pstep1','pstep2','pstep3','pstep4'].forEach(s=>{
+    const el=$(s);if(el){el.classList.remove('done','active');el.style.opacity='.35';el.querySelector('.pay-step-ico').innerHTML='<i class="fas fa-circle"></i>';}
+  });
+
+  try{
+    // ── STEP 1: Read file ──
+    setStep('pstep1','active');setProgress(5,'Reading payment slip…','Processing image…');
+    const slipDataUrl = await new Promise((res,rej)=>{
+      const rd=new FileReader();rd.onload=e=>res(e.target.result);rd.onerror=()=>rej(new Error('File read failed'));rd.readAsDataURL(f);
+    });
+    setStep('pstep1','done');setProgress(25,'Saving order…','Connecting to database…');
+    await new Promise(r=>setTimeout(r,300));
+
+    // ── STEP 2: Save to Firebase ──
+    setStep('pstep2','active');setProgress(35,'Saving order…','Writing to database…');
+    tmpD.paymentSlip=slipDataUrl;
+    const all=toArr((await db.ref('cargoDeliveries').once('value')).val());
+    all.push(tmpD);
+    await db.ref('cargoDeliveries').set(all);
+    setStep('pstep2','done');setProgress(65,'Order saved!','Notifying admin…');
+    await new Promise(r=>setTimeout(r,200));
+
+    // ── STEP 3: Telegram notify ──
+    setStep('pstep3','active');setProgress(75,'Notifying admin team…','Sending notification…');
+    const _d=tmpD;
+    const _discStr=_d.discountAmount>0?'\nDiscount: -MVR '+_d.discountAmount+' ('+_d.discountPercent+'% loyalty)\nOriginal: MVR '+_d.basePrice:'';
+    const _airStr=_d.isAir?'\nType: Air Cargo ('+_d.airSubType+')\nDest: '+_d.airDestination+'\nWeight: '+_d.airWeight:'';
+    const _msg='New EasyCargo Delivery\nRef: '+_d.referenceNumber+'\nCustomer: '+_d.customerName+'\nContact: '+_d.customerContact+'\nCargo: '+_d.cargoType+(_d.isAir?_airStr:(_d.isExpress?'\nSize: '+_d.packageSize+'\nDuration: '+_d.selectedHrLabel:'\nWeight: '+_d.packageWeight))+'\nMode: '+_d.deliveryMode+'\nPickup: '+(_d.isAir?_d.pickupLocation||'Air':_d.pickupLocation)+'\nTo: '+_d.deliveryLocation+'\nPrice: MVR '+_d.deliveryPrice+_discStr+'\nDate: '+_d.deliveryDate;
+    const TBOT='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+    await Promise.allSettled([965429044,7307324767,319043357].map(cid=>fetch('https://api.telegram.org/bot'+TBOT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_msg})})));
+    setStep('pstep3','done');setProgress(90,'Almost done…','Cleaning up…');
+    await new Promise(r=>setTimeout(r,300));
+
+    // ── STEP 4: Finalize ──
+    setStep('pstep4','active');setProgress(95,'Finalizing…','Almost there…');
+    clearDraft();
+    await new Promise(r=>setTimeout(r,400));
+    setStep('pstep4','done');setProgress(100,'Done!','Order placed successfully');
+
+    // ── SUCCESS VIEW ──
+    await new Promise(r=>setTimeout(r,300));
+    $('paySavingView').style.display='none';
+    $('paySuccessView').style.display='block';
+    if($('paySuccessRef'))$('paySuccessRef').textContent='REF: '+_d.referenceNumber;
+
+    // Reset form in background
+    $('cargoForm').reset();
+    document.querySelectorAll('.ct-card,.pickup-card,.dloc-btn,.w-btn,.pkg-size-card,.time-slot-btn,.floor-btn,.boat-card,.sb-card,.isl-btn,.sb-isl-btn,.air-island-btn').forEach(x=>{x.classList.remove('active');x.style.display='';});
+    $('ctV').value='';$('ctPrice').value='0';$('ctIsExpress').value='0';$('ctIsAir').value='0';
+    $('pLocVal').value='';$('dLocVal').value='';$('routePrice').value='0';$('boatPrice').value='0';$('floorPrice').value='0';$('floorNum').value='';
+    $('selW').value='';$('selWP').value='0';$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';
+    $('selBoat').value='';$('selSB').value='';$('selIsl').value='';$('selSBIsl').value='';
+    resetAirSteps();
+    const rpb=$('routePriceBadge');if(rpb)rpb.classList.remove('show');
+    const disc=$('discountBanner');if(disc)disc.style.display='none';
+    const sm=$('stepMode');if(sm)sm.style.display='';
+    hideAirUI();hideStep('stepPickup');hideStep('stepMode');
+    const origEl=$('origPriceDisp');if(origEl)origEl.style.display='none';
+    if($('hiddenBasePrice'))$('hiddenBasePrice').value='0';
+    if($('hiddenDiscount'))$('hiddenDiscount').value='0';
+    if($('hiddenDiscountPct'))$('hiddenDiscountPct').value='0';
+    calcTotal();tmpD=null;
+
+  }catch(err){
+    console.error('Save error:',err);
+    // Show error state
+    $('paySavingView').style.display='none';
+    $('payFormView').style.display='block';
+    showToast('Save failed: '+(err.message||'Unknown error')+'. Please try again.','err');
+  }
+  busy=false;
+  $('payConfirm').disabled=false;
 };
+
+window.closePaySuccess=function(){
+  $('payMod').classList.remove('show');
+  // Reset modal state for next use
+  $('payFormView').style.display='block';
+  $('paySavingView').style.display='none';
+  $('paySuccessView').style.display='none';
+  $('slipFile').value='';$('slipFN').textContent='Tap to attach slip photo';
+  showToast("Order placed! We'll verify your payment soon.",'ok');
+};
+
 
 /* ═══ REWARDS ENGINE ═══ */
 function mkEKey(email){return email.replace(/\./g,'_');}
