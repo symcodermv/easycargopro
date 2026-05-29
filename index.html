@@ -177,9 +177,16 @@ select.fi option{background:#1e2a3a}
 .ct-card.active .ct-ck{display:flex}
 /* AIR CARGO CARD — plane flies right on select, then expands to full width */
 .ct-card.air-card i{color:#64b4ff;transition:transform .5s ease,opacity .3s}
-.ct-card.air-card .ct-pr{color:#64b4ff}
+.ct-card.air-card .ct-name{color:white}
+.ct-card.air-card .ct-pr{color:#64b4ff;font-size:.65rem}
 .ct-card.air-card:hover{border-color:rgba(100,180,255,.45)}
 .ct-card.air-card:hover i{transform:translateX(5px)}
+/* Express air card gets gold/orange accent on icon */
+.ct-card.air-card[data-airid="express"] i{color:#f39c12}
+.ct-card.air-card[data-airid="express"] .ct-pr{color:#f39c12}
+.ct-card.air-card[data-airid="express"]:hover{border-color:rgba(243,156,18,.45)}
+.ct-card.air-card[data-airid="express"].active{border-color:#f39c12;background:rgba(243,156,18,.08)}
+.ct-card.air-card[data-airid="express"].active i{animation:planeFlyOut 2s cubic-bezier(.4,0,.2,1) forwards}
 .ct-card.air-card.active{border-color:#64b4ff;background:rgba(100,180,255,.08);grid-column:1/-1;justify-content:center}
 /* Plane flies right and disappears — air section opens after 2s */
 .ct-card.air-card.active i{animation:planeFlyOut 2s cubic-bezier(.4,0,.2,1) forwards}
@@ -508,6 +515,30 @@ table{min-width:520px}
 .air-total-val{font-size:1.5rem;font-weight:900;color:#64b4ff;font-family:monospace;letter-spacing:.5px}
 
 .air-step-block{margin-bottom:.9rem}
+.air-type-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.85rem}
+.air-type-choice-btn{background:#1a2535;border:2px solid rgba(243,156,18,.2);border-radius:16px;padding:1.1rem .8rem;cursor:pointer;text-align:center;transition:.22s;font-family:inherit;position:relative;overflow:hidden}
+.air-type-choice-btn:hover{border-color:rgba(243,156,18,.5);background:#1e2d42;transform:translateY(-2px)}
+.air-type-choice-btn:hover .air-choice-icon i{transform:translateX(4px) rotate(-5deg)}
+.air-type-choice-btn.active{border-color:#f39c12;background:rgba(243,156,18,.08)}
+.air-type-choice-btn.active .air-choice-icon i{animation:choicePlaneFly 2s cubic-bezier(.25,0,.4,1) forwards}
+@keyframes choicePlaneFly{
+  0%{transform:translateX(0) rotate(0);opacity:1;color:rgba(243,156,18,.5)}
+  15%{transform:translateX(5px) rotate(-8deg);opacity:1;color:#f39c12}
+  55%{transform:translateX(55px) rotate(-10deg) scaleX(1.2);opacity:.9;color:#f39c12}
+  75%{transform:translateX(85px);opacity:.1}
+  76%{transform:translateX(-8px) rotate(5deg);opacity:0}
+  90%{transform:translateX(0) rotate(0);opacity:.8;color:#f39c12}
+  100%{transform:translateX(0) rotate(0);opacity:1;color:#f39c12}
+}
+.air-choice-icon{font-size:1.7rem;margin-bottom:.5rem;display:block}
+.air-choice-icon i{transition:transform .2s,color .2s;display:inline-block;color:rgba(243,156,18,.4)}
+.air-type-choice-btn.active .air-choice-icon i{color:#f39c12}
+.air-choice-name{font-size:.84rem;font-weight:800;color:white;margin-bottom:.3rem}
+.air-type-choice-btn.active .air-choice-name{color:#f39c12}
+.air-choice-eta{font-size:.65rem;color:rgba(255,255,255,.38);font-family:monospace}
+.air-type-choice-btn.active .air-choice-eta{color:rgba(243,156,18,.6)}
+.air-choice-ck{position:absolute;top:7px;right:7px;width:18px;height:18px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:.48rem;color:#1e2a3a}
+.air-type-choice-btn.active .air-choice-ck{display:flex}
 .air-step-label{font-size:.62rem;font-weight:700;color:#64b4ff;text-transform:uppercase;letter-spacing:1.2px;font-family:monospace;margin-bottom:.6rem;display:flex;align-items:center;gap:5px;padding:.5rem .8rem;background:rgba(100,180,255,.07);border-radius:10px;border-left:3px solid #64b4ff}
 .air-dest-search-wrap{position:relative;margin-bottom:.6rem}
 .air-dest-search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.3);font-size:.8rem;pointer-events:none}
@@ -516,13 +547,28 @@ table{min-width:520px}
 .air-dest-search::placeholder{color:rgba(255,255,255,.22)}
 .air-island-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:.5rem}
 @media(min-width:420px){.air-island-grid{grid-template-columns:1fr 1fr 1fr}}
-.air-island-btn{background:#1a2535;border:1.5px solid #2e3f55;border-radius:12px;padding:.6rem .7rem;cursor:pointer;text-align:left;transition:.2s;font-family:inherit;position:relative;display:flex;flex-direction:column;gap:2px;width:100%}
-.air-island-btn:hover{border-color:rgba(100,180,255,.45);background:#1e2d42}
-.air-island-btn.active{border-color:#64b4ff;background:rgba(100,180,255,.1)}
+.air-island-btn{background:#1a2535;border:1.5px solid #2e3f55;border-radius:12px;padding:.6rem .75rem;cursor:pointer;text-align:left;transition:border-color .2s,background .2s;font-family:inherit;position:relative;display:flex;align-items:center;gap:.55rem;width:100%}
+.air-island-btn:hover{border-color:rgba(243,156,18,.45);background:#1e2d42}
+.air-island-btn:hover .air-isl-plane{transform:translateX(4px);color:rgba(243,156,18,.6)}
+.air-island-btn.active{border-color:#f39c12;background:rgba(243,156,18,.09)}
+.air-island-btn.active .air-isl-plane{animation:islPlaneFly 2s cubic-bezier(.25,0,.4,1) forwards}
+@keyframes islPlaneFly{
+  0%{transform:translateX(0) scaleX(1);opacity:1;color:rgba(243,156,18,.4)}
+  15%{transform:translateX(6px) scaleX(1.05);opacity:1;color:#f39c12}
+  55%{transform:translateX(60px) scaleX(1.2);opacity:.9;color:#f39c12}
+  75%{transform:translateX(90px) scaleX(1.1);opacity:.1}
+  76%{transform:translateX(-8px) scaleX(.9);opacity:0}
+  90%{transform:translateX(0) scaleX(1);opacity:.7;color:#f39c12}
+  100%{transform:translateX(0) scaleX(1);opacity:1;color:#f39c12}
+}
+.air-isl-plane{font-size:.82rem;color:rgba(243,156,18,.3);flex-shrink:0;transition:transform .2s,color .2s}
+.air-isl-info{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
 .air-isl-name{font-size:.78rem;font-weight:700;color:white;line-height:1.3}
-.air-isl-atoll{font-size:.62rem;color:rgba(255,255,255,.38)}
-.air-island-ck{position:absolute;top:6px;right:6px;width:16px;height:16px;background:#64b4ff;border-radius:50%;display:none;align-items:center;justify-content:center}
-.air-island-ck i{font-size:.42rem;color:#0a0f1e}
+.air-isl-atoll{font-size:.6rem;color:rgba(255,255,255,.35)}
+.air-island-btn.active .air-isl-name{color:#f39c12;font-weight:800}
+.air-island-btn.active .air-isl-atoll{color:rgba(243,156,18,.55)}
+.air-island-ck{width:16px;height:16px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center;flex-shrink:0}
+.air-island-ck i{font-size:.4rem;color:#1e2a3a}
 .air-island-btn.active .air-island-ck{display:flex}
 .air-total-box{display:flex;align-items:center;gap:.75rem;background:linear-gradient(135deg,rgba(100,180,255,.12),rgba(100,180,255,.06));border:1.5px solid rgba(100,180,255,.3);border-radius:16px;padding:.9rem 1.1rem;margin-bottom:.85rem}
 .air-total-box>i{font-size:1.4rem;color:#64b4ff;flex-shrink:0}
@@ -774,56 +820,65 @@ img{max-width:100%;height:auto}
 
                     <!-- ═══ AIR CARGO SECTION ═══ -->
           <div class="air-cargo-wrap" id="airCargoWrap">
+            <input type="hidden" id="airSubType" value="">
 
-            <input type="hidden" id="airSubType" value="normal">
-
-            <!-- STEP 1: Pickup Location (air-specific, admin assigned) -->
-            <div class="air-step-block" id="airPickupStep">
-              <div class="air-step-label"><i class="fas fa-circle-dot"></i> Step 1 — Pickup Location</div>
-              <div class="pickup-grid" id="airPickupGrid">
-                <div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>Loading pickup locations…</p></div>
+            <!-- STEP 0: Choose Normal or Express Air -->
+            <div id="airTypeStep">
+              <div class="air-step-label"><i class="fas fa-plane"></i> Select Air Cargo Type</div>
+              <div class="air-type-choice-grid" id="airTypeChoiceGrid">
+                <!-- Filled by loadAirTypeChoices() -->
               </div>
-              <input type="hidden" id="airPickupVal">
-              <!-- Address/Postal input — shown only for address/postal type pickups -->
-              <div class="step-section" id="airAddrX" style="margin-top:.5rem">
-                <div class="fg"><label id="airAddrLbl"><i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address</label>
-                  <input class="fi" type="text" id="airAddrVal" placeholder="Enter full address…">
+            </div>
+
+            <!-- Steps 1–3: shown after type is chosen -->
+            <div id="airStepsWrap" style="display:none">
+
+              <!-- STEP 1: Pickup Location -->
+              <div class="air-step-block" id="airPickupStep">
+                <div class="air-step-label"><i class="fas fa-circle-dot"></i> Step 1 — Pickup Location</div>
+                <div class="pickup-grid" id="airPickupGrid">
+                  <div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>Loading pickup locations…</p></div>
+                </div>
+                <input type="hidden" id="airPickupVal">
+                <div class="step-section" id="airAddrX" style="margin-top:.5rem">
+                  <div class="fg"><label id="airAddrLbl"><i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address</label>
+                    <input class="fi" type="text" id="airAddrVal" placeholder="Enter full address…">
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- STEP 2: Select Destination Island (with search filter) -->
-            <div class="air-step-block" id="airDestStep" style="display:none">
-              <div class="air-step-label"><i class="fas fa-plane-departure"></i> Step 2 — Select Destination Island</div>
-              <!-- Search filter -->
-              <div class="air-dest-search-wrap">
-                <i class="fas fa-search"></i>
-                <input type="text" id="airDestSearch" class="air-dest-search" placeholder="Search island or atoll…" oninput="filterAirDests()">
+              <!-- STEP 2: Destination Island -->
+              <div class="air-step-block" id="airDestStep" style="display:none">
+                <div class="air-step-label"><i class="fas fa-plane-departure"></i> Step 2 — Select Destination Island</div>
+                <div class="air-dest-search-wrap">
+                  <i class="fas fa-search"></i>
+                  <input type="text" id="airDestSearch" class="air-dest-search" placeholder="Search island or atoll…" oninput="filterAirDests()">
+                </div>
+                <div class="air-island-grid" id="airIslandGrid">
+                  <div class="empty-s" style="grid-column:1/-1"><i class="fas fa-plane-slash"></i><p>Loading destinations…</p></div>
+                </div>
+                <input type="hidden" id="airSelIslandCode">
+                <input type="hidden" id="airSelIslandName">
+                <input type="hidden" id="airSelIslandGroup">
               </div>
-              <div class="air-island-grid" id="airIslandGrid">
-                <div class="empty-s" style="grid-column:1/-1"><i class="fas fa-plane-slash"></i><p>Loading destinations…</p></div>
-              </div>
-              <input type="hidden" id="airSelIslandCode">
-              <input type="hidden" id="airSelIslandName">
-              <input type="hidden" id="airSelIslandGroup">
-            </div>
 
-            <!-- STEP 3: Package Weight Range (admin-set prices, no formula) -->
-            <div class="air-step-block" id="airWeightStep" style="display:none">
-              <div class="air-step-label"><i class="fas fa-weight-hanging"></i> Step 3 — Package Weight Range</div>
-              <div class="w-grid" id="airWGrid">
-                <div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>Loading weight ranges…</p></div>
+              <!-- STEP 3: Weight Range -->
+              <div class="air-step-block" id="airWeightStep" style="display:none">
+                <div class="air-step-label"><i class="fas fa-weight-hanging"></i> Step 3 — Package Weight Range</div>
+                <div class="w-grid" id="airWGrid">
+                  <div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>Loading weight ranges…</p></div>
+                </div>
+                <input type="hidden" id="airSelWeightRange">
+                <input type="hidden" id="airSelWeightRangePrice">
               </div>
-              <input type="hidden" id="airSelWeightRange">
-              <input type="hidden" id="airSelWeightRangePrice">
-            </div>
 
-            <!-- Final price (admin-set, no formula shown) -->
-            <div class="air-total-box" id="airTotalBox" style="display:none">
-              <i class="fas fa-tag"></i>
-              <div>
-                <div class="air-total-label">Air Cargo Price</div>
-                <div class="air-total-val" id="airTotalValDisp">MVR 0</div>
+              <!-- Price -->
+              <div class="air-total-box" id="airTotalBox" style="display:none">
+                <i class="fas fa-tag"></i>
+                <div>
+                  <div class="air-total-label">Air Cargo Price</div>
+                  <div class="air-total-val" id="airTotalValDisp">MVR 0</div>
+                </div>
               </div>
             </div>
 
@@ -1263,34 +1318,71 @@ const DEFAULT_AIR_DESTINATIONS=[
   {code:'LMV',name:'Madivaru',atoll:'Lhaviyani Atoll',group:'D',active:true}
 ];
 let allAirWeightRanges=[];
-let allAirPickupLocations=[];  // admin-set air-specific pickups (airPickupLocations in Firebase)
+let allAirPickupLocations=[];
+let allAirTypeNormal={name:'Normal Air Cargo',eta:'1-3 Business Days',weights:[]};
+let allAirTypeExpress={name:'Express Air Cargo',eta:'Same Day / Next Day',weights:[]};
 
-// Firebase listeners for air data
-db.ref('airWeightRanges').on('value',snap=>{allAirWeightRanges=toArr(snap.val());if($('ctIsAir')?.value==='1')loadAirWeightGrid();});
-db.ref('airPickupLocations').on('value',snap=>{allAirPickupLocations=toArr(snap.val());if($('ctIsAir')?.value==='1')loadAirPickupGrid();});
+db.ref('airTypes').on('value',snap=>{
+  const d=snap.val()||{};
+  allAirTypeNormal=Object.assign({name:'Normal Air Cargo',eta:'1-3 Business Days',weights:[]},d.normal||{});
+  allAirTypeExpress=Object.assign({name:'Express Air Cargo',eta:'Same Day / Next Day',weights:[]},d.express||{});
+  allAirWeightRanges=allAirTypeNormal.weights.length?allAirTypeNormal.weights:allAirWeightRanges;
+  loadCtypeGrid();
+  if($('ctIsAir')&&$('ctIsAir').value==='1')loadAirTypeChoices();
+});
+db.ref('airWeightRanges').on('value',snap=>{allAirWeightRanges=toArr(snap.val());});
+db.ref('airPickupLocations').on('value',snap=>{allAirPickupLocations=toArr(snap.val());if($('ctIsAir')&&$('ctIsAir').value==='1')loadAirPickupGrid();});
 
-/* ── Normal/Express toggle ── */
-window.setAirSubType=function(sub){
+/* STEP 0: Load Normal/Express choice buttons */
+function loadAirTypeChoices(){
+  const g=$('airTypeChoiceGrid');if(!g)return;
+  const nName=allAirTypeNormal.name||'Normal Air Cargo';
+  const eName=allAirTypeExpress.name||'Express Air Cargo';
+  const nEta=allAirTypeNormal.eta||'1-3 Business Days';
+  const eEta=allAirTypeExpress.eta||'Same Day / Next Day';
+  const curSub=$('airSubType').value;
+  g.innerHTML=`
+    <button type="button" class="air-type-choice-btn normal-air${curSub==='normal'?' active':''}" id="airChoiceNormal" onclick="selAirSubTypeChoice('normal')">
+      <span class="air-choice-icon" style="color:#64b4ff"><i class="fas fa-box"></i></span>
+      <div class="air-choice-name">${nName}</div>
+      <div class="air-choice-eta">${nEta}</div>
+      <div class="air-choice-ck"><i class="fas fa-check"></i></div>
+    </button>
+    <button type="button" class="air-type-choice-btn express-air${curSub==='express'?' active':''}" id="airChoiceExpress" onclick="selAirSubTypeChoice('express')">
+      <span class="air-choice-icon" style="color:#f39c12"><i class="fas fa-bolt"></i></span>
+      <div class="air-choice-name">${eName}</div>
+      <div class="air-choice-eta">${eEta}</div>
+      <div class="air-choice-ck"><i class="fas fa-check"></i></div>
+    </button>`;
+}
+
+window.selAirSubTypeChoice=function(sub){
+  const curSub=$('airSubType').value;
+  const already=(curSub===sub)&&document.querySelector('.air-type-choice-btn.active');
+  document.querySelectorAll('.air-type-choice-btn').forEach(b=>b.classList.remove('active'));
+  if(already){
+    $('airSubType').value='';$('ctV').value='Air Cargo';
+    $('airStepsWrap').style.display='none';resetAirSubSteps();calcTotal();return;
+  }
+  const btn=sub==='normal'?$('airChoiceNormal'):$('airChoiceExpress');
+  if(btn)btn.classList.add('active');
   $('airSubType').value=sub;
-  if($('airSelWeightRange').value) applyAirWeightPrice();
+  const airData=sub==='express'?allAirTypeExpress:allAirTypeNormal;
+  $('ctV').value=airData.name||(sub==='express'?'Express Air Cargo':'Normal Air Cargo');
+  $('airStepsWrap').style.display='block';
+  resetAirSubSteps();loadAirPickupGrid();calcTotal();
 };
 
-
-
-/* ── STEP 1: Air Pickup Grid ──
-   Uses admin-set airPickupLocations if available,
-   falls back to the pickup locations assigned to this air cargo type */
+/* STEP 1: Air Pickup Grid */
 function loadAirPickupGrid(){
   const g=$('airPickupGrid');if(!g)return;
-  // Prefer admin-set air-specific pickup locations
   let locs=allAirPickupLocations.filter(l=>l.active!==false);
   if(!locs.length){
-    // Fallback: use pickup locations assigned to the air cargo type
     const ct=allCargoTypes.find(c=>(c.isAir||c.key==='air')&&$('ctV').value===c.name);
-    const assignedIds=ct?.pickupIds?.length>0?ct.pickupIds:null;
-    locs=assignedIds?allPickups.filter(l=>assignedIds.includes(String(l.id))):allPickups;
+    const aids=ct&&ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null;
+    locs=aids?allPickups.filter(l=>aids.includes(String(l.id))):allPickups;
   }
-  if(!locs.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured for air cargo.</p></div>';return;}
+  if(!locs.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations for air cargo.</p></div>';return;}
   $('airPickupVal').value='';
   g.innerHTML=locs.map(loc=>`<div class="pickup-card" data-airid="${loc.id}" onclick="selAirPickup(this,'${loc.id}')">${loc.imageUrl?`<img class="p-img" src="${loc.imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
     <div class="p-no-img" style="${loc.imageUrl?'display:none':''}"><i class="fas fa-store"></i></div>
@@ -1301,182 +1393,126 @@ function loadAirPickupGrid(){
 }
 
 window.selAirPickup=function(el,id){
-  const grid=$('airPickupGrid');
-  const already=el.classList.contains('active');
+  const grid=$('airPickupGrid'),already=el.classList.contains('active');
   grid.querySelectorAll('.pickup-card').forEach(c=>{c.classList.remove('active');c.style.display='block';});
-  if(already){
-    $('airPickupVal').value='';
-    $('airAddrX').classList.remove('revealed');
-    $('airAddrVal').value='';$('airAddrVal').required=false;
-    $('airDestStep').style.display='none';
-    $('airWeightStep').style.display='none';
-    $('airTotalBox').style.display='none';
-    $('airTotalPrice').value='0';
-    resetAirDestWeight();
-    calcTotal();
-    return;
-  }
+  if($('airAddrX'))$('airAddrX').classList.remove('revealed');
+  if($('airAddrVal')){$('airAddrVal').value='';$('airAddrVal').required=false;}
+  if(already){$('airPickupVal').value='';$('airDestStep').style.display='none';$('airWeightStep').style.display='none';$('airTotalBox').style.display='none';$('airTotalPrice').value='0';resetAirDestWeight();calcTotal();return;}
   el.classList.add('active');
   grid.querySelectorAll('.pickup-card:not(.active)').forEach(c=>c.style.display='none');
-
-  // Find location from air-specific or fallback pickups
   const loc=[...allAirPickupLocations,...allPickups].find(l=>String(l.id)===String(id));
   $('airPickupVal').value=loc?loc.name:'';
-
-  // Show address/postal input based on location type — same as normal cargo
-  const ax=$('airAddrX');
-  const lbl=$('airAddrLbl');
-  const input=$('airAddrVal');
+  const ax=$('airAddrX'),lbl=$('airAddrLbl'),inp=$('airAddrVal');
   if(loc&&(loc.type==='address'||loc.type==='postal')){
-    ax.classList.add('revealed');
-    input.required=true;
-    if(loc.type==='postal'){
-      lbl.innerHTML='<i class="fas fa-envelope" style="color:#f39c12;margin-right:4px"></i>Post/Pickpost Number';
-      input.placeholder='Enter Post/Pickpost number…';
-    } else {
-      lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address';
-      input.placeholder='Enter full address…';
-    }
-  } else {
-    ax.classList.remove('revealed');
-    input.required=false;
-    input.value='';
-  }
-
-  // Show next step
-  $('airDestStep').style.display='block';
-  $('airDestSearch').value='';
-  loadAirIslandGrid();
+    ax.classList.add('revealed');inp.required=true;
+    if(loc.type==='postal'){lbl.innerHTML='<i class="fas fa-envelope" style="color:#f39c12;margin-right:4px"></i>Post/Pickpost Number';inp.placeholder='Enter Post/Pickpost number...';}
+    else{lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address';inp.placeholder='Enter full address...';}
+  }else{ax.classList.remove('revealed');inp.required=false;inp.value='';}
+  $('airDestStep').style.display='block';$('airDestSearch').value='';loadAirIslandGrid();
 };
 
 function resetAirDestWeight(){
   $('airSelIslandCode').value='';$('airSelIslandName').value='';$('airSelIslandGroup').value='';
   $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';
-  document.querySelectorAll('.air-island-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('#airWGrid .w-btn').forEach(b=>b.classList.remove('active'));
-  $('airWeightStep').style.display='none';
-  $('airTotalBox').style.display='none';
-  $('airTotalPrice').value='0';
+  document.querySelectorAll('.air-island-btn,#airWGrid .w-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});
+  $('airWeightStep').style.display='none';$('airTotalBox').style.display='none';$('airTotalPrice').value='0';
 }
 
-/* ── STEP 2: Destination island grid with search ──
-   Shows island name only — no pricing info. Admin-set via airDestinations. */
+/* STEP 2: Island Grid */
 function loadAirIslandGrid(filterQ){
   const g=$('airIslandGrid');if(!g)return;
   const fbDests=allAirDestinations.filter(d=>d.active!==false);
   const dests=fbDests.length?fbDests:DEFAULT_AIR_DESTINATIONS;
   const q=(filterQ||'').toLowerCase().trim();
   const filtered=q?dests.filter(d=>(d.name||'').toLowerCase().includes(q)||(d.atoll||'').toLowerCase().includes(q)||(d.code||'').toLowerCase().includes(q)):dests;
-  if(!filtered.length){
-    g.innerHTML=q?`<div class="empty-s" style="grid-column:1/-1"><i class="fas fa-search"></i><p>No islands match "${filterQ}"</p></div>`:'<div class="empty-s" style="grid-column:1/-1"><i class="fas fa-plane-slash"></i><p>No destinations configured.</p></div>';
-    return;
-  }
-  g.innerHTML=filtered.map(dest=>`<button type="button" class="air-island-btn" data-code="${dest.code}" data-name="${dest.name}" data-group="${dest.group||'A'}" onclick="selAirIsland(this)">
-    <span class="air-isl-name">${dest.name}</span>
-    <span class="air-isl-atoll">${dest.atoll||''}</span>
-    <span class="air-island-ck"><i class="fas fa-check"></i></span>
-  </button>`).join('');
+  if(!filtered.length){g.innerHTML=q?`<div class="empty-s" style="grid-column:1/-1"><i class="fas fa-search"></i><p>No islands match "${filterQ}"</p></div>`:'<div class="empty-s" style="grid-column:1/-1"><i class="fas fa-plane-slash"></i><p>No destinations.</p></div>';return;}
+  g.innerHTML=filtered.map(dest=>`<button type="button" class="air-island-btn" data-code="${dest.code}" data-name="${dest.name}" data-group="${dest.group||'A'}" onclick="selAirIsland(this)"><i class="fas fa-plane air-isl-plane"></i><div class="air-isl-info"><span class="air-isl-name">${dest.name}</span><span class="air-isl-atoll">${dest.atoll||''}</span></div><div class="air-island-ck"><i class="fas fa-check"></i></div></button>`).join('');
 }
 window.filterAirDests=function(){loadAirIslandGrid($('airDestSearch').value);};
-
 window.selAirIsland=function(el){
   const already=el.classList.contains('active');
-  document.querySelectorAll('.air-island-btn').forEach(b=>b.classList.remove('active'));
+  // Restore all buttons first
+  document.querySelectorAll('.air-island-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});
   $('airSelIslandCode').value='';$('airSelIslandName').value='';$('airSelIslandGroup').value='';
-  $('airWeightStep').style.display='none';$('airTotalBox').style.display='none';
-  $('airTotalPrice').value='0';
+  $('airWeightStep').style.display='none';$('airTotalBox').style.display='none';$('airTotalPrice').value='0';
   document.querySelectorAll('#airWGrid .w-btn').forEach(b=>b.classList.remove('active'));
-  $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';
-  calcTotal();
+  $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';calcTotal();
   if(already)return;
+  // Activate selected + hide others
   el.classList.add('active');
+  document.querySelectorAll('.air-island-btn:not(.active)').forEach(b=>b.style.display='none');
   $('airSelIslandCode').value=el.dataset.code;
   $('airSelIslandName').value=el.dataset.name;
   $('airSelIslandGroup').value=el.dataset.group;
-  $('airWeightStep').style.display='block';
-  loadAirWeightGrid();
+  $('airWeightStep').style.display='block';loadAirWeightGrid();
 };
 
-/* ── STEP 3: Weight Range Grid (admin-set prices for air, no formula) ── */
+/* STEP 3: Weight Grid */
 function loadAirWeightGrid(){
   const g=$('airWGrid');if(!g)return;
-  const ranges=allAirWeightRanges.length?allAirWeightRanges:allP;
-  if(!ranges.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges configured.</p></div>';return;}
+  const sub=$('airSubType').value||'normal';
+  const typeRanges=(sub==='express'?allAirTypeExpress:allAirTypeNormal).weights||[];
+  const ranges=typeRanges.length?typeRanges:(allAirWeightRanges.length?allAirWeightRanges:allP);
+  if(!ranges.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No weight ranges. Add them in Air Cargo settings.</p></div>';return;}
   const sorted=[...ranges].sort((a,b)=>a.min-b.min);
   const icon=mx=>mx<=2?'fa-feather':mx<=10?'fa-box':mx<=30?'fa-boxes-stacked':'fa-pallet';
   const lbl=mx=>mx<=2?'Light':mx<=10?'Medium':mx<=30?'Heavy':'Oversized';
-  g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}">
-    <span class="w-icon"><i class="fas ${icon(x.max)}"></i></span>
-    <span class="w-rng">${x.min}–${x.max} kg</span>
-    <span class="w-lbl">${lbl(x.max)}</span>
-    <span class="w-pr">MVR ${x.price}</span>
-  </button>`).join('');
+  g.innerHTML=sorted.map(x=>`<button type="button" class="w-btn" data-mn="${x.min}" data-mx="${x.max}" data-pr="${x.price}"><span class="w-icon"><i class="fas ${icon(x.max)}"></i></span><span class="w-rng">${x.min}–${x.max} kg</span><span class="w-lbl">${lbl(x.max)}</span><span class="w-pr">MVR ${x.price}</span></button>`).join('');
   g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){
-    const wasActive=this.classList.contains('active');
+    const was=this.classList.contains('active');
     g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));
-    $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';
-    $('airWeight').value='0';$('airTotalBox').style.display='none';$('airTotalPrice').value='0';calcTotal();
-    if(wasActive)return;
-    this.classList.add('active');
-    applyAirWeightPrice(this);
+    $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';$('airTotalBox').style.display='none';$('airTotalPrice').value='0';calcTotal();
+    if(was)return;
+    this.classList.add('active');applyAirWeightPrice(this);
   }));
 }
 function applyAirWeightPrice(btn){
-  // If no btn passed, find the active one
-  if(!btn)btn=document.querySelector('#airWGrid .w-btn.active');
-  if(!btn)return;
+  if(!btn)btn=document.querySelector('#airWGrid .w-btn.active');if(!btn)return;
   const price=parseFloat(btn.dataset.pr)||0;
-  const midKg=(parseFloat(btn.dataset.mn)+parseFloat(btn.dataset.mx))/2;
-  const rangeLabel=btn.dataset.mn+'-'+btn.dataset.mx+' kg';
-  $('airSelWeightRange').value=rangeLabel;
-  $('airSelWeightRangePrice').value=price;
-  $('airWeight').value=midKg;
+  $('airSelWeightRange').value=btn.dataset.mn+'-'+btn.dataset.mx+' kg';
+  $('airSelWeightRangePrice').value=price;$('airWeight').value=(parseFloat(btn.dataset.mn)+parseFloat(btn.dataset.mx))/2;
   $('airTotalValDisp').textContent='MVR '+price.toFixed(0);
-  $('airTotalBox').style.display='flex';
-  $('airTotalPrice').value=price;
-  calcTotal();
+  $('airTotalBox').style.display='flex';$('airTotalPrice').value=price;calcTotal();
 }
+window.calcAirPrice=function(){};
+window.setAirSubType=function(sub){$('airSubType').value=sub;if($('airSelWeightRange').value)applyAirWeightPrice();};
 
-window.calcAirPrice=function(){}; // kept for compatibility
-
+function resetAirSubSteps(){
+  if($('airAddrX'))$('airAddrX').classList.remove('revealed');
+  if($('airAddrVal')){$('airAddrVal').value='';$('airAddrVal').required=false;}
+  $('airDestStep').style.display='none';$('airWeightStep').style.display='none';
+  $('airTotalBox').style.display='none';$('airTotalPrice').value='0';
+  $('airSelIslandCode').value='';$('airSelIslandName').value='';$('airSelIslandGroup').value='';
+  $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';$('airPickupVal').value='';
+  document.querySelectorAll('#airPickupGrid .pickup-card').forEach(b=>{b.classList.remove('active');b.style.display='';});
+  document.querySelectorAll('.air-island-btn,#airWGrid .w-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});
+  if($('airDestSearch'))$('airDestSearch').value='';
+}
 function showAirUI(){
-  // Hide other sections immediately
   $('expressFlowWrap').classList.remove('show');$('weightSec').classList.remove('show');
-  hideStep('stepPickup');
-  const sm=$('stepMode');if(sm)sm.style.display='none';
-  // Other ct-cards stay visible while plane animates
+  hideStep('stepPickup');const sm=$('stepMode');if(sm)sm.style.display='none';
   document.querySelectorAll('.ct-card').forEach(c=>c.style.display='');
-  resetAirSteps();
-  // Wait 2s for plane fly animation, then reveal air cargo section
   $('airCargoWrap').classList.remove('show');
   clearTimeout(window._airOpenTimer);
   window._airOpenTimer=setTimeout(function(){
-    // Only open if air type is still selected
-    if($('ctIsAir').value!=='1')return;
+    if(!$('ctIsAir')||$('ctIsAir').value!=='1')return;
     $('airCargoWrap').classList.add('show');
-    loadAirPickupGrid();
-  }, 2000);
+    $('airSubType').value='';$('ctV').value='Air Cargo';
+    document.querySelectorAll('.air-type-choice-btn').forEach(b=>b.classList.remove('active'));
+    if($('airStepsWrap'))$('airStepsWrap').style.display='none';
+    resetAirSubSteps();loadAirTypeChoices();
+  },2000);
 }
 function hideAirUI(){
-  clearTimeout(window._airOpenTimer);
-  $('airCargoWrap').classList.remove('show');
-  const sm=$('stepMode');if(sm)sm.style.display='';
-  $('airTotalPrice').value='0';
-  document.querySelectorAll('.ct-card').forEach(c=>{c.style.display='';});
+  clearTimeout(window._airOpenTimer);$('airCargoWrap').classList.remove('show');
+  const sm=$('stepMode');if(sm)sm.style.display='';$('airTotalPrice').value='0';
+  document.querySelectorAll('.ct-card').forEach(c=>c.style.display='');
 }
 function resetAirSteps(){
-  $('airPickupVal').value='';
-  if($('airAddrX'))$('airAddrX').classList.remove('revealed');
-  if($('airAddrVal')){$('airAddrVal').value='';$('airAddrVal').required=false;}
-  $('airDestStep').style.display='none';
-  $('airWeightStep').style.display='none';
-  $('airTotalBox').style.display='none';
-  $('airTotalPrice').value='0';
-  $('airSelIslandCode').value='';$('airSelIslandName').value='';$('airSelIslandGroup').value='';
-  $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';
-  $('airSubType').value='normal';
-  document.querySelectorAll('#airPickupGrid .pickup-card,.air-island-btn,#airWGrid .w-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});
-  if($('airDestSearch'))$('airDestSearch').value='';
+  $('airSubType').value='';
+  document.querySelectorAll('.air-type-choice-btn').forEach(b=>b.classList.remove('active'));
+  if($('airStepsWrap'))$('airStepsWrap').style.display='none';
+  resetAirSubSteps();
 }
 
 /* ═══ ROUTE / BOAT PRICE LOOKUP ═══ */
@@ -1680,41 +1716,58 @@ $('sideOvl').onclick=closeSB;
 /* ═══ CARGO TYPE GRID ═══ */
 function loadCtypeGrid(){
   const g=$('ctypeGrid');
-  if(!allCargoTypes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div>';return}
   const icons={'normal':'fa-box','express':'fa-bolt','fragile':'fa-wine-glass-crack','oversized':'fa-pallet','custom':'fa-cube','air':'fa-plane'};
-  g.innerHTML=[...allCargoTypes].sort((a,b)=>(a.order||0)-(b.order||0)).map(ct=>{
-    const isAir=ct.isAir||ct.key==='air';
-    const prLabel=isAir?ct.isExpress?'Express Air Cargo':'Normal Air Cargo':ct.isExpress?'Select size &amp; time':'Select weight';
-    return`<div class="ct-card${ct.isExpress&&!isAir?' express-card':''}${isAir?' air-card':''}" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${prLabel}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`;
-  }).join('')
+
+  // Non-air cargo types from Firebase
+  const nonAirTypes=[...allCargoTypes].filter(ct=>!ct.isAir&&ct.key!=='air').sort((a,b)=>(a.order||0)-(b.order||0));
+  const nonAirHTML=nonAirTypes.map(ct=>{
+    const prLabel=ct.isExpress?'Select size &amp; time':'Select weight';
+    return`<div class="ct-card${ct.isExpress?' express-card':''}" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${prLabel}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`;
+  }).join('');
+
+  // ONE Air Cargo card — clicking it triggers plane animation, then shows Normal/Express choice
+  const airCardHTML=`<div class="ct-card air-card" data-id="__air__" onclick="selCtype(this,'__air__')"><i class="fas fa-plane"></i><div class="ct-name">Air Cargo</div><div class="ct-eta">Domestic Flights</div><div class="ct-pr">Normal &amp; Express</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`;
+
+  if(!nonAirTypes.length&&!allCargoTypes.length){
+    g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div>'+airCardHTML;
+  } else {
+    g.innerHTML=nonAirHTML+airCardHTML;
+  }
 }
+
+
+
+/* Called when user taps a Normal Air or Express Air card */
+
 window.selCtype=function(el,id){
   const already=el.classList.contains('active');
   if(already){
     el.classList.remove('active');$('ctV').value='';$('ctPrice').value='0';$('ctIsExpress').value='0';$('ctIsAir').value='0';
     $('etaInfo').classList.remove('show');$('expressFlowWrap').classList.remove('show');$('weightSec').classList.remove('show');
-    clearTimeout(window._airOpenTimer);
-    hideAirUI();hideStep('stepPickup');hideStep('stepMode');
+    clearTimeout(window._airOpenTimer);hideAirUI();hideStep('stepPickup');hideStep('stepMode');
     document.querySelectorAll('.ct-card').forEach(c=>{c.style.display='';});
     calcTotal();return;
   }
-  document.querySelectorAll('.ct-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');
-  const ct=allCargoTypes.find(c=>String(c.id)===String(id));if(!ct)return;
-  const isAir=ct.isAir||ct.key==='air';
-  $('ctV').value=ct.name;$('ctPrice').value=ct.price||0;$('ctIsExpress').value=ct.isExpress&&!isAir?1:0;$('ctIsAir').value=isAir?1:0;
-  const eta=$('etaInfo');eta.classList.add('show');eta.classList.toggle('express',!!ct.isExpress&&!isAir);$('etaV').textContent=ct.eta||'—';
-  document.querySelectorAll('.pkg-size-card,.time-slot-btn,.w-btn').forEach(b=>b.classList.remove('active'));
-  $('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';$('selW').value='';$('selWP').value='0';$('pLocVal').value='';$('dLocVal').value='';$('selBoat').value='';$('selSB').value='';
-  if(isAir){
-    showAirUI();
-    // Restore all cards visible — the active air card spans full width via CSS (grid-column:1/-1)
-    document.querySelectorAll('.ct-card').forEach(c=>c.style.display='');
+  document.querySelectorAll('.ct-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
 
-  }
-  else{
-    hideAirUI();
-    // Restore all cargo type cards
+  // Air Cargo card (synthetic __air__ id)
+  const isAirCard=(id==='__air__');
+  // Also handle old Firebase-based air cargo types
+  const ct=allCargoTypes.find(c=>String(c.id)===String(id));
+  const isAir=isAirCard||(ct&&(ct.isAir||ct.key==='air'));
+
+  if(isAir){
+    $('ctV').value='Air Cargo';$('ctPrice').value='0';$('ctIsAir').value='1';$('ctIsExpress').value='0';
+    $('etaInfo').classList.remove('show');
     document.querySelectorAll('.ct-card').forEach(c=>c.style.display='');
+    showAirUI();
+  } else {
+    hideAirUI();
+    document.querySelectorAll('.ct-card').forEach(c=>c.style.display='');
+    $('ctV').value=ct.name;$('ctPrice').value=ct.basePrice||0;
+    $('ctIsExpress').value=ct.isExpress?'1':'0';$('ctIsAir').value='0';
+    const etaEl=$('etaInfo');if(ct.eta&&etaEl){etaEl.classList.add('show');$('etaV').textContent=ct.eta;}else if(etaEl){etaEl.classList.remove('show');}
     const assigned=ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null;
     hideStep('stepPickup');hideStep('stepMode');
     if(ct.isExpress){$('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.remove('show');loadPkgSizeGrid(ct.id);loadPickupGrid(assigned);}
@@ -1722,6 +1775,7 @@ window.selCtype=function(el,id){
   }
   calcTotal();
 };
+
 
 /* ═══ EXPRESS SIZES / TIME SLOTS ═══ */
 function loadPkgSizeGrid(ctId){const g=$('pkgSizeGrid');const sizes=allExpressSizes.filter(s=>String(s.cargoTypeId)===String(ctId)&&s.active!==false);if(!sizes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No sizes configured.</p></div>';return;}const sorted=[...sizes].sort((a,b)=>(a.order||0)-(b.order||0));g.innerHTML=sorted.map(sz=>`<div class="pkg-size-card" data-szid="${sz.id}" onclick="selPkgSize(this,'${sz.id}')"><i class="fas ${sizeIcon(sz.name)} psz-icon"></i><div class="psz-name">${sz.name}</div><div class="psz-weight">Up to ${sz.maxKg} kg</div><div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>`).join('');$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('expressTimeWrap').classList.remove('show');calcTotal();}
@@ -1807,7 +1861,7 @@ window.selSpeedBoat=function(id){document.querySelectorAll('.sb-card').forEach(c
 
 /* ═══ MY REFS / TABLE / INVOICES ═══ */
 function loadRefs(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email);const el=$('myRefs');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-inbox"></i><p>No deliveries yet.</p></div>';return}el.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem">'+[...mine].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div style="font-family:monospace;font-size:.7rem;font-weight:700;padding:5px 11px;border-radius:17px;cursor:pointer;${d.status==='Delivered'?'background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.22);color:#27ae60':'background:rgba(231,76,60,.13);border:1px solid rgba(231,76,60,.26);color:#e74c3c'}" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</div>`).join('')+'</div>'}
-function getSizeWeightDisplay(d){if(d.isAir||d.deliveryMode==='air')return(d.airDestination||'—')+(d.airWeight?' / '+d.airWeight:'')+(d.airSubType?' ['+d.airSubType+']':'');if(d.isExpress)return(d.packageSize||'—')+(d.selectedHrLabel?' — '+d.selectedHrLabel:'');return d.packageWeight||'—';}
+function getSizeWeightDisplay(d){if(d.isAir||d.deliveryMode==='air')return(d.airDestination||'—')+(d.airWeight?' / '+d.airWeight:'')+(d.airSubType?' ['+(d.airSubType==='express'?'Express':'Normal')+' Air]':'');if(d.isExpress)return(d.packageSize||'—')+(d.selectedHrLabel?' — '+d.selectedHrLabel:'');return d.packageWeight||'—';}
 function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myTB');if(!mine.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,.28);padding:2rem">No records</td></tr>';return}tb.innerHTML=mine.map(d=>{const isAir=d.isAir||d.deliveryMode==='air';return`<tr><td style="font-family:monospace;font-size:.65rem;color:#f39c12;cursor:pointer" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</td><td style="font-size:.7rem">${isAir?'✈ Male → '+d.airDestination:(d.pickupLocation||'')+'→'+(d.deliveryLocation||'')}</td><td style="font-size:.7rem">${d.cargoType||'—'}${isAir?' <span class="badge b-air">Air</span>':d.isExpress?' <span class="badge b-exp">Exp</span>':''}</td><td style="font-size:.68rem">${getSizeWeightDisplay(d)}</td><td style="font-family:monospace">${d.deliveryPrice} MVR</td><td>${sBadge(d.status)}</td><td>${pBadge(d.paymentStatus)}${d.paymentSlip?` <button onclick="viewSlip('${d.paymentSlip}')" style="margin-left:3px;background:rgba(243,156,18,.14);border:1px solid rgba(243,156,18,.28);color:#f39c12;padding:2px 7px;border-radius:10px;font-size:.6rem;cursor:pointer;font-weight:700">Slip</button>`:''}</td></tr>`}).join('')}
 function loadMyInvoices(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email&&d.invoice);const el=$('invListWrap');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet.</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.invoice.issuedAt)-new Date(a.invoice.issuedAt)).map(d=>`<div class="inv-card"><div class="inv-card-hd"><span class="inv-card-no">${d.invoice.invoiceNo}</span><span class="inv-card-date">${fmtD(d.invoice.issuedAt)}</span></div><div style="font-size:.76rem;color:rgba(255,255,255,.55);margin-bottom:.5rem">${d.referenceNumber} · ${d.pickupLocation||d.airDestination||''}→${d.deliveryLocation||d.airDestination||''}</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:monospace;font-weight:800;color:#27ae60">MVR ${d.deliveryPrice}</span><button onclick="viewInvoice('${d.referenceNumber}')" style="background:rgba(39,174,96,.14);border:1px solid rgba(39,174,96,.28);color:#27ae60;padding:5px 12px;border-radius:12px;font-size:.72rem;cursor:pointer;font-weight:700"><i class='fas fa-eye' style='margin-right:4px'></i>View</button></div></div>`).join('')}
 window.viewInvoice=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d||!d.invoice)return;curInvoiceD=d;const inv=d.invoice;const isAir=d.isAir||d.deliveryMode==='air';const rows=[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Cargo Type',d.cargoType||'—'],['Mode',isAir?'Air Cargo ('+d.airSubType+')':d.deliveryMode],isAir?['Destination',d.airDestination||'—']:['Pickup',d.pickupLocation||'—'],isAir?['Weight',d.airWeight+'kg']:['Destination',d.deliveryLocation||'—'],['Size/Weight',getSizeWeightDisplay(d)],['Delivery Date',fmtD(d.deliveryDate)]];$('invContent').innerHTML=`<div class="invoice-box"><div class="invoice-header"><div><div class="invoice-brand">Easy<span>Cargo</span></div><div class="invoice-no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="invoice-date">${fmtD(inv.issuedAt)}</div></div></div><div style="margin-bottom:.8rem">${rows.map(([k,v])=>`<div class="inv-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div><div class="inv-total"><span class="k">Total Paid</span><span class="v">MVR ${d.deliveryPrice}</span></div><div class="inv-stamp"><span><i class="fas fa-check-circle"></i> PAYMENT VERIFIED</span></div></div>`;$('invMod').classList.add('show')};
