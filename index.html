@@ -56,6 +56,33 @@ body{background:#0a0f1e;min-height:100vh;overflow-x:hidden;color:white}
 .how-img-item img{width:100%;display:block;object-fit:cover;min-height:120px}
 .how-empty{text-align:center;padding:1.8rem 1rem;color:rgba(255,255,255,.28);font-size:.82rem;grid-column:1/-1}
 @keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+/* ═══ PAGE LOAD PLANE INTRO ═══ */
+#planeIntro{position:fixed;inset:0;background:#0a0f1e;z-index:10000;display:flex;align-items:center;justify-content:center;overflow:hidden;pointer-events:none}
+#planeIntroPlane{position:absolute;font-size:2.6rem;color:white;filter:drop-shadow(0 0 20px rgba(255,255,255,.6));will-change:transform,opacity;animation:planeIntroAnim 2.3s cubic-bezier(.4,0,.2,1) forwards;left:50%;top:-80px;transform:translate(-50%,0) rotate(90deg) scale(.7)}
+@keyframes planeIntroAnim{
+  /* Phase 1: nose pointing DOWN, drop from top → center */
+  0%  {left:50%;top:-80px;  transform:translate(-50%,0)      rotate(90deg)  scale(.7); opacity:0}
+  6%  {opacity:1}
+  35% {left:50%;top:50%;   transform:translate(-50%,-50%)   rotate(90deg)  scale(1.08);opacity:1}
+  42% {left:50%;top:50%;   transform:translate(-50%,-50%)   rotate(90deg)  scale(1);   opacity:1}
+  /* Phase 2: rotate to face RIGHT at center */
+  55% {left:50%;top:50%;   transform:translate(-50%,-50%)   rotate(0deg)   scale(1);   opacity:1}
+  /* Phase 3: fly RIGHT off screen, nose leading */
+  68% {left:55%;top:50%;   transform:translate(-50%,-50%)   rotate(-5deg)  scaleX(1.1);opacity:1}
+  82% {left:85%;top:50%;   transform:translate(-50%,-50%)   rotate(-8deg)  scaleX(1.2);opacity:.9}
+  93% {left:110%;top:50%;  transform:translate(-50%,-50%)   rotate(-10deg) scaleX(1.15);opacity:.2}
+  100%{left:130%;top:50%;  transform:translate(-50%,-50%)   rotate(-10deg);opacity:0}
+}
+/* Trail streak that appears as plane flies right */
+#planeIntroTrail{position:absolute;top:50%;left:50%;height:2px;width:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),rgba(255,255,255,.1));transform:translateY(-50%);border-radius:2px;animation:planeTrailAnim 2.2s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none}
+@keyframes planeTrailAnim{
+  0%,50%{width:0;left:50%;opacity:0}
+  55%{opacity:1}
+  70%{width:80px;left:45%;opacity:.8}
+  85%{width:160px;left:30%;opacity:.5}
+  100%{width:220px;left:10%;opacity:0}
+}
+/* ═══ END PAGE LOAD PLANE INTRO ═══ */
 #truckAnim{position:fixed;inset:0;background:#0a0f1e;z-index:9999;display:none;align-items:center;justify-content:center;overflow:hidden}
 #truckAnim.show{display:flex}
 .road{position:absolute;bottom:0;left:0;right:0;height:60px;background:#1a2535;border-top:3px solid #f39c12}
@@ -689,6 +716,12 @@ img{max-width:100%;height:auto}
 </head>
 <body>
 
+<!-- PAGE LOAD PLANE INTRO -->
+<div id="planeIntro">
+  <div id="planeIntroPlane"><i class="fas fa-plane"></i></div>
+  <div id="planeIntroTrail"></div>
+</div>
+
 <!-- TRUCK ANIM -->
 <div id="truckAnim">
   <div class="road"><div class="rstrip"></div></div>
@@ -872,14 +905,6 @@ img{max-width:100%;height:auto}
                 <input type="hidden" id="airSelWeightRangePrice">
               </div>
 
-              <!-- Price -->
-              <div class="air-total-box" id="airTotalBox" style="display:none">
-                <i class="fas fa-tag"></i>
-                <div>
-                  <div class="air-total-label">Air Cargo Price</div>
-                  <div class="air-total-val" id="airTotalValDisp">MVR 0</div>
-                </div>
-              </div>
             </div>
 
             <input type="hidden" id="airWeight" value="0">
@@ -1072,7 +1097,7 @@ img{max-width:100%;height:auto}
             </div>
           </div>
           <div class="price-box">
-            <div class="plbl">Total Delivery Price</div>
+            <div class="plbl" id="priceLbl">Total Delivery Price</div>
             <div class="pnum">
               <span id="origPriceDisp" style="font-size:.8rem;color:rgba(255,255,255,.35);text-decoration:line-through;font-family:monospace;display:none;margin-right:6px"></span>
               <span class="pcur">MVR </span><span id="pDisp">0</span>
@@ -1397,7 +1422,7 @@ window.selAirPickup=function(el,id){
   grid.querySelectorAll('.pickup-card').forEach(c=>{c.classList.remove('active');c.style.display='block';});
   if($('airAddrX'))$('airAddrX').classList.remove('revealed');
   if($('airAddrVal')){$('airAddrVal').value='';$('airAddrVal').required=false;}
-  if(already){$('airPickupVal').value='';$('airDestStep').style.display='none';$('airWeightStep').style.display='none';$('airTotalBox').style.display='none';$('airTotalPrice').value='0';resetAirDestWeight();calcTotal();return;}
+  if(already){$('airPickupVal').value='';$('airDestStep').style.display='none';$('airWeightStep').style.display='none';$('airTotalPrice').value='0';resetAirDestWeight();calcTotal();return;}
   el.classList.add('active');
   grid.querySelectorAll('.pickup-card:not(.active)').forEach(c=>c.style.display='none');
   const loc=[...allAirPickupLocations,...allPickups].find(l=>String(l.id)===String(id));
@@ -1415,7 +1440,7 @@ function resetAirDestWeight(){
   $('airSelIslandCode').value='';$('airSelIslandName').value='';$('airSelIslandGroup').value='';
   $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';
   document.querySelectorAll('.air-island-btn,#airWGrid .w-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});
-  $('airWeightStep').style.display='none';$('airTotalBox').style.display='none';$('airTotalPrice').value='0';
+  $('airWeightStep').style.display='none';$('airTotalPrice').value='0';
 }
 
 /* STEP 2: Island Grid */
@@ -1434,7 +1459,7 @@ window.selAirIsland=function(el){
   // Restore all buttons first
   document.querySelectorAll('.air-island-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});
   $('airSelIslandCode').value='';$('airSelIslandName').value='';$('airSelIslandGroup').value='';
-  $('airWeightStep').style.display='none';$('airTotalBox').style.display='none';$('airTotalPrice').value='0';
+  $('airWeightStep').style.display='none';$('airTotalPrice').value='0';
   document.querySelectorAll('#airWGrid .w-btn').forEach(b=>b.classList.remove('active'));
   $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';calcTotal();
   if(already)return;
@@ -1461,7 +1486,7 @@ function loadAirWeightGrid(){
   g.querySelectorAll('.w-btn').forEach(b=>b.addEventListener('click',function(){
     const was=this.classList.contains('active');
     g.querySelectorAll('.w-btn').forEach(x=>x.classList.remove('active'));
-    $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';$('airTotalBox').style.display='none';$('airTotalPrice').value='0';calcTotal();
+    $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';$('airTotalPrice').value='0';calcTotal();
     if(was)return;
     this.classList.add('active');applyAirWeightPrice(this);
   }));
@@ -1471,8 +1496,7 @@ function applyAirWeightPrice(btn){
   const price=parseFloat(btn.dataset.pr)||0;
   $('airSelWeightRange').value=btn.dataset.mn+'-'+btn.dataset.mx+' kg';
   $('airSelWeightRangePrice').value=price;$('airWeight').value=(parseFloat(btn.dataset.mn)+parseFloat(btn.dataset.mx))/2;
-  $('airTotalValDisp').textContent='MVR '+price.toFixed(0);
-  $('airTotalBox').style.display='flex';$('airTotalPrice').value=price;calcTotal();
+  $('airTotalPrice').value=price;calcTotal();
 }
 window.calcAirPrice=function(){};
 window.setAirSubType=function(sub){$('airSubType').value=sub;if($('airSelWeightRange').value)applyAirWeightPrice();};
@@ -1481,7 +1505,7 @@ function resetAirSubSteps(){
   if($('airAddrX'))$('airAddrX').classList.remove('revealed');
   if($('airAddrVal')){$('airAddrVal').value='';$('airAddrVal').required=false;}
   $('airDestStep').style.display='none';$('airWeightStep').style.display='none';
-  $('airTotalBox').style.display='none';$('airTotalPrice').value='0';
+  $('airTotalPrice').value='0';
   $('airSelIslandCode').value='';$('airSelIslandName').value='';$('airSelIslandGroup').value='';
   $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';$('airPickupVal').value='';
   document.querySelectorAll('#airPickupGrid .pickup-card').forEach(b=>{b.classList.remove('active');b.style.display='';});
@@ -1588,6 +1612,7 @@ function calcTotal(){
     else{const pi=$('pointsInfo');if(pi)pi.style.display='none';}
   }
   $('pDisp').textContent=isAir?finalTotal.toFixed(2):finalTotal.toFixed(0);
+  const lbl=$('priceLbl');if(lbl)lbl.textContent=isAir?'Total Cargo Price':'Total Delivery Price';
   if($('hiddenBasePrice'))$('hiddenBasePrice').value=baseTotal;
   if($('hiddenDiscount'))$('hiddenDiscount').value=discountAmt;
   if($('hiddenDiscountPct'))$('hiddenDiscountPct').value=discountPct;
@@ -1647,6 +1672,13 @@ $('regBtn').onclick=async()=>{
   showMsg('regMsg','Registered! You earned '+regPts+' welcome points!','ok');$('tLogin').click();
 };
 window.addEventListener('DOMContentLoaded',()=>{
+  // ── Page load plane animation ──
+  // Hide plane intro after animation (2.2s) + small buffer
+  setTimeout(()=>{
+    const intro=$('planeIntro');
+    if(intro){intro.style.transition='opacity .3s';intro.style.opacity='0';setTimeout(()=>{intro.style.display='none';},300);}
+  },2200);
+
   const s=localStorage.getItem('ecu');
   if(s){me=JSON.parse(s);$('homePage').style.display='none';enterDash();}
   const urlParams=new URLSearchParams(window.location.search);
