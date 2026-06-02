@@ -712,6 +712,20 @@ a{color:#f39c12;text-decoration:none}
 .ldb-pts-big{font-size:.95rem;font-weight:900;font-family:monospace;line-height:1}
 .ldb-pts-lbl{font-size:.55rem;color:rgba(255,255,255,.28);font-family:monospace;text-transform:uppercase;letter-spacing:.8px}
 img{max-width:100%;height:auto}
+/* ── Driver card vehicle animations ── */
+.drv-track{position:relative;height:44px;background:rgba(0,0,0,.25);border-radius:12px;overflow:hidden;margin:.7rem 0}
+.drv-road{position:absolute;bottom:0;left:0;right:0;height:4px;background:rgba(255,255,255,.07)}
+.drv-road-dashes{position:absolute;bottom:1px;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.15) 0,rgba(255,255,255,.15) 12px,transparent 12px,transparent 24px);animation:dashMove 1s linear infinite}
+@keyframes dashMove{from{background-position:0}to{background-position:24px}}
+.drv-vehicle{position:absolute;bottom:6px;font-size:1.2rem;animation:vehicleDrive 3s linear infinite}
+@keyframes vehicleDrive{0%{left:-30px;opacity:0}8%{opacity:1}88%{opacity:1}100%{left:calc(100% + 30px);opacity:0}}
+.drv-progress-wrap{margin:.65rem 0}
+.drv-progress-track{height:6px;background:rgba(255,255,255,.08);border-radius:3px;position:relative;overflow:visible}
+.drv-progress-fill{height:100%;border-radius:3px;transition:width 1s linear;position:relative}
+.drv-progress-icon{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:.9rem;filter:drop-shadow(0 0 6px currentColor)}
+.drv-timer{display:flex;justify-content:space-between;align-items:center;margin-top:.35rem}
+.drv-timer-val{font-family:monospace;font-weight:800;font-size:.78rem}
+.drv-timer-lbl{font-size:.58rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;font-family:monospace}
 </style>
 </head>
 <body>
@@ -803,6 +817,7 @@ img{max-width:100%;height:auto}
       <div class="s-lbl">Navigation</div>
       <div class="s-item active" onclick="switchTab('sNew');closeSB()"><i class="fas fa-plus-circle"></i> New Delivery</div>
       <div class="s-item" onclick="switchTab('sMine');closeSB()"><i class="fas fa-list"></i> My Deliveries</div>
+      <div class="s-item" id="sDriverSideBtn" onclick="switchTab('sDriver');closeSB()"><i class="fas fa-truck-fast"></i> My Driver</div>
       <div class="s-item" onclick="switchTab('sInv');closeSB()"><i class="fas fa-file-invoice"></i> My Invoices</div>
       <div class="s-item" onclick="switchTab('sTrk');closeSB()"><i class="fas fa-search-location"></i> Track</div>
       <div class="s-item" onclick="switchTab('sRwd');closeSB()"><i class="fas fa-medal"></i> Rewards</div>
@@ -923,7 +938,7 @@ img{max-width:100%;height:auto}
               <div class="fg">
                 <div class="express-section-label"><i class="fas fa-clock"></i> Select Duration &amp; Price</div>
                 <div class="time-slot-grid" id="timeSlotGrid"></div>
-                <input type="hidden" id="selTimeId"><input type="hidden" id="selTimePrice" value="0"><input type="hidden" id="selTimeLabel">
+                <input type="hidden" id="selTimeId"><input type="hidden" id="selTimePrice" value="0"><input type="hidden" id="selTimeLabel"><input type="hidden" id="selTimeDeadline">
               </div>
             </div>
           </div>
@@ -1118,7 +1133,14 @@ img{max-width:100%;height:auto}
     </div>
 
     <!-- MY DELIVERIES -->
-    <div class="sec" id="sMine">
+    <div class="sec" id="sDriver">
+  <div class="sec-title"><i class="fas fa-truck-fast" style="color:#f39c12"></i> My Driver</div>
+  <div id="myDriverContent">
+    <div class="empty-s"><i class="fas fa-truck"></i><p>No active delivery assigned yet.</p></div>
+  </div>
+</div>
+
+<div class="sec" id="sMine">
       <div class="sec-title"><i class="fas fa-list"></i> My Deliveries</div>
       <div class="card"><div class="tbl-s"><table><thead><tr><th>Reference</th><th>Route/Dest</th><th>Type</th><th>Size/Weight</th><th>Price</th><th>Status</th><th>Payment</th></tr></thead><tbody id="myTB"></tbody></table></div></div>
     </div>
@@ -1689,7 +1711,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 /* ═══ FIREBASE INIT ═══ */
 function initFB(){
-  db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar()}});
+  db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();loadMyDriver();startIdxDriverTimers();}});
   db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});
   db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});
   db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());});
@@ -1813,7 +1835,26 @@ window.selCtype=function(el,id){
 function loadPkgSizeGrid(ctId){const g=$('pkgSizeGrid');const sizes=allExpressSizes.filter(s=>String(s.cargoTypeId)===String(ctId)&&s.active!==false);if(!sizes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No sizes configured.</p></div>';return;}const sorted=[...sizes].sort((a,b)=>(a.order||0)-(b.order||0));g.innerHTML=sorted.map(sz=>`<div class="pkg-size-card" data-szid="${sz.id}" onclick="selPkgSize(this,'${sz.id}')"><i class="fas ${sizeIcon(sz.name)} psz-icon"></i><div class="psz-name">${sz.name}</div><div class="psz-weight">Up to ${sz.maxKg} kg</div><div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>`).join('');$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('expressTimeWrap').classList.remove('show');calcTotal();}
 window.selPkgSize=function(el,id){const already=el.classList.contains('active');if(already){el.classList.remove('active');$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';$('expressTimeWrap').classList.remove('show');hideStep('stepPickup');calcTotal();return;}document.querySelectorAll('.pkg-size-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');const sz=allExpressSizes.find(s=>String(s.id)===String(id));if(!sz)return;$('selSizeId').value=sz.id;$('selSizeName').value=sz.name;$('selSizeWeight').value=sz.maxKg;$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));hideStep('stepPickup');loadTimeSlots(sz.id);calcTotal();};
 function loadTimeSlots(sizeId){const g=$('timeSlotGrid');const ctId=$('ctypeGrid').querySelector('.ct-card.active')?.dataset?.id||'';const slots=allExpressHrs.filter(h=>String(h.sizeId)===String(sizeId)&&(ctId?String(h.cargoTypeId)===String(ctId):true));if(!slots.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.6rem"><p>No time options for this size.</p></div>';$('expressTimeWrap').classList.add('show');return;}const sorted=[...slots].sort((a,b)=>(a.minutes||0)-(b.minutes||0));g.innerHTML=sorted.map(ts=>`<button type="button" class="time-slot-btn" data-id="${ts.id}" data-price="${ts.price}" data-label="${ts.label||''}" onclick="selTimeSlot(this)"><span class="ts-dur">${ts.label||''}</span><span class="ts-lbl">Delivery Time</span><span class="ts-price">MVR ${ts.price}</span><div class="time-slot-ck"><i class="fas fa-check"></i></div></button>`).join('');$('expressTimeWrap').classList.add('show');}
-window.selTimeSlot=function(el){const already=el.classList.contains('active');if(already){el.classList.remove('active');$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';hideStep('stepPickup');calcTotal();return;}document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');$('selTimeId').value=el.dataset.id;$('selTimePrice').value=el.dataset.price;$('selTimeLabel').value=el.dataset.label;calcTotal();revealStep('stepPickup');};
+window.selTimeSlot=function(el){
+  const already=el.classList.contains('active');
+  if(already){el.classList.remove('active');$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';if($('selTimeDeadline'))$('selTimeDeadline').value='';hideStep('stepPickup');calcTotal();return;}
+  document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  $('selTimeId').value=el.dataset.id;
+  $('selTimePrice').value=el.dataset.price;
+  $('selTimeLabel').value=el.dataset.label;
+  // Calculate actual delivery deadline from label e.g. "18:00 to 20:00"
+  // Store end time HH:MM only — actual date computed when order is assigned
+  const label=el.dataset.label||'';
+  const endMatch=label.match(/(\d{1,2}):(\d{2})\s*(?:to|-|–)\s*(\d{1,2}):(\d{2})/i);
+  if(endMatch&&$('selTimeDeadline')){
+    const endH=String(parseInt(endMatch[3])).padStart(2,'0');
+    const endM=String(parseInt(endMatch[4])).padStart(2,'0');
+    // Store as "HH:MM" — deadline is computed on delivery date
+    $('selTimeDeadline').value=endH+':'+endM;
+  }
+  calcTotal();revealStep('stepPickup');
+};
 function revealStep(id){const el=$(id);if(el&&!el.classList.contains('revealed'))el.classList.add('revealed');}
 function hideStep(id){const el=$(id);if(el)el.classList.remove('revealed');}
 
@@ -1892,9 +1933,261 @@ window.selBoat=function(id){document.querySelectorAll('.boat-card').forEach(c=>c
 window.selSpeedBoat=function(id){document.querySelectorAll('.sb-card').forEach(c=>c.classList.remove('active'));const card=document.querySelector('.sb-card[data-sbid="'+id+'"]');if(card)card.classList.add('active');const boat=allSpeedBoats.find(b=>String(b.id)===String(id));if(!boat)return;$('selSB').value=boat.name;$('boatPrice').value=0;$('sbIslSec').style.display='block';$('sbInfoTxt').textContent=boat.name+(boat.route?' — '+boat.route:'');const ig=$('sbIslGrid');$('selSBIsl').value='';const locs=getIslandNames(boat);if(!locs.length){ig.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.5rem"><p>No locations set.</p></div>';updateBoatPriceBadge();return;}const pickup=$('pLocVal').value;const priceEntry=allBoatRoutePrices.find(r=>r.pickup===pickup&&r.boatName===boat.name&&r.boatType==='speedboat');$('selSBHarbour').value=priceEntry?priceEntry.harbour:'';ig.innerHTML=locs.map(loc=>`<button type="button" class="isl-btn sb-isl-btn" data-sbisl="${encodeURIComponent(loc)}">${loc}</button>`).join('');ig.querySelectorAll('.sb-isl-btn').forEach(btn=>{btn.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ig.querySelectorAll('.sb-isl-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');$('selSBIsl').value=decodeURIComponent(this.getAttribute('data-sbisl'));updateBoatPriceBadge();});});updateBoatPriceBadge();};
 
 /* ═══ MY REFS / TABLE / INVOICES ═══ */
+/* ═══ DRIVER PROFILE FOR CUSTOMERS ═══ */
+let allDriversIdx=[];
+db.ref('drivers').on('value',snap=>{allDriversIdx=Array.isArray(snap.val())?snap.val():snap.val()?Object.values(snap.val()):[];loadMyDriver();});
+
+function loadMyDriver(){
+  const el=$('myDriverContent');if(!el||!me)return;
+  // Find customer's active order that has a driver assigned
+  const myOrders=allD.filter(d=>d.createdBy===me.email);
+  const activeWithDriver=myOrders.filter(o=>o.assignedDriverId&&o.status!=='Delivered')
+    .sort((a,b)=>new Date(b.assignedAt||b.createdAt)-new Date(a.assignedAt||a.createdAt));
+  const completedWithDriver=myOrders.filter(o=>o.assignedDriverId&&o.status==='Delivered')
+    .sort((a,b)=>new Date(b.completedAt)-new Date(a.completedAt)).slice(0,3);
+
+  if(!activeWithDriver.length&&!completedWithDriver.length){
+    el.innerHTML='<div class="empty-s"><i class="fas fa-truck"></i><p>No driver assigned yet.<br>We\'ll notify you when a driver takes your order.</p></div>';
+    return;
+  }
+
+  let html='';
+  // Active delivery card
+  activeWithDriver.forEach(o=>{
+    const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId));
+    html+=buildDriverCard(o,driver,'active');
+  });
+  // Completed deliveries
+  if(completedWithDriver.length){
+    html+=`<div style="font-size:.72rem;color:rgba(255,255,255,.35);font-family:monospace;margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.8px">Past Deliveries</div>`;
+    completedWithDriver.forEach(o=>{
+      const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId));
+      html+=buildDriverCard(o,driver,'completed');
+    });
+  }
+  el.innerHTML=html;
+}
+
+function buildDriverCard(order,driver,type){
+  const isActive=type==='active';
+  const isAir=order.isAir||order.deliveryMode==='air';
+  const isExpress=order.isExpress||(order.cargoType||'').toLowerCase().includes('express');
+  const pickup=(order.pickupLocation||'')+(order.pickupAddress&&order.pickupAddress!==order.pickupLocation?' — '+order.pickupAddress:'');
+  const delivery=(order.deliveryAddress||order.deliveryLocation||order.airDestination||'');
+  const takenTime=order.assignedAt||order.takenAt?new Date(order.assignedAt||order.takenAt).toLocaleString('en-US',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
+  const deliveredTime=order.completedAt?new Date(order.completedAt).toLocaleString('en-US',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
+
+  // ── Vehicle icon + color ──
+  const vIcon=isAir?'fa-plane':isExpress?'fa-motorcycle':'fa-motorcycle';
+  const vColor=isAir?'#f39c12':isExpress?'#e74c3c':'#27ae60';
+
+  // ── Countdown timer calculation ──
+  let timerHtml='';
+  let progressHtml='';
+  // Auto-hide timer if deadline passed (delivery overdue or completed)
+  const isTimerOrder=isActive&&(order.expressDeadline||order.selectedHrLabel||order.deliveryDate);
+  if(isTimerOrder){
+    function idxBuildDL(h,m,dDate){const base=dDate?new Date(dDate+'T00:00:00'):new Date();base.setHours(h,m,0,0);if(!dDate&&base<new Date())base.setDate(base.getDate()+1);return base;}
+    let deadline=null;
+    const lbl4=order.selectedHrLabel||'';
+    const m4=lbl4.match(/(\d{1,2}):(\d{2})\s*(?:to|–|-)\s*(\d{1,2}):(\d{2})/i);
+    if(m4){deadline=idxBuildDL(parseInt(m4[3]),parseInt(m4[4]),order.deliveryDate);}
+    else if(order.expressDeadline){
+      if(order.expressDeadline.includes('T')){
+        const iso=new Date(order.expressDeadline);
+        // Recombine ISO time with deliveryDate to fix "wrong day" bug
+        if(!isNaN(iso.getTime()))deadline=order.deliveryDate?idxBuildDL(iso.getUTCHours(),iso.getUTCMinutes(),order.deliveryDate):iso;
+      } else {const pts=order.expressDeadline.split(':');if(pts.length>=2)deadline=idxBuildDL(parseInt(pts[0]),parseInt(pts[1]),order.deliveryDate);}
+    }
+    if(!deadline&&order.deliveryDate)deadline=new Date(order.deliveryDate+(order.deliveryTime?'T'+order.deliveryTime+':00':'T23:59:59'));
+    const startTime=new Date(order.assignedAt||order.takenAt||order.createdAt);
+    const now=new Date();
+    const totalMs=deadline-startTime;
+    const remainMs=deadline-now;
+    const pct=Math.max(0,Math.min(100,(1-(remainMs/totalMs))*100));
+    const pctColor=remainMs<3600000?'#e74c3c':remainMs<10800000?'#f39c12':'#27ae60';
+
+    // Auto-hide if more than 2 hours overdue (delivery window long passed)
+    if(remainMs < -7200000){timerHtml='';} else {
+
+    const absDiff=Math.abs(remainMs);
+    const hrs=Math.floor(absDiff/3600000);
+    const mins=Math.floor((absDiff%3600000)/60000);
+    const secs=Math.floor((absDiff%60000)/1000);
+    const timeStr=remainMs<0?'OVERDUE':hrs>0?`${hrs}h ${mins}m ${secs}s`:`${mins}m ${secs}s`;
+
+    timerHtml=`<div style="margin:.6rem 0;background:rgba(0,0,0,.2);border-radius:12px;padding:.65rem .8rem;border:1px solid rgba(255,255,255,.05)">
+      <div class="drv-timer" style="margin-bottom:.45rem">
+        <span class="drv-timer-lbl">Time Remaining</span>
+        <span class="drv-timer-val" id="idxTimer_${order.id}" style="color:${pctColor}">${timeStr}</span>
+      </div>
+      <div class="drv-progress-track">
+        <div class="drv-progress-fill" id="idxProg_${order.id}" style="width:${pct}%;background:${pctColor}">
+          <span class="drv-progress-icon" style="color:${vColor}"><i class="fas ${vIcon}"></i></span>
+        </div>
+      </div>
+      <div class="drv-timer" style="margin-top:.3rem">
+        <span class="drv-timer-lbl">Deadline: ${order.deliveryDate}${order.deliveryTime?' at '+order.deliveryTime:''}</span>
+        <span class="drv-timer-lbl">Taken: ${takenTime}</span>
+      </div>
+    </div>`;
+  }} // close else (not overdue)
+
+  // ── Animated vehicle track ──
+  const trackHtml=isActive?`<div class="drv-track">
+    <div class="drv-road"></div>
+    <div class="drv-road-dashes"></div>
+    <div class="drv-vehicle" style="color:${vColor};filter:drop-shadow(0 0 8px ${vColor})"><i class="fas ${vIcon}"></i></div>
+  </div>`:'';
+
+  const stColorMap={'Processing':'rgba(52,152,219,.3)','In Transit':'rgba(243,156,18,.3)','Out for Delivery':'rgba(230,126,34,.3)','Pending Approval':'rgba(243,156,18,.4)','Delivered':'rgba(39,174,96,.3)'};
+  const borderCol=isActive?(stColorMap[order.status]||vColor+'4d'):'rgba(255,255,255,.07)';
+  return`<div style="background:#141b2b;border-radius:20px;border:1.5px solid ${borderCol};margin-bottom:.85rem;overflow:hidden">
+    <!-- Header -->
+    <div style="background:${isActive?'linear-gradient(135deg,rgba(0,0,0,.3),rgba(0,0,0,.1))':'rgba(255,255,255,.02)'};padding:.75rem 1rem;border-bottom:1px solid rgba(255,255,255,.06)">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:7px">
+          <div style="width:28px;height:28px;background:${vColor}22;border-radius:8px;display:flex;align-items:center;justify-content:center">
+            <i class="fas ${vIcon}" style="color:${vColor};font-size:.82rem"></i>
+          </div>
+          <div>
+            <div style="font-family:monospace;font-size:.68rem;color:#f39c12;font-weight:700">${order.referenceNumber}</div>
+            <div style="font-size:.6rem;color:rgba(255,255,255,.35)">${order.cargoType||'Cargo'}</div>
+          </div>
+        </div>
+        ${(()=>{
+          const sMap={'Processing':'🔄 Processing','In Transit':'🚚 In Transit','Out for Delivery':'📍 Out for Delivery','Pending Approval':'⏳ Pending Approval','Delivered':'✅ Delivered'};
+          const sColor={'Processing':'#3498db','In Transit':'#f39c12','Out for Delivery':'#e67e22','Pending Approval':'#f39c12','Delivered':'#27ae60'};
+          const st=order.status||'Processing';
+          const sc=sColor[st]||vColor;
+          return`<span style="background:${sc}22;color:${sc};border:1px solid ${sc}44;font-size:.6rem;font-weight:700;padding:3px 10px;border-radius:12px">${sMap[st]||st}</span>`;
+        })()}
+      </div>
+    </div>
+
+    <div style="padding:.85rem 1rem">
+      ${driver?`
+      <!-- Driver info row -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:.8rem;padding-bottom:.75rem;border-bottom:1px solid rgba(255,255,255,.06)">
+        <div style="width:50px;height:50px;border-radius:50%;overflow:hidden;border:2.5px solid ${vColor};flex-shrink:0;background:${vColor}22;display:flex;align-items:center;justify-content:center">
+          ${driver.profilePhoto?`<img src="${driver.profilePhoto}" style="width:100%;height:100%;object-fit:cover">`:`<i class="fas fa-user" style="font-size:1.2rem;color:${vColor}"></i>`}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:800;color:white;font-size:.88rem">${driver.name||'—'}</div>
+          <div style="font-size:.68rem;color:rgba(255,255,255,.45);margin-top:1px">${driver.vehicle||'—'}${driver.vehicleModel?` · <span style="color:rgba(255,255,255,.5)">${driver.vehicleModel}</span>`:''}</div>
+          ${(driver.vehicleNumber||driver.vehicleRegNumber)?`<div style="font-size:.82rem;font-weight:800;color:white;font-family:monospace;margin-top:3px;letter-spacing:1px;background:rgba(255,255,255,.06);border-radius:8px;padding:3px 9px;display:inline-block">🚗 ${driver.vehicleNumber||driver.vehicleRegNumber}</div>`:``}
+          ${driver.vehiclePhoto?`<div style="margin-top:4px;border-radius:6px;overflow:hidden;width:60px;height:36px;display:inline-block"><img src="${driver.vehiclePhoto}" style="width:100%;height:100%;object-fit:cover;opacity:.8"></div>`:''}
+        </div>
+        <a href="tel:+960${(driver.contact||'').replace(/[^0-9]/g,'')}" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:rgba(39,174,96,.15);border:1.5px solid rgba(39,174,96,.3);border-radius:14px;padding:8px 12px;text-decoration:none;color:#27ae60;flex-shrink:0">
+          <i class="fas fa-phone" style="font-size:.9rem"></i>
+          <span style="font-size:.58rem;font-weight:700">Call</span>
+        </a>
+      </div>
+      `:`<div style="text-align:center;padding:.5rem;color:rgba(255,255,255,.3);font-size:.75rem">Driver info unavailable</div>`}
+
+      <!-- Animated vehicle track (active only) -->
+      ${trackHtml}
+
+      <!-- Progress bar + live countdown timer -->
+      ${timerHtml}
+
+      <!-- Route -->
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:.7rem">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="width:26px;height:26px;background:rgba(231,76,60,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><i class="fas fa-map-marker-alt" style="color:#e74c3c;font-size:.68rem"></i></div>
+          <div><div style="font-size:.56rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;font-family:monospace">Pickup</div><div style="font-size:.76rem;color:white;font-weight:600;line-height:1.4">${pickup||'—'}</div></div>
+        </div>
+        <div style="margin-left:22px;width:1px;height:8px;background:rgba(255,255,255,.1)"></div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="width:26px;height:26px;background:rgba(52,152,219,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><i class="fas fa-flag-checkered" style="color:#3498db;font-size:.68rem"></i></div>
+          <div><div style="font-size:.56rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;font-family:monospace">${isAir?'Cargo Terminal':'Delivery Address'}</div><div style="font-size:.76rem;color:white;font-weight:600;line-height:1.4">${delivery||'—'}</div></div>
+        </div>
+      </div>
+
+      <!-- Taken / Delivered timestamps -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+        <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:.6rem">
+          <div style="font-size:.56rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;font-family:monospace;margin-bottom:2px">Order Taken</div>
+          <div style="font-size:.7rem;color:white;font-weight:600">${takenTime}</div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:.6rem">
+          <div style="font-size:.56rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;font-family:monospace;margin-bottom:2px">${isActive?'Expected':'Delivered At'}</div>
+          <div style="font-size:.7rem;color:${isActive?vColor:'#27ae60'};font-weight:600">${isActive?
+            (order.selectedHrLabel?order.selectedHrLabel:
+              order.expressDeadline?new Date(order.expressDeadline).toLocaleString('en-US',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):
+              order.deliveryDuration?order.deliveryDuration:
+              order.deliveryDate?(order.deliveryDate+(order.deliveryTime?' '+order.deliveryTime:'')):'—')
+            :deliveredTime}</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* Live countdown for driver cards in index */
+let idxTimerInt=null;
+function startIdxDriverTimers(){
+  if(idxTimerInt)clearInterval(idxTimerInt);
+  idxTimerInt=setInterval(()=>{
+    const myOrders=allD.filter(d=>d.createdBy===me?.email&&d.assignedDriverId&&d.status!=='Delivered');
+    myOrders.forEach(o=>{
+      // Always recalculate from selectedHrLabel for accuracy
+      let deadline=null;
+      const lbl3=o.selectedHrLabel||'';
+      const m3=lbl3.match(/(\d{1,2}):(\d{2})\s*(?:to|–|-)\s*(\d{1,2}):(\d{2})/i);
+      if(m3){const b=o.deliveryDate?new Date(o.deliveryDate+'T00:00:00'):new Date();b.setHours(parseInt(m3[3]),parseInt(m3[4]),0,0);if(!o.deliveryDate&&b<new Date())b.setDate(b.getDate()+1);deadline=b;}
+      else if(o.expressDeadline){
+        if(o.expressDeadline.includes('T'))deadline=new Date(o.expressDeadline);
+        else{const pts=o.expressDeadline.split(':');const b=o.deliveryDate?new Date(o.deliveryDate+'T00:00:00'):new Date();b.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);if(!o.deliveryDate&&b<new Date())b.setDate(b.getDate()+1);deadline=b;}
+      } else if(o.deliveryDate){deadline=new Date(o.deliveryDate+(o.deliveryTime?'T'+o.deliveryTime+':00':'T23:59:59'));}
+      if(!deadline||isNaN(deadline.getTime()))return;
+      const startTime=new Date(o.assignedAt||o.takenAt||o.createdAt);
+      const now=new Date();
+      const remainMs=deadline-now;
+      const totalMs=deadline-startTime;
+      const pct=Math.max(0,Math.min(100,(1-(remainMs/totalMs))*100));
+      const pctColor=remainMs<3600000?'#e74c3c':remainMs<10800000?'#f39c12':'#27ae60';
+
+      const timerEl=document.getElementById('idxTimer_'+o.id);
+      const progEl=document.getElementById('idxProg_'+o.id);
+      if(timerEl){
+        // Hide timer element if 2+ hrs overdue
+        const timerParent=timerEl.closest('[id^="idxTimer_"]')?.parentElement?.parentElement;
+        if(remainMs < -7200000){
+          if(timerParent)timerParent.style.display='none';
+        } else {
+          const absDiff=Math.abs(remainMs);
+          const hrs=Math.floor(absDiff/3600000);
+          const mins=Math.floor((absDiff%3600000)/60000);
+          const secs=Math.floor((absDiff%60000)/1000);
+          timerEl.textContent=remainMs<0?'OVERDUE':hrs>0?`${hrs}h ${mins}m ${secs}s`:`${mins}m ${secs}s`;
+          timerEl.style.color=pctColor;
+        }
+      }
+      if(progEl){
+        progEl.style.width=pct+'%';
+        progEl.style.background=pctColor;
+      }
+    });
+  },1000);
+}
+
 function loadRefs(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email);const el=$('myRefs');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-inbox"></i><p>No deliveries yet.</p></div>';return}el.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem">'+[...mine].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div style="font-family:monospace;font-size:.7rem;font-weight:700;padding:5px 11px;border-radius:17px;cursor:pointer;${d.status==='Delivered'?'background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.22);color:#27ae60':'background:rgba(231,76,60,.13);border:1px solid rgba(231,76,60,.26);color:#e74c3c'}" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</div>`).join('')+'</div>'}
 function getSizeWeightDisplay(d){if(d.isAir||d.deliveryMode==='air')return(d.airDestination||'—')+(d.airWeight?' / '+d.airWeight:'')+(d.airSubType?' ['+(d.airSubType==='express'?'Express':'Normal')+' Air]':'');if(d.isExpress)return(d.packageSize||'—')+(d.selectedHrLabel?' — '+d.selectedHrLabel:'');return d.packageWeight||'—';}
-function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myTB');if(!mine.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,.28);padding:2rem">No records</td></tr>';return}tb.innerHTML=mine.map(d=>{const isAir=d.isAir||d.deliveryMode==='air';return`<tr><td style="font-family:monospace;font-size:.65rem;color:#f39c12;cursor:pointer" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</td><td style="font-size:.7rem">${isAir?'✈ Male → '+d.airDestination:(d.pickupLocation||'')+'→'+(d.deliveryLocation||'')}</td><td style="font-size:.7rem">${d.cargoType||'—'}${isAir?' <span class="badge b-air">Air</span>':d.isExpress?' <span class="badge b-exp">Exp</span>':''}</td><td style="font-size:.68rem">${getSizeWeightDisplay(d)}</td><td style="font-family:monospace">${d.deliveryPrice} MVR</td><td>${sBadge(d.status)}</td><td>${pBadge(d.paymentStatus)}${d.paymentSlip?` <button onclick="viewSlip('${d.paymentSlip}')" style="margin-left:3px;background:rgba(243,156,18,.14);border:1px solid rgba(243,156,18,.28);color:#f39c12;padding:2px 7px;border-radius:10px;font-size:.6rem;cursor:pointer;font-weight:700">Slip</button>`:''}</td></tr>`}).join('')}
+function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myTB');if(!mine.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,.28);padding:2rem">No records</td></tr>';return}tb.innerHTML=mine.map(d=>{
+    const isAir=d.isAir||d.deliveryMode==='air';
+    const pickupFull=(d.pickupLocation||'')+(d.pickupAddress?' — '+d.pickupAddress:'');
+    const delivFull=(d.deliveryLocation||d.airDestination||'')+(d.deliveryAddress&&d.deliveryAddress!==(d.deliveryLocation||d.airDestination)?' — '+d.deliveryAddress:'');
+    const driverHtml=d.assignedDriverId?`<div style="display:flex;align-items:center;gap:4px;margin-top:2px"><i class="fas fa-truck-fast" style="color:#9b59b6;font-size:.58rem"></i><span style="font-size:.62rem;color:#9b59b6;font-weight:600">${d.assignedDriverName||'—'}</span></div>`:'';
+    return`<tr>
+      <td style="font-family:monospace;font-size:.65rem;color:#f39c12;cursor:pointer" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</td>
+      <td style="font-size:.68rem"><div>${isAir?'✈ '+pickupFull:pickupFull}</div><div style="color:rgba(255,255,255,.45);margin-top:1px">→ ${delivFull}</div>${driverHtml}</td>
+      <td style="font-size:.7rem">${d.cargoType||'—'}${isAir?' <span class="badge b-air">Air</span>':d.isExpress?' <span class="badge b-exp">Exp</span>':''}</td>
+      <td style="font-size:.68rem">${getSizeWeightDisplay(d)}</td>
+      <td style="font-family:monospace">${d.deliveryPrice} MVR</td>
+      <td>${sBadge(d.status)}</td>
+      <td>${pBadge(d.paymentStatus)}${d.paymentSlip?` <button onclick="viewSlip('${d.paymentSlip}')" style="margin-left:3px;background:rgba(243,156,18,.14);border:1px solid rgba(243,156,18,.28);color:#f39c12;padding:2px 7px;border-radius:10px;font-size:.6rem;cursor:pointer;font-weight:700">Slip</button>`:''}</td>
+    </tr>`}).join('')}
 function loadMyInvoices(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email&&d.invoice);const el=$('invListWrap');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet.</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.invoice.issuedAt)-new Date(a.invoice.issuedAt)).map(d=>`<div class="inv-card"><div class="inv-card-hd"><span class="inv-card-no">${d.invoice.invoiceNo}</span><span class="inv-card-date">${fmtD(d.invoice.issuedAt)}</span></div><div style="font-size:.76rem;color:rgba(255,255,255,.55);margin-bottom:.5rem">${d.referenceNumber} · ${d.pickupLocation||d.airDestination||''}→${d.deliveryLocation||d.airDestination||''}</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:monospace;font-weight:800;color:#27ae60">MVR ${d.deliveryPrice}</span><button onclick="viewInvoice('${d.referenceNumber}')" style="background:rgba(39,174,96,.14);border:1px solid rgba(39,174,96,.28);color:#27ae60;padding:5px 12px;border-radius:12px;font-size:.72rem;cursor:pointer;font-weight:700"><i class='fas fa-eye' style='margin-right:4px'></i>View</button></div></div>`).join('')}
 window.viewInvoice=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d||!d.invoice)return;curInvoiceD=d;const inv=d.invoice;const isAir=d.isAir||d.deliveryMode==='air';const rows=[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Cargo Type',d.cargoType||'—'],['Mode',isAir?'Air Cargo ('+d.airSubType+')':d.deliveryMode],isAir?['Destination',d.airDestination||'—']:['Pickup',d.pickupLocation||'—'],isAir?['Weight',d.airWeight+'kg']:['Destination',d.deliveryLocation||'—'],['Size/Weight',getSizeWeightDisplay(d)],['Delivery Date',fmtD(d.deliveryDate)]];$('invContent').innerHTML=`<div class="invoice-box"><div class="invoice-header"><div><div class="invoice-brand">Easy<span>Cargo</span></div><div class="invoice-no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="invoice-date">${fmtD(inv.issuedAt)}</div></div></div><div style="margin-bottom:.8rem">${rows.map(([k,v])=>`<div class="inv-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div><div class="inv-total"><span class="k">Total Paid</span><span class="v">MVR ${d.deliveryPrice}</span></div><div class="inv-stamp"><span><i class="fas fa-check-circle"></i> PAYMENT VERIFIED</span></div></div>`;$('invMod').classList.add('show')};
 $('invClose').onclick=$('invClose2').onclick=()=>$('invMod').classList.remove('show');
@@ -1962,6 +2255,7 @@ $('cargoForm').addEventListener('submit',function(e){
   tmpD={
     referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,
     pickupLocation:isAir?$('airPickupVal').value:$('pLocVal').value,pickupAddress:isAir?($('airAddrVal').value||''):($('addrVal').value||''),
+    deliveryAddress:$('delivAddrVal')?.value||$('addrVal')?.value||'',
     deliveryMode:isAir?'air':dMode,deliveryLocation:isAir?$('airSelIslandName').value:dest,
     boatName:boatNameVal,boatContact:boatContactVal||'',destinationIsland:boatIslandVal,
     manualBoatEntry:!isAir&&((dMode==='boat'&&boatInputMode==='manual')||(dMode==='speedboat'&&sbInputMode==='manual')),
@@ -1970,6 +2264,8 @@ $('cargoForm').addEventListener('submit',function(e){
     airWeight:isAir?($('airSelWeightRange').value||''):'',airGroup:isAir?$('airSelIslandGroup').value:'',
     packageSize:isExp&&!isAir?($('selSizeName').value+' / up to '+$('selSizeWeight').value+' kg'):'',
     selectedSizeName:isExp&&!isAir?$('selSizeName').value||'':'',selectedHrLabel:isExp&&!isAir?$('selTimeLabel').value:'',
+    expressDeadline:(()=>{if(!isExp||isAir)return'';const t=$('selTimeDeadline')?.value||'';if(!t)return'';if(t.includes('T'))return t;const dDate=$('dDate')?.value||'';if(dDate){const pts=t.split(':');const d=new Date(dDate+'T00:00:00');d.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);return d.toISOString();}return t;})(),
+    deliveryDuration:!isExp&&!isAir?'3-5 Business Days':'',
     packageWeight:!isExp&&!isAir?$('selW').value:'—',
     floorLevel:$('floorNum').value||'',packageDescription:$('pkgDesc').value||'',
     deliveryPrice:price,basePrice:parseFloat($('hiddenBasePrice').value)||price,
