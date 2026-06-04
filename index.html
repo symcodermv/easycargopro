@@ -17,7 +17,26 @@
 <meta property="og:title" content="EasyCargo — Fast &amp; Reliable Cargo Delivery | Maldives">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <script src="shared.js"></script>
+  <script>
+  /* Inline Firebase — works without shared.js */
+  if(!firebase.apps||!firebase.apps.length){
+    firebase.initializeApp({
+      apiKey:"AIzaSyAnY8cnBA2lfNmTsUZKh20ZXvZwaXBhw-g",
+      authDomain:"easycargo-mv.firebaseapp.com",
+      databaseURL:"https://easycargo-mv-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId:"easycargo-mv",
+      storageBucket:"easycargo-mv.firebasestorage.app",
+      messagingSenderId:"243526736761",
+      appId:"1:243526736761:web:b9bae2df8df118d4cf2da8"
+    });
+  }
+  window.db = firebase.database();
+  var db = window.db;
+  window.TG_BOT='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+  window.TG_IDS=[965429044,7307324767,319043357];
+</script>
 <script>
 const MANUAL_SLIDES=[{url:'2.png'},{url:'photos.jpg'},{url:'Advertisemnet.png'}];
 const MANUAL_HOW_IMAGES=[{url:'A.png'},{url:'B.png'},{url:'C.png'},{url:'A.png'}];
@@ -803,7 +822,26 @@ img{max-width:100%;height:auto}
           <div class="fg"><label>Password</label><input class="fi" type="password" id="rPwd" placeholder="Password"></div>
           <div class="fg"><label>Confirm</label><input class="fi" type="password" id="rCfm" placeholder="Repeat"></div>
         </div>
-        <button class="btn btn-gold" id="regBtn"><i class="fas fa-user-plus"></i> Register</button>
+        <div id="regFormFields">
+</div>
+<button class="btn btn-gold" id="regBtn" style="width:100%"><i class="fas fa-paper-plane" style="margin-right:7px"></i>Send OTP & Register</button>
+<!-- OTP Step -->
+<div id="otpStep" style="display:none;margin-top:1rem">
+  <div style="background:rgba(52,152,219,.08);border:1.5px solid rgba(52,152,219,.3);border-radius:16px;padding:1rem;text-align:center">
+    <div style="font-size:1.4rem;margin-bottom:.4rem">📱</div>
+    <div style="font-weight:700;color:white;font-size:.9rem;margin-bottom:.3rem">Enter Verification Code</div>
+    <div style="font-size:.72rem;color:rgba(255,255,255,.45);margin-bottom:.85rem;line-height:1.5">A 6-digit code was sent to your number. Enter it below to complete registration.</div>
+    <input type="tel" id="otpInput" maxlength="6" inputmode="numeric" placeholder="— — — — — —" style="width:100%;padding:14px;background:#1e2a3a;border:2px solid rgba(52,152,219,.4);border-radius:14px;color:white;font-size:1.4rem;text-align:center;letter-spacing:.5rem;font-weight:800;outline:none;box-sizing:border-box;font-family:monospace;margin-bottom:.75rem">
+    <button id="verifyOtpBtn" onclick="verifyOtp()" style="width:100%;background:linear-gradient(135deg,#27ae60,#2ecc71);color:white;border:none;border-radius:22px;padding:12px;font-weight:800;font-size:.88rem;cursor:pointer;font-family:inherit;margin-bottom:.5rem">
+      <i class="fas fa-check" style="margin-right:7px"></i>Verify & Complete Registration
+    </button>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <button onclick="resendOtp()" style="background:none;border:none;color:#3498db;font-size:.72rem;cursor:pointer;font-family:inherit;padding:4px"><i class="fas fa-rotate-right" style="margin-right:4px"></i>Resend OTP</button>
+      <span style="font-size:.7rem;font-family:monospace" id="otpCountdown" style="color:rgba(255,255,255,.4)">05:00</span>
+      <button onclick="resetOtpStep()" style="background:none;border:none;color:rgba(255,255,255,.3);font-size:.72rem;cursor:pointer;font-family:inherit;padding:4px">← Back</button>
+    </div>
+  </div>
+</div>
       </div>
     </div>
   </div>
@@ -1349,24 +1387,59 @@ img{max-width:100%;height:auto}
 <div class="toast" id="toast"><div class="t-ico"><i class="fas fa-info-circle"></i></div><div class="t-msg" id="tTxt"></div></div>
 
 <script>
-const fbCfg={apiKey:"AIzaSyCZA8Z9AJcC97CyQUZVCRsljTuYBfxjHMw",authDomain:"easycargo-9c0cd.firebaseapp.com",databaseURL:"https://easycargo-9c0cd-default-rtdb.firebaseio.com",projectId:"easycargo-9c0cd",storageBucket:"easycargo-9c0cd.firebasestorage.app",messagingSenderId:"51689325187",appId:"1:51689325187:web:c65cb8fb0af2241a4c91b6"};
-firebase.initializeApp(fbCfg);
-const db=firebase.database();
+
+function saveCache(data) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      ts: Date.now(), data: data
+    }));
+  } catch(e) {}
+}
+
+function loadCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (Date.now() - obj.ts > CACHE_TTL) return null;
+    return obj.data;
+  } catch(e) { return null; }
+}
+
+function applyCachedData(cached) {
+  if (!cached) return false;
+  if (cached.cargoTypes)    { allCargoTypes = cached.cargoTypes; }
+  if (cached.pickupLocations) { allPickups = cached.pickupLocations; }
+  if (cached.deliveryLocations) { allDelLocs = cached.deliveryLocations; }
+  if (cached.routePrices)   { allRoutePrices = cached.routePrices; }
+  if (cached.boats)         { allBoats = cached.boats; }
+  if (cached.speedBoats)    { allSpeedBoats = cached.speedBoats; }
+  if (cached.boatHarbours)  { allBoatHarbours = cached.boatHarbours; }
+  if (cached.siteSettings)   { siteSettings = cached.siteSettings; }
+  if (cached.expressSizes)   { allExpressSizes = cached.expressSizes; }
+  if (cached.expressHours)   { allExpressHrs = cached.expressHours; }
+  if (cached.cargoPriceRanges){ allP = cached.cargoPriceRanges; }
+  if (cached.floorPrices)    { allFloors = cached.floorPrices; }
+  if (cached.expressHours)  { allExpressHrs = cached.expressHours; }
+  if (cached.floorPrices)   { allFloors = cached.floorPrices; }
+  if (cached.cargoPriceRanges) { allP = cached.cargoPriceRanges; }
+  if (cached.airDestinations) { allAirDestinations = cached.airDestinations; }
+  return true;
+}
+
+
+
+
 
 let me=null,allD=[],allP=[],allN=[],allBoats=[],allSpeedBoats=[],allPickups=[],allCargoTypes=[],
     allExpressHrs=[],allExpressSizes=[],allDelLocs=[],allFloors=[],allRoutePrices=[],
     allBoatRoutePrices=[],allBoatHarbours=[],allManualBoatPrices=[],allAirDestinations=[],
     siteSettings={},tmpD=null,busy=false,dMode='cargo',slideIdx=0,slideTimer=null,curInvoiceD=null;
 
-const $=id=>document.getElementById(id);
-function toArr(d){return d?(Array.isArray(d)?d:Object.values(d)):[]}
-function fmtD(d){return d?new Date(d).toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}):'—'}
-function genRef(){return`CARGO-${Date.now().toString().slice(-6)}${Math.floor(Math.random()*900+100)}`}
-function showToast(m,t='info'){const el=$('toast');el.className=`toast ${t}`;$('tTxt').textContent=m;el.querySelector('.t-ico').innerHTML=t==='ok'?'<i class="fas fa-check-circle"></i>':t==='err'?'<i class="fas fa-times-circle"></i>':'<i class="fas fa-info-circle"></i>';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3200)}
-function sBadge(s){const m={'Order Placed':'b-placed','Processing':'b-proc','In Transit':'b-trans','Out for Delivery':'b-out','Delivered':'b-del'};return`<span class="badge ${m[s]||'b-placed'}">${s}</span>`}
-function pBadge(s){const m={'under_review':['b-rev','Reviewing'],'paid':['b-paid','Paid'],'pending':['b-pnd','Pending']};const[c,l]=m[s]||['b-pnd','Pending'];return`<span class="badge ${c}">${l}</span>`}
-function showMsg(id,msg,t){const el=$(id);el.className=`msg ${t}`;el.textContent=msg;setTimeout(()=>el.className='msg',4000)}
-function timeAgo(ts){if(!ts)return'';const s=Math.floor((Date.now()-new Date(ts))/1000);if(s<60)return s+'s ago';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago'}
+
+
+
+
 
 /* ═══ AIR CARGO ═══ */
 const DEFAULT_AIR_DESTINATIONS=[
@@ -1392,7 +1465,7 @@ let allAirPickupLocations=[];
 let allAirTypeNormal={name:'Normal Air Cargo',eta:'1-3 Business Days',weights:[]};
 let allAirTypeExpress={name:'Express Air Cargo',eta:'Same Day / Next Day',weights:[]};
 
-db.ref('airTypes').on('value',snap=>{
+db.ref('airTypes').once('value').then(snap=>{
   const d=snap.val()||{};
   allAirTypeNormal=Object.assign({name:'Normal Air Cargo',eta:'1-3 Business Days',weights:[]},d.normal||{});
   allAirTypeExpress=Object.assign({name:'Express Air Cargo',eta:'Same Day / Next Day',weights:[]},d.express||{});
@@ -1400,8 +1473,8 @@ db.ref('airTypes').on('value',snap=>{
   loadCtypeGrid();
   if($('ctIsAir')&&$('ctIsAir').value==='1')loadAirTypeChoices();
 });
-db.ref('airWeightRanges').on('value',snap=>{allAirWeightRanges=toArr(snap.val());});
-db.ref('airPickupLocations').on('value',snap=>{allAirPickupLocations=toArr(snap.val());if($('ctIsAir')&&$('ctIsAir').value==='1')loadAirPickupGrid();});
+db.ref('airWeightRanges').once('value').then(snap=>{allAirWeightRanges=toArr(snap.val());});
+db.ref('airPickupLocations').once('value').then(snap=>{allAirPickupLocations=toArr(snap.val());if($('ctIsAir')&&$('ctIsAir').value==='1')loadAirPickupGrid();});
 
 /* STEP 0: Load Normal/Express choice buttons */
 function loadAirTypeChoices(){
@@ -1697,24 +1770,155 @@ $('loginBtn').onclick=async()=>{
   $('loginBtn').disabled=true;$('truckAnim').classList.add('show');
   setTimeout(()=>{$('truckAnim').classList.remove('show');me=f;localStorage.setItem('ecu',JSON.stringify(f));enterDash()},1800)
 };
-$('regBtn').onclick=async()=>{
+/* OTP state */
+var _otpCode='',_otpExpiry=0,_otpData={};
+
+$('regBtn').onclick=async function(){
   const u=$('rUsr').value.trim(),e=$('rEml').value.trim(),c=$('rCnt').value.trim(),p=$('rPwd').value,cf=$('rCfm').value;
-  if(!u||!e||!c||!p||!cf){showMsg('regMsg','Fill all fields','err');return}
-  if(p!==cf){showMsg('regMsg','Passwords do not match','err');return}
+  if(!u||!e||!c||!p||!cf){showMsg('regMsg','Fill all fields','err');return;}
+  if(p!==cf){showMsg('regMsg','Passwords do not match','err');return;}
+  if(!/^[0-9]{7,8}$/.test(c)){showMsg('regMsg','Enter a valid 7-8 digit Maldives number','err');return;}
   const arr=toArr((await db.ref('users').once('value')).val());
-  if(arr.find(x=>x.email===e)){showMsg('regMsg','Email already exists','err');return}
-  if(arr.find(x=>x.contact===c)){showMsg('regMsg','Contact number already registered','err');return}
-  const urlRef=new URLSearchParams(window.location.search).get('ref')||'';
-  const newUser={id:Date.now(),username:u,email:e,contact:c,password:p,role:'user',status:'pending',referredBy:urlRef||null};
-  arr.push(newUser);await db.ref('users').set(arr);
-  const eKey=e.replace(/\./g,'_'),refCode='EC'+c.slice(-6).toUpperCase(),regPts=siteSettings.pointsOnRegister||50;
-  const initRwd={points:regPts,referralCode:refCode,referralCount:0,referredBy:urlRef||null,history:[{pts:regPts,note:'Welcome bonus on registration',date:new Date().toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),ref:'Welcome'}]};
-  await db.ref('userRewards/'+eKey).set(initRwd);
-  if(urlRef){const rwSnap=(await db.ref('userRewards').once('value')).val()||{};for(const[rKey,rData] of Object.entries(rwSnap)){if(rData.referralCode===urlRef){const refPts=siteSettings.pointsPerReferral||10;rData.points=(rData.points||0)+refPts;rData.referralCount=(rData.referralCount||0)+1;rData.history=rData.history||[];rData.history.push({pts:refPts,note:'Referral bonus — '+u+' joined!',date:new Date().toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),ref:'Referral'});await db.ref('userRewards/'+rKey).set(rData);break;}}}
+  if(arr.find(x=>x.email===e)){showMsg('regMsg','Email already exists','err');return;}
+  if(arr.find(x=>x.contact===c)){showMsg('regMsg','Contact number already registered','err');return;}
+  /* Generate 6-digit OTP */
+  _otpCode=String(Math.floor(100000+Math.random()*900000));
+  _otpExpiry=Date.now()+5*60*1000; /* 5 min */
+  _otpData={u,e,c,p};
+  /* Send OTP via Telegram bot as SMS fallback */
+  /* Try Twilio SMS first */
+  var sent=false;
+  try{
+    const cfg=siteSettings.twilioConfig||{};
+    if(cfg.sid&&cfg.token&&cfg.from){
+      const mvNum='960'+c.replace(/[^0-9]/g,'');
+      const creds=btoa(cfg.sid+':'+cfg.token);
+      const body=new URLSearchParams();
+      body.append('To','+'+mvNum);
+      if(cfg.msgSid){
+        body.append('MessagingServiceSid',cfg.msgSid);
+      } else {
+        body.append('From',cfg.from||'');
+      }
+      body.append('Body','EasyCargo OTP: '+_otpCode+'. Valid 5 mins. Do not share.');
+      const resp=await fetch('https://api.twilio.com/2010-04-01/Accounts/'+cfg.sid+'/Messages.json',{
+        method:'POST',headers:{Authorization:'Basic '+creds,'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()
+      });
+      if(resp.ok)sent=true;
+    }
+  }catch(se){console.warn('Twilio OTP failed:',se);}
+  /* Also notify admins via Telegram so they can relay OTP if needed */
   const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
-  const _rmsg='New EasyCargo Registration\nUsername: '+u+'\nContact: '+c+'\nEmail: '+e+'\nStatus: Pending';
-  [965429044,7307324767,319043357].forEach(cid=>{fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_rmsg})}).catch(()=>{});});
-  showMsg('regMsg','Registered! You earned '+regPts+' welcome points!','ok');$('tLogin').click();
+  [965429044,7307324767,319043357].forEach(function(cid){
+    fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:cid,text:'OTP Request\nUser: '+u+'\nContact: +960'+c+'\nOTP: '+_otpCode+'\n(Relay if SMS fails)',parse_mode:'Markdown'})
+    }).catch(function(){});
+  });
+  /* Show OTP input step */
+  $('otpStep').style.display='block';
+  $('regFormFields').style.display='none';
+  $('regBtn').style.display='none';
+  /* Start countdown */
+  var secs=300;
+  if(window._otpTimer)clearInterval(window._otpTimer);
+  window._otpTimer=setInterval(function(){
+    secs--;
+    var mm=String(Math.floor(secs/60)).padStart(2,'0');
+    var ss=String(secs%60).padStart(2,'0');
+    var el=$('otpCountdown');
+    if(el)el.textContent=mm+':'+ss;
+    if(secs<=0){
+      clearInterval(window._otpTimer);
+      if(el)el.textContent='Expired';
+      _otpCode='';
+    }
+  },1000);
+  if($('otpInput'))$('otpInput').value='';
+  if($('otpInput'))setTimeout(function(){$('otpInput').focus();},200);
+  showMsg('regMsg',sent?'OTP sent to +960'+c+' via SMS! Check your messages.':'OTP generated! If SMS not received, contact support.','ok');
+};
+
+window.verifyOtp=async function(){
+  const entered=($('otpInput')?.value||'').trim();
+  if(!entered){showMsg('regMsg','Enter the OTP','err');return;}
+  if(!_otpCode){showMsg('regMsg','OTP expired. Please register again.','err');resetOtpStep();return;}
+  if(Date.now()>_otpExpiry){showMsg('regMsg','OTP expired. Please register again.','err');resetOtpStep();return;}
+  if(entered!==_otpCode){
+    showMsg('regMsg','Incorrect OTP. Try again.','err');
+    if($('otpInput'))$('otpInput').value='';
+    return;
+  }
+  /* OTP correct — complete registration */
+  const btn=$('verifyOtpBtn');
+  if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> Registering…';}
+  try{
+    const {u,e,c,p}=_otpData;
+    const arr=toArr((await db.ref('users').once('value')).val());
+    const urlRef=new URLSearchParams(window.location.search).get('ref')||'';
+    const newUser={id:Date.now(),username:u,email:e,contact:c,password:p,role:'user',status:'pending',referredBy:urlRef||null};
+    arr.push(newUser);
+    await db.ref('users').set(arr);
+    const eKey=e.replace(/\./g,'_'),refCode='EC'+c.slice(-6).toUpperCase(),regPts=siteSettings.pointsOnRegister||50;
+    const initRwd={points:regPts,referralCode:refCode,referralCount:0,referredBy:urlRef||null,
+      history:[{pts:regPts,note:'Welcome bonus on registration',date:new Date().toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),ref:'Welcome'}]};
+    await db.ref('userRewards/'+eKey).set(initRwd);
+    if(urlRef){
+      const rwSnap=(await db.ref('userRewards').once('value')).val()||{};
+      for(const[rKey,rData] of Object.entries(rwSnap)){
+        if(rData.referralCode===urlRef){
+          const refPts=siteSettings.pointsPerReferral||10;
+          rData.points=(rData.points||0)+refPts;rData.referralCount=(rData.referralCount||0)+1;
+          rData.history=rData.history||[];
+          rData.history.push({pts:refPts,note:'Referral bonus — '+u+' joined!',date:new Date().toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),ref:'Referral'});
+          await db.ref('userRewards/'+rKey).set(rData);break;
+        }
+      }
+    }
+    const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+    const _rmsg='✅ New EasyCargo Registration (OTP Verified)\nUsername: '+u+'\nContact: +960'+c+'\nEmail: '+e+'\nStatus: Pending Approval';
+    [965429044,7307324767,319043357].forEach(function(cid){fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_rmsg})}).catch(function(){});});
+    clearInterval(window._otpTimer);
+    _otpCode='';_otpData={};
+    showMsg('regMsg','✅ Registered! You earned '+regPts+' welcome points!','ok');
+    setTimeout(function(){$('tLogin').click();resetOtpStep();},2000);
+  }catch(err){
+    showMsg('regMsg','Registration failed: '+err.message,'err');
+    if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-check"></i> Verify & Register';}
+  }
+};
+
+window.resendOtp=async function(){
+  if(_otpData&&_otpData.c){
+    _otpCode=String(Math.floor(100000+Math.random()*900000));
+    _otpExpiry=Date.now()+5*60*1000;
+    var secs=300;
+    if(window._otpTimer)clearInterval(window._otpTimer);
+    window._otpTimer=setInterval(function(){
+      secs--;
+      var mm=String(Math.floor(secs/60)).padStart(2,'0');
+      var ss=String(secs%60).padStart(2,'0');
+      var el=$('otpCountdown');
+      if(el)el.textContent=mm+':'+ss;
+      if(secs<=0){clearInterval(window._otpTimer);if(el)el.textContent='Expired';_otpCode='';}
+    },1000);
+    const _tok='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
+    [965429044,7307324767,319043357].forEach(function(cid){
+      fetch('https://api.telegram.org/bot'+_tok+'/sendMessage',{method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({chat_id:cid,text:'OTP Resend\nUser: '+_otpData.u+'\nContact: +960'+_otpData.c+'\nNew OTP: '+_otpCode,parse_mode:'Markdown'})
+      }).catch(function(){});
+    });
+    showMsg('regMsg','New OTP sent!','ok');
+  }
+};
+
+function resetOtpStep(){
+  if($('otpStep'))$('otpStep').style.display='none';
+  if($('regFormFields'))$('regFormFields').style.display='';
+  if($('regBtn'))$('regBtn').style.display='';
+  if(window._otpTimer)clearInterval(window._otpTimer);
+  _otpCode='';_otpData={};
 };
 window.addEventListener('DOMContentLoaded',()=>{
   // ── Page load plane animation ──
@@ -1734,29 +1938,100 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 /* ═══ FIREBASE INIT ═══ */
 function initFB(){
-  db.ref('cargoDeliveries').on('value',snap=>{allD=toArr(snap.val());if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();loadMyDriver();startIdxDriverTimers();}});
-  db.ref('cargoPriceRanges').on('value',snap=>{allP=toArr(snap.val());if(me)loadWeights()});
-  db.ref('notifications').on('value',snap=>{allN=toArr(snap.val());if(me)loadNotifs()});
-  db.ref('boats').on('value',snap=>{allBoats=toArr(snap.val());});
-  db.ref('speedBoats').on('value',snap=>{allSpeedBoats=toArr(snap.val());});
-  db.ref('pickupLocations').on('value',snap=>{allPickups=toArr(snap.val());if(me){const ac=document.querySelector('.ct-card.active');if(ac){const ct=allCargoTypes.find(c=>String(c.id)===String(ac.dataset.id));if(ct)loadPickupGrid(ct.pickupIds&&ct.pickupIds.length?ct.pickupIds:null);else loadPickupGrid(null);}else loadPickupGrid(null);}});
-  db.ref('cargoTypes').on('value',snap=>{allCargoTypes=toArr(snap.val());if(me)loadCtypeGrid()});
-  db.ref('expressHours').on('value',snap=>{allExpressHrs=toArr(snap.val())});
-  db.ref('expressSizes').on('value',snap=>{allExpressSizes=toArr(snap.val())});
-  db.ref('deliveryLocations').on('value',snap=>{allDelLocs=toArr(snap.val());if(me)loadDlocGrid()});
-  db.ref('floorPrices').on('value',snap=>{allFloors=toArr(snap.val());if(me)loadFloorSelector()});
-  db.ref('routePrices').on('value',snap=>{allRoutePrices=toArr(snap.val());updateRoutePrice();});
-  db.ref('boatRoutePrices').on('value',snap=>{allBoatRoutePrices=toArr(snap.val());});
-  db.ref('manualBoatPrices').on('value',snap=>{allManualBoatPrices=toArr(snap.val());});
-  db.ref('boatHarbours').on('value',snap=>{allBoatHarbours=toArr(snap.val());loadHarbourButtons();});
-  db.ref('airDestinations').on('value',snap=>{allAirDestinations=toArr(snap.val());if(me)loadAirIslandGrid();});
-  db.ref('siteSettings').on('value',snap=>{siteSettings=snap.val()||{};initSlideshow();loadHowTo();loadLoginPageSettings();if(me)updateCapBar()});
-  initSlideshow();loadHowTo();
+  /* ── STEP 1: Load from cache INSTANTLY (zero network delay) ── */
+  const cached = loadCache();
+  if (cached) {
+    applyCachedData(cached);
+    // Show UI immediately from cache
+    loadCtypeGrid();
+    loadPickupGrid(null);
+    loadDlocGrid();
+    loadHarbourButtons();
+    if (cached.siteSettings) { initSlideshow(); loadHowTo(); loadLoginPageSettings(); }
+    console.log('✅ Loaded from cache instantly');
+  }
+
+  /* ── STEP 2: Load from Firebase in background (updates cache) ── */
+  /* Customer needs prices/boats/cargo types to fill the booking form */
+  Promise.all([
+    db.ref('siteSettings').once('value').then(snap=>{
+      siteSettings=snap.val()||{};
+      initSlideshow();loadHowTo();loadLoginPageSettings();
+    }),
+    db.ref('cargoTypes').once('value').then(snap=>{allCargoTypes=toArr(snap.val());}),
+    db.ref('pickupLocations').once('value').then(snap=>{allPickups=toArr(snap.val());}),
+    db.ref('deliveryLocations').once('value').then(snap=>{allDelLocs=toArr(snap.val());}),
+    db.ref('routePrices').once('value').then(snap=>{allRoutePrices=toArr(snap.val());}),
+    db.ref('boats').once('value').then(snap=>{allBoats=toArr(snap.val());}),
+    db.ref('speedBoats').once('value').then(snap=>{allSpeedBoats=toArr(snap.val());}),
+    db.ref('boatHarbours').once('value').then(snap=>{allBoatHarbours=toArr(snap.val());}),
+    db.ref('expressSizes').once('value').then(snap=>{allExpressSizes=toArr(snap.val());}),
+    db.ref('expressHours').once('value').then(snap=>{allExpressHrs=toArr(snap.val());}),
+    db.ref('cargoPriceRanges').once('value').then(snap=>{allP=toArr(snap.val());}),
+    db.ref('floorPrices').once('value').then(snap=>{allFloors=toArr(snap.val());}),
+  ]).then(function(){
+    // Save fresh data to cache for instant load next time
+    saveCache({
+      cargoTypes: allCargoTypes,
+      pickupLocations: allPickups,
+      deliveryLocations: allDelLocs,
+      routePrices: allRoutePrices,
+      boats: allBoats,
+      speedBoats: allSpeedBoats,
+      boatHarbours: allBoatHarbours,
+      siteSettings: siteSettings,
+      expressSizes: allExpressSizes || [],
+      expressHours: allExpressHrs || [],
+      floorPrices: allFloors || [],
+      cargoPriceRanges: allP || [],
+      airDestinations: allAirDestinations || [],
+    });
+    // Reload express sizes grid if user already selected express
+    if($('ctIsExpress')&&$('ctIsExpress').value==='1'){
+      var activeCt=$('ctypeGrid')?.querySelector('.ct-card.active');
+      if(activeCt)loadPkgSizeGrid(activeCt.dataset.id);
+    }
+    loadCtypeGrid();
+    loadPickupGrid(null);
+    loadDlocGrid();
+    loadHarbourButtons();
+    // If user clicked express while sizes were loading, reload now
+    if(window._pendingExpressCtId){
+      loadPkgSizeGrid(window._pendingExpressCtId);
+      window._pendingExpressCtId = null;
+    }
+    console.log('✅ Cache updated from Firebase');
+  });
+
+  /* Load secondary config in background (not needed until user selects options) */
+  Promise.all([
+    db.ref('cargoPriceRanges').once('value').then(snap=>{allP=toArr(snap.val());}),
+    db.ref('expressHours').once('value').then(snap=>{allExpressHrs=toArr(snap.val());}),
+    db.ref('floorPrices').once('value').then(snap=>{allFloors=toArr(snap.val());}),
+    db.ref('boatRoutePrices').once('value').then(snap=>{allBoatRoutePrices=toArr(snap.val());}),
+    db.ref('manualBoatPrices').once('value').then(snap=>{allManualBoatPrices=toArr(snap.val());}),
+    db.ref('airDestinations').once('value').then(snap=>{allAirDestinations=toArr(snap.val());}),
+  ]);
+}
+
+/* Called AFTER successful login — start live listeners for user-specific data */
+function startUserListeners(){
+  /* User's own orders - live */
+  db.ref('cargoDeliveries').on('value',snap=>{
+    allD=toArr(snap.val());
+    if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();loadMyDriver();startIdxDriverTimers();}
+  });
+  /* Notifications - live */
+  db.ref('notifications').on('value',snap=>{
+    allN=toArr(snap.val());
+    if(me)loadNotifs();
+  });
 }
 
 /* ═══ ENTER DASHBOARD ═══ */
 function enterDash(){
   $('authScreen').classList.remove('show');$('dashboard').style.display='block';
+  startUserListeners();
   watchDeliveryPoints();loadFloorSelector();loadUserRewards();loadHarbourButtons();
   $('hName').textContent=me.username;$('sidebarName').textContent=me.username;
   $('cNm').value=me.username;$('cCt').value=me.contact||'';
@@ -1806,7 +2081,23 @@ function loadCtypeGrid(){
   const airCardHTML=`<div class="ct-card air-card" data-id="__air__" onclick="selCtype(this,'__air__')"><i class="fas fa-plane"></i><div class="ct-name">Air Cargo</div><div class="ct-eta">Domestic Flights</div><div class="ct-pr">Normal &amp; Express</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`;
 
   if(!nonAirTypes.length&&!allCargoTypes.length){
-    g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div>'+airCardHTML;
+    // Show default cards while loading instead of "No cargo types" message
+    const defaultHTML=`
+      <div class="ct-card" data-id="normal" onclick="selCtype(this,'normal')">
+        <i class="fas fa-box"></i>
+        <div class="ct-name">Normal Cargo</div>
+        <div class="ct-eta">Standard delivery</div>
+        <div class="ct-pr">Select weight</div>
+        <div class="ct-ck"><i class="fas fa-check"></i></div>
+      </div>
+      <div class="ct-card express-card" data-id="express" onclick="selCtype(this,'express')">
+        <i class="fas fa-bolt"></i>
+        <div class="ct-name">Express Cargo</div>
+        <div class="ct-eta">Fast delivery</div>
+        <div class="ct-pr">Select size &amp; time</div>
+        <div class="ct-ck"><i class="fas fa-check"></i></div>
+      </div>`;
+    g.innerHTML=defaultHTML+airCardHTML;
   } else {
     g.innerHTML=nonAirHTML+airCardHTML;
   }
@@ -1835,7 +2126,14 @@ window.selCtype=function(el,id){
   if(isAir){
     $('ctV').value='Air Cargo';$('ctPrice').value='0';$('ctIsAir').value='1';$('ctIsExpress').value='0';
     $('etaInfo').classList.remove('show');
-    document.querySelectorAll('.ct-card').forEach(c=>c.style.display='');
+    // Hide non-air cards, show only the air card
+    document.querySelectorAll('.ct-card').forEach(function(c){
+      if(c.getAttribute('data-id')==='__air__'||c.classList.contains('air-card')){
+        c.style.display='';
+      } else {
+        c.style.display='none';
+      }
+    });
     showAirUI();
   } else {
     hideAirUI();
@@ -1853,7 +2151,37 @@ window.selCtype=function(el,id){
 
 
 /* ═══ EXPRESS SIZES / TIME SLOTS ═══ */
-function loadPkgSizeGrid(ctId){const g=$('pkgSizeGrid');const sizes=allExpressSizes.filter(s=>String(s.cargoTypeId)===String(ctId)&&s.active!==false);if(!sizes.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No sizes configured.</p></div>';return;}const sorted=[...sizes].sort((a,b)=>(a.order||0)-(b.order||0));g.innerHTML=sorted.map(sz=>`<div class="pkg-size-card" data-szid="${sz.id}" onclick="selPkgSize(this,'${sz.id}')"><i class="fas ${sizeIcon(sz.name)} psz-icon"></i><div class="psz-name">${sz.name}</div><div class="psz-weight">Up to ${sz.maxKg} kg</div><div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>`).join('');$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('expressTimeWrap').classList.remove('show');calcTotal();}
+function loadPkgSizeGrid(ctId){
+  var g=$('pkgSizeGrid');
+  if(!g)return;
+  // Try exact match first, then fallback to all express sizes
+  var sizes=allExpressSizes.filter(function(s){return String(s.cargoTypeId)===String(ctId)&&s.active!==false;});
+  if(!sizes.length) sizes=allExpressSizes.filter(function(s){return s.active!==false;});
+  if(!sizes.length){
+    g.innerHTML='<div class="pkg-size-card" data-szid="small"><i class="fas fa-box-open psz-icon"></i><div class="psz-name">Small</div><div class="psz-weight">Up to 5 kg</div><div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>'
+      +'<div class="pkg-size-card" data-szid="medium"><i class="fas fa-box psz-icon"></i><div class="psz-name">Medium</div><div class="psz-weight">Up to 15 kg</div><div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>'
+      +'<div class="pkg-size-card" data-szid="large"><i class="fas fa-boxes-stacked psz-icon"></i><div class="psz-name">Large</div><div class="psz-weight">Up to 30 kg</div><div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>';
+    window._pendingExpressCtId=ctId;
+    g.querySelectorAll('.pkg-size-card').forEach(function(c){c.onclick=function(){selPkgSize(c,c.dataset.szid);};});
+    return;
+  }
+  window._pendingExpressCtId=null;
+  var sorted=[...sizes].sort(function(a,b){return (a.order||0)-(b.order||0);});
+  g.innerHTML=sorted.map(function(sz){
+    var sid=String(sz.id||'');
+    return '<div class="pkg-size-card" data-szid="'+sid+'">'
+      +'<i class="fas '+(sizeIcon(sz.name)||'fa-box')+' psz-icon"></i>'
+      +'<div class="psz-name">'+(sz.name||'')+'</div>'
+      +'<div class="psz-weight">Up to '+(sz.maxKg||'?')+' kg</div>'
+      +'<div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>';
+  }).join('');
+  g.querySelectorAll('.pkg-size-card').forEach(function(c){c.onclick=function(){selPkgSize(c,c.dataset.szid);};});
+  if($('selSizeId'))$('selSizeId').value='';
+  if($('selSizeName'))$('selSizeName').value='';
+  if($('selSizeWeight'))$('selSizeWeight').value='';
+  if($('expressTimeWrap'))$('expressTimeWrap').classList.remove('show');
+  calcTotal();
+}
 window.selPkgSize=function(el,id){const already=el.classList.contains('active');if(already){el.classList.remove('active');$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';$('expressTimeWrap').classList.remove('show');hideStep('stepPickup');calcTotal();return;}document.querySelectorAll('.pkg-size-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');const sz=allExpressSizes.find(s=>String(s.id)===String(id));if(!sz)return;$('selSizeId').value=sz.id;$('selSizeName').value=sz.name;$('selSizeWeight').value=sz.maxKg;$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));hideStep('stepPickup');loadTimeSlots(sz.id);calcTotal();};
 function loadTimeSlots(sizeId){const g=$('timeSlotGrid');const ctId=$('ctypeGrid').querySelector('.ct-card.active')?.dataset?.id||'';const slots=allExpressHrs.filter(h=>String(h.sizeId)===String(sizeId)&&(ctId?String(h.cargoTypeId)===String(ctId):true));if(!slots.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.6rem"><p>No time options for this size.</p></div>';$('expressTimeWrap').classList.add('show');return;}const sorted=[...slots].sort((a,b)=>(a.minutes||0)-(b.minutes||0));g.innerHTML=sorted.map(ts=>`<button type="button" class="time-slot-btn" data-id="${ts.id}" data-price="${ts.price}" data-label="${ts.label||''}" onclick="selTimeSlot(this)"><span class="ts-dur">${ts.label||''}</span><span class="ts-lbl">Delivery Time</span><span class="ts-price">MVR ${ts.price}</span><div class="time-slot-ck"><i class="fas fa-check"></i></div></button>`).join('');$('expressTimeWrap').classList.add('show');}
 window.selTimeSlot=function(el){
@@ -1956,7 +2284,7 @@ window.selSpeedBoat=function(id){document.querySelectorAll('.sb-card').forEach(c
 /* ═══ MY REFS / TABLE / INVOICES ═══ */
 /* ═══ DRIVER PROFILE FOR CUSTOMERS ═══ */
 let allDriversIdx=[];
-db.ref('drivers').on('value',snap=>{allDriversIdx=Array.isArray(snap.val())?snap.val():snap.val()?Object.values(snap.val()):[];loadMyDriver();});
+db.ref('drivers').once('value').then(snap=>{allDriversIdx=Array.isArray(snap.val())?snap.val():snap.val()?Object.values(snap.val()):[];});
 
 function loadMyDriver(){
   const el=$('myDriverContent');if(!el||!me)return;
@@ -2230,10 +2558,10 @@ window.renderTrk=function(ref){
 /* ═══ NOTIFICATIONS ═══ */
 function pushN(title,msg,email){const n={id:Date.now(),title,message:msg,userEmail:email,timestamp:new Date().toISOString(),read:false};db.ref('notifications').set([...allN,n])}
 function loadNotifs(){if(!me)return;const mine=allN.filter(n=>n.userEmail===me.email||n.userEmail==='all');const unread=mine.filter(n=>!n.read).length;$('nDot').className=`n-dot ${unread?'show':''}`;if(unread)$('nDot').textContent=unread>9?'9+':unread;const el=$('nList');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-bell-slash"></i><p>No notifications</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).map(n=>`<div class="n-item ${n.read?'':'unread'}" onclick="markNRead(${n.id})"><button class="n-rm" onclick="rmN(event,${n.id})"><i class="fas fa-times"></i></button><div class="nt">${n.title}</div><div class="nm">${n.message}</div><div class="nd">${timeAgo(n.timestamp)}</div></div>`).join('')}
-$('nBtn').onclick=()=>{$('nPanel').classList.add('open');allN.forEach(n=>{if(n.userEmail===me?.email||n.userEmail==='all')n.read=true});db.ref('notifications').set(allN);loadNotifs()};
+$('nBtn').onclick=()=>{$('nPanel').classList.add('open');const updates={};allN.forEach((n,i)=>{if((n.userEmail===me?.email||n.userEmail==='all')&&!n.read){n.read=true;updates[i+'/read']=true;}});if(Object.keys(updates).length)db.ref('notifications').update(updates);loadNotifs()};
 $('nClose').onclick=()=>$('nPanel').classList.remove('open');
-window.markNRead=function(id){const n=allN.find(x=>x.id===id);if(n&&!n.read){n.read=true;db.ref('notifications').set(allN);loadNotifs()}};
-window.rmN=function(e,id){e.stopPropagation();allN=allN.filter(n=>n.id!==id);db.ref('notifications').set(allN);loadNotifs()};
+window.markNRead=function(id){const idx=allN.findIndex(x=>x.id===id);if(idx!==-1&&!allN[idx].read){allN[idx].read=true;db.ref('notifications/'+idx+'/read').set(true);loadNotifs()}};
+window.rmN=function(e,id){e.stopPropagation();const idx=allN.findIndex(n=>n.id===id);if(idx!==-1){allN.splice(idx,1);db.ref('notifications').set(allN);}loadNotifs()};
 $('nClearAll').onclick=()=>{allN=allN.filter(n=>n.userEmail!==me?.email&&n.userEmail!=='all');db.ref('notifications').set(allN);loadNotifs()};
 window.viewSlip=src=>{$('slipViewImg').src=src;$('slipMod').classList.add('show')};
 $('slipClose').onclick=$('slipClose2').onclick=()=>$('slipMod').classList.remove('show');
@@ -2416,7 +2744,7 @@ window.closePaySuccess=function(){
 function mkEKey(email){return email.replace(/\./g,'_');}
 async function awardPoints(email,pts,note,ref){const key=mkEKey(email);const snap=await db.ref('userRewards/'+key).once('value');const rd=snap.val()||{points:0,history:[],referralCode:'EC'+Date.now().toString().slice(-6),referralCount:0};rd.points=(rd.points||0)+pts;rd.history=rd.history||[];rd.history.push({pts,note,date:new Date().toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),ref:ref||''});await db.ref('userRewards/'+key).set(rd);showPointsPopup(pts);pushN('⭐ Points Earned!','You earned +'+pts+' points! '+note,email);}
 let _watchedDeliveries=new Set();
-function watchDeliveryPoints(){db.ref('cargoDeliveries').on('value',snap=>{const deliveries=toArr(snap.val());deliveries.forEach(d=>{if(d.paymentStatus==='paid'&&d.createdBy===me?.email&&!_watchedDeliveries.has(d.referenceNumber)){_watchedDeliveries.add(d.referenceNumber);const key=mkEKey(d.createdBy);db.ref('userRewards/'+key+'/history').once('value').then(s=>{const hist=toArr(s.val());const alreadyAwarded=hist.some(h=>h.ref===d.referenceNumber&&h.note&&h.note.includes('Delivery'));if(!alreadyAwarded&&d.paymentStatus==='paid'){const dpts=siteSettings.pointsPerDelivery||10;awardPoints(d.createdBy,dpts,'Delivery reward',d.referenceNumber);}});}});});}
+function watchDeliveryPoints(){;}
 function showPointsPopup(pts){const el=document.createElement('div');el.className='pts-float-toast';el.innerHTML=`<div class="pts-float-inner"><i class="fas fa-star pfi-star" style="color:#f39c12;font-size:1.1rem;animation:orbFloat 1s ease-in-out infinite"></i><span class="pfi-text">You earned <span class="pfi-num">+${pts} pts</span>!</span></div>`;document.body.appendChild(el);setTimeout(()=>el.remove(),3100);}
 
 function getTierInfo(pts){if(pts>=5000)return{name:'Gold',faIcon:'fa-medal',faColor:'#f39c12',icoClass:'tier-ico-gold',color:'#f39c12',color2:'#e67e22',chipBg:'rgba(243,156,18,.15)',chipBorder:'rgba(243,156,18,.4)',heroBg:'rwd-hero-bg-gold',orb:'rwd-hero-orb-gold',fillGrad:'linear-gradient(90deg,#b8860b,#f39c12,#ffd700)',next:null,nextPts:0,benefits:[{icon:'fa-rocket',iconBg:'rgba(243,156,18,.15)',iconColor:'#f39c12',text:'Priority Delivery',badge:'VIP',badgeBg:'rgba(243,156,18,.2)',badgeColor:'#f39c12'},{icon:'fa-tag',iconBg:'rgba(39,174,96,.12)',iconColor:'#27ae60',text:'Exclusive Discounts',badge:'Active',badgeBg:'rgba(39,174,96,.15)',badgeColor:'#27ae60'},{icon:'fa-headset',iconBg:'rgba(52,152,219,.12)',iconColor:'#3498db',text:'Fastest Support',badge:'24/7',badgeBg:'rgba(52,152,219,.15)',badgeColor:'#3498db'},{icon:'fa-crown',iconBg:'rgba(243,156,18,.15)',iconColor:'#f39c12',text:'VIP Badge',badge:'Gold',badgeBg:'rgba(243,156,18,.2)',badgeColor:'#f39c12'}]};if(pts>=1000)return{name:'Silver',faIcon:'fa-medal',faColor:'#9ab4c8',icoClass:'tier-ico-silver',color:'#9ab4c8',color2:'#7a96b0',chipBg:'rgba(154,180,200,.12)',chipBorder:'rgba(154,180,200,.35)',heroBg:'rwd-hero-bg-silver',orb:'rwd-hero-orb-silver',fillGrad:'linear-gradient(90deg,#607d8b,#9ab4c8,#cfd8dc)',next:'Gold',nextPts:5000,benefits:[{icon:'fa-bolt',iconBg:'rgba(52,152,219,.12)',iconColor:'#3498db',text:'Faster Support',badge:'Priority',badgeBg:'rgba(52,152,219,.15)',badgeColor:'#3498db'},{icon:'fa-tag',iconBg:'rgba(39,174,96,.12)',iconColor:'#27ae60',text:'Small Discount',badge:'Active',badgeBg:'rgba(39,174,96,.15)',badgeColor:'#27ae60'},{icon:'fa-arrow-up',iconBg:'rgba(154,180,200,.12)',iconColor:'#9ab4c8',text:'Priority Queue',badge:'On',badgeBg:'rgba(154,180,200,.15)',badgeColor:'#9ab4c8'},{icon:'fa-star',iconBg:'rgba(154,180,200,.1)',iconColor:'#9ab4c8',text:'Silver Status',badge:'Silver',badgeBg:'rgba(154,180,200,.15)',badgeColor:'#9ab4c8'}]};return{name:'Bronze',faIcon:'fa-medal',faColor:'#cd7f32',icoClass:'tier-ico-bronze',color:'#cd7f32',color2:'#a0522d',chipBg:'rgba(205,127,50,.12)',chipBorder:'rgba(205,127,50,.35)',heroBg:'rwd-hero-bg-bronze',orb:'rwd-hero-orb-bronze',fillGrad:'linear-gradient(90deg,#6d3b0a,#cd7f32,#daa520)',next:'Silver',nextPts:1000,benefits:[{icon:'fa-headset',iconBg:'rgba(205,127,50,.12)',iconColor:'#cd7f32',text:'Basic Support',badge:'Standard',badgeBg:'rgba(205,127,50,.12)',badgeColor:'#cd7f32'},{icon:'fa-gift',iconBg:'rgba(39,174,96,.1)',iconColor:'#27ae60',text:'Welcome Bonus',badge:'Earned',badgeBg:'rgba(39,174,96,.12)',badgeColor:'#27ae60'},{icon:'fa-location-dot',iconBg:'rgba(52,152,219,.1)',iconColor:'#3498db',text:'Delivery Tracking',badge:'Free',badgeBg:'rgba(52,152,219,.12)',badgeColor:'#3498db'},{icon:'fa-trophy',iconBg:'rgba(205,127,50,.1)',iconColor:'#cd7f32',text:'Bronze Status',badge:'New',badgeBg:'rgba(205,127,50,.12)',badgeColor:'#cd7f32'}]};}
