@@ -1763,7 +1763,7 @@ $('loginBtn').onclick=async()=>{
   if(!contact||!pwd){showMsg('loginMsg','Fill all fields','err');return}
   const arr=toArr((await db.ref('users').once('value')).val());
   const f=arr.find(x=>x.contact===contact&&x.password===pwd);
-  if(!f){showMsg('loginMsg','Invalid contact number or password','err');return}
+  if(!f){showMsg('loginMsg','Account not found. Please register first or check your contact number.','err');return}
   if(f.role==='admin'){showMsg('loginMsg','Use the admin panel','err');return}
   if(f.status==='pending'){$('pLogin').innerHTML=`<div class="pending-box"><i class="fas fa-hourglass-half"></i><h3>Access Pending</h3><p>Awaiting admin approval.</p></div><button class="btn btn-sec" style="margin-top:.8rem" onclick="location.reload()"><i class="fas fa-arrow-left"></i> Back</button>`;return}
   if(f.status==='blocked'){showMsg('loginMsg','Account blocked. Contact admin.','err');return}
