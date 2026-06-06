@@ -2348,8 +2348,8 @@ function buildDriverCard(order,driver,type){
         if(!isNaN(iso.getTime()))deadline=order.deliveryDate?idxBuildDL(iso.getUTCHours(),iso.getUTCMinutes(),order.deliveryDate):iso;
       } else {const pts=order.expressDeadline.split(':');if(pts.length>=2)deadline=idxBuildDL(parseInt(pts[0]),parseInt(pts[1]),order.deliveryDate);}
     }
-    if(!deadline&&order.deliveryDate)deadline=new Date(order.deliveryDate+(order.deliveryTime?'T'+order.deliveryTime+':00':'T23:59:59'));
-    const startTime=new Date(order.assignedAt||order.takenAt||order.createdAt);
+if(!deadline&&order.driverDeadline){const _dd=new Date(order.driverDeadline);if(!isNaN(_dd.getTime()))deadline=_dd;}
+if(!deadline&&order.deliveryDate)deadline=new Date(order.deliveryDate+(order.deliveryTime?'T'+order.deliveryTime+':00':'T23:59:59'));    const startTime=new Date(order.assignedAt||order.takenAt||order.createdAt);
     const now=new Date();
     const totalMs=deadline-startTime;
     const remainMs=deadline-now;
@@ -2490,6 +2490,7 @@ function startIdxDriverTimers(){
         else{const pts=o.expressDeadline.split(':');const b=o.deliveryDate?new Date(o.deliveryDate+'T00:00:00'):new Date();b.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);if(!o.deliveryDate&&b<new Date())b.setDate(b.getDate()+1);deadline=b;}
       } else if(o.deliveryDate){deadline=new Date(o.deliveryDate+(o.deliveryTime?'T'+o.deliveryTime+':00':'T23:59:59'));}
       if(!deadline||isNaN(deadline.getTime()))return;
+      
       const startTime=new Date(o.assignedAt||o.takenAt||o.createdAt);
       const now=new Date();
       const remainMs=deadline-now;
@@ -2789,5 +2790,46 @@ $('forgotA').onclick=e=>{e.preventDefault();showToast('Contact your admin to res
   document.addEventListener('keydown',function(e){var k=e.key,ctrl=e.ctrlKey||e.metaKey;if(ctrl&&(k==='u'||k==='U')){e.preventDefault();return false;}if(ctrl&&(k==='s'||k==='S')){e.preventDefault();return false;}if(k==='F12'){e.preventDefault();return false;}});
 })();
 </script>
+
+
+<script>
+(function(){
+  /* 1. Block right-click / context menu everywhere */
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); return false; });
+
+  /* 2. Block copy, cut, and text selection */
+  ['copy','cut','selectstart','dragstart'].forEach(function(ev){
+    document.addEventListener(ev, function(e){ e.preventDefault(); return false; });
+  });
+
+  /* 3. Block image dragging & long-press save (mobile) */
+  document.addEventListener('touchstart', function(e){
+    if(e.target && e.target.tagName === 'IMG'){ e.preventDefault(); }
+  }, { passive:false });
+
+  /* 4. Block dev-tools / view-source / save keyboard shortcuts */
+  document.addEventListener('keydown', function(e){
+    var k = (e.key||'').toLowerCase(), ctrl = e.ctrlKey||e.metaKey;
+    if(k === 'f12') { e.preventDefault(); return false; }                    // F12
+    if(ctrl && (k==='u'||k==='s'||k==='c'||k==='a'||k==='p')) { e.preventDefault(); return false; } // view-source/save/copy/select-all/print
+    if(ctrl && e.shiftKey && (k==='i'||k==='j'||k==='c')) { e.preventDefault(); return false; }      // inspect/console
+  });
+
+  /* 5. CSS — disable selection, image highlight, and iOS long-press menu */
+  var s = document.createElement('style');
+  s.textContent =
+    '*{-webkit-user-select:none!important;-moz-user-select:none!important;'+
+    'user-select:none!important;-webkit-touch-callout:none!important}'+
+    'img{-webkit-user-drag:none!important;user-drag:none!important;'+
+    'pointer-events:none!important}'+
+    'input,textarea,select,[contenteditable]{-webkit-user-select:text!important;'+
+    'user-select:text!important;pointer-events:auto!important}';
+  document.head.appendChild(s);
+})();
+</script>
+
+
+
+
 </body>
 </html>
