@@ -593,9 +593,9 @@ table{min-width:520px}
 .air-dest-search{width:100%;padding:9px 13px 9px 34px;background:#1e2a3a;border:1.5px solid rgba(100,180,255,.2);border-radius:22px;color:white;font-size:.82rem;outline:none;font-family:inherit;transition:.2s}
 .air-dest-search:focus{border-color:#64b4ff;background:#23324a}
 .air-dest-search::placeholder{color:rgba(255,255,255,.22)}
-.air-island-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:.5rem}
-@media(min-width:420px){.air-island-grid{grid-template-columns:1fr 1fr 1fr}}
-.air-island-btn{background:#1a2535;border:1.5px solid #2e3f55;border-radius:12px;padding:.6rem .75rem;cursor:pointer;text-align:left;transition:border-color .2s,background .2s;font-family:inherit;position:relative;display:flex;align-items:center;gap:.55rem;width:100%}
+.air-island-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:.5rem;width:100%;max-width:100%;overflow:hidden}
+@media(min-width:700px){.air-island-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.air-island-btn{background:#1a2535;border:1.5px solid #2e3f55;border-radius:14px;padding:.72rem .7rem;cursor:pointer;text-align:left;transition:border-color .2s,background .2s,transform .2s;font-family:inherit;position:relative;display:flex;align-items:center;gap:.55rem;width:100%;min-width:0;overflow:hidden}
 .air-island-btn:hover{border-color:rgba(243,156,18,.45);background:#1e2d42}
 .air-island-btn:hover .air-isl-plane{transform:translateX(4px);color:rgba(243,156,18,.6)}
 .air-island-btn.active{border-color:#f39c12;background:rgba(243,156,18,.09)}
@@ -611,8 +611,9 @@ table{min-width:520px}
 }
 .air-isl-plane{font-size:.82rem;color:rgba(243,156,18,.3);flex-shrink:0;transition:transform .2s,color .2s}
 .air-isl-info{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
-.air-isl-name{font-size:.78rem;font-weight:700;color:white;line-height:1.3}
-.air-isl-atoll{font-size:.6rem;color:rgba(255,255,255,.35)}
+.air-isl-name{font-size:.78rem;font-weight:700;color:white;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.air-isl-atoll{font-size:.6rem;color:rgba(255,255,255,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+@media(max-width:360px){.air-island-grid{grid-template-columns:1fr}.air-island-btn{padding:.75rem .85rem}.air-isl-name{font-size:.82rem}}
 .air-island-btn.active .air-isl-name{color:#f39c12;font-weight:800}
 .air-island-btn.active .air-isl-atoll{color:rgba(243,156,18,.55)}
 .air-island-ck{width:16px;height:16px;background:#f39c12;border-radius:50%;display:none;align-items:center;justify-content:center;flex-shrink:0}
@@ -747,6 +748,32 @@ img{max-width:100%;height:auto}
 .drv-timer{display:flex;justify-content:space-between;align-items:center;margin-top:.35rem}
 .drv-timer-val{font-family:monospace;font-weight:800;font-size:.78rem}
 .drv-timer-lbl{font-size:.58rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;font-family:monospace}
+.driver-search-card{background:linear-gradient(145deg,#141b2b,#18253a);color:white;border:1.5px solid #2e3f55;border-radius:22px;padding:1rem;margin:0 auto .85rem;box-shadow:0 12px 32px rgba(0,0,0,.25);overflow:hidden;width:100%;max-width:560px}
+.driver-search-head{position:relative;text-align:center;margin-bottom:.85rem;padding:0 54px}
+.driver-search-title{font-size:1rem;font-weight:900;color:white}.driver-search-sub{font-size:.7rem;color:rgba(255,255,255,.42);margin-top:3px}
+.driver-search-time{position:absolute;right:0;top:0;font-family:monospace;font-size:1rem;font-weight:900;color:#64b4ff;white-space:nowrap}
+.driver-candidates{display:block;padding:3px 0 8px;min-height:82px}
+.driver-candidate{position:relative;border:0;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.025));width:100%;padding:1rem 58px;cursor:pointer;font-family:inherit;color:white;text-align:center;border-radius:18px;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;animation:driverCardIn .28s ease;min-height:154px}
+.driver-candidate.active{display:flex}@keyframes driverCardIn{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:translateX(0)}}
+.driver-candidate-avatar{width:74px;height:74px;border-radius:50%;margin:0 auto;background:#1e2a3a;border:3px solid #141b2b;box-shadow:0 0 0 2px #3498db,0 5px 13px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;flex-shrink:0}
+.driver-candidate-avatar img{width:100%;height:100%;object-fit:cover}.driver-candidate-avatar i{font-size:1.15rem;color:#60758c}
+.driver-candidate.active .driver-candidate-avatar{animation:driverRespond 1.35s ease-in-out infinite}
+@keyframes driverRespond{0%,100%{box-shadow:0 0 0 2px #3498db,0 5px 13px rgba(0,0,0,.16)}50%{box-shadow:0 0 0 6px rgba(52,152,219,.18),0 7px 17px rgba(0,0,0,.18)}}
+.driver-candidate-info{width:100%;min-width:0;text-align:center}.driver-candidate-name{display:block;font-size:.92rem;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.driver-candidate-vehicle{display:block;font-size:.68rem;color:rgba(255,255,255,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}.driver-candidate-number{display:inline-block;font-family:monospace;font-size:.72rem;font-weight:800;color:#f39c12;background:rgba(243,156,18,.1);border:1px solid rgba(243,156,18,.25);border-radius:10px;padding:4px 10px;margin-top:7px}
+.driver-next-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);border:1px solid rgba(100,180,255,.3);background:rgba(100,180,255,.1);color:#64b4ff;width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}.driver-next-btn:hover{background:rgba(100,180,255,.2);transform:translateY(-50%) scale(1.06)}
+.driver-search-note{display:flex;align-items:center;gap:7px;background:rgba(52,152,219,.08);color:#64b4ff;border:1px solid rgba(52,152,219,.14);border-radius:12px;padding:.6rem .7rem;font-size:.65rem;line-height:1.4;margin-top:.35rem}
+@media(max-width:380px){.driver-search-head{padding:0 42px 0 0;text-align:left}.driver-candidate{padding:1rem 52px}.driver-candidate-avatar{width:68px;height:68px}.driver-search-card{padding:.8rem}.driver-search-note{font-size:.61rem}}
+/* Dashboard cargo launcher */
+.dash-hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#141b2b,#192943);border:1px solid #2e3f55;border-radius:24px;padding:1.25rem;margin-bottom:1rem}
+.dash-hero:after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:#3498db;filter:blur(75px);opacity:.12;right:-45px;top:-70px}
+.dash-welcome{position:relative;z-index:1;font-size:.68rem;color:#64b4ff;text-transform:uppercase;letter-spacing:1.1px;font-family:monospace;font-weight:800}.dash-title{position:relative;z-index:1;font-size:1.35rem;font-weight:900;color:white;margin-top:.35rem}.dash-desc{position:relative;z-index:1;font-size:.74rem;color:rgba(255,255,255,.45);line-height:1.6;margin-top:.35rem;max-width:480px}
+.dash-section-head{display:flex;align-items:center;gap:8px;margin-bottom:.7rem;color:white;font-weight:800;font-size:.92rem}.dash-section-head i{color:#f39c12}.dash-section-head span{margin-left:auto;color:rgba(255,255,255,.3);font-size:.6rem;font-family:monospace;font-weight:600}
+.dash-cargo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dash-cargo-card{position:relative;min-width:0;background:#182235;border:1.5px solid #304158;border-radius:18px;padding:1.15rem .8rem;cursor:pointer;text-align:center;color:white;font-family:inherit;transition:.22s;overflow:hidden}.dash-cargo-card:hover,.dash-cargo-card:focus{border-color:#f39c12;transform:translateY(-3px);box-shadow:0 9px 25px rgba(243,156,18,.13);outline:none}.dash-cargo-card.express{background:linear-gradient(145deg,rgba(243,156,18,.1),#182235)}.dash-cargo-card.air{background:linear-gradient(145deg,rgba(100,180,255,.1),#182235)}
+.dash-cargo-icon{width:48px;height:48px;border-radius:15px;background:rgba(243,156,18,.1);display:flex;align-items:center;justify-content:center;margin:0 auto .65rem;color:#f39c12;font-size:1.35rem}.dash-cargo-card.air .dash-cargo-icon{background:rgba(100,180,255,.12);color:#82b7ff}.dash-cargo-name{font-size:.88rem;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-cargo-eta{font-size:.62rem;color:rgba(255,255,255,.36);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-cargo-action{font-family:monospace;font-size:.62rem;color:#f39c12;font-weight:700;margin-top:.55rem}.dash-cargo-card.air .dash-cargo-action{color:#82b7ff}.dash-cargo-arrow{position:absolute;right:9px;top:9px;width:23px;height:23px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);font-size:.6rem}.dash-cargo-card:hover .dash-cargo-arrow{background:#f39c12;color:#182235}
+.selected-cargo-summary{display:none;align-items:center;gap:11px;background:linear-gradient(145deg,rgba(243,156,18,.1),rgba(255,255,255,.025));border:1.5px solid rgba(243,156,18,.3);border-radius:16px;padding:.75rem .8rem;margin-bottom:.9rem}.selected-cargo-summary.show{display:flex}.selected-cargo-icon{width:42px;height:42px;border-radius:12px;background:rgba(243,156,18,.14);display:flex;align-items:center;justify-content:center;color:#f39c12;font-size:1.05rem;flex-shrink:0}.selected-cargo-info{flex:1;min-width:0}.selected-cargo-label{font-size:.56rem;color:rgba(255,255,255,.36);text-transform:uppercase;letter-spacing:.8px;font-family:monospace}.selected-cargo-name{font-size:.85rem;color:white;font-weight:800;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.selected-cargo-change{border:1px solid rgba(100,180,255,.3);background:rgba(100,180,255,.1);color:#64b4ff;border-radius:12px;padding:7px 11px;font-family:inherit;font-size:.68rem;font-weight:750;cursor:pointer;flex-shrink:0}
+.my-delivery-list{display:grid;grid-template-columns:1fr;gap:10px}.my-delivery-card{background:linear-gradient(145deg,#151f31,#18253a);border:1.5px solid #2d3e55;border-radius:18px;padding:.9rem;min-width:0;overflow:hidden}.mdc-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:.7rem;margin-bottom:.7rem;border-bottom:1px solid rgba(255,255,255,.06)}.mdc-ref{border:0;background:rgba(243,156,18,.1);color:#f39c12;border-radius:10px;padding:6px 9px;font-family:monospace;font-size:.7rem;font-weight:850;cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mdc-ref:hover{background:rgba(243,156,18,.2)}.mdc-route{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start;margin-bottom:.65rem}.mdc-route-icon{width:24px;height:24px;border-radius:7px;background:rgba(100,180,255,.1);color:#64b4ff;display:flex;align-items:center;justify-content:center;font-size:.62rem}.mdc-route-text{font-size:.72rem;color:white;line-height:1.45;min-width:0;overflow-wrap:anywhere}.mdc-route-to{color:rgba(255,255,255,.43);margin-top:2px}.mdc-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.mdc-cell{background:rgba(255,255,255,.035);border-radius:10px;padding:.55rem;min-width:0}.mdc-label{font-family:monospace;font-size:.52rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.55px;margin-bottom:3px}.mdc-value{font-size:.69rem;color:white;line-height:1.35;overflow-wrap:anywhere}.mdc-actions{display:flex;gap:7px;margin-top:.75rem}.mdc-track{flex:1;border:0;background:linear-gradient(135deg,#3498db,#2878b5);color:white;border-radius:12px;padding:9px;font-family:inherit;font-size:.72rem;font-weight:800;cursor:pointer}.mdc-slip{border:1px solid rgba(243,156,18,.28);background:rgba(243,156,18,.1);color:#f39c12;border-radius:12px;padding:8px 12px;font-family:inherit;font-size:.68rem;font-weight:750;cursor:pointer}@media(min-width:700px){.my-delivery-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:700px){.dash-cargo-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dash-cargo-card{padding:1.35rem 1rem}}
+@media(max-width:350px){.dash-cargo-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -855,7 +882,7 @@ img{max-width:100%;height:auto}
     <div class="s-hd"><div class="s-av"><i class="fas fa-user"></i></div><div><h3 id="sidebarName">User</h3><p>Member</p></div></div>
     <div class="s-nav">
       <div class="s-lbl">Navigation</div>
-      <div class="s-item active" onclick="switchTab('sNew');closeSB()"><i class="fas fa-plus-circle"></i> New Delivery</div>
+      <div class="s-item active" onclick="switchTab('sDash');closeSB()"><i class="fas fa-house"></i> Dashboard</div>
       <div class="s-item" onclick="switchTab('sMine');closeSB()"><i class="fas fa-list"></i> My Deliveries</div>
       <div class="s-item" id="sDriverSideBtn" onclick="switchTab('sDriver');closeSB()"><i class="fas fa-truck-fast"></i> My Driver</div>
       <div class="s-item" onclick="switchTab('sInv');closeSB()"><i class="fas fa-file-invoice"></i> My Invoices</div>
@@ -872,17 +899,15 @@ img{max-width:100%;height:auto}
     <div class="n-bell" style="flex-shrink:0"><div class="n-bell-btn" id="nBtn"><i class="fas fa-bell"></i></div><div class="n-dot" id="nDot"></div></div>
     <button class="btn-ico" style="flex-shrink:0" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i></button>
   </div>
-  <div class="nav-bar"><div class="nav-tabs">
-    <button class="ntab active" data-s="sNew"><i class="fas fa-plus-circle"></i> New</button>
-    <button class="ntab" data-s="sMine"><i class="fas fa-list"></i> Mine</button>
-    <button class="ntab" data-s="sInv"><i class="fas fa-file-invoice"></i> Invoices</button>
-    <button class="ntab" data-s="sTrk"><i class="fas fa-search-location"></i> Track</button>
-    <button class="ntab" data-s="sRwd"><i class="fas fa-medal"></i> Rewards</button>
-  </div></div>
-
   <div class="content">
+    <!-- DASHBOARD -->
+    <div class="sec active" id="sDash">
+      <div class="dash-hero"><div class="dash-welcome"><i class="fas fa-sparkles"></i> EasyCargo Dashboard</div><div class="dash-title">What are you sending today?</div><div class="dash-desc">Choose a cargo service below. Your delivery form will open with the selected cargo type ready to complete.</div></div>
+      <div class="dash-section-head"><i class="fas fa-box"></i> Cargo Type <span>SELECT A SERVICE</span></div>
+      <div class="dash-cargo-grid" id="dashCargoGrid"><div class="empty-s" style="grid-column:1/-1"><i class="fas fa-box-open"></i><p>Loading cargo services…</p></div></div>
+    </div>
     <!-- NEW DELIVERY -->
-    <div class="sec active" id="sNew">
+    <div class="sec" id="sNew">
       <div class="sec-title"><i class="fas fa-plus-circle"></i> New Delivery</div>
       <div class="cap-wrap" id="capWrap" style="display:none">
         <div class="cap-hd"><span class="cap-lbl"><i class="fas fa-box-open" style="margin-right:4px;color:#f39c12"></i>Today's Capacity</span><span class="cap-pct" id="capPct">0%</span></div>
@@ -897,8 +922,14 @@ img{max-width:100%;height:auto}
             <div class="fg"><label><i class="fas fa-phone" style="color:#f39c12;margin-right:4px"></i>Contact Number</label><input class="fi" type="tel" id="cCt" disabled></div>
           </div>
 
+          <div class="selected-cargo-summary" id="selectedCargoSummary">
+            <div class="selected-cargo-icon" id="selectedCargoIcon"><i class="fas fa-box"></i></div>
+            <div class="selected-cargo-info"><div class="selected-cargo-label">Selected Cargo Type</div><div class="selected-cargo-name" id="selectedCargoName">Cargo</div></div>
+            <button type="button" class="selected-cargo-change" onclick="changeDashboardCargo()"><i class="fas fa-rotate"></i> Change</button>
+          </div>
+
           <!-- CARGO TYPE -->
-          <div class="fg">
+          <div class="fg" id="cargoTypeFormSection">
             <label><i class="fas fa-box" style="color:#f39c12;margin-right:4px"></i>Cargo Type</label>
             <div class="ctype-grid" id="ctypeGrid"><div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No cargo types configured.</p></div></div>
             <input type="hidden" id="ctV"><input type="hidden" id="ctPrice" value="0">
@@ -1203,7 +1234,7 @@ img{max-width:100%;height:auto}
 
 <div class="sec" id="sMine">
       <div class="sec-title"><i class="fas fa-list"></i> My Deliveries</div>
-      <div class="card"><div class="tbl-s"><table><thead><tr><th>Reference</th><th>Route/Dest</th><th>Type</th><th>Size/Weight</th><th>Price</th><th>Status</th><th>Payment</th></tr></thead><tbody id="myTB"></tbody></table></div></div>
+      <div class="my-delivery-list" id="myDeliveryList"><div class="empty-s"><i class="fas fa-box-open"></i><p>No deliveries yet.</p></div></div>
     </div>
 
     <!-- INVOICES -->
@@ -1215,7 +1246,7 @@ img{max-width:100%;height:auto}
     <!-- TRACK -->
     <div class="sec" id="sTrk">
       <div class="sec-title"><i class="fas fa-search-location"></i> Track Delivery</div>
-      <div class="card">
+      <div class="card" id="trackSearchCard">
         <div class="c-hd"><div class="c-ico"><i class="fas fa-magnifying-glass"></i></div><h3>Search</h3></div>
         <div class="srch-row"><input type="text" id="srchIn" placeholder="Enter contact number…"><button class="btn-srch" id="srchBtn"><i class="fas fa-search"></i></button></div>
         <div id="rcWrap" style="display:none"><div class="ref-cards" id="rcGrid"></div></div>
@@ -1258,7 +1289,8 @@ img{max-width:100%;height:auto}
   </div>
 
   <nav class="mob-nav">
-    <button class="m-tab active" data-s="sNew"><i class="fas fa-plus-circle"></i>New</button>
+    <button class="m-tab active" data-s="sDash"><i class="fas fa-house"></i>Home</button>
+    <button class="m-tab" data-s="sDriver"><i class="fas fa-truck-fast"></i>Driver</button>
     <button class="m-tab" data-s="sMine"><i class="fas fa-list"></i>Mine</button>
     <button class="m-tab" data-s="sInv"><i class="fas fa-file-invoice"></i>Invoices</button>
     <button class="m-tab" data-s="sTrk"><i class="fas fa-search-location"></i>Track</button>
@@ -1365,7 +1397,7 @@ img{max-width:100%;height:auto}
     <div style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:.35rem">Your order has been saved successfully.</div>
     <div id="paySuccessRef" style="font-family:monospace;font-size:.82rem;color:#f39c12;font-weight:700;background:rgba(243,156,18,.08);border:1px solid rgba(243,156,18,.2);border-radius:10px;padding:6px 14px;display:inline-block;margin-bottom:1rem"></div>
     <div style="font-size:.72rem;color:rgba(255,255,255,.38);line-height:1.6">We'll review your payment slip and confirm your order.<br>You'll be notified once approved.</div>
-    <button class="btn btn-gold" style="width:100%;margin-top:1.1rem" onclick="closePaySuccess()"><i class="fas fa-check-circle"></i> Done</button>
+    <button class="btn btn-gold" style="width:100%;margin-top:1.1rem" onclick="closePaySuccess()"><i class="fas fa-magnifying-glass"></i> Find My Driver</button>
   </div>
 </div>
 </div>
@@ -1580,7 +1612,7 @@ window.selAirIsland=function(el){
   $('airWeightStep').style.display='none';$('airTotalPrice').value='0';
   document.querySelectorAll('#airWGrid .w-btn').forEach(b=>b.classList.remove('active'));
   $('airSelWeightRange').value='';$('airSelWeightRangePrice').value='0';$('airWeight').value='0';calcTotal();
-  if(already)return;
+  if(already){$('airDestSearch').value='';loadAirIslandGrid();return;}
   // Activate selected + hide others
   el.classList.add('active');
   document.querySelectorAll('.air-island-btn:not(.active)').forEach(b=>b.style.display='none');
@@ -2035,7 +2067,7 @@ function enterDash(){
   watchDeliveryPoints();loadFloorSelector();loadUserRewards();loadHarbourButtons();
   $('hName').textContent=me.username;$('sidebarName').textContent=me.username;
   $('cNm').value=me.username;$('cCt').value=me.contact||'';
-  loadPickupGrid(null);loadCtypeGrid();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();loadAirIslandGrid();
+  loadPickupGrid(null);loadCtypeGrid();loadDashboardCargoTypes();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();loadAirIslandGrid();switchTab('sDash');
   const draft=localStorage.getItem('ec_draft');
   if(draft){try{const d=JSON.parse(draft);if(d&&d.version){$('draftMod').classList.add('show');$('draftContinue').onclick=()=>{$('draftMod').classList.remove('show');restoreDraft(d);};$('draftDiscard').onclick=()=>{$('draftMod').classList.remove('show');localStorage.removeItem('ec_draft');}}}catch(e){localStorage.removeItem('ec_draft');}}
 }
@@ -2060,7 +2092,7 @@ function updateCapBar(){const cap=siteSettings.dailyCapacity||0;if(!cap){$('capW
 
 /* ═══ NAV / SIDEBAR ═══ */
 document.querySelectorAll('.ntab[data-s],.m-tab[data-s]').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.s)}));
-function switchTab(s){document.querySelectorAll('.ntab,.m-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll(`[data-s="${s}"]`).forEach(x=>x.classList.add('active'));document.querySelectorAll('.sec').forEach(x=>x.classList.remove('active'));$(s).classList.add('active');if(s==='sMine')loadMyTbl();if(s==='sInv')loadMyInvoices();if(s==='sRwd')loadRewards()}
+function switchTab(s){document.querySelectorAll('.ntab,.m-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll(`[data-s="${s}"]`).forEach(x=>x.classList.add('active'));document.querySelectorAll('.sec').forEach(x=>x.classList.remove('active'));$(s).classList.add('active');if(s==='sMine')loadMyTbl();if(s==='sDriver'){loadMyDriver();startIdxDriverTimers();}if(s==='sTrk'&&!window._openExactTrack){$('trackSearchCard').style.display='';$('rcWrap').style.display='none';$('trkCard').style.display='none';}if(s==='sInv')loadMyInvoices();if(s==='sRwd')loadRewards()}
 function toggleSB(){$('sidebar').classList.toggle('open');$('sideOvl').classList.toggle('show')}
 function closeSB(){$('sidebar').classList.remove('open');$('sideOvl').classList.remove('show')}
 $('sideOvl').onclick=closeSB;
@@ -2101,7 +2133,31 @@ function loadCtypeGrid(){
   } else {
     g.innerHTML=nonAirHTML+airCardHTML;
   }
+  loadDashboardCargoTypes();
 }
+
+function loadDashboardCargoTypes(){
+  const g=$('dashCargoGrid');if(!g)return;
+  const icons={normal:'fa-box',express:'fa-bolt',fragile:'fa-wine-glass-crack',oversized:'fa-pallet',custom:'fa-cube'};
+  const types=[...allCargoTypes].filter(ct=>!ct.isAir&&ct.key!=='air').sort((a,b)=>Number(!!b.isExpress)-Number(!!a.isExpress)||(a.order||0)-(b.order||0));
+  const cards=types.map(ct=>`<button type="button" class="dash-cargo-card${ct.isExpress?' express':''}" onclick="openDeliveryForCargo('${ct.id}')"><span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i></span><div class="dash-cargo-name">${ct.name}</div><div class="dash-cargo-eta">${ct.eta||(ct.isExpress?'Same Day':'3–5 Business Days')}</div><div class="dash-cargo-action">${ct.isExpress?'Select size & time':'Select weight'}</div></button>`).join('');
+  const air=`<button type="button" class="dash-cargo-card air" onclick="openDeliveryForCargo('__air__')"><span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas fa-plane"></i></span><div class="dash-cargo-name">Air Cargo</div><div class="dash-cargo-eta">Domestic Flights</div><div class="dash-cargo-action">Normal & Express</div></button>`;
+  g.innerHTML=cards+air;
+}
+
+window.openDeliveryForCargo=function(id){
+  switchTab('sNew');
+  requestAnimationFrame(()=>{
+    const card=document.querySelector('#ctypeGrid .ct-card[data-id="'+String(id).replace(/"/g,'')+'"]');
+    if(!card){showToast('Cargo type is still loading. Please try again.','info');return;}
+    if(!card.classList.contains('active'))selCtype(card,String(id));
+    const ct=String(id)==='__air__'?{name:'Air Cargo'}:(allCargoTypes.find(c=>String(c.id)===String(id))||{name:'Cargo'});
+    const icon=String(id)==='__air__'?'fa-plane':ct.isExpress?'fa-bolt':ct.key==='fragile'?'fa-wine-glass-crack':ct.key==='oversized'?'fa-pallet':'fa-box';
+    $('cargoTypeFormSection').style.display='none';$('selectedCargoSummary').classList.add('show');$('selectedCargoName').textContent=ct.name;$('selectedCargoIcon').innerHTML='<i class="fas '+icon+'"></i>';
+    $('cargoForm').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+};
+window.changeDashboardCargo=function(){$('selectedCargoSummary').classList.remove('show');$('cargoTypeFormSection').style.display='';switchTab('sDash');};
 
 /* Called when user taps a Normal Air or Express Air card */
 
@@ -2284,33 +2340,78 @@ window.selSpeedBoat=function(id){document.querySelectorAll('.sb-card').forEach(c
 /* ═══ MY REFS / TABLE / INVOICES ═══ */
 /* ═══ DRIVER PROFILE FOR CUSTOMERS ═══ */
 let allDriversIdx=[];
-db.ref('drivers').once('value').then(snap=>{allDriversIdx=Array.isArray(snap.val())?snap.val():snap.val()?Object.values(snap.val()):[];});
+db.ref('drivers').on('value',snap=>{
+  allDriversIdx=Array.isArray(snap.val())?snap.val():snap.val()?Object.values(snap.val()):[];
+  if(me)loadMyDriver();
+});
+
+function driverFromOrder(order){
+  if(!order||!order.assignedDriverId)return null;
+  return{
+    id:order.assignedDriverId,
+    name:order.assignedDriverName||'Your driver',
+    contact:order.assignedDriverContact||'',
+    profilePhoto:order.assignedDriverPhoto||'',
+    vehicle:order.assignedDriverVehicle||'',
+    vehicleModel:order.assignedDriverVehicleModel||'',
+    vehicleNumber:order.assignedDriverVehicleNumber||'',
+    vehicleRegNumber:order.assignedDriverVehicleNumber||'',
+    vehiclePhoto:order.assignedDriverVehiclePhoto||''
+  };
+}
+
+function buildFindingDriverCard(order){
+  const awaiting=order.paymentStatus!=='paid';
+  const seenDrivers=new Set();
+  const drivers=allDriversIdx.filter(d=>{
+    if(!d||d.status!=='active'||(d.verificationStatus&&d.verificationStatus!=='verified'))return false;
+    const key=String(d.id||d.contact||d.name||'').toLowerCase();if(!key||seenDrivers.has(key))return false;seenDrivers.add(key);return true;
+  }).slice(0,8);
+  const candidates=drivers.length?drivers.map((d,i)=>`<div class="driver-candidate${i===0?' active':''}" role="button" tabindex="0" data-driver-name="${String(d.name||'Driver').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" onclick="showDriverWaitingInfo(this)" onkeydown="if(event.key==='Enter')showDriverWaitingInfo(this)">
+    <span class="driver-candidate-avatar">${d.profilePhoto?`<img src="${d.profilePhoto}" alt="">`:'<i class="fas fa-user"></i>'}</span>
+    <span class="driver-candidate-info"><span class="driver-candidate-name">${d.name||'Driver'}</span><span class="driver-candidate-vehicle">${d.vehicle||'Driver'}${d.vehicleModel?' · '+d.vehicleModel:''}</span><span class="driver-candidate-number"><i class="fas fa-car-side"></i> ${d.vehicleNumber||d.vehicleRegNumber||'Number not added'}</span></span>
+    ${drivers.length>1?'<span class="driver-next-btn" onclick="event.stopPropagation();nextWaitingDriver(this.closest(\'.driver-search-card\'))" title="Next driver"><i class="fas fa-chevron-right"></i></span>':''}
+  </div>`).join(''):`<div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.48);font-size:.72rem;padding:.5rem"><span class="driver-candidate-avatar"><i class="fas fa-user-clock"></i></span><span>Waiting for an available registered driver…</span></div>`;
+  return `<div class="driver-search-card">
+    <div class="driver-search-head"><div><div class="driver-search-title">${awaiting?'Drivers are standing by':'Drivers responding…'}</div><div class="driver-search-sub">${awaiting?'Payment review in progress':'This usually takes a few seconds'} · ${order.referenceNumber||''}</div></div><div class="driver-search-time" id="findTimer_${order.id}" data-start="${order.createdAt||new Date().toISOString()}">0:00</div></div>
+    <div class="driver-candidates">${candidates}</div>
+    <div class="driver-search-note"><i class="fas ${awaiting?'fa-receipt':'fa-satellite-dish'}"></i><span>${awaiting?'These registered drivers will receive the order as soon as payment is approved.':'Registered drivers have been notified. The first driver to accept will appear here with profile and vehicle details.'}</span></div>
+  </div>`;
+}
+window.showDriverWaitingInfo=function(el){showToast((el.dataset.driverName||'Driver')+' is registered and has been notified.','info');};
+window.nextWaitingDriver=function(card){
+  if(!card)return;const list=[...card.querySelectorAll('.driver-candidate')];if(list.length<2)return;
+  const current=Math.max(0,list.findIndex(x=>x.classList.contains('active')));list[current].classList.remove('active');list[(current+1)%list.length].classList.add('active');
+};
 
 function loadMyDriver(){
   const el=$('myDriverContent');if(!el||!me)return;
   // Find customer's active order that has a driver assigned
   const myOrders=allD.filter(d=>d.createdBy===me.email);
+  const waitingOrders=myOrders.filter(o=>!o.assignedDriverId&&o.status!=='Delivered')
+    .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   const activeWithDriver=myOrders.filter(o=>o.assignedDriverId&&o.status!=='Delivered')
     .sort((a,b)=>new Date(b.assignedAt||b.createdAt)-new Date(a.assignedAt||a.createdAt));
   const completedWithDriver=myOrders.filter(o=>o.assignedDriverId&&o.status==='Delivered')
     .sort((a,b)=>new Date(b.completedAt)-new Date(a.completedAt)).slice(0,3);
 
-  if(!activeWithDriver.length&&!completedWithDriver.length){
+  if(!waitingOrders.length&&!activeWithDriver.length&&!completedWithDriver.length){
     el.innerHTML='<div class="empty-s"><i class="fas fa-truck"></i><p>No driver assigned yet.<br>We\'ll notify you when a driver takes your order.</p></div>';
     return;
   }
 
   let html='';
+  waitingOrders.forEach(o=>{html+=buildFindingDriverCard(o);});
   // Active delivery card
   activeWithDriver.forEach(o=>{
-    const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId));
+    const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId))||driverFromOrder(o);
     html+=buildDriverCard(o,driver,'active');
   });
   // Completed deliveries
   if(completedWithDriver.length){
     html+=`<div style="font-size:.72rem;color:rgba(255,255,255,.35);font-family:monospace;margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.8px">Past Deliveries</div>`;
     completedWithDriver.forEach(o=>{
-      const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId));
+      const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId))||driverFromOrder(o);
       html+=buildDriverCard(o,driver,'completed');
     });
   }
@@ -2478,6 +2579,12 @@ let idxTimerInt=null;
 function startIdxDriverTimers(){
   if(idxTimerInt)clearInterval(idxTimerInt);
   idxTimerInt=setInterval(()=>{
+    document.querySelectorAll('[id^="findTimer_"]').forEach(el=>{
+      const start=new Date(el.dataset.start||Date.now());
+      const seconds=Math.max(0,Math.floor((Date.now()-start.getTime())/1000));
+      el.textContent=Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');
+      if(seconds>0&&seconds%5===0)nextWaitingDriver(el.closest('.driver-search-card'));
+    });
     const myOrders=allD.filter(d=>d.createdBy===me?.email&&d.assignedDriverId&&d.status!=='Delivered');
     myOrders.forEach(o=>{
       // Always recalculate from selectedHrLabel for accuracy
@@ -2524,27 +2631,19 @@ function startIdxDriverTimers(){
 
 function loadRefs(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email);const el=$('myRefs');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-inbox"></i><p>No deliveries yet.</p></div>';return}el.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem">'+[...mine].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div style="font-family:monospace;font-size:.7rem;font-weight:700;padding:5px 11px;border-radius:17px;cursor:pointer;${d.status==='Delivered'?'background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.22);color:#27ae60':'background:rgba(231,76,60,.13);border:1px solid rgba(231,76,60,.26);color:#e74c3c'}" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</div>`).join('')+'</div>'}
 function getSizeWeightDisplay(d){if(d.isAir||d.deliveryMode==='air')return(d.airDestination||'—')+(d.airWeight?' / '+d.airWeight:'')+(d.airSubType?' ['+(d.airSubType==='express'?'Express':'Normal')+' Air]':'');if(d.isExpress)return(d.packageSize||'—')+(d.selectedHrLabel?' — '+d.selectedHrLabel:'');return d.packageWeight||'—';}
-function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myTB');if(!mine.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,.28);padding:2rem">No records</td></tr>';return}tb.innerHTML=mine.map(d=>{
+function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myDeliveryList');if(!mine.length){tb.innerHTML='<div class="empty-s" style="grid-column:1/-1"><i class="fas fa-box-open"></i><p>No deliveries yet.</p></div>';return}tb.innerHTML=mine.map(d=>{
     const isAir=d.isAir||d.deliveryMode==='air';
     const pickupFull=(d.pickupLocation||'')+(d.pickupAddress?' — '+d.pickupAddress:'');
     const delivFull=(d.deliveryLocation||d.airDestination||'')+(d.deliveryAddress&&d.deliveryAddress!==(d.deliveryLocation||d.airDestination)?' — '+d.deliveryAddress:'');
     const driverHtml=d.assignedDriverId?`<div style="display:flex;align-items:center;gap:4px;margin-top:2px"><i class="fas fa-truck-fast" style="color:#9b59b6;font-size:.58rem"></i><span style="font-size:.62rem;color:#9b59b6;font-weight:600">${d.assignedDriverName||'—'}</span></div>`:'';
-    return`<tr>
-      <td style="font-family:monospace;font-size:.65rem;color:#f39c12;cursor:pointer" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</td>
-      <td style="font-size:.68rem"><div>${isAir?'✈ '+pickupFull:pickupFull}</div><div style="color:rgba(255,255,255,.45);margin-top:1px">→ ${delivFull}</div>${driverHtml}</td>
-      <td style="font-size:.7rem">${d.cargoType||'—'}${isAir?' <span class="badge b-air">Air</span>':d.isExpress?' <span class="badge b-exp">Exp</span>':''}</td>
-      <td style="font-size:.68rem">${getSizeWeightDisplay(d)}</td>
-      <td style="font-family:monospace">${d.deliveryPrice} MVR</td>
-      <td>${sBadge(d.status)}</td>
-      <td>${pBadge(d.paymentStatus)}${d.paymentSlip?` <button onclick="viewSlip('${d.paymentSlip}')" style="margin-left:3px;background:rgba(243,156,18,.14);border:1px solid rgba(243,156,18,.28);color:#f39c12;padding:2px 7px;border-radius:10px;font-size:.6rem;cursor:pointer;font-weight:700">Slip</button>`:''}</td>
-    </tr>`}).join('')}
+    return`<article class="my-delivery-card"><div class="mdc-head"><button class="mdc-ref" onclick="jmpTrk('${d.referenceNumber}')"><i class="fas fa-location-dot"></i> ${d.referenceNumber}</button>${sBadge(d.status)}</div><div class="mdc-route"><div class="mdc-route-icon"><i class="fas ${isAir?'fa-plane':'fa-route'}"></i></div><div class="mdc-route-text"><div>${pickupFull||'—'}</div><div class="mdc-route-to"><i class="fas fa-arrow-right" style="font-size:.55rem"></i> ${delivFull||'—'}</div>${driverHtml}</div></div><div class="mdc-grid"><div class="mdc-cell"><div class="mdc-label">Cargo Type</div><div class="mdc-value">${d.cargoType||'—'} ${isAir?'<span class="badge b-air">Air</span>':d.isExpress?'<span class="badge b-exp">Exp</span>':''}</div></div><div class="mdc-cell"><div class="mdc-label">Size / Weight</div><div class="mdc-value">${getSizeWeightDisplay(d)}</div></div><div class="mdc-cell"><div class="mdc-label">Price</div><div class="mdc-value" style="font-family:monospace;color:#27ae60;font-weight:800">${d.deliveryPrice} MVR</div></div><div class="mdc-cell"><div class="mdc-label">Payment</div><div class="mdc-value">${pBadge(d.paymentStatus)}</div></div></div><div class="mdc-actions"><button class="mdc-track" onclick="jmpTrk('${d.referenceNumber}')"><i class="fas fa-location-crosshairs"></i> Track This Delivery</button>${d.paymentSlip?`<button class="mdc-slip" onclick="viewSlip('${d.paymentSlip}')"><i class="fas fa-receipt"></i> Slip</button>`:''}</div></article>`}).join('')}
 function loadMyInvoices(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email&&d.invoice);const el=$('invListWrap');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-file-invoice"></i><p>No invoices yet.</p></div>';return}el.innerHTML=mine.sort((a,b)=>new Date(b.invoice.issuedAt)-new Date(a.invoice.issuedAt)).map(d=>`<div class="inv-card"><div class="inv-card-hd"><span class="inv-card-no">${d.invoice.invoiceNo}</span><span class="inv-card-date">${fmtD(d.invoice.issuedAt)}</span></div><div style="font-size:.76rem;color:rgba(255,255,255,.55);margin-bottom:.5rem">${d.referenceNumber} · ${d.pickupLocation||d.airDestination||''}→${d.deliveryLocation||d.airDestination||''}</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:monospace;font-weight:800;color:#27ae60">MVR ${d.deliveryPrice}</span><button onclick="viewInvoice('${d.referenceNumber}')" style="background:rgba(39,174,96,.14);border:1px solid rgba(39,174,96,.28);color:#27ae60;padding:5px 12px;border-radius:12px;font-size:.72rem;cursor:pointer;font-weight:700"><i class='fas fa-eye' style='margin-right:4px'></i>View</button></div></div>`).join('')}
 window.viewInvoice=function(ref){const d=allD.find(x=>x.referenceNumber===ref);if(!d||!d.invoice)return;curInvoiceD=d;const inv=d.invoice;const isAir=d.isAir||d.deliveryMode==='air';const rows=[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Cargo Type',d.cargoType||'—'],['Mode',isAir?'Air Cargo ('+d.airSubType+')':d.deliveryMode],isAir?['Destination',d.airDestination||'—']:['Pickup',d.pickupLocation||'—'],isAir?['Weight',d.airWeight+'kg']:['Destination',d.deliveryLocation||'—'],['Size/Weight',getSizeWeightDisplay(d)],['Delivery Date',fmtD(d.deliveryDate)]];$('invContent').innerHTML=`<div class="invoice-box"><div class="invoice-header"><div><div class="invoice-brand">Easy<span>Cargo</span></div><div class="invoice-no">${inv.invoiceNo}</div></div><div style="text-align:right"><div class="invoice-date">${fmtD(inv.issuedAt)}</div></div></div><div style="margin-bottom:.8rem">${rows.map(([k,v])=>`<div class="inv-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}</div><div class="inv-total"><span class="k">Total Paid</span><span class="v">MVR ${d.deliveryPrice}</span></div><div class="inv-stamp"><span><i class="fas fa-check-circle"></i> PAYMENT VERIFIED</span></div></div>`;$('invMod').classList.add('show')};
 $('invClose').onclick=$('invClose2').onclick=()=>$('invMod').classList.remove('show');
 $('invDownload').onclick=()=>{if(!curInvoiceD)return;const d=curInvoiceD,inv=d.invoice,isAir=d.isAir||d.deliveryMode==='air';const rows=[['Reference',d.referenceNumber],['Customer',d.customerName],['Contact',d.customerContact],['Mode',isAir?'Air Cargo':d.deliveryMode],isAir?['Destination',d.airDestination]:['Pickup',d.pickupLocation||'—'],isAir?['Weight',d.airWeight+'kg']:['Destination',d.deliveryLocation||'—'],['Size/Weight',getSizeWeightDisplay(d)],['Delivery Date',fmtD(d.deliveryDate)]];const html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice '+inv.invoiceNo+'</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1a1a2e;max-width:600px;margin:0 auto}h1 span{color:#e67e22}.hd{display:flex;justify-content:space-between;border-bottom:2px solid #e67e22;padding-bottom:12px;margin-bottom:16px}table{width:100%;border-collapse:collapse;margin-bottom:16px}td{padding:7px 0;border-bottom:1px solid #eee;font-size:.85rem}td:first-child{color:#666}td:last-child{text-align:right;font-weight:600}.total{font-size:1.1rem;font-weight:800;color:#27ae60}.stamp{text-align:center;margin-top:20px;padding:10px;background:#f0fdf4;border:1px solid #27ae60;border-radius:8px;color:#27ae60;font-weight:700}</style></head><body><div class="hd"><h1>Easy<span>Cargo</span></h1><div style="font-size:.85rem;color:#888">'+inv.invoiceNo+' · '+fmtD(inv.issuedAt)+'</div></div><table>'+rows.map(([k,v])=>'<tr><td>'+k+'</td><td>'+v+'</td></tr>').join('')+'</table><table><tr><td class="total">Total Paid</td><td class="total">MVR '+d.deliveryPrice+'</td></tr></table><div class="stamp">✓ PAYMENT VERIFIED</div></body></html>';const w=window.open('','_blank');if(w){w.document.write(html);w.document.close();setTimeout(()=>{w.focus();w.print()},400);}};
 
 /* ═══ TRACKING ═══ */
-window.jmpTrk=function(ref){switchTab('sTrk');const d=allD.find(x=>x.referenceNumber===ref);if(d){$('srchIn').value=d.customerContact;doSearch()}};
+window.jmpTrk=function(ref){window._openExactTrack=true;switchTab('sTrk');window._openExactTrack=false;const d=allD.find(x=>x.referenceNumber===ref);if(!d)return;$('srchIn').value=ref;$('trackSearchCard').style.display='none';$('rcWrap').style.display='none';renderTrk(ref);$('trkCard').scrollIntoView({behavior:'smooth',block:'start'});};
 $('srchBtn').onclick=doSearch;$('srchIn').addEventListener('keyup',e=>{if(e.key==='Enter')doSearch()});
 function doSearch(){const q=$('srchIn').value.trim();if(!q){showToast('Enter contact number','err');return}const found=allD.filter(d=>d.customerContact===q);if(!found.length){showToast('No deliveries found','err');$('rcWrap').style.display='none';$('trkCard').style.display='none';return}$('rcGrid').innerHTML=found.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div class="rcard" onclick="renderTrk('${d.referenceNumber}')"><div class="rn">${d.referenceNumber}</div><div class="rd">${d.isAir||d.deliveryMode==='air'?'✈ Male → '+d.airDestination:(d.pickupLocation||'')+'→'+(d.deliveryLocation||'')}</div><div class="rd">${getSizeWeightDisplay(d)} | ${d.deliveryPrice} MVR</div>${sBadge(d.status)}</div>`).join('');$('rcWrap').style.display='block';if(found.length===1)renderTrk(found[0].referenceNumber)}
 window.renderTrk=function(ref){
@@ -2737,6 +2836,7 @@ window.closePaySuccess=function(){
   $('paySavingView').style.display='none';
   $('paySuccessView').style.display='none';
   $('slipFile').value='';$('slipFN').textContent='Tap to attach slip photo';
+  switchTab('sDriver');loadMyDriver();startIdxDriverTimers();
   showToast("Order placed! We'll verify your payment soon.",'ok');
 };
 
