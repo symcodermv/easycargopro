@@ -2623,7 +2623,7 @@ function loadMyDriver(){
   // Find customer's active order that has a driver assigned
   const myOrders=allD.filter(d=>d.createdBy===me.email);
   const isFinished=o=>/^(delivered|complete|completed|cancelled|canceled)$/i.test(String(o.status||'').trim());
-  const paymentWasSubmitted=o=>Boolean(o.paymentSlip||o.paymentSubmittedAt)&&!/^unpaid$/i.test(String(o.paymentStatus||''));
+  const paymentWasApproved=o=>Boolean(o.paymentSlip||o.paymentSubmittedAt)&&String(o.paymentStatus||'').trim().toLowerCase()==='paid';
   const responseWindowIsOpen=o=>{
     const mins=Math.max(1,Number(o.driverResponseMinutes||driverUiSettings.responseMinutes)||10);
     const started=o.driverSearchStartedAt||o.paymentSubmittedAt||o.createdAt;
@@ -2631,7 +2631,7 @@ function loadMyDriver(){
     const expires=o.driverSearchExpiresAt||new Date(new Date(started).getTime()+mins*60000).toISOString();
     return new Date(expires).getTime()>Date.now();
   };
-  const waitingOrders=myOrders.filter(o=>!o.assignedDriverId&&!isFinished(o)&&paymentWasSubmitted(o)&&responseWindowIsOpen(o))
+  const waitingOrders=myOrders.filter(o=>!o.assignedDriverId&&!isFinished(o)&&paymentWasApproved(o)&&responseWindowIsOpen(o))
     .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,1);
   const activeWithDriver=myOrders.filter(o=>o.assignedDriverId&&!isFinished(o))
     .sort((a,b)=>new Date(b.assignedAt||b.createdAt)-new Date(a.assignedAt||a.createdAt));
@@ -3171,9 +3171,6 @@ $('payConfirm').onclick=async()=>{
     setStep('pstep2','active');setProgress(35,'Saving order…','Writing to database…');
     tmpD.paymentSlip=slipDataUrl;
     tmpD.paymentSubmittedAt=new Date().toISOString();
-    tmpD.driverSearchStartedAt=tmpD.paymentSubmittedAt;
-    tmpD.driverResponseMinutes=Math.max(1,Number(driverUiSettings.responseMinutes)||10);
-    tmpD.driverSearchExpiresAt=new Date(new Date(tmpD.driverSearchStartedAt).getTime()+tmpD.driverResponseMinutes*60000).toISOString();
     const cap=Number(siteSettings.dailyCapacity)||0;
     const saveResult=await db.ref('cargoDeliveries').transaction(current=>{
       const all=toArr(current);
