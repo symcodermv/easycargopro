@@ -760,6 +760,9 @@ img{max-width:100%;height:auto}
 .customer-map-vehicle-img{position:absolute;width:38px;height:26px;background-repeat:no-repeat;background-size:contain;background-position:center;transform:translate(-50%,-72%) rotate(var(--vehicle-heading,0deg));transform-origin:50% 72%;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55));pointer-events:none;z-index:30;transition:transform .25s ease}.customer-map-vehicle-img.car{background-image:url('vehicles/car.png')}.customer-map-vehicle-img.motorcycle,.customer-map-vehicle-img.bicycle{background-image:url('vehicles/motorcycle.png')}.customer-map-vehicle-img.van,.customer-map-vehicle-img.truck,.customer-map-vehicle-img.boat{background-image:url('vehicles/van.png')}
 @media(max-width:430px){.customer-live-map{height:245px}.customer-live-head{align-items:flex-start;flex-direction:column}}
 .driver-search-card{background:linear-gradient(145deg,#141b2b,#18253a);color:white;border:1.5px solid #2e3f55;border-radius:22px;padding:1rem;margin:0 auto .85rem;box-shadow:0 12px 32px rgba(0,0,0,.25);overflow:hidden;width:100%;max-width:560px}
+.driver-search-card.profiles-only{padding:.8rem;border-color:rgba(52,152,219,.35)}
+.driver-search-card.profiles-only .driver-candidates{padding:0;min-height:154px}
+.driver-search-card.profiles-only .driver-candidate{background:linear-gradient(145deg,rgba(52,152,219,.10),rgba(255,255,255,.025))}
 .driver-search-head{position:relative;text-align:center;margin-bottom:.85rem;padding:0 54px}
 .driver-search-title{font-size:1rem;font-weight:900;color:white}.driver-search-sub{font-size:.7rem;color:rgba(255,255,255,.42);margin-top:3px}
 .driver-search-time{position:absolute;right:0;top:0;font-family:monospace;font-size:1rem;font-weight:900;color:#64b4ff;white-space:nowrap}
@@ -2295,6 +2298,7 @@ function clearPackageVehicle(){/* Manual vehicle selection is independent of pac
 const MANUAL_VEHICLES=[{key:'any',label:'Any',image:'any.png'},{key:'car',label:'Car',image:'car.png'},{key:'motorcycle',label:'Motorcycle',image:'motorcycle.png'},{key:'van',label:'Van',image:'van.png'}];
 let activeVehiclePriceZone=null;
 let selectedRouteDriverEarning=0;
+let selectedRouteDriverPercent=0;
 function currentLinkedPriceSelection(){
   const cargoTypeId=$('ctypeGrid')?.querySelector('.ct-card.active')?.dataset?.id||'';
   if($('ctIsExpress').value==='1')return{cargoTypeId:String(cargoTypeId),packageKey:'size:'+($('selSizeId').value||'')};
@@ -2304,13 +2308,14 @@ function currentLinkedPriceSelection(){
 function loadManualVehicles(){const grid=$('manualVehicleGrid');if(!grid)return;grid.innerHTML=MANUAL_VEHICLES.map(v=>'<button type="button" class="manual-vehicle-card" data-key="'+v.key+'" data-vehicle-price="0" data-available="0" onclick="selectManualVehicle(this,\''+v.key+'\')"><img class="mvc-image" src="'+v.image+'" alt="'+v.label+' vehicle"><div class="mvc-name">'+v.label+'</div><div class="mvc-total-label">Area Price</div><div class="mvc-price">Select location</div></button>').join('');applyZoneVehiclePricing(null);}
 function applyZoneVehiclePricing(zone){
   activeVehiclePriceZone=zone&&(zone.vehiclePrices||Array.isArray(zone.priceRules))?zone:null;
-  const selection=currentLinkedPriceSelection(),matchingRules=(activeVehiclePriceZone?.priceRules||[]).filter(r=>String(r.cargoTypeId)===selection.cargoTypeId&&r.packageKey===selection.packageKey),prices=matchingRules.length?Object.fromEntries(matchingRules.map(r=>[r.vehicle,Number(r.price)||0])):(activeVehiclePriceZone?.vehiclePrices||{}),earnings=Object.fromEntries(matchingRules.map(r=>[r.vehicle,Number(r.driverEarning)||0])),specific=Object.keys(prices).filter(key=>key!=='any'&&MANUAL_VEHICLES.some(v=>v.key===key)),hasDelivery=!!$('deliveryLat').value;
-  document.querySelectorAll('.manual-vehicle-card').forEach(card=>{const key=card.dataset.key;if(!hasDelivery){card.style.display='';card.dataset.available='0';card.dataset.vehiclePrice='0';card.dataset.driverEarning='0';return;}if(activeVehiclePriceZone){if(key==='any'){const choices=specific.map(k=>({key:k,price:parseFloat(prices[k])})).filter(x=>Number.isFinite(x.price)).sort((a,b)=>a.price-b.price),best=choices[0];card.style.display=best?'block':'none';card.dataset.available=best?'1':'0';card.dataset.vehiclePrice=best?best.price:0;card.dataset.driverEarning=best?(parseFloat(earnings[best.key])||0):0;}else{const available=Object.prototype.hasOwnProperty.call(prices,key);card.style.display=available?'block':'none';card.dataset.available=available?'1':'0';card.dataset.vehiclePrice=available?(parseFloat(prices[key])||0):0;card.dataset.driverEarning=available?(parseFloat(earnings[key])||0):0;}}else{card.style.display='';card.dataset.available='0';card.dataset.vehiclePrice='0';card.dataset.driverEarning='0';}});
+  const selection=currentLinkedPriceSelection(),matchingRules=(activeVehiclePriceZone?.priceRules||[]).filter(r=>String(r.cargoTypeId)===selection.cargoTypeId&&r.packageKey===selection.packageKey),prices=matchingRules.length?Object.fromEntries(matchingRules.map(r=>[r.vehicle,Number(r.price)||0])):(activeVehiclePriceZone?.vehiclePrices||{}),earnings=Object.fromEntries(matchingRules.map(r=>[r.vehicle,Number(r.driverEarning)||0])),percents=Object.fromEntries(matchingRules.map(r=>[r.vehicle,Number(r.driverPercent)||0])),specific=Object.keys(prices).filter(key=>key!=='any'&&MANUAL_VEHICLES.some(v=>v.key===key)),hasDelivery=!!$('deliveryLat').value;
+  document.querySelectorAll('.manual-vehicle-card').forEach(card=>{const key=card.dataset.key;if(!hasDelivery){card.style.display='';card.dataset.available='0';card.dataset.vehiclePrice='0';card.dataset.driverEarning='0';card.dataset.driverPercent='0';return;}if(activeVehiclePriceZone){if(key==='any'){const choices=specific.map(k=>({key:k,price:parseFloat(prices[k])})).filter(x=>Number.isFinite(x.price)).sort((a,b)=>a.price-b.price),best=choices[0];card.style.display=best?'block':'none';card.dataset.available=best?'1':'0';card.dataset.vehiclePrice=best?best.price:0;card.dataset.driverEarning=best?(parseFloat(earnings[best.key])||0):0;card.dataset.driverPercent=best?(parseFloat(percents[best.key])||0):0;}else{const available=Object.prototype.hasOwnProperty.call(prices,key);card.style.display=available?'block':'none';card.dataset.available=available?'1':'0';card.dataset.vehiclePrice=available?(parseFloat(prices[key])||0):0;card.dataset.driverEarning=available?(parseFloat(earnings[key])||0):0;card.dataset.driverPercent=available?(parseFloat(percents[key])||0):0;}}else{card.style.display='';card.dataset.available='0';card.dataset.vehiclePrice='0';card.dataset.driverEarning='0';card.dataset.driverPercent='0';}});
   const selected=$('requiredVehicleCategory').value,selectedCard=document.querySelector('.manual-vehicle-card[data-key="'+selected+'"]');if(!selectedCard||selectedCard.dataset.available!=='1'){$('requiredVehicleCategory').value='';$('requiredVehicleLabel').value='';$('selectedVehiclePrice').value='0';document.querySelectorAll('.manual-vehicle-card').forEach(b=>b.classList.remove('active'));}else $('selectedVehiclePrice').value=parseFloat(selectedCard.dataset.vehiclePrice)||0;
   selectedRouteDriverEarning=selectedCard?.dataset.available==='1'?(parseFloat(selectedCard.dataset.driverEarning)||0):0;
+  selectedRouteDriverPercent=selectedCard?.dataset.available==='1'?(parseFloat(selectedCard.dataset.driverPercent)||0):0;
   calcTotal();
 }
-window.selectManualVehicle=function(el,key){if(el.dataset.available!=='1'){showToast($('deliveryLat').value?'This vehicle has no price for this cargo and package in the selected route':'Select the delivery location on the map first','err');return;}document.querySelectorAll('.manual-vehicle-card').forEach(b=>b.classList.remove('active'));el.classList.add('active');el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});const def=MANUAL_VEHICLES.find(v=>v.key===key);$('requiredVehicleCategory').value=key;$('requiredVehicleLabel').value=def?def.label:key;$('selectedVehiclePrice').value=parseFloat(el.dataset.vehiclePrice)||0;selectedRouteDriverEarning=parseFloat(el.dataset.driverEarning)||0;calcTotal();setTimeout(()=>$('manualVehiclePanel').scrollIntoView({behavior:'smooth',block:'center'}),180);};
+window.selectManualVehicle=function(el,key){if(el.dataset.available!=='1'){showToast($('deliveryLat').value?'This vehicle has no price for this cargo and package in the selected route':'Select the delivery location on the map first','err');return;}document.querySelectorAll('.manual-vehicle-card').forEach(b=>b.classList.remove('active'));el.classList.add('active');el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});const def=MANUAL_VEHICLES.find(v=>v.key===key);$('requiredVehicleCategory').value=key;$('requiredVehicleLabel').value=def?def.label:key;$('selectedVehiclePrice').value=parseFloat(el.dataset.vehiclePrice)||0;selectedRouteDriverEarning=parseFloat(el.dataset.driverEarning)||0;selectedRouteDriverPercent=parseFloat(el.dataset.driverPercent)||0;calcTotal();setTimeout(()=>$('manualVehiclePanel').scrollIntoView({behavior:'smooth',block:'center'}),180);};
 window.selPkgSize=function(el,id){const already=el.classList.contains('active');if(already){document.querySelectorAll('.pkg-size-card').forEach(c=>{c.classList.remove('active');c.style.display='';});$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';$('expressTimeWrap').classList.remove('show');clearPackageVehicle();hideStep('stepPickup');calcTotal();return;}document.querySelectorAll('.pkg-size-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.pkg-size-card').forEach(c=>c.style.display=c===el?'block':'none');const sz=allExpressSizes.find(s=>String(s.id)===String(id))||{id,name:el.dataset.name||'Package',maxKg:Number(el.dataset.maxkg)||5};$('selSizeId').value=sz.id;$('selSizeName').value=sz.name;$('selSizeWeight').value=sz.maxKg;setPackageVehicle(sz.maxKg);$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));hideStep('stepPickup');loadTimeSlots(sz.id);calcTotal();};
 function loadTimeSlots(sizeId){const g=$('timeSlotGrid');const ctId=$('ctypeGrid').querySelector('.ct-card.active')?.dataset?.id||'';const slots=allExpressHrs.filter(h=>String(h.sizeId)===String(sizeId)&&(ctId?String(h.cargoTypeId)===String(ctId):true));if(!slots.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.6rem"><p>No time options for this size.</p></div>';$('expressTimeWrap').classList.add('show');return;}const sorted=[...slots].sort((a,b)=>(a.minutes||0)-(b.minutes||0));g.innerHTML=sorted.map(ts=>`<button type="button" class="time-slot-btn" data-id="${ts.id}" data-price="${ts.price}" data-label="${ts.label||''}" onclick="selTimeSlot(this)"><span class="ts-dur">${ts.label||''}</span><span class="ts-lbl">Delivery Time</span><div class="time-slot-ck"><i class="fas fa-check"></i></div></button>`).join('');$('expressTimeWrap').classList.add('show');}
 window.selTimeSlot=function(el){
@@ -2449,27 +2454,28 @@ function driverFromOrder(order){
 }
 
 function buildFindingDriverCard(order){
-  const awaiting=order.paymentStatus!=='paid';
   const responseMins=Math.max(1,Number(order.driverResponseMinutes||driverUiSettings.responseMinutes)||10);
-  const responseStart=order.driverSearchStartedAt||order.paymentApprovedAt||order.createdAt||new Date().toISOString();
-  const savedExpiry=order.driverSearchExpiresAt||(!awaiting?new Date(new Date(responseStart).getTime()+responseMins*60000).toISOString():'');
-  /* Keep searching in repeating backend-controlled windows until a driver accepts. */
-  const responseExpires=!awaiting&&savedExpiry?(new Date(savedExpiry).getTime()>Date.now()?savedExpiry:new Date(Date.now()+responseMins*60000).toISOString()):'';
-  const expired=false;
+  const responseStart=order.driverSearchStartedAt||order.paymentSubmittedAt||order.createdAt||new Date().toISOString();
+  const responseExpires=order.driverSearchExpiresAt||new Date(new Date(responseStart).getTime()+responseMins*60000).toISOString();
+  const initialRemaining=Math.max(0,Math.ceil((new Date(responseExpires).getTime()-Date.now())/1000));
+  const initialTime=initialRemaining>0?Math.floor(initialRemaining/60)+':'+String(initialRemaining%60).padStart(2,'0'):'0:00';
   const seenDrivers=new Set();
-  const drivers=allDriversIdx.filter(d=>{
-    if(!d||d.status!=='active'||(d.verificationStatus&&d.verificationStatus!=='verified'))return false;
-    if(!driverMatchesVehicleCategory(d,order.requiredVehicleCategory||''))return false;
+  const activeDrivers=allDriversIdx.filter(d=>{
+    const status=String(d?.status||'').trim().toLowerCase();
+    const verification=String(d?.verificationStatus||'').trim().toLowerCase();
+    if(!d||status!=='active'||(verification&&verification!=='verified'))return false;
     const key=String(d.id||d.contact||d.name||'').toLowerCase();if(!key||seenDrivers.has(key))return false;seenDrivers.add(key);return true;
-  }).slice(0,8);
-  const candidates=drivers.length?drivers.map((d,i)=>`<div class="driver-candidate${i===0?' active':''}" role="button" tabindex="0" data-driver-name="${String(d.name||'Driver').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" onclick="showDriverWaitingInfo(this)" onkeydown="if(event.key==='Enter')showDriverWaitingInfo(this)">
+  });
+  const matching=activeDrivers.filter(d=>driverMatchesVehicleCategory(d,order.requiredVehicleCategory||''));
+  const drivers=(matching.length?matching:activeDrivers).slice(0,8);
+  if(!drivers.length)return '';
+  const candidates=drivers.map((d,i)=>`<div class="driver-candidate${i===0?' active':''}">
     <span class="driver-candidate-avatar">${d.profilePhoto?`<img src="${String(d.profilePhoto).replace(/"/g,'&quot;')}" alt="${String(d.name||'Driver').replace(/"/g,'&quot;')}">`:`<i class="fas fa-user" style="font-size:1.35rem;color:#64b4ff"></i>`}</span>
     <span class="driver-candidate-info"><span class="driver-candidate-name">${d.name||'Driver'}</span><span class="driver-candidate-vehicle">${d.vehicle||'Driver'}${d.vehicleModel?' · '+d.vehicleModel:''}</span><span class="driver-candidate-number"><i class="fas fa-car-side"></i> ${d.vehicleNumber||d.vehicleRegNumber||'Number not added'}</span></span>
-  </div>`).join(''):`<div style="display:flex;align-items:center;justify-content:center;gap:10px;color:rgba(255,255,255,.48);font-size:.72rem;padding:.8rem"><span class="driver-candidate-avatar"><i class="fas ${expired?'fa-clock-rotate-left':'fa-user-clock'}"></i></span><span>${expired?'No driver accepted before the timer ended.':'Waiting for an available compatible driver…'}</span></div>`;
-  return `<div class="driver-search-card">
-    <div class="driver-search-head"><div><div class="driver-search-title">${awaiting?'Drivers are standing by':'Drivers responding…'}</div><div class="driver-search-sub">${awaiting?'Payment review in progress':'Searching registered drivers'} · ${order.referenceNumber||''}</div></div><div class="driver-search-time" id="findTimer_${order.id}" data-start="${responseStart}" data-expires="${responseExpires}">${awaiting?'--:--':responseMins+':00'}</div></div>
+  </div>`).join('');
+  return `<div class="driver-search-card profiles-only" data-auto-slide="true" data-last-slide="${Date.now()}">
+    <div class="driver-search-head"><div><div class="driver-search-title">Finding active drivers…</div><div class="driver-search-sub">Drivers responding · ${order.referenceNumber||''}</div></div><div class="driver-search-time" id="findTimer_${order.id}" data-start="${responseStart}" data-expires="${responseExpires}">${initialTime}</div></div>
     <div class="driver-candidates">${candidates}</div>
-    <div class="driver-search-note"><i class="fas ${awaiting?'fa-receipt':'fa-satellite-dish'}"></i><span>${awaiting?'Compatible registered drivers will receive the order as soon as payment is approved.':'Registered compatible drivers have been notified. The first driver to accept will appear here.'}</span></div>
   </div>`;
 }
 window.showDriverWaitingInfo=function(el){showToast((el.dataset.driverName||'Driver')+' is registered and has been notified.','info');};
@@ -2616,33 +2622,34 @@ function loadMyDriver(){
   const el=$('myDriverContent');if(!el||!me)return;
   // Find customer's active order that has a driver assigned
   const myOrders=allD.filter(d=>d.createdBy===me.email);
-  const waitingOrders=myOrders.filter(o=>!o.assignedDriverId&&o.status!=='Delivered')
+  const isFinished=o=>/^(delivered|complete|completed|cancelled|canceled)$/i.test(String(o.status||'').trim());
+  const paymentWasSubmitted=o=>Boolean(o.paymentSlip||o.paymentSubmittedAt)&&!/^unpaid$/i.test(String(o.paymentStatus||''));
+  const responseWindowIsOpen=o=>{
+    const mins=Math.max(1,Number(o.driverResponseMinutes||driverUiSettings.responseMinutes)||10);
+    const started=o.driverSearchStartedAt||o.paymentSubmittedAt||o.createdAt;
+    if(!started)return false;
+    const expires=o.driverSearchExpiresAt||new Date(new Date(started).getTime()+mins*60000).toISOString();
+    return new Date(expires).getTime()>Date.now();
+  };
+  const waitingOrders=myOrders.filter(o=>!o.assignedDriverId&&!isFinished(o)&&paymentWasSubmitted(o)&&responseWindowIsOpen(o))
     .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,1);
-  const activeWithDriver=myOrders.filter(o=>o.assignedDriverId&&o.status!=='Delivered')
+  const activeWithDriver=myOrders.filter(o=>o.assignedDriverId&&!isFinished(o))
     .sort((a,b)=>new Date(b.assignedAt||b.createdAt)-new Date(a.assignedAt||a.createdAt));
-  const completedWithDriver=myOrders.filter(o=>o.assignedDriverId&&o.status==='Delivered')
-    .sort((a,b)=>new Date(b.completedAt)-new Date(a.completedAt)).slice(0,3);
 
-  if(!waitingOrders.length&&!activeWithDriver.length&&!completedWithDriver.length){
-    el.innerHTML='<div class="empty-s"><i class="fas fa-truck"></i><p>No driver assigned yet.<br>We\'ll notify you when a driver takes your order.</p></div>';
+  if(!waitingOrders.length&&!activeWithDriver.length){
+    el.innerHTML='';
     return;
   }
 
   let html='';
-  if(!activeWithDriver.length)waitingOrders.forEach(o=>{html+=buildFindingDriverCard(o);});
+  // The active-driver carousel belongs only to an unassigned saved order.
+  // When that order is taken, assignedDriverId removes it from waitingOrders immediately.
+  waitingOrders.forEach(o=>{html+=buildFindingDriverCard(o);});
   // Active delivery card
   activeWithDriver.forEach(o=>{
     const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId))||driverFromOrder(o);
     html+=buildDriverCard(o,driver,'active');
   });
-  // Completed deliveries
-  if(completedWithDriver.length){
-    html+=`<div style="font-size:.72rem;color:rgba(255,255,255,.35);font-family:monospace;margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.8px">Past Deliveries</div>`;
-    completedWithDriver.forEach(o=>{
-      const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId))||driverFromOrder(o);
-      html+=buildDriverCard(o,driver,'completed');
-    });
-  }
   el.innerHTML=html;
   setTimeout(()=>initCustomerLiveMaps(activeWithDriver),80);
 }
@@ -2657,7 +2664,7 @@ function indexOrderDeadline(o){
     const m=lbl.match(/(\d{1,2}):(\d{2})\s*(?:to|–|-)\s*(\d{1,2}):(\d{2})/i);
     if(m){const st=buildDL(parseInt(m[1]),parseInt(m[2]),o.deliveryDate);let en=buildDL(parseInt(m[3]),parseInt(m[4]),o.deliveryDate);if(en<=st)en=new Date(en.getTime()+86400000);return{date:en,start:st,label:lbl,source:'express'};}
     if(o.expressDeadline){
-      if(o.expressDeadline.includes('T')){const iso=new Date(o.expressDeadline);if(!isNaN(iso.getTime())){if(o.deliveryDate)return{date:buildDL(iso.getUTCHours(),iso.getUTCMinutes(),o.deliveryDate),start:null,label:lbl,source:'express'};return{date:iso,start:null,label:lbl,source:'express'};}}
+      if(o.expressDeadline.includes('T')){const iso=new Date(o.expressDeadline);if(!isNaN(iso.getTime())){if(o.deliveryDate)return{date:buildDL(iso.getHours(),iso.getMinutes(),o.deliveryDate),start:null,label:lbl,source:'express'};return{date:iso,start:null,label:lbl,source:'express'};}}
       else{const pts=o.expressDeadline.split(':');if(pts.length>=2)return{date:buildDL(parseInt(pts[0]),parseInt(pts[1]),o.deliveryDate),start:null,label:o.expressDeadline,source:'express'};}
     }
   }
@@ -2668,10 +2675,8 @@ function indexOrderDeadline(o){
 
 function indexOrderRemaining(o,dl){
   const now=new Date();
-  const anchor=o.takenAt?new Date(o.takenAt):(o.assignedAt?new Date(o.assignedAt):new Date(o.createdAt||Date.now()));
-  let totalMs,remainMs;
-  if(dl.start){totalMs=dl.date-dl.start;remainMs=totalMs-(now-anchor);}
-  else{totalMs=(dl.date-anchor)||1;remainMs=dl.date-now;}
+  const anchor=dl.start||(o.takenAt?new Date(o.takenAt):(o.assignedAt?new Date(o.assignedAt):new Date(o.createdAt||Date.now())));
+  let totalMs=(dl.date-anchor)||1,remainMs=dl.date-now;
   if(totalMs<=0)totalMs=1;
   return{totalMs,remainMs};
 }
@@ -2979,8 +2984,11 @@ function startIdxDriverTimers(){
       const start=new Date(el.dataset.start||Date.now());
       const seconds=Math.max(0,Math.floor((Date.now()-start.getTime())/1000));
       const expires=el.dataset.expires?new Date(el.dataset.expires):null;
-      if(expires&&!isNaN(expires.getTime())){const wasExpired=el.textContent==='EXPIRED',remaining=Math.max(0,Math.ceil((expires.getTime()-Date.now())/1000));el.textContent=remaining>0?Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0'):'EXPIRED';el.style.color=remaining<=60?'#e74c3c':'#64b4ff';if(remaining===0&&!wasExpired)setTimeout(loadMyDriver,50);}
-      if(seconds>0&&seconds%5===0)nextWaitingDriver(el.closest('.driver-search-card'));
+      if(expires&&!isNaN(expires.getTime())){const remaining=Math.max(0,Math.ceil((expires.getTime()-Date.now())/1000));el.textContent=remaining>0?Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0'):'0:00';el.style.color=remaining<=60?'#e74c3c':'#64b4ff';if(remaining===0)setTimeout(loadMyDriver,20);}
+    });
+    document.querySelectorAll('.driver-search-card[data-auto-slide="true"]').forEach(card=>{
+      const last=Number(card.dataset.lastSlide||0);
+      if(Date.now()-last>=4000){nextWaitingDriver(card);card.dataset.lastSlide=String(Date.now());}
     });
     const myOrders=allD.filter(d=>d.createdBy===me?.email&&d.assignedDriverId&&d.status!=='Delivered');
     myOrders.forEach(o=>{
@@ -3103,7 +3111,7 @@ $('cargoForm').addEventListener('submit',function(e){
     packageSize:isExp&&!isAir?($('selSizeName').value+' / up to '+$('selSizeWeight').value+' kg'):'',
     selectedSizeName:isExp&&!isAir?$('selSizeName').value||'':'',selectedHrLabel:isExp&&!isAir?$('selTimeLabel').value:'',
     requiredVehicleCategory:!isAir&&dMode==='cargo'?($('requiredVehicleCategory').value||''):'',requiredVehicleType:!isAir&&dMode==='cargo'?($('requiredVehicleLabel').value||''):'',vehiclePrice:!isAir&&dMode==='cargo'?(parseFloat($('selectedVehiclePrice').value)||0):0,mapRoutePrice:!isAir&&dMode==='cargo'?(parseFloat($('routePrice').value)||0):0,
-    linkedPriceZoneId:!isAir&&dMode==='cargo'?(activeVehiclePriceZone?.id||''):'',linkedPriceZoneName:!isAir&&dMode==='cargo'?(activeVehiclePriceZone?.name||''):'',linkedPackageKey:!isAir&&dMode==='cargo'?currentLinkedPriceSelection().packageKey:'',routeDriverEarning:!isAir&&dMode==='cargo'?selectedRouteDriverEarning:0,
+    linkedPriceZoneId:!isAir&&dMode==='cargo'?(activeVehiclePriceZone?.id||''):'',linkedPriceZoneName:!isAir&&dMode==='cargo'?(activeVehiclePriceZone?.name||''):'',linkedPackageKey:!isAir&&dMode==='cargo'?currentLinkedPriceSelection().packageKey:'',routeDriverEarning:!isAir&&dMode==='cargo'?selectedRouteDriverEarning:0,routeDriverPercent:!isAir&&dMode==='cargo'?selectedRouteDriverPercent:0,
     expressDeadline:(()=>{if(!isExp||isAir)return'';const t=$('selTimeDeadline')?.value||'';if(!t)return'';if(t.includes('T'))return t;const dDate=$('dDate')?.value||'';if(dDate){const pts=t.split(':');const d=new Date(dDate+'T00:00:00');d.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);return d.toISOString();}return t;})(),
     deliveryDuration:!isExp&&!isAir?'3-5 Business Days':'',
     packageWeight:!isExp&&!isAir?$('selW').value:'—',
@@ -3162,6 +3170,10 @@ $('payConfirm').onclick=async()=>{
     // ── STEP 2: Save to Firebase ──
     setStep('pstep2','active');setProgress(35,'Saving order…','Writing to database…');
     tmpD.paymentSlip=slipDataUrl;
+    tmpD.paymentSubmittedAt=new Date().toISOString();
+    tmpD.driverSearchStartedAt=tmpD.paymentSubmittedAt;
+    tmpD.driverResponseMinutes=Math.max(1,Number(driverUiSettings.responseMinutes)||10);
+    tmpD.driverSearchExpiresAt=new Date(new Date(tmpD.driverSearchStartedAt).getTime()+tmpD.driverResponseMinutes*60000).toISOString();
     const cap=Number(siteSettings.dailyCapacity)||0;
     const saveResult=await db.ref('cargoDeliveries').transaction(current=>{
       const all=toArr(current);
@@ -3195,6 +3207,7 @@ $('payConfirm').onclick=async()=>{
     $('paySavingView').style.display='none';
     $('paySuccessView').style.display='block';
     if($('paySuccessRef'))$('paySuccessRef').textContent='REF: '+_d.referenceNumber;
+    setTimeout(()=>{if($('paySuccessView')?.style.display!=='none')closePaySuccess();},900);
 
     // Reset form in background
     $('cargoForm').reset();
