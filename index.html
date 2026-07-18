@@ -788,6 +788,7 @@ img{max-width:100%;height:auto}
 .cargo-map-panel{margin-top:.75rem;background:linear-gradient(145deg,#111a2a,#17243a);border:1.5px solid rgba(100,180,255,.28);border-radius:18px;padding:.7rem;overflow:hidden}.cargo-map-head{display:flex;align-items:center;gap:9px;margin-bottom:.55rem}.cargo-map-head i{width:34px;height:34px;border-radius:10px;background:rgba(52,152,219,.13);color:#64b4ff;display:flex;align-items:center;justify-content:center}.cargo-map-title{font-size:.78rem;color:white;font-weight:800}.cargo-map-sub{font-size:.6rem;color:rgba(255,255,255,.38);margin-top:2px}.cargo-map-search{display:flex;gap:6px;margin-bottom:.55rem}.cargo-map-search input{min-width:0;flex:1}.cargo-map-search button,.cargo-map-actions button,.cargo-map-open{border:1px solid rgba(100,180,255,.3);background:rgba(100,180,255,.1);color:#82b7ff;border-radius:11px;padding:8px 10px;font:700 .66rem inherit;cursor:pointer}.cargo-map{height:300px;border-radius:14px;background:#0b1220;overflow:hidden}.cargo-map-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:.55rem}.cargo-map-status{display:flex;align-items:flex-start;gap:7px;margin-top:.55rem;padding:.55rem .65rem;border-radius:11px;background:rgba(255,255,255,.035);color:rgba(255,255,255,.48);font-size:.64rem;line-height:1.4}.cargo-map-status.ready{background:rgba(39,174,96,.09);color:#55d88a;border:1px solid rgba(39,174,96,.2)}
 .pickup-method{display:none;margin-top:.55rem;background:rgba(52,152,219,.06);border:1px solid rgba(52,152,219,.18);border-radius:14px;padding:.65rem}.pickup-method.show{display:block}.pickup-method-title{font-size:.68rem;color:rgba(255,255,255,.55);font-weight:750;margin-bottom:.5rem}.pickup-method-btns{display:grid;grid-template-columns:1fr 1fr;gap:7px}.pickup-method-btn{border:1.5px solid #304158;background:#172235;color:rgba(255,255,255,.6);border-radius:12px;padding:10px 7px;font:750 .7rem inherit;cursor:pointer}.pickup-method-btn.active{border-color:#27ae60;background:rgba(39,174,96,.12);color:#55d88a}@media(max-width:480px){.cargo-map{height:250px}.cargo-map-search{flex-direction:column}.cargo-map-search button{width:100%}}
 .pickup-confirm-wrap{display:none;margin-top:.55rem}.pickup-confirm-wrap.show{display:block}.pickup-confirm-btn{width:100%;border:0;border-radius:12px;padding:11px;background:linear-gradient(135deg,#075f3f,#0b8057);color:white;font:800 .75rem inherit;cursor:pointer}.pickup-live-panel{display:none;margin-top:.65rem;background:#111a2a;border:1.5px solid rgba(39,174,96,.28);border-radius:17px;padding:.65rem;overflow:hidden}.pickup-live-panel.show{display:block}.pickup-live-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:.5rem}.pickup-live-title{font-size:.75rem;color:white;font-weight:800}.pickup-live-address{font-size:.62rem;color:#55d88a;margin-top:2px;line-height:1.35}.pickup-live-map{height:250px;border-radius:12px;background:#0b1220}.pickup-live-actions{display:flex;gap:7px;margin-top:.5rem}.pickup-live-actions button{flex:1;border:1px solid rgba(39,174,96,.3);background:rgba(39,174,96,.1);color:#55d88a;border-radius:10px;padding:8px;font:750 .66rem inherit;cursor:pointer}
+.pickup-confirmed-summary{display:none;align-items:center;gap:10px;margin-top:.65rem;padding:.72rem;background:linear-gradient(145deg,rgba(39,174,96,.13),rgba(20,35,47,.95));border:1.5px solid rgba(39,174,96,.34);border-radius:15px;min-width:0}.pickup-confirmed-summary.show{display:flex}.pickup-confirmed-icon{width:40px;height:40px;border-radius:12px;background:rgba(39,174,96,.16);color:#55d88a;display:grid;place-items:center;flex:0 0 40px}.pickup-confirmed-info{flex:1;min-width:0}.pickup-confirmed-label{font:700 .52rem monospace;color:#55d88a;text-transform:uppercase;letter-spacing:.65px}.pickup-confirmed-name{font-size:.76rem;font-weight:850;color:#fff;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pickup-confirmed-address{font-size:.6rem;color:rgba(255,255,255,.48);margin-top:3px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pickup-confirmed-change{border:1px solid rgba(100,180,255,.3);background:rgba(100,180,255,.1);color:#82b7ff;border-radius:10px;padding:7px 9px;font:750 .62rem inherit;cursor:pointer;flex-shrink:0}@media(max-width:380px){.pickup-confirmed-summary{padding:.62rem;gap:8px}.pickup-confirmed-icon{width:36px;height:36px;flex-basis:36px}.pickup-confirmed-change{padding:7px}}
 @keyframes stepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @media(min-width:700px){.dash-cargo-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dash-cargo-card{padding:1.35rem 1rem}}
 @media(max-width:350px){.dash-cargo-grid{grid-template-columns:1fr}}
@@ -1056,6 +1057,7 @@ img{max-width:100%;height:auto}
             <div class="pickup-method" id="pickupMethodChoice"><div class="pickup-method-title"><i class="fas fa-location-dot" style="color:#27ae60;margin-right:4px"></i>How do you want to set the pickup point?</div><div class="pickup-method-btns"><button type="button" class="pickup-method-btn" id="pickupAddressBtn" onclick="choosePickupMethod('address')"><i class="fas fa-keyboard"></i> Enter Address</button><button type="button" class="pickup-method-btn" id="pickupMapBtn" onclick="choosePickupMethod('map')"><i class="fas fa-map-location-dot"></i> Use Map</button></div></div>
             <div class="pickup-live-panel" id="pickupLivePanel"><div class="pickup-live-head"><div><div class="pickup-live-title"><i class="fas fa-map-location-dot" style="color:#27ae60;margin-right:5px"></i>Pickup Location · Live Map</div><div class="pickup-live-address" id="pickupLiveAddress">Loading pickup address…</div></div><i class="fas fa-circle-check" id="pickupLiveCheck" style="color:#27ae60"></i></div><div class="pickup-live-map" id="pickupLiveMap"></div><div class="pickup-live-actions"><button type="button" onclick="usePickupPreviewGps()"><i class="fas fa-location-crosshairs"></i> Use Current GPS Pickup</button></div></div>
             <div class="pickup-confirm-wrap" id="pickupConfirmWrap"><button type="button" class="pickup-confirm-btn" onclick="confirmPickupDetails()"><i class="fas fa-circle-check"></i> Confirm Pickup Location</button></div>
+            <div class="pickup-confirmed-summary" id="pickupConfirmedSummary"><div class="pickup-confirmed-icon"><i class="fas fa-location-dot"></i></div><div class="pickup-confirmed-info"><div class="pickup-confirmed-label">Confirmed Pickup</div><div class="pickup-confirmed-name" id="pickupConfirmedName">Pickup location</div><div class="pickup-confirmed-address" id="pickupConfirmedAddress">Exact address</div></div><button type="button" class="pickup-confirmed-change" onclick="editConfirmedPickup()"><i class="fas fa-pen"></i> Change</button></div>
           </div>
           </div>
 
@@ -2332,6 +2334,8 @@ function loadWeights(){const g=$('wGrid');if(!me)return;if(!allP.length){g.inner
 /* ═══ PICKUP GRID ═══ */
 function loadPickupGrid(filteredIds){
   const g=$('pickupGrid');
+  g.style.display='';
+  const confirmedSummary=$('pickupConfirmedSummary');if(confirmedSummary)confirmedSummary.classList.remove('show');
   if(!allPickups.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations configured.</p></div>';return}
   let locs=allPickups;if(filteredIds&&filteredIds.length>0)locs=allPickups.filter(l=>filteredIds.includes(String(l.id)));
   if(!locs.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.8rem"><p>No pickup locations assigned to this cargo type.</p></div>';return}
@@ -2340,6 +2344,8 @@ function loadPickupGrid(filteredIds){
 }
 window.selPickup=function(el,id){
   const grid=$('pickupGrid'),already=el.classList.contains('active');
+  const confirmedSummary=$('pickupConfirmedSummary');if(confirmedSummary)confirmedSummary.classList.remove('show');
+  if(grid)grid.style.display='';
   if(already){document.querySelectorAll('.pickup-card').forEach(c=>{c.style.display='block';c.classList.remove('active');});$('pLocVal').value='';pickupMethod='';$('pickupMethodChoice').classList.remove('show');$('pickupConfirmWrap').classList.remove('show');$('pickupLivePanel').classList.remove('show');dMode='';document.querySelectorAll('.dm-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});$('cargoDest').style.display='none';clearCargoMapPin(true);hideStep('stepMode');return;}
   document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');
   const loc=allPickups.find(l=>String(l.id)===String(id));if(!loc)return;
@@ -2503,7 +2509,38 @@ async function showPickupLiveMap(interactive){
 function geocodePickupPreview(query){return new Promise(resolve=>pickupPreviewGeocoder.geocode({address:query},(res,status)=>{if(status==='OK'&&res[0]){setPickupPreviewPoint(res[0].geometry.location,false,res[0].formatted_address);resolve(true);}else{$('pickupLiveAddress').textContent='Pickup address was not found. Use Current GPS or click the map.';resolve(false);}}));}
 function setPickupPreviewPoint(position,reverse,address){if(!pickupPreviewMap)return;if(pickupPreviewMarker)pickupPreviewMarker.setMap(null);pickupPreviewMarker=new google.maps.Marker({map:pickupPreviewMap,position,draggable:pickupPreviewInteractive,title:'Pickup point',label:{text:'P',color:'#fff',fontWeight:'800'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:'#075f3f',fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});pickupPreviewMarker.addListener('dragend',e=>setPickupPreviewPoint(e.latLng,true));$('pickupLat').value=position.lat();$('pickupLng').value=position.lng();pickupPreviewMap.panTo(position);pickupPreviewMap.setZoom(17);const done=a=>{const current=a||$('pLocVal').value||'Pickup point';$('pickupLiveAddress').textContent='Current pickup: '+current;if(pickupMethod==='map')$('addrVal').value=current;};if(address)done(address);else if(reverse)pickupPreviewGeocoder.geocode({location:position},(res,status)=>done(status==='OK'&&res[0]?res[0].formatted_address:'Pinned pickup point'));else done($('pLocVal').value);}
 window.usePickupPreviewGps=function(){if(!navigator.geolocation){showToast('GPS is not supported','err');return;}pickupPreviewInteractive=true;showToast('Getting current pickup GPS…','info');navigator.geolocation.getCurrentPosition(async p=>{await showPickupLiveMap(true);setPickupPreviewPoint(new google.maps.LatLng(p.coords.latitude,p.coords.longitude),true);},()=>showToast('Location permission denied','err'),{enableHighAccuracy:true,timeout:12000});};
-window.confirmPickupDetails=async function(){const loc=allPickups.find(x=>x.name===$('pLocVal').value);if(!loc){showToast('Select a pickup location','err');return;}const detail=$('addrVal').value.trim();if((loc.type==='postal'||pickupMethod==='address')&&!detail){showToast(loc.type==='postal'?'Enter Post/Pickpost number or pickup message':'Enter address or flat number','err');return;}const ok=await showPickupLiveMap(pickupMethod==='map');if(!ok)return;if(!$('pickupLat').value||!$('pickupLng').value){showToast('Set the pickup point on the live map','err');return;}$('pickupConfirmWrap').classList.remove('show');$('pickupLiveCheck').style.color='#27ae60';$('pickupLivePanel').classList.remove('show');revealStep('stepMode');showToast('Pickup location confirmed','ok');};
+window.confirmPickupDetails=async function(){
+  const loc=allPickups.find(x=>x.name===$('pLocVal').value);
+  if(!loc){showToast('Select a pickup location','err');return;}
+  const detail=$('addrVal').value.trim();
+  if((loc.type==='postal'||pickupMethod==='address')&&!detail){showToast(loc.type==='postal'?'Enter Post/Pickpost number or pickup message':'Enter address or flat number','err');return;}
+  const ok=await showPickupLiveMap(pickupMethod==='map');if(!ok)return;
+  if(!$('pickupLat').value||!$('pickupLng').value){showToast('Set the pickup point on the live map','err');return;}
+  const liveText=($('pickupLiveAddress')?.textContent||'').replace(/^Current pickup:\s*/i,'').trim();
+  const confirmedAddress=liveText&&!/^Loading live pickup map/i.test(liveText)?liveText:(detail||loc.mapAddress||loc.name);
+  $('pickupConfirmedName').textContent=loc.name;
+  $('pickupConfirmedAddress').textContent=confirmedAddress;
+  $('pickupConfirmedSummary').classList.add('show');
+  $('pickupGrid').style.display='none';
+  $('pickupMethodChoice').classList.remove('show');
+  $('addrX').classList.remove('show');
+  $('pickupConfirmWrap').classList.remove('show');
+  $('pickupLiveCheck').style.color='#27ae60';
+  $('pickupLivePanel').classList.remove('show');
+  revealStep('stepMode');
+  if(me)loadMyDriver();
+  showToast('Pickup location confirmed','ok');
+};
+window.editConfirmedPickup=function(){
+  const loc=allPickups.find(x=>x.name===$('pLocVal').value);
+  $('pickupConfirmedSummary').classList.remove('show');
+  $('pickupGrid').style.display='grid';
+  if(loc?.type==='address')$('pickupMethodChoice').classList.add('show');
+  if(loc?.type==='postal'||pickupMethod==='address')$('addrX').classList.add('show');
+  $('pickupConfirmWrap').classList.add('show');
+  hideStep('stepMode');
+  showPickupLiveMap(pickupMethod==='map');
+};
 function setCargoMapStatus(message,ready){const box=$('cargoMapStatus');if(!box)return;box.classList.toggle('ready',!!ready);box.querySelector('span').textContent=message;}
 async function initCargoDeliveryMap(){
   if(dMode!=='cargo'||!$('cargoDeliveryMap'))return;
@@ -2601,6 +2638,35 @@ function loadMyDriver(){
   setTimeout(()=>initCustomerLiveMaps(activeWithDriver),80);
 }
 
+/* Keep the customer countdown identical to DRIVER APP/Driver.html orderDeadline(). */
+function indexOrderDeadline(o){
+  const isAir=o.isAir||o.deliveryMode==='air';
+  const isExpress=!isAir&&(o.isExpress||(o.cargoType||'').toLowerCase().includes('express'));
+  const buildDL=(h,m,dDate)=>{const base=dDate?new Date(dDate+'T00:00:00'):new Date();base.setHours(h,m,0,0);if(!dDate&&base<new Date())base.setDate(base.getDate()+1);return base;};
+  if(isExpress){
+    const lbl=o.selectedHrLabel||'';
+    const m=lbl.match(/(\d{1,2}):(\d{2})\s*(?:to|–|-)\s*(\d{1,2}):(\d{2})/i);
+    if(m){const st=buildDL(parseInt(m[1]),parseInt(m[2]),o.deliveryDate);let en=buildDL(parseInt(m[3]),parseInt(m[4]),o.deliveryDate);if(en<=st)en=new Date(en.getTime()+86400000);return{date:en,start:st,label:lbl,source:'express'};}
+    if(o.expressDeadline){
+      if(o.expressDeadline.includes('T')){const iso=new Date(o.expressDeadline);if(!isNaN(iso.getTime())){if(o.deliveryDate)return{date:buildDL(iso.getUTCHours(),iso.getUTCMinutes(),o.deliveryDate),start:null,label:lbl,source:'express'};return{date:iso,start:null,label:lbl,source:'express'};}}
+      else{const pts=o.expressDeadline.split(':');if(pts.length>=2)return{date:buildDL(parseInt(pts[0]),parseInt(pts[1]),o.deliveryDate),start:null,label:o.expressDeadline,source:'express'};}
+    }
+  }
+  if(o.driverDeadline){const d=new Date(o.driverDeadline);if(!isNaN(d.getTime())){let st=null;if(o.driverTimeFrom){const fp=String(o.driverTimeFrom).split(':');st=new Date(d);st.setHours(parseInt(fp[0]),parseInt(fp[1]||0),0,0);if(st>d)st=new Date(st.getTime()-86400000);}return{date:d,start:st,label:o.driverTimeLabel||'',source:'driver'};}}
+  if(o.deliveryDate)return{date:new Date(o.deliveryDate+(o.deliveryTime?'T'+o.deliveryTime+':00':'T23:59:59')),start:null,label:o.deliveryTime||'',source:'order'};
+  return null;
+}
+
+function indexOrderRemaining(o,dl){
+  const now=new Date();
+  const anchor=o.takenAt?new Date(o.takenAt):(o.assignedAt?new Date(o.assignedAt):new Date(o.createdAt||Date.now()));
+  let totalMs,remainMs;
+  if(dl.start){totalMs=dl.date-dl.start;remainMs=totalMs-(now-anchor);}
+  else{totalMs=(dl.date-anchor)||1;remainMs=dl.date-now;}
+  if(totalMs<=0)totalMs=1;
+  return{totalMs,remainMs};
+}
+
 function buildDriverCard(order,driver,type){
   const isActive=type==='active';
   const isAir=order.isAir||order.deliveryMode==='air';
@@ -2618,27 +2684,12 @@ function buildDriverCard(order,driver,type){
   let timerHtml='';
   let progressHtml='';
   // Auto-hide timer if deadline passed (delivery overdue or completed)
-  const isTimerOrder=isActive&&(order.expressDeadline||order.selectedHrLabel||order.deliveryDate);
+  const resolvedDeadline=indexOrderDeadline(order);
+  const isTimerOrder=isActive&&resolvedDeadline&& !isNaN(resolvedDeadline.date.getTime());
   if(isTimerOrder){
-    function idxBuildDL(h,m,dDate){const base=dDate?new Date(dDate+'T00:00:00'):new Date();base.setHours(h,m,0,0);if(!dDate&&base<new Date())base.setDate(base.getDate()+1);return base;}
-    let deadline=null;
-    const lbl4=order.selectedHrLabel||'';
-    const m4=lbl4.match(/(\d{1,2}):(\d{2})\s*(?:to|–|-)\s*(\d{1,2}):(\d{2})/i);
-    if(m4){deadline=idxBuildDL(parseInt(m4[3]),parseInt(m4[4]),order.deliveryDate);}
-    else if(order.expressDeadline){
-      if(order.expressDeadline.includes('T')){
-        const iso=new Date(order.expressDeadline);
-        // Recombine ISO time with deliveryDate to fix "wrong day" bug
-        if(!isNaN(iso.getTime()))deadline=order.deliveryDate?idxBuildDL(iso.getUTCHours(),iso.getUTCMinutes(),order.deliveryDate):iso;
-      } else {const pts=order.expressDeadline.split(':');if(pts.length>=2)deadline=idxBuildDL(parseInt(pts[0]),parseInt(pts[1]),order.deliveryDate);}
-    }
-if(!deadline&&order.driverDeadline){const _dd=new Date(order.driverDeadline);if(!isNaN(_dd.getTime()))deadline=_dd;}
-if(!deadline&&order.deliveryDate)deadline=new Date(order.deliveryDate+(order.deliveryTime?'T'+order.deliveryTime+':00':'T23:59:59'));    const startTime=new Date(order.assignedAt||order.takenAt||order.createdAt);
-    const now=new Date();
-    const totalMs=deadline-startTime;
-    const remainMs=deadline-now;
+    const {totalMs,remainMs}=indexOrderRemaining(order,resolvedDeadline);
     const pct=Math.max(0,Math.min(100,(1-(remainMs/totalMs))*100));
-    const pctColor=remainMs<3600000?'#e74c3c':remainMs<10800000?'#f39c12':'#27ae60';
+    const pctColor=remainMs<1800000?'#e74c3c':remainMs<3600000?'#f39c12':'#27ae60';
 
     // Auto-hide if more than 2 hours overdue (delivery window long passed)
     if(remainMs < -7200000){timerHtml='';} else {
@@ -2660,7 +2711,7 @@ if(!deadline&&order.deliveryDate)deadline=new Date(order.deliveryDate+(order.del
         </div>
       </div>
       <div class="drv-timer" style="margin-top:.3rem">
-        <span class="drv-timer-lbl">Deadline: ${order.deliveryDate}${order.deliveryTime?' at '+order.deliveryTime:''}</span>
+        <span class="drv-timer-lbl">Window: ${resolvedDeadline.label||resolvedDeadline.date.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</span>
         <span class="drv-timer-lbl">Taken: ${takenTime}</span>
       </div>
     </div>`;
@@ -2916,23 +2967,11 @@ function startIdxDriverTimers(){
     });
     const myOrders=allD.filter(d=>d.createdBy===me?.email&&d.assignedDriverId&&d.status!=='Delivered');
     myOrders.forEach(o=>{
-      // Always recalculate from selectedHrLabel for accuracy
-      let deadline=null;
-      const lbl3=o.selectedHrLabel||'';
-      const m3=lbl3.match(/(\d{1,2}):(\d{2})\s*(?:to|–|-)\s*(\d{1,2}):(\d{2})/i);
-      if(m3){const b=o.deliveryDate?new Date(o.deliveryDate+'T00:00:00'):new Date();b.setHours(parseInt(m3[3]),parseInt(m3[4]),0,0);if(!o.deliveryDate&&b<new Date())b.setDate(b.getDate()+1);deadline=b;}
-      else if(o.expressDeadline){
-        if(o.expressDeadline.includes('T'))deadline=new Date(o.expressDeadline);
-        else{const pts=o.expressDeadline.split(':');const b=o.deliveryDate?new Date(o.deliveryDate+'T00:00:00'):new Date();b.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);if(!o.deliveryDate&&b<new Date())b.setDate(b.getDate()+1);deadline=b;}
-      } else if(o.deliveryDate){deadline=new Date(o.deliveryDate+(o.deliveryTime?'T'+o.deliveryTime+':00':'T23:59:59'));}
-      if(!deadline||isNaN(deadline.getTime()))return;
-      
-      const startTime=new Date(o.assignedAt||o.takenAt||o.createdAt);
-      const now=new Date();
-      const remainMs=deadline-now;
-      const totalMs=deadline-startTime;
+      const deadline=indexOrderDeadline(o);
+      if(!deadline||isNaN(deadline.date.getTime()))return;
+      const {totalMs,remainMs}=indexOrderRemaining(o,deadline);
       const pct=Math.max(0,Math.min(100,(1-(remainMs/totalMs))*100));
-      const pctColor=remainMs<3600000?'#e74c3c':remainMs<10800000?'#f39c12':'#27ae60';
+      const pctColor=remainMs<1800000?'#e74c3c':remainMs<3600000?'#f39c12':'#27ae60';
 
       const timerEl=document.getElementById('idxTimer_'+o.id);
       const progEl=document.getElementById('idxProg_'+o.id);
