@@ -757,6 +757,7 @@ img{max-width:100%;height:auto}
 .customer-live-status{display:flex;align-items:center;gap:7px;font-size:.66rem;color:rgba(255,255,255,.68);margin-bottom:.48rem}.customer-live-status i{color:#42d77d}
 .customer-map-legend{display:flex;flex-wrap:wrap;gap:11px;font-size:.58rem;color:rgba(255,255,255,.45)}.customer-map-legend span{display:flex;align-items:center;gap:4px}.customer-map-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 .customer-map-vehicle-label{line-height:1!important;text-shadow:0 2px 4px rgba(0,0,0,.38)}
+.customer-map-vehicle-img{position:absolute;width:38px;height:26px;background-repeat:no-repeat;background-size:contain;background-position:center;transform:translate(-50%,-72%) rotate(var(--vehicle-heading,0deg));transform-origin:50% 72%;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55));pointer-events:none;z-index:30;transition:transform .25s ease}.customer-map-vehicle-img.car{background-image:url('../assets/vehicles/car.png')}.customer-map-vehicle-img.motorcycle,.customer-map-vehicle-img.bicycle{background-image:url('../assets/vehicles/motorcycle.png')}.customer-map-vehicle-img.van,.customer-map-vehicle-img.truck,.customer-map-vehicle-img.boat{background-image:url('../assets/vehicles/van.png')}
 @media(max-width:430px){.customer-live-map{height:245px}.customer-live-head{align-items:flex-start;flex-direction:column}}
 .driver-search-card{background:linear-gradient(145deg,#141b2b,#18253a);color:white;border:1.5px solid #2e3f55;border-radius:22px;padding:1rem;margin:0 auto .85rem;box-shadow:0 12px 32px rgba(0,0,0,.25);overflow:hidden;width:100%;max-width:560px}
 .driver-search-head{position:relative;text-align:center;margin-bottom:.85rem;padding:0 54px}
@@ -770,7 +771,6 @@ img{max-width:100%;height:auto}
 .driver-candidate.active .driver-candidate-avatar{animation:driverRespond 1.35s ease-in-out infinite}
 @keyframes driverRespond{0%,100%{box-shadow:0 0 0 2px #3498db,0 5px 13px rgba(0,0,0,.16)}50%{box-shadow:0 0 0 6px rgba(52,152,219,.18),0 7px 17px rgba(0,0,0,.18)}}
 .driver-candidate-info{width:100%;min-width:0;text-align:center}.driver-candidate-name{display:block;font-size:.92rem;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.driver-candidate-vehicle{display:block;font-size:.68rem;color:rgba(255,255,255,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}.driver-candidate-number{display:inline-block;font-family:monospace;font-size:.72rem;font-weight:800;color:#f39c12;background:rgba(243,156,18,.1);border:1px solid rgba(243,156,18,.25);border-radius:10px;padding:4px 10px;margin-top:7px}
-.driver-next-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);border:1px solid rgba(100,180,255,.3);background:rgba(100,180,255,.1);color:#64b4ff;width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}.driver-next-btn:hover{background:rgba(100,180,255,.2);transform:translateY(-50%) scale(1.06)}
 .driver-search-note{display:flex;align-items:center;gap:7px;background:rgba(52,152,219,.08);color:#64b4ff;border:1px solid rgba(52,152,219,.14);border-radius:12px;padding:.6rem .7rem;font-size:.65rem;line-height:1.4;margin-top:.35rem}
 @media(max-width:380px){.driver-search-head{padding:0 42px 0 0;text-align:left}.driver-candidate{padding:1rem 52px}.driver-candidate-avatar{width:68px;height:68px}.driver-search-card{padding:.8rem}.driver-search-note{font-size:.61rem}}
 /* Dashboard cargo launcher */
@@ -780,10 +780,11 @@ img{max-width:100%;height:auto}
 .dash-section-head{display:flex;align-items:center;gap:8px;margin-bottom:.7rem;color:white;font-weight:800;font-size:.92rem}.dash-section-head i{color:#f39c12}.dash-section-head span{margin-left:auto;color:rgba(255,255,255,.3);font-size:.6rem;font-family:monospace;font-weight:600}
 .dash-cargo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dash-cargo-card{position:relative;min-width:0;background:#182235;border:1.5px solid #304158;border-radius:18px;padding:1.15rem .8rem;cursor:pointer;text-align:center;color:white;font-family:inherit;transition:.22s;overflow:hidden}.dash-cargo-card:hover,.dash-cargo-card:focus{border-color:#f39c12;transform:translateY(-3px);box-shadow:0 9px 25px rgba(243,156,18,.13);outline:none}.dash-cargo-card.express{background:linear-gradient(145deg,rgba(243,156,18,.1),#182235)}.dash-cargo-card.air{background:linear-gradient(145deg,rgba(100,180,255,.1),#182235)}
 .dash-cargo-icon{width:48px;height:48px;border-radius:15px;background:rgba(243,156,18,.1);display:flex;align-items:center;justify-content:center;margin:0 auto .65rem;color:#f39c12;font-size:1.35rem}.dash-cargo-card.air .dash-cargo-icon{background:rgba(100,180,255,.12);color:#82b7ff}.dash-cargo-name{font-size:.88rem;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-cargo-eta{font-size:.62rem;color:rgba(255,255,255,.36);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-cargo-action{font-family:monospace;font-size:.62rem;color:#f39c12;font-weight:700;margin-top:.55rem}.dash-cargo-card.air .dash-cargo-action{color:#82b7ff}.dash-cargo-arrow{position:absolute;right:9px;top:9px;width:23px;height:23px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);font-size:.6rem}.dash-cargo-card:hover .dash-cargo-arrow{background:#f39c12;color:#182235}
+.dash-running-wrap{display:none;margin-bottom:1rem}.dash-running-wrap.show{display:block}.dash-running-card{width:100%;border:1.5px solid rgba(39,174,96,.32);background:linear-gradient(145deg,#10241d,#16283a);border-radius:18px;padding:.82rem;color:#fff;font-family:inherit;text-align:left;cursor:pointer;display:flex;align-items:center;gap:11px;box-shadow:0 10px 26px rgba(0,0,0,.2)}.dash-running-icon{width:44px;height:44px;border-radius:13px;background:rgba(39,174,96,.14);color:#55d88a;display:grid;place-items:center;font-size:1rem;position:relative;flex-shrink:0}.dash-running-icon:after{content:'';position:absolute;right:4px;top:4px;width:7px;height:7px;border-radius:50%;background:#55d88a;box-shadow:0 0 0 4px rgba(85,216,138,.12)}.dash-running-main{flex:1;min-width:0}.dash-running-label{font-family:monospace;font-size:.53rem;letter-spacing:.65px;color:#55d88a;text-transform:uppercase}.dash-running-title{font-size:.82rem;font-weight:850;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-running-sub{font-size:.62rem;color:rgba(255,255,255,.45);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-running-go{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(100,180,255,.12);color:#64b4ff;border:1px solid rgba(100,180,255,.25);flex-shrink:0}
 .selected-cargo-summary{display:none;align-items:center;gap:11px;background:linear-gradient(145deg,rgba(243,156,18,.1),rgba(255,255,255,.025));border:1.5px solid rgba(243,156,18,.3);border-radius:16px;padding:.75rem .8rem;margin-bottom:.9rem}.selected-cargo-summary.show{display:flex}.selected-cargo-icon{width:42px;height:42px;border-radius:12px;background:rgba(243,156,18,.14);display:flex;align-items:center;justify-content:center;color:#f39c12;font-size:1.05rem;flex-shrink:0}.selected-cargo-info{flex:1;min-width:0}.selected-cargo-label{font-size:.56rem;color:rgba(255,255,255,.36);text-transform:uppercase;letter-spacing:.8px;font-family:monospace}.selected-cargo-name{font-size:.85rem;color:white;font-weight:800;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.selected-cargo-change{border:1px solid rgba(100,180,255,.3);background:rgba(100,180,255,.1);color:#64b4ff;border-radius:12px;padding:7px 11px;font-family:inherit;font-size:.68rem;font-weight:750;cursor:pointer;flex-shrink:0}
 .my-delivery-list{display:grid;grid-template-columns:1fr;gap:10px}.my-delivery-card{background:linear-gradient(145deg,#151f31,#18253a);border:1.5px solid #2d3e55;border-radius:18px;padding:.9rem;min-width:0;overflow:hidden}.mdc-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:.7rem;margin-bottom:.7rem;border-bottom:1px solid rgba(255,255,255,.06)}.mdc-ref{border:0;background:rgba(243,156,18,.1);color:#f39c12;border-radius:10px;padding:6px 9px;font-family:monospace;font-size:.7rem;font-weight:850;cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mdc-ref:hover{background:rgba(243,156,18,.2)}.mdc-route{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start;margin-bottom:.65rem}.mdc-route-icon{width:24px;height:24px;border-radius:7px;background:rgba(100,180,255,.1);color:#64b4ff;display:flex;align-items:center;justify-content:center;font-size:.62rem}.mdc-route-text{font-size:.72rem;color:white;line-height:1.45;min-width:0;overflow-wrap:anywhere}.mdc-route-to{color:rgba(255,255,255,.43);margin-top:2px}.mdc-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.mdc-cell{background:rgba(255,255,255,.035);border-radius:10px;padding:.55rem;min-width:0}.mdc-label{font-family:monospace;font-size:.52rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.55px;margin-bottom:3px}.mdc-value{font-size:.69rem;color:white;line-height:1.35;overflow-wrap:anywhere}.mdc-actions{display:flex;gap:7px;margin-top:.75rem}.mdc-track{flex:1;border:0;background:linear-gradient(135deg,#3498db,#2878b5);color:white;border-radius:12px;padding:9px;font-family:inherit;font-size:.72rem;font-weight:800;cursor:pointer}.mdc-slip{border:1px solid rgba(243,156,18,.28);background:rgba(243,156,18,.1);color:#f39c12;border-radius:12px;padding:8px 12px;font-family:inherit;font-size:.68rem;font-weight:750;cursor:pointer}@media(min-width:700px){.my-delivery-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .vehicle-match-panel{display:none;background:linear-gradient(145deg,#151f31,#1a2940);border:1.5px solid rgba(100,180,255,.28);border-radius:18px;padding:.85rem;margin:.2rem 0 .9rem}.vehicle-match-panel.show{display:block}.vehicle-match-head{display:flex;align-items:center;gap:11px}.vehicle-match-icon{width:52px;height:52px;border-radius:15px;background:rgba(100,180,255,.12);color:#82b7ff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}.vehicle-match-info{flex:1;min-width:0}.vehicle-match-label{font-family:monospace;font-size:.54rem;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.7px}.vehicle-match-name{font-size:.9rem;font-weight:850;color:white;margin-top:2px}.vehicle-match-reason{font-size:.62rem;color:rgba(255,255,255,.42);margin-top:3px}.vehicle-options-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:.7rem;padding-top:.7rem;border-top:1px solid rgba(255,255,255,.06)}.vehicle-option-card{display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(100,180,255,.07);border:1px solid rgba(100,180,255,.2);border-radius:12px;padding:.65rem;color:#82b7ff;min-width:0}.vehicle-option-card.only{grid-column:1/-1}.vehicle-option-card i{font-size:1.05rem}.vehicle-option-card span{font-size:.68rem;font-weight:800;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.manual-vehicle-panel{display:none;margin-top:.75rem;background:#111a2a;border:1.5px solid rgba(243,156,18,.25);border-radius:18px;padding:.75rem;overflow:hidden}.manual-vehicle-panel.show{display:block;animation:stepIn .28s ease}.manual-vehicle-title{font-size:.78rem;color:white;font-weight:850}.manual-vehicle-sub{font-size:.61rem;color:rgba(255,255,255,.4);margin-top:2px}.manual-vehicle-grid{display:flex;gap:8px;margin-top:.65rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px;scrollbar-width:none;-ms-overflow-style:none}.manual-vehicle-grid::-webkit-scrollbar{display:none;width:0;height:0}.manual-vehicle-card{position:relative;flex:0 0 122px;scroll-snap-align:center;border:1.5px solid #304158;background:#182235;color:white;border-radius:15px;padding:.42rem .4rem .55rem;text-align:center;cursor:pointer;font-family:inherit;transition:.2s;min-width:0}.manual-vehicle-card.active{border-color:#f39c12;background:linear-gradient(145deg,rgba(243,156,18,.15),#182235);box-shadow:0 0 0 2px rgba(243,156,18,.1)}.manual-vehicle-card.active:after{content:'\2713';position:absolute;right:7px;top:7px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:#27ae60;color:white;font-size:.58rem;font-weight:900}.mvc-image{height:62px;width:100%;background-image:url('../assets/vehicle-selector-sprite.png');background-repeat:no-repeat;background-size:200% 200%;background-position:0 0;margin-bottom:.15rem;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25))}.mvc-image.car{background-position:100% 0}.mvc-image.motorcycle{background-position:0 100%}.mvc-image.van{background-position:100% 100%}.mvc-name{font-size:.72rem;font-weight:850}.mvc-total-label{font-family:monospace;font-size:.48rem;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:5px}.mvc-price{font-size:.72rem;color:#55d88a;font-family:monospace;font-weight:900;margin-top:1px;white-space:nowrap}#routePriceBadge{display:none!important}@media(max-width:370px){.manual-vehicle-card{flex-basis:114px}.mvc-image{height:58px}}
+.manual-vehicle-panel{display:none;margin-top:.75rem;background:#111a2a;border:1.5px solid rgba(243,156,18,.25);border-radius:18px;padding:.75rem;overflow:hidden}.manual-vehicle-panel.show{display:block;animation:stepIn .28s ease}.manual-vehicle-title{font-size:.78rem;color:white;font-weight:850}.manual-vehicle-sub{font-size:.61rem;color:rgba(255,255,255,.4);margin-top:2px}.manual-vehicle-grid{display:flex;gap:8px;margin-top:.65rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px;scrollbar-width:none;-ms-overflow-style:none}.manual-vehicle-grid::-webkit-scrollbar{display:none;width:0;height:0}.manual-vehicle-card{position:relative;flex:0 0 122px;scroll-snap-align:center;border:1.5px solid #304158;background:#182235;color:white;border-radius:15px;padding:.42rem .4rem .55rem;text-align:center;cursor:pointer;font-family:inherit;transition:.2s;min-width:0}.manual-vehicle-card.active{border-color:#f39c12;background:linear-gradient(145deg,rgba(243,156,18,.15),#182235);box-shadow:0 0 0 2px rgba(243,156,18,.1)}.manual-vehicle-card.active:after{content:'\2713';position:absolute;right:7px;top:7px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:#27ae60;color:white;font-size:.58rem;font-weight:900}.mvc-image{height:62px;width:100%;background-repeat:no-repeat;background-size:contain;background-position:center;margin-bottom:.15rem;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25))}.mvc-image.any{background-image:url('../assets/vehicles/any.png')}.mvc-image.car{background-image:url('../assets/vehicles/car.png')}.mvc-image.motorcycle{background-image:url('../assets/vehicles/motorcycle.png')}.mvc-image.van{background-image:url('../assets/vehicles/van.png')}.mvc-name{font-size:.72rem;font-weight:850}.mvc-total-label{font-family:monospace;font-size:.48rem;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:5px}.mvc-price{font-size:.72rem;color:#55d88a;font-family:monospace;font-weight:900;margin-top:1px;white-space:nowrap}#routePriceBadge{display:none!important}@media(max-width:370px){.manual-vehicle-card{flex-basis:114px}.mvc-image{height:58px}}
 .cargo-map-panel{margin-top:.75rem;background:linear-gradient(145deg,#111a2a,#17243a);border:1.5px solid rgba(100,180,255,.28);border-radius:18px;padding:.7rem;overflow:hidden}.cargo-map-head{display:flex;align-items:center;gap:9px;margin-bottom:.55rem}.cargo-map-head i{width:34px;height:34px;border-radius:10px;background:rgba(52,152,219,.13);color:#64b4ff;display:flex;align-items:center;justify-content:center}.cargo-map-title{font-size:.78rem;color:white;font-weight:800}.cargo-map-sub{font-size:.6rem;color:rgba(255,255,255,.38);margin-top:2px}.cargo-map-search{display:flex;gap:6px;margin-bottom:.55rem}.cargo-map-search input{min-width:0;flex:1}.cargo-map-search button,.cargo-map-actions button,.cargo-map-open{border:1px solid rgba(100,180,255,.3);background:rgba(100,180,255,.1);color:#82b7ff;border-radius:11px;padding:8px 10px;font:700 .66rem inherit;cursor:pointer}.cargo-map{height:300px;border-radius:14px;background:#0b1220;overflow:hidden}.cargo-map-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:.55rem}.cargo-map-status{display:flex;align-items:flex-start;gap:7px;margin-top:.55rem;padding:.55rem .65rem;border-radius:11px;background:rgba(255,255,255,.035);color:rgba(255,255,255,.48);font-size:.64rem;line-height:1.4}.cargo-map-status.ready{background:rgba(39,174,96,.09);color:#55d88a;border:1px solid rgba(39,174,96,.2)}
 .pickup-method{display:none;margin-top:.55rem;background:rgba(52,152,219,.06);border:1px solid rgba(52,152,219,.18);border-radius:14px;padding:.65rem}.pickup-method.show{display:block}.pickup-method-title{font-size:.68rem;color:rgba(255,255,255,.55);font-weight:750;margin-bottom:.5rem}.pickup-method-btns{display:grid;grid-template-columns:1fr 1fr;gap:7px}.pickup-method-btn{border:1.5px solid #304158;background:#172235;color:rgba(255,255,255,.6);border-radius:12px;padding:10px 7px;font:750 .7rem inherit;cursor:pointer}.pickup-method-btn.active{border-color:#27ae60;background:rgba(39,174,96,.12);color:#55d88a}@media(max-width:480px){.cargo-map{height:250px}.cargo-map-search{flex-direction:column}.cargo-map-search button{width:100%}}
 .pickup-confirm-wrap{display:none;margin-top:.55rem}.pickup-confirm-wrap.show{display:block}.pickup-confirm-btn{width:100%;border:0;border-radius:12px;padding:11px;background:linear-gradient(135deg,#075f3f,#0b8057);color:white;font:800 .75rem inherit;cursor:pointer}.pickup-live-panel{display:none;margin-top:.65rem;background:#111a2a;border:1.5px solid rgba(39,174,96,.28);border-radius:17px;padding:.65rem;overflow:hidden}.pickup-live-panel.show{display:block}.pickup-live-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:.5rem}.pickup-live-title{font-size:.75rem;color:white;font-weight:800}.pickup-live-address{font-size:.62rem;color:#55d88a;margin-top:2px;line-height:1.35}.pickup-live-map{height:250px;border-radius:12px;background:#0b1220}.pickup-live-actions{display:flex;gap:7px;margin-top:.5rem}.pickup-live-actions button{flex:1;border:1px solid rgba(39,174,96,.3);background:rgba(39,174,96,.1);color:#55d88a;border-radius:10px;padding:8px;font:750 .66rem inherit;cursor:pointer}
@@ -919,6 +920,7 @@ img{max-width:100%;height:auto}
     <!-- DASHBOARD -->
     <div class="sec active" id="sDash">
       <div class="dash-hero"><div class="dash-welcome"><i class="fas fa-sparkles"></i> EasyCargo Dashboard</div><div class="dash-title">What are you sending today?</div><div class="dash-desc">Choose a cargo service below. Your delivery form will open with the selected cargo type ready to complete.</div></div>
+      <div class="dash-running-wrap" id="dashboardRunningOrders"></div>
       <div class="dash-section-head"><i class="fas fa-box"></i> Cargo Type <span>SELECT A SERVICE</span></div>
       <div class="dash-cargo-grid" id="dashCargoGrid"><div class="empty-s" style="grid-column:1/-1"><i class="fas fa-box-open"></i><p>Loading cargo services…</p></div></div>
     </div>
@@ -2081,7 +2083,7 @@ function startUserListeners(){
   /* User's own orders - live */
   db.ref('cargoDeliveries').on('value',snap=>{
     allD=toArr(snap.val());
-    if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();loadMyDriver();startIdxDriverTimers();}
+    if(me){loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();loadMyDriver();loadDashboardRunningOrders();startIdxDriverTimers();}
   });
   /* Notifications - live */
   db.ref('notifications').on('value',snap=>{
@@ -2097,7 +2099,7 @@ function enterDash(){
   watchDeliveryPoints();loadFloorSelector();loadUserRewards();loadHarbourButtons();
   $('hName').textContent=me.username;$('sidebarName').textContent=me.username;
   $('cNm').value=me.username;$('cCt').value=me.contact||'';
-  loadPickupGrid(null);loadCtypeGrid();loadDashboardCargoTypes();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();loadAirIslandGrid();switchTab('sDash');
+  loadPickupGrid(null);loadCtypeGrid();loadDashboardCargoTypes();loadDashboardRunningOrders();loadWeights();loadDlocGrid();loadRefs();loadMyTbl();loadMyInvoices();updateCapBar();loadAirIslandGrid();switchTab('sDash');
   const draft=localStorage.getItem('ec_draft');
   if(draft){try{const d=JSON.parse(draft);if(d&&d.version){$('draftMod').classList.add('show');$('draftContinue').onclick=()=>{$('draftMod').classList.remove('show');restoreDraft(d);};$('draftDiscard').onclick=()=>{$('draftMod').classList.remove('show');localStorage.removeItem('ec_draft');}}}catch(e){localStorage.removeItem('ec_draft');}}
 }
@@ -2176,6 +2178,19 @@ function loadDashboardCargoTypes(){
   const cards=types.map(ct=>`<button type="button" class="dash-cargo-card${ct.isExpress?' express':''}" onclick="openDeliveryForCargo('${ct.id}')"><span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i></span><div class="dash-cargo-name">${ct.name}</div><div class="dash-cargo-eta">${ct.eta||(ct.isExpress?'Same Day':'3–5 Business Days')}</div><div class="dash-cargo-action">${ct.isExpress?'Select size & time':'Select weight'}</div></button>`).join('');
   const air=`<button type="button" class="dash-cargo-card air" onclick="openDeliveryForCargo('__air__')"><span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas fa-plane"></i></span><div class="dash-cargo-name">Air Cargo</div><div class="dash-cargo-eta">Domestic Flights</div><div class="dash-cargo-action">Normal & Express</div></button>`;
   g.innerHTML=cards+air;
+}
+
+function loadDashboardRunningOrders(){
+  const wrap=$('dashboardRunningOrders');if(!wrap||!me)return;
+  const running=allD.filter(o=>o.createdBy===me.email&&o.assignedDriverId&&o.status!=='Delivered').sort((a,b)=>new Date(b.assignedAt||b.createdAt)-new Date(a.assignedAt||a.createdAt));
+  if(!running.length){wrap.classList.remove('show');wrap.innerHTML='';return;}
+  const o=running[0],driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId))||driverFromOrder(o),phase=customerOrderPhase(o,customerLiveForOrder(o));
+  wrap.classList.add('show');wrap.innerHTML=`<div class="dash-section-head"><i class="fas fa-route"></i> Running Delivery <span>${running.length>1?running.length+' ACTIVE':'LIVE'}</span></div>
+    <button type="button" class="dash-running-card" onclick="switchTab('sDriver')">
+      <span class="dash-running-icon"><i class="fas ${/motor|bike|scooter/i.test((driver&&driver.vehicle)||'')?'fa-motorcycle':'fa-truck-fast'}"></i></span>
+      <span class="dash-running-main"><span class="dash-running-label">${o.referenceNumber||'ACTIVE ORDER'}</span><span class="dash-running-title">${driver&&driver.name?driver.name+' · ':''}${phase==='to_delivery'?'Coming to you':'Going to pickup'}</span><span class="dash-running-sub">${o.pickupLocation||'Pickup'} → ${o.deliveryAddress||o.deliveryLocation||o.airDestination||'Delivery'}</span></span>
+      <span class="dash-running-go"><i class="fas fa-chevron-right"></i></span>
+    </button>`;
 }
 
 window.openDeliveryForCargo=function(id){
@@ -2395,11 +2410,11 @@ let allDriversIdx=[],allDriverLive={};
 const customerTrackingMaps={};
 db.ref('drivers').on('value',snap=>{
   allDriversIdx=Array.isArray(snap.val())?snap.val():snap.val()?Object.values(snap.val()):[];
-  if(me)loadMyDriver();
+  if(me){loadMyDriver();loadDashboardRunningOrders();}
 });
 db.ref('driverLiveLocations').on('value',snap=>{
   allDriverLive=snap.val()||{};
-  if(me){const hasMap=document.querySelector('[id^="customerLiveMap_"]');if(hasMap)refreshCustomerLiveMaps();else loadMyDriver();}
+  if(me){const hasMap=document.querySelector('[id^="customerLiveMap_"]');if(hasMap)refreshCustomerLiveMaps();else loadMyDriver();loadDashboardRunningOrders();}
 });
 db.ref('driverSettings').on('value',snap=>{driverUiSettings=Object.assign({responseMinutes:10},snap.val()||{});if(me)loadMyDriver();});
 
@@ -2433,14 +2448,13 @@ function buildFindingDriverCard(order){
     const key=String(d.id||d.contact||d.name||'').toLowerCase();if(!key||seenDrivers.has(key))return false;seenDrivers.add(key);return true;
   }).slice(0,8);
   const candidates=drivers.length?drivers.map((d,i)=>`<div class="driver-candidate${i===0?' active':''}" role="button" tabindex="0" data-driver-name="${String(d.name||'Driver').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" onclick="showDriverWaitingInfo(this)" onkeydown="if(event.key==='Enter')showDriverWaitingInfo(this)">
-    <span class="driver-candidate-avatar"><i class="fas ${isMotorcycleVehicle(d.vehicle)?'fa-motorcycle':'fa-car-side'}" style="font-size:1.35rem;color:#64b4ff"></i></span>
+    <span class="driver-candidate-avatar">${d.profilePhoto?`<img src="${String(d.profilePhoto).replace(/"/g,'&quot;')}" alt="${String(d.name||'Driver').replace(/"/g,'&quot;')}">`:`<i class="fas fa-user" style="font-size:1.35rem;color:#64b4ff"></i>`}</span>
     <span class="driver-candidate-info"><span class="driver-candidate-name">${d.name||'Driver'}</span><span class="driver-candidate-vehicle">${d.vehicle||'Driver'}${d.vehicleModel?' · '+d.vehicleModel:''}</span><span class="driver-candidate-number"><i class="fas fa-car-side"></i> ${d.vehicleNumber||d.vehicleRegNumber||'Number not added'}</span></span>
-    ${drivers.length>1?'<span class="driver-next-btn" onclick="event.stopPropagation();nextWaitingDriver(this.closest(\'.driver-search-card\'))" title="Next driver"><i class="fas fa-chevron-right"></i></span>':''}
   </div>`).join(''):`<div style="display:flex;align-items:center;justify-content:center;gap:10px;color:rgba(255,255,255,.48);font-size:.72rem;padding:.8rem"><span class="driver-candidate-avatar"><i class="fas ${expired?'fa-clock-rotate-left':'fa-user-clock'}"></i></span><span>${expired?'No driver accepted before the timer ended.':'Waiting for an available compatible driver…'}</span></div>`;
   return `<div class="driver-search-card">
     <div class="driver-search-head"><div><div class="driver-search-title">${awaiting?'Drivers are standing by':'Drivers responding…'}</div><div class="driver-search-sub">${awaiting?'Payment review in progress':'Searching registered drivers'} · ${order.referenceNumber||''}</div></div><div class="driver-search-time" id="findTimer_${order.id}" data-start="${responseStart}" data-expires="${responseExpires}">${awaiting?'--:--':responseMins+':00'}</div></div>
     <div class="driver-candidates">${candidates}</div>
-    <div class="driver-search-note"><i class="fas ${awaiting?'fa-receipt':'fa-satellite-dish'}"></i><span>${awaiting?'Compatible registered drivers will receive the order as soon as payment is approved.':'Compatible drivers remain visible until one accepts your order. Use the arrow to view the next driver.'}</span></div>
+    <div class="driver-search-note"><i class="fas ${awaiting?'fa-receipt':'fa-satellite-dish'}"></i><span>${awaiting?'Compatible registered drivers will receive the order as soon as payment is approved.':'Registered compatible drivers have been notified. The first driver to accept will appear here.'}</span></div>
   </div>`;
 }
 window.showDriverWaitingInfo=function(el){showToast((el.dataset.driverName||'Driver')+' is registered and has been notified.','info');};
@@ -2557,7 +2571,7 @@ function loadMyDriver(){
   // Find customer's active order that has a driver assigned
   const myOrders=allD.filter(d=>d.createdBy===me.email);
   const waitingOrders=myOrders.filter(o=>!o.assignedDriverId&&o.status!=='Delivered')
-    .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,1);
   const activeWithDriver=myOrders.filter(o=>o.assignedDriverId&&o.status!=='Delivered')
     .sort((a,b)=>new Date(b.assignedAt||b.createdAt)-new Date(a.assignedAt||a.createdAt));
   const completedWithDriver=myOrders.filter(o=>o.assignedDriverId&&o.status==='Delivered')
@@ -2569,7 +2583,7 @@ function loadMyDriver(){
   }
 
   let html='';
-  waitingOrders.forEach(o=>{html+=buildFindingDriverCard(o);});
+  if(!activeWithDriver.length)waitingOrders.forEach(o=>{html+=buildFindingDriverCard(o);});
   // Active delivery card
   activeWithDriver.forEach(o=>{
     const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId))||driverFromOrder(o);
@@ -2748,7 +2762,7 @@ if(!deadline&&order.deliveryDate)deadline=new Date(order.deliveryDate+(order.del
 
 function validCustomerPin(lat,lng){return lat!==null&&lat!==undefined&&lng!==null&&lng!==undefined&&isFinite(Number(lat))&&isFinite(Number(lng));}
 function customerMapSafeId(id){return String(id).replace(/[^a-zA-Z0-9_-]/g,'_');}
-function customerLiveForOrder(order){const direct=allDriverLive[String(order.assignedDriverId)];if(direct&&String(direct.orderId)===String(order.id))return direct;return Object.values(allDriverLive||{}).find(x=>String(x.orderId)===String(order.id))||null;}
+function customerLiveForOrder(order){const direct=allDriverLive[String(order.assignedDriverId)];if(direct&&String(direct.orderId)===String(order.id))return direct;if(direct&&!direct.orderId)return direct;return Object.values(allDriverLive||{}).find(x=>String(x.orderId)===String(order.id))||null;}
 function customerOrderPhase(order,live){return live&&live.phase?live.phase:order&&(order.pickedUpAt||['Out for Delivery','In Transit'].includes(order.status))?'to_delivery':'to_pickup';}
 function customerLiveMapPanel(order){
   const sid=customerMapSafeId(order.id),live=customerLiveForOrder(order),phase=customerOrderPhase(order,live);
@@ -2763,6 +2777,15 @@ function customerVehicleType(order,live){
   const driver=allDriversIdx.find(d=>String(d.id)===String(order.assignedDriverId));
   return String((live&&live.driverVehicle)||order.assignedDriverVehicle||(driver&&driver.vehicle)||'vehicle').toLowerCase();
 }
+function customerVehicleSpriteClass(order,live){
+  const type=customerVehicleType(order,live);
+  if(/motor|scooter|motorbike/.test(type))return'motorcycle';
+  if(/bicycle|cycle|bike/.test(type))return'bicycle';
+  if(/van|minivan|shuttle/.test(type))return'van';
+  if(/truck|lorry/.test(type))return'truck';
+  if(/boat|ship|dhoni/.test(type))return'boat';
+  return'car';
+}
 function customerVehicleEmoji(order,live){
   const type=customerVehicleType(order,live);
   if(/motor|scooter|motorbike/.test(type))return'🏍';
@@ -2772,26 +2795,81 @@ function customerVehicleEmoji(order,live){
   if(/boat|ship|dhoni/.test(type))return'🚤';
   return'🚗';
 }
-function customerVehicleIcon(){return{path:google.maps.SymbolPath.CIRCLE,scale:19,fillColor:'#f39c12',fillOpacity:1,strokeColor:'#ffffff',strokeWeight:3};}
-function setCustomerVehicleStyle(marker,order,live){marker.setIcon(customerVehicleIcon());marker.setLabel({text:customerVehicleEmoji(order,live),fontSize:'22px',fontWeight:'700',className:'customer-map-vehicle-label'});marker.setTitle(((live&&live.driverVehicle)||order.assignedDriverVehicle||'Driver vehicle')+' · live location');}
+function customerVehiclePhoto(order,live){
+  const driver=allDriversIdx.find(d=>String(d.id)===String(order.assignedDriverId));
+  return String(order.assignedDriverVehiclePhoto||(driver&&driver.vehiclePhoto)||(live&&live.driverVehiclePhoto)||'');
+}
+let customerVehicleAssetPromise=null;
+const customerVehicleAssets={};
+function loadCustomerVehicleAssets(){
+  if(customerVehicleAssetPromise)return customerVehicleAssetPromise;
+  Object.assign(customerVehicleAssets,{car:'../assets/vehicles/car.png',motorcycle:'../assets/vehicles/motorcycle.png',bicycle:'../assets/vehicles/motorcycle.png',van:'../assets/vehicles/van.png',truck:'../assets/vehicles/van.png',boat:'../assets/vehicles/van.png'});
+  customerVehicleAssetPromise=Promise.resolve(customerVehicleAssets);return customerVehicleAssetPromise;
+}
+function customerVehicleSvgIcon(order,live){
+  const type=customerVehicleSpriteClass(order,live),heading=isFinite(Number(live&&live.heading))?Number(live.heading):0;
+  let shape='';
+  if(type==='motorcycle'||type==='bicycle')shape='<ellipse cx="27" cy="10" rx="5" ry="9" fill="#10151d" stroke="#fff" stroke-width="2.5"/><ellipse cx="27" cy="58" rx="5" ry="9" fill="#10151d" stroke="#fff" stroke-width="2.5"/><path d="M17 18H37M27 17V27L20 39M27 27L34 39M20 39H34L27 51" fill="none" stroke="#f39c12" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><rect x="21" y="27" width="12" height="19" rx="6" fill="#242c38" stroke="#fff" stroke-width="2"/><circle cx="27" cy="24" r="5" fill="#f39c12" stroke="#fff" stroke-width="2"/>';
+  else if(type==='van'||type==='truck'||type==='boat')shape='<path d="M13 8Q13 3 20 2H34Q41 3 41 8L44 57Q44 65 36 67H18Q10 65 10 57Z" fill="#222a34" stroke="#fff" stroke-width="3"/><path d="M16 12H38L40 25H14Z" fill="#b9dce6"/><rect x="15" y="31" width="24" height="24" rx="4" fill="#414b58"/><path d="M14 59H40" stroke="#f39c12" stroke-width="4"/><path d="M10 17H6M48 17H44M10 52H6M48 52H44" stroke="#111" stroke-width="5" stroke-linecap="round"/>';
+  else shape='<path d="M18 3Q27-1 36 3L42 12L45 55Q45 64 36 68H18Q9 64 9 55L12 12Z" fill="#20262e" stroke="#fff" stroke-width="3"/><path d="M15 14Q27 8 39 14L40 25H14Z" fill="#c7e4eb"/><path d="M14 47H40L39 57Q27 63 15 57Z" fill="#394552"/><rect x="16" y="29" width="22" height="14" rx="5" fill="#303945"/><path d="M10 18H5M49 18H44M10 51H5M49 51H44" stroke="#111" stroke-width="6" stroke-linecap="round"/><path d="M14 61Q27 68 40 61" fill="none" stroke="#ff5a4f" stroke-width="4"/>';
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="54" height="72" viewBox="0 0 54 72"><defs><filter id="s" x="-40%" y="-30%" width="180%" height="180%"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity=".5"/></filter></defs><g filter="url(#s)" transform="rotate('+heading+' 27 36)">'+shape+'</g></svg>';
+  return{url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg),scaledSize:new google.maps.Size(46,61),anchor:new google.maps.Point(23,66)};
+}
+function customerVehicleIcon(){return{path:google.maps.SymbolPath.CIRCLE,scale:12,fillColor:'#f39c12',fillOpacity:1,strokeColor:'#fff',strokeWeight:3};}
+function customerTopViewPng(order,live){
+  const type=customerVehicleSpriteClass(order,live),heading=isFinite(Number(live&&live.heading))?Number(live.heading):0,canvas=document.createElement('canvas');canvas.width=96;canvas.height=128;const c=canvas.getContext('2d');
+  c.translate(48,64);c.rotate(heading*Math.PI/180);c.shadowColor='rgba(0,0,0,.48)';c.shadowBlur=7;c.shadowOffsetY=4;c.lineJoin='round';
+  const rr=(x,y,w,h,r)=>{c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();};
+  if(type==='motorcycle'||type==='bicycle'){
+    c.fillStyle='#10151c';rr(-7,-53,14,30,7);c.fill();rr(-7,23,14,30,7);c.fill();c.shadowColor='transparent';
+    c.strokeStyle='#fff';c.lineWidth=3;c.stroke();c.fillStyle='#f39c12';rr(-10,-29,20,45,9);c.fill();c.stroke();c.fillStyle='#242b35';rr(-8,3,16,29,7);c.fill();
+    c.strokeStyle='#f39c12';c.lineWidth=5;c.beginPath();c.moveTo(-18,-27);c.lineTo(18,-27);c.moveTo(0,-27);c.lineTo(0,-42);c.stroke();c.fillStyle='#d7e9ed';c.beginPath();c.arc(0,-34,5,0,Math.PI*2);c.fill();
+  }else{
+    const van=type==='van'||type==='truck',w=van?54:48,h=van?104:96,x=-w/2,y=-h/2;
+    c.fillStyle='#111820';rr(x-5,y+13,7,25,3);c.fill();rr(x+w-2,y+13,7,25,3);c.fill();rr(x-5,y+h-38,7,25,3);c.fill();rr(x+w-2,y+h-38,7,25,3);c.fill();
+    c.fillStyle=van?'#f1f3f5':'#eceff1';c.strokeStyle='#fff';c.lineWidth=3;rr(x,y,w,h,van?12:18);c.fill();c.stroke();c.shadowColor='transparent';
+    c.fillStyle='#8faab3';rr(x+7,y+10,w-14,24,7);c.fill();c.fillStyle='#2b3541';rr(x+7,y+h-36,w-14,26,7);c.fill();c.fillStyle='rgba(255,255,255,.28)';rr(x+10,y+38,w-20,h-78,5);c.fill();
+    c.fillStyle='#ffe66d';c.fillRect(x+6,y+3,8,4);c.fillRect(x+w-14,y+3,8,4);c.fillStyle='#ff5b55';c.fillRect(x+6,y+h-7,9,4);c.fillRect(x+w-15,y+h-7,9,4);
+  }
+  return canvas.toDataURL('image/png');
+}
+function setCustomerVehicleStyle(marker,order,live){
+  const type=customerVehicleSpriteClass(order,live),asset=customerVehicleAssets[type]||customerVehicleAssets.car;
+  if(asset){marker.setIcon({url:asset,scaledSize:new google.maps.Size(60,37),anchor:new google.maps.Point(30,43)});marker.setLabel(null);}
+  else{marker.setIcon({path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:'#18263b',fillOpacity:1,strokeColor:'#f39c12',strokeWeight:3,anchor:new google.maps.Point(0,1.65),labelOrigin:new google.maps.Point(0,0)});marker.setLabel({text:customerVehicleEmoji(order,live),fontSize:'17px',fontWeight:'700',className:'customer-map-vehicle-label'});}
+  marker.setTitle(((live&&live.driverVehicle)||order.assignedDriverVehicle||'Driver vehicle')+' · live location');
+}
+function createCustomerVehicleOverlay(map,position,order,live){
+  class CustomerVehicleOverlay extends google.maps.OverlayView{
+    constructor(){super();this.position=new google.maps.LatLng(position);this.div=null;this.vehicleClass=customerVehicleSpriteClass(order,live);this.vehicleTitle='Driver vehicle · live location';this.heading=isFinite(Number(live&&live.heading))?Number(live.heading):0;this.setMap(map);}
+    onAdd(){this.div=document.createElement('div');this.div.className='customer-map-vehicle-img '+this.vehicleClass;this.div.title=this.vehicleTitle;this.div.style.setProperty('--vehicle-heading',this.heading+'deg');this.getPanes().overlayMouseTarget.appendChild(this.div);}
+    draw(){if(!this.div)return;const p=this.getProjection().fromLatLngToDivPixel(this.position);if(p){this.div.style.left=p.x+'px';this.div.style.top=p.y+'px';}}
+    onRemove(){if(this.div){this.div.remove();this.div=null;}}
+    getPosition(){return this.position;}
+    setPosition(pos){this.position=pos instanceof google.maps.LatLng?pos:new google.maps.LatLng(pos);this.draw();}
+    setVehicleType(type,title,heading){this.vehicleClass=type;this.vehicleTitle=title;this.heading=isFinite(Number(heading))?Number(heading):0;if(this.div){this.div.className='customer-map-vehicle-img '+type;this.div.title=title;this.div.style.setProperty('--vehicle-heading',this.heading+'deg');}}
+  }
+  return new CustomerVehicleOverlay();
+}
 function animateCustomerMarker(marker,to){
   const from=marker.getPosition();if(!from){marker.setPosition(to);return;}const a={lat:from.lat(),lng:from.lng()},start=performance.now(),duration=850;
   function frame(now){const t=Math.min(1,(now-start)/duration),ease=1-Math.pow(1-t,3);marker.setPosition({lat:a.lat+(to.lat-a.lat)*ease,lng:a.lng+(to.lng-a.lng)*ease});if(t<1)requestAnimationFrame(frame);}requestAnimationFrame(frame);
 }
 async function initCustomerLiveMaps(orders){
   const mapped=(orders||[]).filter(o=>!o.isAir&&o.deliveryMode!=='air'&&validCustomerPin(o.pickupLat,o.pickupLng)&&validCustomerPin(o.deliveryLat,o.deliveryLng));if(!mapped.length)return;
-  try{await loadCargoGoogleMaps();mapped.forEach(order=>{
+  try{await loadCargoGoogleMaps();await loadCustomerVehicleAssets();mapped.forEach(order=>{
     const sid=customerMapSafeId(order.id),el=$('customerLiveMap_'+sid);if(!el)return;
     const pickup={lat:Number(order.pickupLat),lng:Number(order.pickupLng)},delivery={lat:Number(order.deliveryLat),lng:Number(order.deliveryLng)};
     let state=customerTrackingMaps[sid];
     if(!state||state.el!==el){
       const map=new google.maps.Map(el,{center:pickup,zoom:14,mapTypeControl:false,streetViewControl:false,fullscreenControl:true,gestureHandling:'greedy',styles:UBER_MAP_STYLES});
-      const pickupMarker=new google.maps.Marker({map,position:pickup,title:'Pickup',label:{text:'P',color:'#fff',fontWeight:'800'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:13,fillColor:'#08754d',fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
-      const deliveryMarker=new google.maps.Marker({map,position:delivery,title:'Delivery',label:{text:'D',color:'#fff',fontWeight:'800'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:13,fillColor:'#2574c7',fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
-      const directions=new google.maps.DirectionsService(),renderer=new google.maps.DirectionsRenderer({map,suppressMarkers:true,preserveViewport:true,polylineOptions:{strokeColor:'#08754d',strokeOpacity:.95,strokeWeight:6}});
+      const pickupMarker=new google.maps.Marker({map,position:pickup,title:'Pickup',zIndex:50,label:{text:'P',color:'#fff',fontWeight:'800'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:13,fillColor:'#08754d',fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
+      const deliveryMarker=new google.maps.Marker({map,position:delivery,title:'Delivery',zIndex:50,label:{text:'D',color:'#fff',fontWeight:'800'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:13,fillColor:'#2574c7',fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
+      const directions=new google.maps.DirectionsService(),renderer=new google.maps.DirectionsRenderer({map,suppressMarkers:true,preserveViewport:true,polylineOptions:{strokeColor:'#08754d',strokeOpacity:.92,strokeWeight:4,zIndex:5}});
+      const fallbackLine=new google.maps.Polyline({map,path:[pickup,delivery],strokeColor:'#08754d',strokeOpacity:.92,strokeWeight:4,zIndex:5});
       const firstLive=customerLiveForOrder(order),firstPos=firstLive&&validCustomerPin(firstLive.lat,firstLive.lng)?{lat:Number(firstLive.lat),lng:Number(firstLive.lng)}:{lat:pickup.lat+.00012,lng:pickup.lng};
-      const driverMarker=new google.maps.Marker({map,position:firstPos,zIndex:20,optimized:false});setCustomerVehicleStyle(driverMarker,order,firstLive);
-      state=customerTrackingMaps[sid]={el,map,pickupMarker,deliveryMarker,directions,renderer,driverMarker,lastRouteAt:0,lastOrigin:null,orderId:order.id};
+      const driverMarker=new google.maps.Marker({map,position:firstPos,zIndex:100,optimized:false});setCustomerVehicleStyle(driverMarker,order,firstLive);
+      state=customerTrackingMaps[sid]={el,map,pickupMarker,deliveryMarker,directions,renderer,fallbackLine,driverMarker,lastRouteAt:0,lastOrigin:null,orderId:order.id};
       const bounds=new google.maps.LatLngBounds();bounds.extend(pickup);bounds.extend(delivery);map.fitBounds(bounds,55);
     }
     updateCustomerLiveMap(order,customerLiveForOrder(order),true);
@@ -2804,17 +2882,20 @@ function updateCustomerLiveMap(order,live,force){
   if(!live||!validCustomerPin(live.lat,live.lng)){
     if(state.driverMarker){state.driverMarker.setPosition({lat:Number(order.pickupLat)+.00012,lng:Number(order.pickupLng)});setCustomerVehicleStyle(state.driverMarker,order,null);}
     if(status)status.innerHTML='<i class="fas fa-satellite-dish"></i> Waiting for the driver to allow live GPS…';
-    if(force)state.directions.route({origin:{lat:Number(order.pickupLat),lng:Number(order.pickupLng)},destination:{lat:Number(order.deliveryLat),lng:Number(order.deliveryLng)},travelMode:google.maps.TravelMode.DRIVING},(res,st)=>{if(st==='OK')state.renderer.setDirections(res);});return;
+    if(state.fallbackLine){state.fallbackLine.setPath([{lat:Number(order.pickupLat),lng:Number(order.pickupLng)},{lat:Number(order.deliveryLat),lng:Number(order.deliveryLng)}]);state.fallbackLine.setMap(state.map);}
+    if(force)state.directions.route({origin:{lat:Number(order.pickupLat),lng:Number(order.pickupLng)},destination:{lat:Number(order.deliveryLat),lng:Number(order.deliveryLng)},travelMode:google.maps.TravelMode.DRIVING},(res,st)=>{if(st==='OK'){state.renderer.setDirections(res);if(state.fallbackLine)state.fallbackLine.setMap(null);}});return;
   }
   const pos={lat:Number(live.lat),lng:Number(live.lng)};
-  if(!state.driverMarker)state.driverMarker=new google.maps.Marker({map:state.map,position:pos,zIndex:20,optimized:false});
+  if(!state.driverMarker)state.driverMarker=new google.maps.Marker({map:state.map,position:pos,zIndex:100,optimized:false});
   else animateCustomerMarker(state.driverMarker,pos);
+  state.driverMarker.setZIndex(100);
   setCustomerVehicleStyle(state.driverMarker,order,live);
+  const visibleBounds=state.map.getBounds();if(visibleBounds&&!visibleBounds.contains(pos))state.map.panTo(pos);
   const age=Math.max(0,Math.round((Date.now()-new Date(live.updatedAt).getTime())/1000)),ageText=age<8?'just now':age<60?age+' sec ago':Math.floor(age/60)+' min ago';
   const vehicleName=(live.driverVehicle||order.assignedDriverVehicle||'Driver vehicle');
   if(status)status.innerHTML='<i class="fas fa-location-arrow"></i> '+vehicleName+' · '+(phase==='to_delivery'?'heading to your delivery point':'heading to pickup')+' · updated '+ageText;
   const moved=!state.lastOrigin||Math.abs(state.lastOrigin.lat-pos.lat)+Math.abs(state.lastOrigin.lng-pos.lng)>.00012;
-  if((force||moved)&&Date.now()-state.lastRouteAt>8000){state.lastRouteAt=Date.now();state.lastOrigin=pos;state.directions.route({origin:pos,destination:target,travelMode:google.maps.TravelMode.DRIVING},(res,st)=>{if(st==='OK')state.renderer.setDirections(res);});}
+  if((force||moved)&&Date.now()-state.lastRouteAt>8000){state.lastRouteAt=Date.now();state.lastOrigin=pos;if(state.fallbackLine){state.fallbackLine.setPath([pos,target]);state.fallbackLine.setMap(state.map);}state.directions.route({origin:pos,destination:target,travelMode:google.maps.TravelMode.DRIVING},(res,st)=>{if(st==='OK'){state.renderer.setDirections(res);if(state.fallbackLine)state.fallbackLine.setMap(null);}});}
 }
 function refreshCustomerLiveMaps(){
   const myOrders=allD.filter(o=>me&&o.createdBy===me.email&&o.assignedDriverId&&o.status!=='Delivered');
