@@ -2116,7 +2116,7 @@ function restoreDraft(d){
   if(d.ctV){$('ctV').value=d.ctV;$('ctIsExpress').value=d.ctIsExpress||'0';$('ctIsAir').value=d.ctIsAir||'0';
     document.querySelectorAll('.ct-card').forEach(el=>{const ct=allCargoTypes.find(c=>c.name===d.ctV);if(ct&&String(el.dataset.id)===String(ct.id))el.classList.add('active');});
     if(d.ctIsAir==='1'){showAirUI();setTimeout(()=>{setAirSubType(d.airSubType||'normal');if(d.airCode){const btn=document.querySelector(`.air-island-btn[data-code="${d.airCode}"]`);if(btn)selAirIsland(btn);}if(d.airWeight){$('airWeight').value=d.airWeight;calcAirPrice();}},300);}
-    else{hideAirUI();if(d.ctIsExpress==='1'){$('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');}else{$('expressFlowWrap').classList.remove('show');$('weightSec').classList.add('show');}const ct=allCargoTypes.find(c=>c.name===d.ctV);if(ct)loadPickupGrid(ct.pickupIds&&ct.pickupIds.length?ct.pickupIds:null);}
+    else{hideAirUI();$('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.toggle('show',d.ctIsExpress==='1');const ct=allCargoTypes.find(c=>c.name===d.ctV);if(ct){loadPkgSizeGrid(ct.id);loadPickupGrid(ct.pickupIds&&ct.pickupIds.length?ct.pickupIds:null);}}
   }
   if(d.pkgDesc)$('pkgDesc').value=d.pkgDesc;if(d.dDate)$('dDate').value=d.dDate;
   setTimeout(()=>calcTotal(),400);
@@ -2145,7 +2145,7 @@ function loadCtypeGrid(){
   // Non-air cargo types from Firebase
   const nonAirTypes=[...allCargoTypes].filter(ct=>!ct.isAir&&ct.key!=='air').sort((a,b)=>(a.order||0)-(b.order||0));
   const nonAirHTML=nonAirTypes.map(ct=>{
-    const prLabel=ct.isExpress?'Select size &amp; time':'Select weight';
+    const prLabel=ct.isExpress?'Select size &amp; time':'Select package size';
     return`<div class="ct-card${ct.isExpress?' express-card':''}" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${prLabel}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`;
   }).join('');
 
@@ -2159,7 +2159,7 @@ function loadCtypeGrid(){
         <i class="fas fa-box"></i>
         <div class="ct-name">Normal Cargo</div>
         <div class="ct-eta">Standard delivery</div>
-        <div class="ct-pr">Select weight</div>
+        <div class="ct-pr">Select package size</div>
         <div class="ct-ck"><i class="fas fa-check"></i></div>
       </div>
       <div class="ct-card express-card" data-id="express" onclick="selCtype(this,'express')">
@@ -2180,7 +2180,7 @@ function loadDashboardCargoTypes(){
   const g=$('dashCargoGrid');if(!g)return;
   const icons={normal:'fa-box',express:'fa-bolt',fragile:'fa-wine-glass-crack',oversized:'fa-pallet',custom:'fa-cube'};
   const types=[...allCargoTypes].filter(ct=>!ct.isAir&&ct.key!=='air').sort((a,b)=>Number(!!b.isExpress)-Number(!!a.isExpress)||(a.order||0)-(b.order||0));
-  const cards=types.map(ct=>`<button type="button" class="dash-cargo-card${ct.isExpress?' express':''}" onclick="openDeliveryForCargo('${ct.id}')"><span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i></span><div class="dash-cargo-name">${ct.name}</div><div class="dash-cargo-eta">${ct.eta||(ct.isExpress?'Same Day':'3–5 Business Days')}</div><div class="dash-cargo-action">${ct.isExpress?'Select size & time':'Select weight'}</div></button>`).join('');
+  const cards=types.map(ct=>`<button type="button" class="dash-cargo-card${ct.isExpress?' express':''}" onclick="openDeliveryForCargo('${ct.id}')"><span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i></span><div class="dash-cargo-name">${ct.name}</div><div class="dash-cargo-eta">${ct.eta||(ct.isExpress?'Same Day':'3–5 Business Days')}</div><div class="dash-cargo-action">${ct.isExpress?'Select size & time':'Select package size'}</div></button>`).join('');
   const air=`<button type="button" class="dash-cargo-card air" onclick="openDeliveryForCargo('__air__')"><span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas fa-plane"></i></span><div class="dash-cargo-name">Air Cargo</div><div class="dash-cargo-eta">Domestic Flights</div><div class="dash-cargo-action">Normal & Express</div></button>`;
   g.innerHTML=cards+air;
 }
@@ -2252,8 +2252,7 @@ window.selCtype=function(el,id){
     const etaEl=$('etaInfo');if(ct.eta&&etaEl){etaEl.classList.add('show');$('etaV').textContent=ct.eta;}else if(etaEl){etaEl.classList.remove('show');}
     const assigned=ct.pickupIds&&ct.pickupIds.length>0?ct.pickupIds:null;
     hideStep('stepPickup');hideStep('stepMode');
-    if(ct.isExpress){$('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.remove('show');loadPkgSizeGrid(ct.id);loadPickupGrid(assigned);}
-    else{$('expressFlowWrap').classList.remove('show');$('weightSec').classList.add('show');$('expressTimeWrap').classList.remove('show');loadWeights();loadPickupGrid(assigned);}
+    $('expressFlowWrap').classList.add('show');$('weightSec').classList.remove('show');$('expressTimeWrap').classList.remove('show');loadPkgSizeGrid(ct.id);loadPickupGrid(assigned);
   }
   calcTotal();
 };
@@ -2272,6 +2271,7 @@ function loadPkgSizeGrid(ctId){
       +'<div class="pkg-size-card" data-szid="large" data-name="Large" data-maxkg="30"><i class="fas fa-boxes-stacked psz-icon"></i><div class="psz-name">Large</div><div class="psz-weight">Up to 30 kg</div><div class="pkg-size-ck"><i class="fas fa-check"></i></div></div>';
     window._pendingExpressCtId=ctId;
     g.querySelectorAll('.pkg-size-card').forEach(function(c){c.onclick=function(){selPkgSize(c,c.dataset.szid);};});
+    $('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';if($('selTimeDeadline'))$('selTimeDeadline').value='';$('expressTimeWrap').classList.remove('show');
     return;
   }
   window._pendingExpressCtId=null;
@@ -2288,6 +2288,10 @@ function loadPkgSizeGrid(ctId){
   if($('selSizeId'))$('selSizeId').value='';
   if($('selSizeName'))$('selSizeName').value='';
   if($('selSizeWeight'))$('selSizeWeight').value='';
+  if($('selTimeId'))$('selTimeId').value='';
+  if($('selTimePrice'))$('selTimePrice').value='0';
+  if($('selTimeLabel'))$('selTimeLabel').value='';
+  if($('selTimeDeadline'))$('selTimeDeadline').value='';
   if($('expressTimeWrap'))$('expressTimeWrap').classList.remove('show');
   calcTotal();
 }
@@ -2301,9 +2305,7 @@ let selectedRouteDriverEarning=0;
 let selectedRouteDriverPercent=0;
 function currentLinkedPriceSelection(){
   const cargoTypeId=$('ctypeGrid')?.querySelector('.ct-card.active')?.dataset?.id||'';
-  if($('ctIsExpress').value==='1')return{cargoTypeId:String(cargoTypeId),packageKey:'size:'+($('selSizeId').value||'')};
-  const nums=String($('selW').value||'').match(/[\d.]+/g)||[];
-  return{cargoTypeId:String(cargoTypeId),packageKey:nums.length>=2?'weight:'+Number(nums[0])+'|'+Number(nums[1]):''};
+  return{cargoTypeId:String(cargoTypeId),packageKey:'size:'+($('selSizeId').value||'')};
 }
 function loadManualVehicles(){const grid=$('manualVehicleGrid');if(!grid)return;grid.innerHTML=MANUAL_VEHICLES.map(v=>'<button type="button" class="manual-vehicle-card" data-key="'+v.key+'" data-vehicle-price="0" data-available="0" onclick="selectManualVehicle(this,\''+v.key+'\')"><img class="mvc-image" src="'+v.image+'" alt="'+v.label+' vehicle"><div class="mvc-name">'+v.label+'</div><div class="mvc-total-label">Area Price</div><div class="mvc-price">Select location</div></button>').join('');applyZoneVehiclePricing(null);}
 function applyZoneVehiclePricing(zone){
@@ -2316,7 +2318,7 @@ function applyZoneVehiclePricing(zone){
   calcTotal();
 }
 window.selectManualVehicle=function(el,key){if(el.dataset.available!=='1'){showToast($('deliveryLat').value?'This vehicle has no price for this cargo and package in the selected route':'Select the delivery location on the map first','err');return;}document.querySelectorAll('.manual-vehicle-card').forEach(b=>b.classList.remove('active'));el.classList.add('active');el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});const def=MANUAL_VEHICLES.find(v=>v.key===key);$('requiredVehicleCategory').value=key;$('requiredVehicleLabel').value=def?def.label:key;$('selectedVehiclePrice').value=parseFloat(el.dataset.vehiclePrice)||0;selectedRouteDriverEarning=parseFloat(el.dataset.driverEarning)||0;selectedRouteDriverPercent=parseFloat(el.dataset.driverPercent)||0;calcTotal();setTimeout(()=>$('manualVehiclePanel').scrollIntoView({behavior:'smooth',block:'center'}),180);};
-window.selPkgSize=function(el,id){const already=el.classList.contains('active');if(already){document.querySelectorAll('.pkg-size-card').forEach(c=>{c.classList.remove('active');c.style.display='';});$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';$('expressTimeWrap').classList.remove('show');clearPackageVehicle();hideStep('stepPickup');calcTotal();return;}document.querySelectorAll('.pkg-size-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.pkg-size-card').forEach(c=>c.style.display=c===el?'block':'none');const sz=allExpressSizes.find(s=>String(s.id)===String(id))||{id,name:el.dataset.name||'Package',maxKg:Number(el.dataset.maxkg)||5};$('selSizeId').value=sz.id;$('selSizeName').value=sz.name;$('selSizeWeight').value=sz.maxKg;setPackageVehicle(sz.maxKg);$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));hideStep('stepPickup');loadTimeSlots(sz.id);calcTotal();};
+window.selPkgSize=function(el,id){const already=el.classList.contains('active'),isExpress=$('ctIsExpress').value==='1';if(already){document.querySelectorAll('.pkg-size-card').forEach(c=>{c.classList.remove('active');c.style.display='';});$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';$('expressTimeWrap').classList.remove('show');clearPackageVehicle();hideStep('stepPickup');calcTotal();return;}document.querySelectorAll('.pkg-size-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.pkg-size-card').forEach(c=>c.style.display=c===el?'block':'none');const sz=allExpressSizes.find(s=>String(s.id)===String(id))||{id,name:el.dataset.name||'Package',maxKg:Number(el.dataset.maxkg)||5};$('selSizeId').value=sz.id;$('selSizeName').value=sz.name;$('selSizeWeight').value=sz.maxKg;setPackageVehicle(sz.maxKg);$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';document.querySelectorAll('.time-slot-btn').forEach(b=>b.classList.remove('active'));hideStep('stepPickup');if(isExpress)loadTimeSlots(sz.id);else{$('expressTimeWrap').classList.remove('show');revealStep('stepPickup');}calcTotal();};
 function loadTimeSlots(sizeId){const g=$('timeSlotGrid');const ctId=$('ctypeGrid').querySelector('.ct-card.active')?.dataset?.id||'';const slots=allExpressHrs.filter(h=>String(h.sizeId)===String(sizeId)&&(ctId?String(h.cargoTypeId)===String(ctId):true));if(!slots.length){g.innerHTML='<div class="empty-s" style="grid-column:1/-1;padding:.6rem"><p>No time options for this size.</p></div>';$('expressTimeWrap').classList.add('show');return;}const sorted=[...slots].sort((a,b)=>(a.minutes||0)-(b.minutes||0));g.innerHTML=sorted.map(ts=>`<button type="button" class="time-slot-btn" data-id="${ts.id}" data-price="${ts.price}" data-label="${ts.label||''}" onclick="selTimeSlot(this)"><span class="ts-dur">${ts.label||''}</span><span class="ts-lbl">Delivery Time</span><div class="time-slot-ck"><i class="fas fa-check"></i></div></button>`).join('');$('expressTimeWrap').classList.add('show');}
 window.selTimeSlot=function(el){
   const already=el.classList.contains('active');
@@ -3037,7 +3039,7 @@ function startIdxDriverTimers(){
 }
 
 function loadRefs(){if(!me)return;const mine=allD.filter(d=>d.createdBy===me.email);const el=$('myRefs');if(!mine.length){el.innerHTML='<div class="empty-s"><i class="fas fa-inbox"></i><p>No deliveries yet.</p></div>';return}el.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem">'+[...mine].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(d=>`<div style="font-family:monospace;font-size:.7rem;font-weight:700;padding:5px 11px;border-radius:17px;cursor:pointer;${d.status==='Delivered'?'background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.22);color:#27ae60':'background:rgba(231,76,60,.13);border:1px solid rgba(231,76,60,.26);color:#e74c3c'}" onclick="jmpTrk('${d.referenceNumber}')">${d.referenceNumber}</div>`).join('')+'</div>'}
-function getSizeWeightDisplay(d){if(d.isAir||d.deliveryMode==='air')return(d.airDestination||'—')+(d.airWeight?' / '+d.airWeight:'')+(d.airSubType?' ['+(d.airSubType==='express'?'Express':'Normal')+' Air]':'');if(d.isExpress)return(d.packageSize||'—')+(d.selectedHrLabel?' — '+d.selectedHrLabel:'');return d.packageWeight||'—';}
+function getSizeWeightDisplay(d){if(d.isAir||d.deliveryMode==='air')return(d.airDestination||'—')+(d.airWeight?' / '+d.airWeight:'')+(d.airSubType?' ['+(d.airSubType==='express'?'Express':'Normal')+' Air]':'');return(d.packageSize||d.packageWeight||'—')+(d.isExpress&&d.selectedHrLabel?' — '+d.selectedHrLabel:'');}
 function loadMyTbl(){if(!me)return;const mine=[...allD.filter(d=>d.createdBy===me.email)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));const tb=$('myDeliveryList');if(!mine.length){tb.innerHTML='<div class="empty-s" style="grid-column:1/-1"><i class="fas fa-box-open"></i><p>No deliveries yet.</p></div>';return}tb.innerHTML=mine.map(d=>{
     const isAir=d.isAir||d.deliveryMode==='air';
     const pickupFull=(d.pickupLocation||'')+(d.pickupAddress?' — '+d.pickupAddress:'');
@@ -3096,8 +3098,8 @@ $('cargoForm').addEventListener('submit',function(e){
     const pickup=$('pLocVal').value;if(!pickup){showToast('Select a pickup location','err');return;}
     if(!dMode){showToast('Select a delivery mode','err');return;}
     if(dMode==='cargo'){if(!$('pickupLat').value||!$('pickupLng').value){showToast('Set an accurate pickup point on the map first','err');$('cargoDeliveryMap').scrollIntoView({behavior:'smooth',block:'center'});return;}if(!$('deliveryLat').value||!$('deliveryLng').value){showToast('Search or tap the map to set the delivery point','err');$('cargoDeliveryMap').scrollIntoView({behavior:'smooth',block:'center'});return;}if(!$('requiredVehicleCategory').value){showToast('Select Any, Car, Motorcycle or Van','err');$('manualVehiclePanel').scrollIntoView({behavior:'smooth',block:'center'});return;}
-      if($('ctIsExpress').value==='1'){if(!$('selSizeId').value){showToast('Select a package size','err');return;}if(!$('selTimeId').value){showToast('Select a time slot','err');return;}}
-      else{if(!$('selW').value){showToast('Select a weight range','err');return;}}
+      if(!$('selSizeId').value){showToast('Select a package size','err');return;}
+      if($('ctIsExpress').value==='1'&&!$('selTimeId').value){showToast('Select a time slot','err');return;}
     }else if(dMode==='boat'){if(!($('selBoat').value||$('manualBoatName').value)){showToast('Select or enter a boat name','err');return;}if(!($('selIsl').value||$('manualBoatIsland').value)){showToast('Select a destination island','err');return;}}
     else if(dMode==='speedboat'){if(!($('selSB').value||$('manualSBName').value)){showToast('Select or enter a speed boat name','err');return;}if(!($('selSBIsl').value||$('manualSBIsland').value)){showToast('Select a destination island','err');return;}}
   }
@@ -3122,13 +3124,13 @@ $('cargoForm').addEventListener('submit',function(e){
     cargoType:ctype,isExpress:isExp&&!isAir,isAir,
     airSubType:isAir?$('airSubType').value:'',airDestination:isAir?$('airSelIslandName').value:'',
     airWeight:isAir?($('airSelWeightRange').value||''):'',airGroup:isAir?$('airSelIslandGroup').value:'',
-    packageSize:isExp&&!isAir?($('selSizeName').value+' / up to '+$('selSizeWeight').value+' kg'):'',
-    selectedSizeName:isExp&&!isAir?$('selSizeName').value||'':'',selectedHrLabel:isExp&&!isAir?$('selTimeLabel').value:'',
+    packageSize:!isAir?($('selSizeName').value+' / up to '+$('selSizeWeight').value+' kg'):'',
+    selectedSizeName:!isAir?$('selSizeName').value||'':'',selectedHrLabel:isExp&&!isAir?$('selTimeLabel').value:'',
     requiredVehicleCategory:!isAir&&dMode==='cargo'?($('requiredVehicleCategory').value||''):'',requiredVehicleType:!isAir&&dMode==='cargo'?($('requiredVehicleLabel').value||''):'',vehiclePrice:!isAir&&dMode==='cargo'?(parseFloat($('selectedVehiclePrice').value)||0):0,mapRoutePrice:!isAir&&dMode==='cargo'?(parseFloat($('routePrice').value)||0):0,
     linkedPriceZoneId:!isAir&&dMode==='cargo'?(activeVehiclePriceZone?.id||''):'',linkedPriceZoneName:!isAir&&dMode==='cargo'?(activeVehiclePriceZone?.name||''):'',linkedPackageKey:!isAir&&dMode==='cargo'?currentLinkedPriceSelection().packageKey:'',routeDriverEarning:!isAir&&dMode==='cargo'?selectedRouteDriverEarning:0,routeDriverPercent:!isAir&&dMode==='cargo'?selectedRouteDriverPercent:0,
     expressDeadline:(()=>{if(!isExp||isAir)return'';const t=$('selTimeDeadline')?.value||'';if(!t)return'';if(t.includes('T'))return t;const dDate=$('dDate')?.value||'';if(dDate){const pts=t.split(':');const d=new Date(dDate+'T00:00:00');d.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);return d.toISOString();}return t;})(),
     deliveryDuration:!isExp&&!isAir?'3-5 Business Days':'',
-    packageWeight:!isExp&&!isAir?$('selW').value:'—',
+    packageWeight:!isAir?($('selSizeName').value+' / up to '+$('selSizeWeight').value+' kg'):'—',
     floorLevel:$('floorNum').value||'',packageDescription:$('pkgDesc').value||'',
     deliveryPrice:price,basePrice:parseFloat($('hiddenBasePrice').value)||price,
     discountAmount:parseFloat($('hiddenDiscount').value)||0,discountPercent:parseFloat($('hiddenDiscountPct').value)||0,
@@ -3201,7 +3203,7 @@ $('payConfirm').onclick=async()=>{
     const _d=tmpD;
     const _discStr=_d.discountAmount>0?'\nDiscount: -MVR '+_d.discountAmount+' ('+_d.discountPercent+'% loyalty)\nOriginal: MVR '+_d.basePrice:'';
     const _airStr=_d.isAir?'\nType: Air Cargo ('+_d.airSubType+')\nDest: '+_d.airDestination+'\nWeight: '+_d.airWeight:'';
-    const _msg='New EasyCargo Delivery\nRef: '+_d.referenceNumber+'\nCustomer: '+_d.customerName+'\nContact: '+_d.customerContact+'\nCargo: '+_d.cargoType+(_d.isAir?_airStr:(_d.isExpress?'\nSize: '+_d.packageSize+'\nDuration: '+_d.selectedHrLabel:'\nWeight: '+_d.packageWeight))+'\nMode: '+_d.deliveryMode+'\nPickup: '+(_d.isAir?_d.pickupLocation||'Air':_d.pickupLocation)+'\nTo: '+_d.deliveryLocation+'\nPrice: MVR '+_d.deliveryPrice+_discStr+'\nDate: '+_d.deliveryDate;
+    const _msg='New EasyCargo Delivery\nRef: '+_d.referenceNumber+'\nCustomer: '+_d.customerName+'\nContact: '+_d.customerContact+'\nCargo: '+_d.cargoType+(_d.isAir?_airStr:('\nSize: '+_d.packageSize+(_d.isExpress?'\nDuration: '+_d.selectedHrLabel:'')))+'\nMode: '+_d.deliveryMode+'\nPickup: '+(_d.isAir?_d.pickupLocation||'Air':_d.pickupLocation)+'\nTo: '+_d.deliveryLocation+'\nPrice: MVR '+_d.deliveryPrice+_discStr+'\nDate: '+_d.deliveryDate;
     const TBOT='8417757176:AAEWgzN_MK9ljtV9WN4vtW1ag9ZoYEsY6Ck';
     await Promise.allSettled([965429044,7307324767,319043357].map(cid=>fetch('https://api.telegram.org/bot'+TBOT+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:cid,text:_msg})})));
     setStep('pstep3','done');setProgress(90,'Almost done…','Cleaning up…');
