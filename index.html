@@ -1366,6 +1366,7 @@ img{max-width:100%;height:auto}
       <div style="font-size:.65rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;font-family:monospace;margin-bottom:4px">Amount to Pay</div>
       <div id="payAmt" style="font-size:2rem;font-weight:900;color:#f39c12;font-family:monospace;letter-spacing:1px">0 MVR</div>
     </div>
+    <div id="payAirNotice" style="display:none;margin-bottom:.8rem;background:rgba(155,89,182,.09);border:1px solid rgba(155,89,182,.3);border-radius:12px;padding:.7rem;color:rgba(255,255,255,.62);font-size:.67rem;line-height:1.55"><i class="fas fa-plane" style="color:#c58af9;margin-right:5px"></i>This payment covers the EasyCargo linked route. After the driver uploads the <b style="color:white">Maldivian Cargo Consignment Note</b>, its separate amount will appear as a red pending payment on your Dashboard.</div>
     <!-- Bank details -->
     <div class="bank-box">
       <div class="bank-row"><span class="bk">Bank</span><span class="bv">Bank of Maldives</span></div>
@@ -1661,6 +1662,7 @@ window.selAirIsland=function(el){
   if($('deliveryModeChoices'))$('deliveryModeChoices').style.display='none';
   if($('deliveryModeLabel'))$('deliveryModeLabel').innerHTML='<i class="fas fa-map-location-dot" style="color:#f39c12;margin-right:4px"></i>Delivery Location';
   $('stepMode').style.display='block';setMode('cargo');
+  if($('houseAddrWrap'))$('houseAddrWrap').style.display='none';if($('floorWrap'))$('floorWrap').classList.remove('show');
   setTimeout(async()=>{
     await initCargoDeliveryMap();
     const pLat=parseFloat($('pickupLat').value),pLng=parseFloat($('pickupLng').value);
@@ -2213,11 +2215,11 @@ function loadDashboardRunningOrders(){
   const wrap=$('dashboardRunningOrders');if(!wrap||!me)return;
   const running=allD.filter(o=>o.createdBy===me.email&&o.assignedDriverId&&o.status!=='Delivered').sort((a,b)=>new Date(b.assignedAt||b.createdAt)-new Date(a.assignedAt||a.createdAt));
   if(!running.length){wrap.classList.remove('show');wrap.innerHTML='';return;}
-  const o=running[0],driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId))||driverFromOrder(o),phase=customerOrderPhase(o,customerLiveForOrder(o));
+  const o=running[0],driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId))||driverFromOrder(o),phase=customerOrderPhase(o,customerLiveForOrder(o)),airPayDue=(o.isAir||o.deliveryMode==='air')&&(parseFloat(o.airConsignmentAmount)||0)>0&&o.airConsignmentPaymentStatus!=='paid',airPayReview=o.airConsignmentPaymentStatus==='under_review';
   wrap.classList.add('show');wrap.innerHTML=`<div class="dash-section-head"><i class="fas fa-route"></i> Running Delivery <span>${running.length>1?running.length+' ACTIVE':'LIVE'}</span></div>
-    <button type="button" class="dash-running-card" onclick="switchTab('sDriver')">
+    <button type="button" class="dash-running-card" onclick="${airPayDue&&!airPayReview?`openAirCargoPayment('${o.id}')`:`switchTab('sDriver')`}" style="${airPayDue?'border-color:rgba(231,76,60,.65);background:linear-gradient(145deg,rgba(86,20,24,.95),#162033)':''}">
       <span class="dash-running-icon"><i class="fas ${/motor|bike|scooter/i.test((driver&&driver.vehicle)||'')?'fa-motorcycle':'fa-truck-fast'}"></i></span>
-      <span class="dash-running-main"><span class="dash-running-label">${o.referenceNumber||'ACTIVE ORDER'}</span><span class="dash-running-title">${driver&&driver.name?driver.name+' · ':''}${phase==='to_delivery'?'Coming to you':'Going to pickup'}</span><span class="dash-running-sub">${o.pickupLocation||'Pickup'} → ${o.deliveryAddress||o.deliveryLocation||o.airDestination||'Delivery'}</span></span>
+      <span class="dash-running-main"><span class="dash-running-label">${o.referenceNumber||'ACTIVE ORDER'}</span><span class="dash-running-title" style="${airPayDue?'color:#ff7675':''}">${airPayDue?(airPayReview?'Air Cargo payment reviewing':'Payment Pending · MVR '+o.airConsignmentAmount):(driver&&driver.name?driver.name+' · ':'')+(phase==='to_delivery'?'Coming to you':'Going to pickup')}</span><span class="dash-running-sub">${o.pickupLocation||'Pickup'} → ${o.deliveryAddress||o.deliveryLocation||o.airDestination||'Delivery'}</span></span>
       <span class="dash-running-go"><i class="fas fa-chevron-right"></i></span>
     </button>`;
 }
@@ -2634,7 +2636,7 @@ function setCargoDeliveryPoint(position,address){
   cargoDeliveryMarker=new google.maps.Marker({map:cargoMap,position,draggable:true,title:'Delivery',animation:google.maps.Animation.DROP,label:{text:'D',color:'#fff',fontWeight:'800'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:'#3498db',fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
   cargoDeliveryMarker.addListener('dragend',e=>setCargoDeliveryPoint(e.latLng));
   $('deliveryLat').value=position.lat();$('deliveryLng').value=position.lng();
-  const finish=a=>{const exact=a||'Pinned delivery point';$('mapDeliveryAddress').value=exact;$('dLocVal').value=exact;setCargoMapStatus('Delivery point set: '+exact+' — drag the blue marker to adjust.',true);$('cargoRoutePreview').style.display='inline-block';const hw=$('houseAddrWrap');if(hw)hw.style.display='block';const fw=$('floorWrap');if(fw&&allFloors.length){fw.classList.add('show');loadFloorSelector();}$('manualVehiclePanel').classList.add('show');applyZoneVehiclePricing(customerMapPriceZone(position));drawCargoRoute();if(isFirstDelivery)setTimeout(()=>$('manualVehiclePanel').scrollIntoView({behavior:'smooth',block:'start'}),350);};
+  const finish=a=>{const exact=a||'Pinned delivery point';$('mapDeliveryAddress').value=exact;$('dLocVal').value=exact;setCargoMapStatus('Delivery point set: '+exact+' — drag the blue marker to adjust.',true);$('cargoRoutePreview').style.display='inline-block';const isAir=$('ctIsAir').value==='1',hw=$('houseAddrWrap');if(hw)hw.style.display=isAir?'none':'block';const fw=$('floorWrap');if(fw){if(!isAir&&allFloors.length){fw.classList.add('show');loadFloorSelector();}else fw.classList.remove('show');}$('manualVehiclePanel').classList.add('show');applyZoneVehiclePricing(customerMapPriceZone(position));drawCargoRoute();if(isFirstDelivery)setTimeout(()=>$('manualVehiclePanel').scrollIntoView({behavior:'smooth',block:'start'}),350);};
   if(address)finish(address);else cargoGeocoder.geocode({location:position},(res,status)=>finish(status==='OK'&&res[0]?res[0].formatted_address:'Pinned delivery location'));
 }
 function customerMapPriceZone(deliveryPosition){const raw=(siteSettings.mapPricing||{}).zones,zones=Array.isArray(raw)?raw:raw?Object.values(raw):[];if(!deliveryPosition||!window.google?.maps?.geometry)return null;const pLat=parseFloat($('pickupLat').value),pLng=parseFloat($('pickupLng').value),pickupPosition=isFinite(pLat)&&isFinite(pLng)?new google.maps.LatLng(pLat,pLng):null,inside=(point,area)=>point&&area&&isFinite(Number(area.lat))&&isFinite(Number(area.lng))&&Number(area.radius)>0&&google.maps.geometry.spherical.computeDistanceBetween(point,new google.maps.LatLng(Number(area.lat),Number(area.lng)))<=Number(area.radius),selection=currentLinkedPriceSelection(),matchesSelection=z=>!Array.isArray(z.priceRules)||z.priceRules.some(r=>String(r.cargoTypeId)===selection.cargoTypeId&&r.packageKey===selection.packageKey);return zones.filter(z=>z.from&&z.to&&inside(pickupPosition,z.from)&&inside(deliveryPosition,z.to)&&matchesSelection(z)).sort((a,b)=>Number(a.to.radius)-Number(b.to.radius))[0]||null;}
@@ -2732,6 +2734,21 @@ function indexOrderRemaining(o,dl){
   if(totalMs<=0)totalMs=1;
   return{totalMs,remainMs};
 }
+
+function airConsignmentPaymentHtml(order){
+  const isAir=order.isAir||order.deliveryMode==='air',amount=parseFloat(order.airConsignmentAmount)||0;if(!isAir||amount<=0)return'';
+  const status=order.airConsignmentPaymentStatus||'pending',paid=status==='paid',review=status==='under_review',color=paid?'#27ae60':review?'#f39c12':'#e74c3c';
+  return `<div style="margin:.7rem 0;background:${color}12;border:1.5px solid ${color}55;border-radius:14px;padding:.75rem">
+    <div style="display:flex;align-items:center;gap:10px"><div style="width:40px;height:40px;border-radius:11px;background:${color}22;color:${color};display:grid;place-items:center"><i class="fas fa-file-invoice-dollar"></i></div><div style="flex:1;min-width:0"><div style="font-size:.72rem;color:${color};font-weight:900">${paid?'Maldivian Cargo payment approved':review?'Payment submitted · Backend reviewing':'PAYMENT PENDING'}</div><div style="font-size:.62rem;color:rgba(255,255,255,.48);margin-top:2px">Consignment Note · <b style="color:white">MVR ${amount.toFixed(2).replace(/\.00$/,'')}</b></div></div>${order.airConsignmentNote?`<button type="button" onclick="event.stopPropagation();viewAirConsignmentDocument('${order.id}')" style="border:1px solid ${color}55;background:${color}16;color:${color};border-radius:9px;padding:7px;cursor:pointer"><i class="fas fa-eye"></i></button>`:''}</div>
+    ${!paid&&!review?`<button type="button" onclick="event.stopPropagation();openAirCargoPayment('${order.id}')" style="width:100%;margin-top:.65rem;border:0;border-radius:11px;padding:10px;background:#e74c3c;color:white;font:800 .72rem inherit;cursor:pointer"><i class="fas fa-wallet"></i> Pay MVR ${amount.toFixed(2).replace(/\.00$/,'')} Now</button>`:''}
+  </div>`;
+}
+window.viewAirConsignmentDocument=function(orderId){const o=allD.find(x=>String(x.id)===String(orderId));if(!o?.airConsignmentNote)return;if(/^data:application\/pdf/i.test(o.airConsignmentNote)){const w=window.open();if(w)w.location=o.airConsignmentNote;}else viewSlip(o.airConsignmentNote);};
+window.openAirCargoPayment=function(orderId){
+  const o=allD.find(x=>String(x.id)===String(orderId));if(!o)return;document.getElementById('airCargoChargeMod')?.remove();
+  const mod=document.createElement('div');mod.id='airCargoChargeMod';mod.className='modal-overlay show';mod.innerHTML=`<div class="modal-box" style="max-width:430px"><div class="modal-hd"><div class="modal-title"><i class="fas fa-plane" style="color:#9b59b6"></i> Air Cargo Payment</div><button class="close-btn" onclick="document.getElementById('airCargoChargeMod').remove()"><i class="fas fa-times"></i></button></div><div style="text-align:center;background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.3);border-radius:14px;padding:.9rem;margin-bottom:.8rem"><div style="font-size:.62rem;color:rgba(255,255,255,.45)">MALDIVIAN CARGO CONSIGNMENT NOTE</div><div style="font:900 1.7rem monospace;color:#e74c3c;margin-top:4px">MVR ${Number(o.airConsignmentAmount).toFixed(2).replace(/\.00$/,'')}</div></div><div class="bank-box"><div class="bank-row"><span class="bk">Bank</span><span class="bv">Bank of Maldives</span></div><div class="bank-row"><span class="bk">Account Name</span><span class="bv">EasyCargo MV</span></div><div class="bank-row"><span class="bk">Account No.</span><span class="bv" style="font-family:monospace">7730000770230</span></div></div><div class="fg"><label>Upload Payment Slip</label><div class="file-zone"><input type="file" id="airChargeSlip" accept="image/*"><i class="fas fa-cloud-arrow-up"></i><span>Tap to attach payment slip</span></div></div><button type="button" id="airChargeSubmit" class="btn btn-gold" style="width:100%" onclick="submitAirCargoPayment('${o.id}')"><i class="fas fa-paper-plane"></i> Submit Payment for Review</button></div>`;document.body.appendChild(mod);
+};
+window.submitAirCargoPayment=async function(orderId){const input=$('airChargeSlip'),file=input?.files[0];if(!file){showToast('Attach the Air Cargo payment slip','err');return;}const btn=$('airChargeSubmit');btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> Submitting…';try{const slip=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=e=>resolve(e.target.result);r.onerror=reject;r.readAsDataURL(file);});const snap=await db.ref('cargoDeliveries').once('value'),orders=toArr(snap.val()),idx=orders.findIndex(x=>String(x.id)===String(orderId));if(idx<0)throw new Error('Order not found');await db.ref('cargoDeliveries/'+idx).update({airConsignmentPaymentSlip:slip,airConsignmentPaymentStatus:'under_review',airConsignmentPaymentSubmittedAt:new Date().toISOString()});$('airCargoChargeMod')?.remove();showToast('Air Cargo payment submitted for Backend review','ok');}catch(e){showToast('Payment upload failed: '+e.message,'err');btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Submit Payment for Review';}};
 
 function buildDriverCard(order,driver,type){
   const isActive=type==='active';
@@ -2848,6 +2865,8 @@ function buildDriverCard(order,driver,type){
       ${hasLiveMap?customerLiveMapPanel(order):''}
 
       ${proofHtml}
+
+      ${airConsignmentPaymentHtml(order)}
 
       <!-- Progress bar + live countdown timer -->
       ${timerHtml}
@@ -3167,7 +3186,7 @@ $('cargoForm').addEventListener('submit',function(e){
   tmpD={
     referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,
     pickupLocation:isAir?$('airPickupVal').value:$('pLocVal').value,pickupAddress:$('addrVal').value||$('airAddrVal').value||'',
-    deliveryAddress:(dMode==='cargo'?[ $('mapDeliveryAddress').value,$('houseAddr').value.trim() ].filter(Boolean).join(' — '):'')||$('delivAddrVal')?.value||$('addrVal')?.value||'',
+    deliveryAddress:(dMode==='cargo'?[ $('mapDeliveryAddress').value,isAir?'':$('houseAddr').value.trim() ].filter(Boolean).join(' — '):'')||$('delivAddrVal')?.value||$('addrVal')?.value||'',
     deliveryMode:isAir?'air':dMode,deliveryLocation:isAir?$('airSelIslandName').value:dest,
     pickupLat:parseFloat($('pickupLat').value)||null,pickupLng:parseFloat($('pickupLng').value)||null,pickupSelectionMethod:pickupMethod||'configured',
     deliveryLat:dMode==='cargo'?parseFloat($('deliveryLat').value):null,deliveryLng:dMode==='cargo'?parseFloat($('deliveryLng').value):null,mapDistanceKm:dMode==='cargo'?(parseFloat($('mapDistanceKm').value)||null):null,
@@ -3183,13 +3202,13 @@ $('cargoForm').addEventListener('submit',function(e){
     expressDeadline:(()=>{if(!isExp||isAir)return'';const t=$('selTimeDeadline')?.value||'';if(!t)return'';if(t.includes('T'))return t;const dDate=$('dDate')?.value||'';if(dDate){const pts=t.split(':');const d=new Date(dDate+'T00:00:00');d.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);return d.toISOString();}return t;})(),
     deliveryDuration:!isExp&&!isAir?'3-5 Business Days':'',
     packageWeight:!isAir?($('selSizeName').value+' / up to '+$('selSizeWeight').value+' kg'):'—',
-    floorLevel:$('floorNum').value||'',packageDescription:$('pkgDesc').value||'',
+    floorLevel:isAir?'':($('floorNum').value||''),packageDescription:$('pkgDesc').value||'',
     deliveryPrice:price,basePrice:parseFloat($('hiddenBasePrice').value)||price,
     discountAmount:parseFloat($('hiddenDiscount').value)||0,discountPercent:parseFloat($('hiddenDiscountPct').value)||0,
     deliveryDate:$('dDate').value,status:'Order Placed',progress:1,
     id:Date.now(),createdAt:new Date().toISOString(),paymentStatus:'under_review',createdBy:me.email
   };
-  $('payAmt').textContent=price+' MVR';$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';$('payMod').classList.add('show');
+  $('payAmt').textContent=price+' MVR';$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';if($('payAirNotice'))$('payAirNotice').style.display=isAir?'block':'none';$('payMod').classList.add('show');
 });
 
 $('payConfirm').onclick=async()=>{
