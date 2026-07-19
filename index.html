@@ -782,7 +782,7 @@ img{max-width:100%;height:auto}
 .dash-hero:after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:#3498db;filter:blur(75px);opacity:.12;right:-45px;top:-70px}
 .dash-welcome{position:relative;z-index:1;font-size:.68rem;color:#64b4ff;text-transform:uppercase;letter-spacing:1.1px;font-family:monospace;font-weight:800}.dash-title{position:relative;z-index:1;font-size:1.35rem;font-weight:900;color:white;margin-top:.35rem}.dash-desc{position:relative;z-index:1;font-size:.74rem;color:rgba(255,255,255,.45);line-height:1.6;margin-top:.35rem;max-width:480px}
 .dash-section-head{display:flex;align-items:center;gap:8px;margin-bottom:.7rem;color:white;font-weight:800;font-size:.92rem}.dash-section-head i{color:#f39c12}.dash-section-head span{margin-left:auto;color:rgba(255,255,255,.3);font-size:.6rem;font-family:monospace;font-weight:600}
-.dash-cargo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dash-cargo-card{position:relative;min-width:0;background:#182235;border:1.5px solid #304158;border-radius:18px;padding:1.15rem .8rem;cursor:pointer;text-align:center;color:white;font-family:inherit;transition:.22s;overflow:hidden}.dash-cargo-card:hover,.dash-cargo-card:focus{border-color:#f39c12;transform:translateY(-3px);box-shadow:0 9px 25px rgba(243,156,18,.13);outline:none}.dash-cargo-card.express{background:linear-gradient(145deg,rgba(243,156,18,.1),#182235)}.dash-cargo-card.air{background:linear-gradient(145deg,rgba(100,180,255,.1),#182235)}
+.dash-cargo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dash-cargo-card{position:relative;isolation:isolate;min-width:0;background:#182235;border:1.5px solid #304158;border-radius:18px;padding:1.15rem .8rem;cursor:pointer;text-align:center;color:white;font-family:inherit;transition:.22s;overflow:hidden}.dash-cargo-card::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(8,15,29,.48),rgba(8,15,29,.88));pointer-events:none}.dash-cargo-card>*:not(.dash-cargo-bg){position:relative;z-index:2}.dash-cargo-bg{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none}.dash-cargo-card:hover,.dash-cargo-card:focus{border-color:#f39c12;transform:translateY(-3px);box-shadow:0 9px 25px rgba(243,156,18,.13);outline:none}.dash-cargo-card.express{background:linear-gradient(145deg,rgba(243,156,18,.1),#182235)}.dash-cargo-card.air{background:linear-gradient(145deg,rgba(100,180,255,.1),#182235)}
 .dash-cargo-icon{width:48px;height:48px;border-radius:15px;background:rgba(243,156,18,.1);display:flex;align-items:center;justify-content:center;margin:0 auto .65rem;color:#f39c12;font-size:1.35rem}.dash-cargo-card.air .dash-cargo-icon{background:rgba(100,180,255,.12);color:#82b7ff}.dash-cargo-name{font-size:.88rem;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-cargo-eta{font-size:.62rem;color:rgba(255,255,255,.36);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-cargo-action{font-family:monospace;font-size:.62rem;color:#f39c12;font-weight:700;margin-top:.55rem}.dash-cargo-card.air .dash-cargo-action{color:#82b7ff}.dash-cargo-arrow{position:absolute;right:9px;top:9px;width:23px;height:23px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);font-size:.6rem}.dash-cargo-card:hover .dash-cargo-arrow{background:#f39c12;color:#182235}
 .dash-running-wrap{display:none;margin-bottom:1rem;min-width:0}.dash-running-wrap.show{display:block}.dash-running-card{width:100%;max-width:100%;min-width:0;border:1.5px solid rgba(39,174,96,.32);background:linear-gradient(145deg,#10241d,#16283a);border-radius:18px;padding:.82rem;color:#fff;font-family:inherit;text-align:left;cursor:pointer;display:flex;align-items:center;gap:11px;box-shadow:0 10px 26px rgba(0,0,0,.2);overflow:hidden}.dash-running-icon{width:44px;height:44px;border-radius:13px;background:rgba(39,174,96,.14);color:#55d88a;display:grid;place-items:center;font-size:1rem;position:relative;flex:0 0 44px}.dash-running-icon:after{content:'';position:absolute;right:4px;top:4px;width:7px;height:7px;border-radius:50%;background:#55d88a;box-shadow:0 0 0 4px rgba(85,216,138,.12)}.dash-running-main{display:block;flex:1 1 auto;min-width:0;max-width:100%;overflow:hidden}.dash-running-label,.dash-running-title,.dash-running-sub{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-running-label{font-family:monospace;font-size:.53rem;letter-spacing:.65px;color:#55d88a;text-transform:uppercase}.dash-running-title{font-size:.82rem;font-weight:850;margin-top:3px}.dash-running-sub{font-size:.62rem;color:rgba(255,255,255,.45);margin-top:3px}.dash-running-go{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(100,180,255,.12);color:#64b4ff;border:1px solid rgba(100,180,255,.25);flex:0 0 34px}@media(max-width:480px){.dash-running-card{padding:.7rem;gap:9px;border-radius:16px}.dash-running-icon{width:42px;height:42px;flex-basis:42px}.dash-running-title{font-size:.75rem}.dash-running-sub{font-size:.58rem}.dash-running-go{width:31px;height:31px;flex-basis:31px}}
 .selected-cargo-summary{display:none;align-items:center;gap:11px;background:linear-gradient(145deg,rgba(243,156,18,.1),rgba(255,255,255,.025));border:1.5px solid rgba(243,156,18,.3);border-radius:16px;padding:.75rem .8rem;margin-bottom:.9rem}.selected-cargo-summary.show{display:flex}.selected-cargo-icon{width:42px;height:42px;border-radius:12px;background:rgba(243,156,18,.14);display:flex;align-items:center;justify-content:center;color:#f39c12;font-size:1.05rem;flex-shrink:0}.selected-cargo-info{flex:1;min-width:0}.selected-cargo-label{font-size:.56rem;color:rgba(255,255,255,.36);text-transform:uppercase;letter-spacing:.8px;font-family:monospace}.selected-cargo-name{font-size:.85rem;color:white;font-weight:800;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.selected-cargo-change{border:1px solid rgba(100,180,255,.3);background:rgba(100,180,255,.1);color:#64b4ff;border-radius:12px;padding:7px 11px;font-family:inherit;font-size:.68rem;font-weight:750;cursor:pointer;flex-shrink:0}
@@ -2074,7 +2074,7 @@ function initFB(){
   Promise.all([
     db.ref('siteSettings').once('value').then(snap=>{
       siteSettings=snap.val()||{};
-      initSlideshow();loadHowTo();loadLoginPageSettings();
+      initSlideshow();loadHowTo();loadLoginPageSettings();loadDashboardCargoTypes();
     }),
     db.ref('cargoTypes').once('value').then(snap=>{allCargoTypes=toArr(snap.val());}),
     db.ref('pickupLocations').once('value').then(snap=>{allPickups=toArr(snap.val());}),
@@ -2195,7 +2195,7 @@ function loadCtypeGrid(){
   const nonAirTypes=[...allCargoTypes].filter(ct=>!ct.isAir&&ct.key!=='air').sort((a,b)=>(a.order||0)-(b.order||0));
   const nonAirHTML=nonAirTypes.map(ct=>{
     const prLabel=ct.isExpress?'Select size &amp; time':'Select package size';
-    return`<div class="ct-card${ct.isExpress?' express-card':''}" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${prLabel}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`;
+    return`<div class="ct-card${ct.isExpress?' express-card':''}" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.isExpress?'Quick Delivery':ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${prLabel}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`;
   }).join('');
 
   // ONE Air Cargo card — clicking it triggers plane animation, then shows Normal/Express choice
@@ -2213,7 +2213,7 @@ function loadCtypeGrid(){
       </div>
       <div class="ct-card express-card" data-id="express" onclick="selCtype(this,'express')">
         <i class="fas fa-bolt"></i>
-        <div class="ct-name">Express Cargo</div>
+        <div class="ct-name">Quick Delivery</div>
         <div class="ct-eta">Fast delivery</div>
         <div class="ct-pr">Select size &amp; time</div>
         <div class="ct-ck"><i class="fas fa-check"></i></div>
@@ -2228,9 +2228,16 @@ function loadCtypeGrid(){
 function loadDashboardCargoTypes(){
   const g=$('dashCargoGrid');if(!g)return;
   const icons={normal:'fa-box',express:'fa-bolt',fragile:'fa-wine-glass-crack',oversized:'fa-pallet',custom:'fa-cube'};
+  const bgImage=key=>{
+    const cfg=(siteSettings.dashboardCargoCards||{})[String(key)]||{},url=String(cfg.imageUrl||'').trim();
+    if(!url)return'';
+    const safe=url.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const opacity=Math.max(.05,Math.min(.45,parseFloat(cfg.opacity)||.16));
+    return `<img class="dash-cargo-bg" src="${safe}" alt="" style="opacity:${opacity}" onerror="this.style.display='none'">`;
+  };
   const types=[...allCargoTypes].filter(ct=>!ct.isAir&&ct.key!=='air').sort((a,b)=>Number(!!b.isExpress)-Number(!!a.isExpress)||(a.order||0)-(b.order||0));
-  const cards=types.map(ct=>`<button type="button" class="dash-cargo-card${ct.isExpress?' express':''}" onclick="openDeliveryForCargo('${ct.id}')"><span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i></span><div class="dash-cargo-name">${ct.name}</div><div class="dash-cargo-eta">${ct.eta||(ct.isExpress?'Same Day':'3–5 Business Days')}</div><div class="dash-cargo-action">${ct.isExpress?'Select size & time':'Select package size'}</div></button>`).join('');
-  const air=`<button type="button" class="dash-cargo-card air" onclick="openDeliveryForCargo('__air__')"><span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas fa-plane"></i></span><div class="dash-cargo-name">Air Cargo</div><div class="dash-cargo-eta">Domestic Flights</div><div class="dash-cargo-action">Normal & Express</div></button>`;
+  const cards=types.map(ct=>`<button type="button" class="dash-cargo-card${ct.isExpress?' express':''}" onclick="openDeliveryForCargo('${ct.id}')">${bgImage(ct.id)}<span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i></span><div class="dash-cargo-name">${ct.isExpress?'Quick Delivery':ct.name}</div><div class="dash-cargo-eta">${ct.eta||(ct.isExpress?'Same Day':'3–5 Business Days')}</div><div class="dash-cargo-action">${ct.isExpress?'Select size & time':'Select package size'}</div></button>`).join('');
+  const air=`<button type="button" class="dash-cargo-card air" onclick="openDeliveryForCargo('__air__')">${bgImage('__air__')}<span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas fa-plane"></i></span><div class="dash-cargo-name">Air Cargo</div><div class="dash-cargo-eta">Domestic Flights</div><div class="dash-cargo-action">Normal & Express</div></button>`;
   g.innerHTML=cards+air;
 }
 
@@ -2255,7 +2262,7 @@ window.openDeliveryForCargo=function(id){
     if(!card.classList.contains('active'))selCtype(card,String(id));
     const ct=String(id)==='__air__'?{name:'Air Cargo'}:(allCargoTypes.find(c=>String(c.id)===String(id))||{name:'Cargo'});
     const icon=String(id)==='__air__'?'fa-plane':ct.isExpress?'fa-bolt':ct.key==='fragile'?'fa-wine-glass-crack':ct.key==='oversized'?'fa-pallet':'fa-box';
-    $('cargoTypeFormSection').style.display='none';$('selectedCargoSummary').classList.add('show');$('selectedCargoName').textContent=ct.name;$('selectedCargoIcon').innerHTML='<i class="fas '+icon+'"></i>';
+    $('cargoTypeFormSection').style.display='none';$('selectedCargoSummary').classList.add('show');$('selectedCargoName').textContent=ct.isExpress?'Quick Delivery':ct.name;$('selectedCargoIcon').innerHTML='<i class="fas '+icon+'"></i>';
     $('cargoForm').scrollIntoView({behavior:'smooth',block:'start'});
   });
 };
