@@ -2623,15 +2623,8 @@ function loadMyDriver(){
   // Find customer's active order that has a driver assigned
   const myOrders=allD.filter(d=>d.createdBy===me.email);
   const isFinished=o=>/^(delivered|complete|completed|cancelled|canceled)$/i.test(String(o.status||'').trim());
-  const paymentWasApproved=o=>Boolean(o.paymentSlip||o.paymentSubmittedAt)&&String(o.paymentStatus||'').trim().toLowerCase()==='paid';
-  const responseWindowIsOpen=o=>{
-    const mins=Math.max(1,Number(o.driverResponseMinutes||driverUiSettings.responseMinutes)||10);
-    const started=o.driverSearchStartedAt||o.paymentSubmittedAt||o.createdAt;
-    if(!started)return false;
-    const expires=o.driverSearchExpiresAt||new Date(new Date(started).getTime()+mins*60000).toISOString();
-    return new Date(expires).getTime()>Date.now();
-  };
-  const waitingOrders=myOrders.filter(o=>!o.assignedDriverId&&!isFinished(o)&&paymentWasApproved(o)&&responseWindowIsOpen(o))
+  const paymentWasSubmitted=o=>Boolean(o.paymentSlip||o.paymentSubmittedAt)&&!/^unpaid$/i.test(String(o.paymentStatus||''));
+  const waitingOrders=myOrders.filter(o=>!o.assignedDriverId&&!isFinished(o)&&paymentWasSubmitted(o))
     .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,1);
   const activeWithDriver=myOrders.filter(o=>o.assignedDriverId&&!isFinished(o))
     .sort((a,b)=>new Date(b.assignedAt||b.createdAt)-new Date(a.assignedAt||a.createdAt));
@@ -2984,7 +2977,7 @@ function startIdxDriverTimers(){
       const start=new Date(el.dataset.start||Date.now());
       const seconds=Math.max(0,Math.floor((Date.now()-start.getTime())/1000));
       const expires=el.dataset.expires?new Date(el.dataset.expires):null;
-      if(expires&&!isNaN(expires.getTime())){const remaining=Math.max(0,Math.ceil((expires.getTime()-Date.now())/1000));el.textContent=remaining>0?Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0'):'0:00';el.style.color=remaining<=60?'#e74c3c':'#64b4ff';if(remaining===0)setTimeout(loadMyDriver,20);}
+      if(expires&&!isNaN(expires.getTime())){const remaining=Math.max(0,Math.ceil((expires.getTime()-Date.now())/1000));el.textContent=remaining>0?Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0'):'0:00';el.style.color=remaining<=60?'#e74c3c':'#64b4ff';}
     });
     document.querySelectorAll('.driver-search-card[data-auto-slide="true"]').forEach(card=>{
       const last=Number(card.dataset.lastSlide||0);
