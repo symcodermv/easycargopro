@@ -494,6 +494,7 @@ tr:hover td{background:rgba(255,255,255,.02);color:white}
 .file-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .file-zone i{font-size:1.3rem;color:#f39c12;display:block;margin-bottom:4px}
 .file-zone span{font-size:.74rem;color:rgba(255,255,255,.38)}
+.payment-slip-preview{display:none;width:100%;max-height:210px;object-fit:contain;border-radius:11px;margin:0 0 8px;border:1px solid rgba(243,156,18,.25);background:#0d1523}
 .slip-img{max-width:100%;border-radius:10px;margin:8px 0;border:1px solid #2e3f55}
 .toast{position:fixed;top:62px;left:50%;transform:translateX(-50%) translateY(-16px);z-index:3000;max-width:310px;width:92%;background:#1e2a3a;border-radius:15px;padding:.78rem .9rem;border:1px solid #2e4057;box-shadow:0 12px 40px rgba(0,0,0,.6);display:flex;align-items:center;gap:7px;opacity:0;transition:all .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -792,6 +793,8 @@ img{max-width:100%;height:auto}
 .pickup-method{display:none;margin-top:.55rem;background:rgba(52,152,219,.06);border:1px solid rgba(52,152,219,.18);border-radius:14px;padding:.65rem}.pickup-method.show{display:block}.pickup-method-title{font-size:.68rem;color:rgba(255,255,255,.55);font-weight:750;margin-bottom:.5rem}.pickup-method-btns{display:grid;grid-template-columns:1fr 1fr;gap:7px}.pickup-method-btn{border:1.5px solid #304158;background:#172235;color:rgba(255,255,255,.6);border-radius:12px;padding:10px 7px;font:750 .7rem inherit;cursor:pointer}.pickup-method-btn.active{border-color:#27ae60;background:rgba(39,174,96,.12);color:#55d88a}@media(max-width:480px){.cargo-map{height:250px}.cargo-map-search{flex-direction:column}.cargo-map-search button{width:100%}}
 .pickup-confirm-wrap{display:none;margin-top:.55rem}.pickup-confirm-wrap.show{display:block}.pickup-confirm-btn{width:100%;border:0;border-radius:12px;padding:11px;background:linear-gradient(135deg,#075f3f,#0b8057);color:white;font:800 .75rem inherit;cursor:pointer}.pickup-live-panel{display:none;margin-top:.65rem;background:#111a2a;border:1.5px solid rgba(39,174,96,.28);border-radius:17px;padding:.65rem;overflow:hidden}.pickup-live-panel.show{display:block}.pickup-live-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:.5rem}.pickup-live-title{font-size:.75rem;color:white;font-weight:800}.pickup-live-address{font-size:.62rem;color:#55d88a;margin-top:2px;line-height:1.35}.pickup-live-map{height:250px;border-radius:12px;background:#0b1220}.pickup-live-actions{display:flex;gap:7px;margin-top:.5rem}.pickup-live-actions button{flex:1;border:1px solid rgba(39,174,96,.3);background:rgba(39,174,96,.1);color:#55d88a;border-radius:10px;padding:8px;font:750 .66rem inherit;cursor:pointer}
 .pickup-confirmed-summary{display:none;align-items:center;gap:10px;margin-top:.65rem;padding:.72rem;background:linear-gradient(145deg,rgba(39,174,96,.13),rgba(20,35,47,.95));border:1.5px solid rgba(39,174,96,.34);border-radius:15px;min-width:0}.pickup-confirmed-summary.show{display:flex}.pickup-confirmed-icon{width:40px;height:40px;border-radius:12px;background:rgba(39,174,96,.16);color:#55d88a;display:grid;place-items:center;flex:0 0 40px}.pickup-confirmed-info{flex:1;min-width:0}.pickup-confirmed-label{font:700 .52rem monospace;color:#55d88a;text-transform:uppercase;letter-spacing:.65px}.pickup-confirmed-name{font-size:.76rem;font-weight:850;color:#fff;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pickup-confirmed-address{font-size:.6rem;color:rgba(255,255,255,.48);margin-top:3px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pickup-confirmed-change{border:1px solid rgba(100,180,255,.3);background:rgba(100,180,255,.1);color:#82b7ff;border-radius:10px;padding:7px 9px;font:750 .62rem inherit;cursor:pointer;flex-shrink:0}@media(max-width:380px){.pickup-confirmed-summary{padding:.62rem;gap:8px}.pickup-confirmed-icon{width:36px;height:36px;flex-basis:36px}.pickup-confirmed-change{padding:7px}}
+.marine-details{display:none;margin-top:.75rem;padding:.85rem;background:linear-gradient(145deg,#121d2f,#19283e);border:1.5px solid rgba(52,152,219,.3);border-radius:18px}.marine-details.show{display:block;animation:stepIn .25s ease}.marine-details-head{display:flex;align-items:center;gap:10px;padding-bottom:.65rem;margin-bottom:.7rem;border-bottom:1px solid rgba(255,255,255,.07)}.marine-details-icon{width:42px;height:42px;border-radius:12px;background:rgba(52,152,219,.13);color:#64b4ff;display:grid;place-items:center;font-size:1rem}.marine-details-title{font-size:.82rem;font-weight:850;color:#fff}.marine-details-sub{font-size:.59rem;color:rgba(255,255,255,.42);margin-top:2px}.marine-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.marine-details .fg{margin:0}.marine-details .fg.full{grid-column:1/-1}.marine-details .fi{padding:10px 12px;border-radius:12px}.marine-confirm-btn{width:100%;margin-top:.75rem;border:0;border-radius:12px;padding:11px;background:linear-gradient(135deg,#2479b8,#3498db);color:#fff;font:800 .75rem inherit;cursor:pointer;box-shadow:0 6px 18px rgba(52,152,219,.2)}@media(max-width:430px){.marine-details-grid{grid-template-columns:1fr}.marine-details .fg.full{grid-column:auto}}
+.marine-confirmed-summary{display:none;align-items:center;gap:10px;margin-top:.75rem;padding:.72rem;background:linear-gradient(145deg,rgba(52,152,219,.13),rgba(20,35,47,.96));border:1.5px solid rgba(52,152,219,.34);border-radius:15px;min-width:0}.marine-confirmed-summary.show{display:flex}.marine-confirmed-icon{width:44px;height:44px;border-radius:12px;background:rgba(52,152,219,.16);color:#64b4ff;display:grid;place-items:center;flex:0 0 44px}.marine-confirmed-info{flex:1;min-width:0}.marine-confirmed-label{font:700 .52rem monospace;color:#64b4ff;text-transform:uppercase;letter-spacing:.65px}.marine-confirmed-name{font-size:.76rem;font-weight:850;color:#fff;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.marine-confirmed-meta{font-size:.6rem;color:rgba(255,255,255,.48);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.marine-confirmed-change{border:1px solid rgba(100,180,255,.35);background:rgba(100,180,255,.11);color:#82b7ff;border-radius:10px;padding:8px 10px;font:750 .64rem inherit;cursor:pointer;flex-shrink:0}
 @keyframes stepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @media(min-width:700px){.dash-cargo-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dash-cargo-card{padding:1.35rem 1rem}}
 @media(max-width:350px){.dash-cargo-grid{grid-template-columns:1fr}}
@@ -1073,6 +1076,20 @@ img{max-width:100%;height:auto}
               <button type="button" class="dm-btn" id="dmBoat" onclick="setMode('boat')"><i class="fas fa-ship"></i><strong>Boat</strong><small>Island to island</small></button>
               <button type="button" class="dm-btn" id="dmSpeedboat" onclick="setMode('speedboat')"><i class="fas fa-bolt"></i><strong>Speed Boat</strong><small>Express island</small></button>
             </div>
+
+            <div class="marine-details" id="marineDetailsPanel">
+              <div class="marine-details-head"><div class="marine-details-icon" id="marineDetailsIcon"><i class="fas fa-ship"></i></div><div><div class="marine-details-title" id="marineDetailsTitle">Enter Boat Details</div><div class="marine-details-sub">Add the delivery boat information before choosing the map destination.</div></div></div>
+              <div class="marine-details-grid">
+                <div class="fg full"><label id="marineNameLabel">Boat Name</label><input class="fi" type="text" id="marineBoatName" placeholder="Enter boat name"></div>
+                <div class="fg"><label>Contact Number</label><input class="fi" type="tel" inputmode="numeric" id="marineBoatContact" placeholder="e.g. 7XXXXXX"></div>
+                <div class="fg"><label>Departure Time</label><input class="fi" type="time" id="marineDepartureTime"></div>
+                <div class="fg full"><label>Current Boat Location</label><input class="fi" type="text" id="marineCurrentLocation" placeholder="e.g. Male jetty or current pickup point"></div>
+                <div class="fg"><label>Package Label</label><input class="fi" type="text" id="marinePackageLabel" placeholder="e.g. EC-BOX-102"></div>
+                <div class="fg"><label>Island Code</label><input class="fi" type="text" id="marineIslandCode" placeholder="e.g. MLE or HDH" autocapitalize="characters"></div>
+              </div>
+              <button type="button" class="marine-confirm-btn" id="marineConfirmBtn" onclick="confirmMarineDetails()"><i class="fas fa-circle-check"></i> Confirm Details &amp; Set Delivery Point</button>
+            </div>
+            <div class="marine-confirmed-summary" id="marineConfirmedSummary"><div class="marine-confirmed-icon" id="marineConfirmedIcon"><i class="fas fa-ship"></i></div><div class="marine-confirmed-info"><div class="marine-confirmed-label" id="marineConfirmedLabel">CONFIRMED BOAT DETAILS</div><div class="marine-confirmed-name" id="marineConfirmedName">Boat name</div><div class="marine-confirmed-meta" id="marineConfirmedMeta">Package label · Island code</div></div><button type="button" class="marine-confirmed-change" onclick="editMarineDetails()"><i class="fas fa-pen"></i> Change</button></div>
 
             <div id="cargoDest" style="margin-top:.7rem;display:none">
               <div style="display:flex;align-items:flex-start;gap:8px;background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.2);border-radius:13px;padding:.65rem;margin-bottom:.65rem"><i class="fas fa-route" style="color:#27ae60;margin-top:2px"></i><div><div style="font-size:.75rem;color:white;font-weight:800">Where should we deliver?</div><div style="font-size:.63rem;color:rgba(255,255,255,.45);margin-top:2px">Search an address or tap the live map. You can drag the delivery marker for an accurate point.</div></div></div>
@@ -1382,7 +1399,7 @@ img{max-width:100%;height:auto}
     <!-- Slip upload -->
     <div class="fg">
       <label style="font-size:.74rem;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:.35rem;display:block"><i class="fas fa-image" style="color:#f39c12;margin-right:5px"></i>Upload Payment Slip</label>
-      <div class="file-zone"><input type="file" id="slipFile" accept="image/*"><i class="fas fa-cloud-arrow-up"></i><span id="slipFN">Tap to attach slip photo</span></div>
+      <div class="file-zone"><input type="file" id="slipFile" accept="image/*"><img class="payment-slip-preview" id="slipPreview" alt="Payment slip preview"><i class="fas fa-cloud-arrow-up"></i><span id="slipFN">Tap to attach slip photo</span></div>
     </div>
     <div class="modal-btns">
       <button class="btn btn-sec" style="flex:1" id="payCancel"><i class="fas fa-times"></i> Cancel</button>
@@ -1807,7 +1824,7 @@ function calcTotal(){
   const isAir=$('ctIsAir').value==='1',isExp=$('ctIsExpress').value==='1';
   let baseTotal=0;
   if(isAir)baseTotal=(parseFloat($('routePrice').value)||0)+(parseFloat($('selectedVehiclePrice').value)||0);
-  else if(dMode==='cargo')baseTotal=(parseFloat($('routePrice').value)||0)+(parseFloat($('selectedVehiclePrice').value)||0);
+  else if(['cargo','boat','speedboat'].includes(dMode))baseTotal=(parseFloat($('routePrice').value)||0)+(parseFloat($('selectedVehiclePrice').value)||0);
   else baseTotal=(parseFloat($('boatPrice').value)||0);
   const routeOnly=parseFloat($('routePrice').value)||0,cards=[...document.querySelectorAll('.manual-vehicle-card')],money=n=>Number(n).toFixed(2).replace(/\.00$/,'').replace(/(\.\d)0$/,'$1'),hasDelivery=!!$('deliveryLat').value,specificTotals=cards.filter(card=>card.dataset.key!=='any'&&card.dataset.available==='1').map(card=>routeOnly+(parseFloat(card.dataset.vehiclePrice)||0));cards.forEach(card=>{const price=parseFloat(card.dataset.vehiclePrice)||0,view=card.querySelector('.mvc-price');if(!view)return;if(!hasDelivery){view.textContent='Select location';return;}if(card.dataset.available!=='1'){view.textContent='Not available';return;}if(card.dataset.key==='any'&&specificTotals.length){const low=Math.min(...specificTotals),high=Math.max(...specificTotals);view.textContent='MVR '+money(low)+(high>low?'~'+money(high):'');}else view.textContent='MVR '+money(routeOnly+price);});
   const pts=_userRewards.points||0,ptsNeeded=siteSettings.discountPerPoints||100,discPct=siteSettings.discountPercent||5;
@@ -1835,7 +1852,7 @@ function calcTotal(){
 }
 function updateRoutePrice(){
   const badge=$('routePriceBadge'),valEl=$('routePriceVal');
-  if(dMode!=='cargo'){$('routePrice').value='0';if(badge)badge.classList.remove('show');calcTotal();return;}
+  if(!['cargo','boat','speedboat'].includes(dMode)){$('routePrice').value='0';if(badge)badge.classList.remove('show');calcTotal();return;}
   if(!$('mapDistanceKm').value){$('routePrice').value='0';if(badge)badge.classList.remove('show');calcTotal();return;}
   drawCargoRoute();
   calcTotal();
@@ -2408,11 +2425,11 @@ window.selPickup=function(el,id){
   const grid=$('pickupGrid'),already=el.classList.contains('active');
   const confirmedSummary=$('pickupConfirmedSummary');if(confirmedSummary)confirmedSummary.classList.remove('show');
   if(grid)grid.style.display='';
-  if(already){document.querySelectorAll('.pickup-card').forEach(c=>{c.style.display='block';c.classList.remove('active');});$('pLocVal').value='';pickupMethod='';$('pickupMethodChoice').classList.remove('show');$('pickupConfirmWrap').classList.remove('show');$('pickupLivePanel').classList.remove('show');dMode='';document.querySelectorAll('.dm-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});$('cargoDest').style.display='none';clearCargoMapPin(true);hideStep('stepMode');if($('ctIsAir').value==='1'){$('airPickupVal').value='';resetAirDestWeight();}return;}
+  if(already){document.querySelectorAll('.pickup-card').forEach(c=>{c.style.display='block';c.classList.remove('active');});$('pLocVal').value='';pickupMethod='';$('pickupMethodChoice').classList.remove('show');$('pickupConfirmWrap').classList.remove('show');$('pickupLivePanel').classList.remove('show');dMode='';document.querySelectorAll('.dm-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});$('cargoDest').style.display='none';$('marineDetailsPanel').classList.remove('show');$('marineConfirmedSummary').classList.remove('show');clearCargoMapPin(true);hideStep('stepMode');if($('ctIsAir').value==='1'){$('airPickupVal').value='';resetAirDestWeight();}return;}
   document.querySelectorAll('.pickup-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');
   const loc=findCustomerPickup(id);if(!loc)return;
   $('pLocVal').value=loc.name;if(grid)grid.querySelectorAll('.pickup-card').forEach(c=>{c.style.display=c.classList.contains('active')?'block':'none';});
-  if(dMode==='cargo')updateRoutePrice();else if(dMode==='boat'||dMode==='speedboat')updateBoatPriceBadge();
+  if(['cargo','boat','speedboat'].includes(dMode))updateRoutePrice();
   pickupMethod='';cargoPinMode='delivery';$('pickupMethodChoice').classList.remove('show');$('pickupConfirmWrap').classList.remove('show');$('pickupLivePanel').classList.remove('show');document.querySelectorAll('.pickup-method-btn').forEach(b=>b.classList.remove('active'));const ax=$('addrX'),lbl=ax?ax.querySelector('label'):null;
   const mapChoice=loc.type==='address';
   if(mapChoice){$('pickupMethodChoice').classList.add('show');ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value='';hideStep('stepMode');showPickupLiveMap(false);const gf=$('pickupGfNotice');if(gf)gf.classList.add('show');return;}
@@ -2426,18 +2443,28 @@ window.selPickup=function(el,id){
 let boatInputMode='list',sbInputMode='list';
 window.setMode=function(m){
   const btnMap={cargo:'dmCargo',boat:'dmBoat',speedboat:'dmSpeedboat'};const curBtn=$(btnMap[m]);
-  if(curBtn&&curBtn.classList.contains('active')){dMode='';document.querySelectorAll('.dm-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});$('cargoDest').style.display='none';$('boatSec').classList.remove('show');$('speedboatSec').classList.remove('show');$('boatPrice').value='0';$('routePrice').value='0';clearCargoMapPin(false);const badge=$('routePriceBadge');if(badge)badge.classList.remove('show');calcTotal();return;}
+  if(curBtn&&curBtn.classList.contains('active')){dMode='';document.querySelectorAll('.dm-btn').forEach(b=>{b.classList.remove('active');b.style.display='';});$('cargoDest').style.display='none';$('marineDetailsPanel').classList.remove('show');$('marineConfirmedSummary').classList.remove('show');$('boatSec').classList.remove('show');$('speedboatSec').classList.remove('show');$('boatPrice').value='0';$('routePrice').value='0';clearCargoMapPin(false);const badge=$('routePriceBadge');if(badge)badge.classList.remove('show');calcTotal();return;}
   dMode=m;document.querySelectorAll('.dm-btn').forEach(b=>b.classList.remove('active'));$(btnMap[m])?.classList.add('active');
   document.querySelectorAll('.dm-btn').forEach(b=>{b.style.display=b===$(btnMap[m])?'block':'none';});
-  $('cargoDest').style.display=m==='cargo'?'block':'none';$('boatSec').classList.toggle('show',m==='boat');$('speedboatSec').classList.toggle('show',m==='speedboat');
+  const marine=m==='boat'||m==='speedboat';$('cargoDest').style.display=m==='cargo'?'block':'none';$('marineDetailsPanel').classList.toggle('show',marine);$('marineConfirmedSummary').classList.remove('show');$('boatSec').classList.remove('show');$('speedboatSec').classList.remove('show');
   $('boatPrice').value='0';$('routePrice').value='0';$('dLocVal').value='';document.querySelectorAll('.dloc-btn').forEach(b=>b.classList.remove('active'));
   const badge=$('routePriceBadge');if(badge)badge.classList.remove('show');
-  if(m==='boat'){boatInputMode='list';$('boatListBtn').classList.add('active');$('boatManualBtn').classList.remove('active');$('boatListMode').style.display='block';$('boatManualMode').style.display='none';if($('atollSearch'))$('atollSearch').value='';$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';}
-  if(m==='speedboat'){sbInputMode='list';$('sbListBtn').classList.add('active');$('sbManualBtn').classList.remove('active');$('sbListMode').style.display='block';$('sbManualMode').style.display='none';if($('sbAtollSearch'))$('sbAtollSearch').value='';$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';}
-  if(m==='cargo'){const w=$('houseAddrWrap');if(w)w.style.display='none';loadManualVehicles();$('manualVehiclePanel').classList.add('show');setTimeout(initCargoDeliveryMap,80);}
-  else{$('requiredVehicleCategory').value='';$('requiredVehicleLabel').value='';$('selectedVehiclePrice').value='0';document.querySelectorAll('.manual-vehicle-card').forEach(b=>b.classList.remove('active'));}
+  const w=$('houseAddrWrap');if(w)w.style.display='none';loadManualVehicles();$('manualVehiclePanel').classList.add('show');
+  const modeName=m==='boat'?'Boat':m==='speedboat'?'Speed Boat':'Cargo',mapTitle=document.querySelector('#cargoMapPanel .cargo-map-title');if(mapTitle)mapTitle.textContent='Set '+modeName+' delivery point';
+  if(marine){$('marineDetailsTitle').textContent='Enter '+modeName+' Details';$('marineNameLabel').textContent=modeName+' Name';$('marineBoatName').placeholder='Enter '+modeName.toLowerCase()+' name';$('marineDetailsIcon').innerHTML='<i class="fas '+(m==='speedboat'?'fa-bolt':'fa-ship')+'"></i>';$('marineConfirmBtn').innerHTML='<i class="fas fa-circle-check"></i> Confirm Details &amp; Set Delivery Point';['marineBoatName','marineBoatContact','marineDepartureTime','marineCurrentLocation','marinePackageLabel','marineIslandCode'].forEach(id=>$(id).value='');clearCargoMapPin(false);}else setTimeout(initCargoDeliveryMap,80);
   const fw=$('floorWrap');if(fw)fw.classList.remove('show');calcTotal();
 };
+window.confirmMarineDetails=function(){
+  if(!['boat','speedboat'].includes(dMode))return;const name=$('marineBoatName').value.trim(),contact=$('marineBoatContact').value.trim(),departure=$('marineDepartureTime').value,current=$('marineCurrentLocation').value.trim(),packageLabel=$('marinePackageLabel').value.trim(),islandCode=$('marineIslandCode').value.trim().toUpperCase();
+  if(!name){showToast('Enter the '+(dMode==='speedboat'?'speed boat':'boat')+' name','err');$('marineBoatName').focus();return;}
+  if(!contact){showToast('Enter the boat contact number','err');$('marineBoatContact').focus();return;}
+  if(!departure){showToast('Select the departure time','err');$('marineDepartureTime').focus();return;}
+  if(!current){showToast('Enter the current boat location','err');$('marineCurrentLocation').focus();return;}
+  if(!packageLabel){showToast('Enter the package label','err');$('marinePackageLabel').focus();return;}
+  if(!islandCode){showToast('Enter the island code','err');$('marineIslandCode').focus();return;}
+  $('marineIslandCode').value=islandCode;$('marineDetailsPanel').classList.remove('show');$('marineConfirmedSummary').classList.add('show');$('marineConfirmedLabel').textContent='CONFIRMED '+(dMode==='speedboat'?'SPEED BOAT':'BOAT')+' DETAILS';$('marineConfirmedName').textContent=name+' · '+contact;$('marineConfirmedMeta').textContent='Package '+packageLabel+' · Island '+islandCode+' · '+departure;$('marineConfirmedIcon').innerHTML='<i class="fas '+(dMode==='speedboat'?'fa-bolt':'fa-ship')+'"></i>';$('cargoDest').style.display='block';loadManualVehicles();$('manualVehiclePanel').classList.add('show');setTimeout(async()=>{await initCargoDeliveryMap();$('cargoDest').scrollIntoView({behavior:'smooth',block:'start'});},80);showToast('Boat details confirmed. Set the delivery point.','ok');
+};
+window.editMarineDetails=function(){$('marineConfirmedSummary').classList.remove('show');$('marineDetailsPanel').classList.add('show');$('marineDetailsPanel').scrollIntoView({behavior:'smooth',block:'center'});};
 window.setBoatInputMode=function(m){boatInputMode=m;document.querySelectorAll('#boatSec .bmt-btn').forEach(b=>b.classList.remove('active'));if(m==='list'){$('boatListBtn').classList.add('active');$('boatListMode').style.display='block';$('boatManualMode').style.display='none';}else{$('boatManualBtn').classList.add('active');$('boatListMode').style.display='none';$('boatManualMode').style.display='block';$('selBoat').value='';$('selIsl').value='';$('islSec').style.display='none';$('boatSearchStep').style.display='none';if($('boatHarbourBtns'))$('boatHarbourBtns').querySelectorAll('.harbour-btn').forEach(b=>b.classList.remove('active'));$('selBoatHarbour').value='';}};
 window.setSBInputMode=function(m){sbInputMode=m;document.querySelectorAll('#speedboatSec .bmt-btn').forEach(b=>b.classList.remove('active'));if(m==='list'){$('sbListBtn').classList.add('active');$('sbListMode').style.display='block';$('sbManualMode').style.display='none';}else{$('sbManualBtn').classList.add('active');$('sbListMode').style.display='none';$('sbManualMode').style.display='block';$('selSB').value='';$('selSBIsl').value='';$('sbIslSec').style.display='none';}};
 window.onManualContactInput=function(type){if(type==='sb'){const v=$('manualSBContact').value.trim();const btn=$('manualSBCallBtn');btn.style.display=v.length>=7?'flex':'none';if(v.length>=7)btn.href='tel:'+v;}};
@@ -2532,7 +2559,7 @@ window.nextWaitingDriver=function(card){
   const current=Math.max(0,list.findIndex(x=>x.classList.contains('active')));list[current].classList.remove('active');list[(current+1)%list.length].classList.add('active');
 };
 window.choosePickupMethod=function(method){pickupMethod=method;document.querySelectorAll('.pickup-method-btn').forEach(b=>b.classList.remove('active'));$(method==='map'?'pickupMapBtn':'pickupAddressBtn').classList.add('active');const ax=$('addrX'),lbl=ax?.querySelector('label');if(method==='address'){cargoPinMode='delivery';ax.classList.add('show');$('addrVal').required=true;if(lbl)lbl.innerHTML='<i class="fas fa-home" style="color:#f39c12;margin-right:4px"></i>Address / Flat Number';$('addrVal').placeholder='Enter address, house or flat number…';showPickupLiveMap(false);}else{cargoPinMode='pickup';ax.classList.remove('show');$('addrVal').required=false;$('addrVal').value='';showPickupLiveMap(true);}$('pickupConfirmWrap').classList.add('show');hideStep('stepMode');};
-$('addrVal').addEventListener('change',()=>{if(dMode==='cargo'&&pickupMethod==='address')geocodeCargoPickup().then(drawCargoRoute);});
+$('addrVal').addEventListener('change',()=>{if(['cargo','boat','speedboat'].includes(dMode)&&pickupMethod==='address')geocodeCargoPickup().then(drawCargoRoute);});
 
 /* ═══ GOOGLE MAP — CARGO DELIVERY PIN ═══ */
 const UBER_MAP_STYLES=[
@@ -2612,7 +2639,7 @@ window.editConfirmedPickup=function(){
 };
 function setCargoMapStatus(message,ready){const box=$('cargoMapStatus');if(!box)return;box.classList.toggle('ready',!!ready);box.querySelector('span').textContent=message;}
 async function initCargoDeliveryMap(){
-  if(dMode!=='cargo'||!$('cargoDeliveryMap'))return;
+  if(!['cargo','boat','speedboat'].includes(dMode)||!$('cargoDeliveryMap'))return;
   setCargoMapStatus('Loading Google map…',false);
   try{await loadCargoGoogleMaps();
     if(!cargoMap){
@@ -2667,7 +2694,7 @@ window.clearCargoMapPin=function(all){
   $('routePrice').value='0';
   if(all){['pickupLat','pickupLng'].forEach(id=>{if($(id))$(id).value='';});if(cargoPickupMarker){cargoPickupMarker.setMap(null);cargoPickupMarker=null;}if($('pickupCurrentAddress'))$('pickupCurrentAddress').style.display='none';}
   cargoPinMode=pickupMethod==='map'?'pickup':'delivery';if($('cargoRoutePreview'))$('cargoRoutePreview').style.display='none';
-  $('manualVehiclePanel').classList.toggle('show',dMode==='cargo');$('requiredVehicleCategory').value='';$('requiredVehicleLabel').value='';$('selectedVehiclePrice').value='0';document.querySelectorAll('.manual-vehicle-card').forEach(b=>b.classList.remove('active'));applyZoneVehiclePricing(null);
+  $('manualVehiclePanel').classList.toggle('show',['cargo','boat','speedboat'].includes(dMode)||$('ctIsAir').value==='1');$('requiredVehicleCategory').value='';$('requiredVehicleLabel').value='';$('selectedVehiclePrice').value='0';document.querySelectorAll('.manual-vehicle-card').forEach(b=>b.classList.remove('active'));applyZoneVehiclePricing(null);
   setCargoMapStatus(cargoPinMode==='pickup'?'Tap the map to set the pickup point first.':'Select an area above, then tap the map for the exact delivery location.',false);calcTotal();
 };
 window.openCargoRoutePreview=function(){const a=$('pickupLat').value+','+$('pickupLng').value,b=$('deliveryLat').value+','+$('deliveryLng').value;if(!$('deliveryLat').value)return;window.open('https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(a)+'&destination='+encodeURIComponent(b)+'&travelmode=driving','_blank');};
@@ -2753,9 +2780,16 @@ window.copyBankAccount=async function(button){
     showToast('Account number copied: '+account,'ok');
   }catch(e){showToast('Account number: '+account,'info');}
 };
+window.previewPaymentSlip=function(input,previewId,labelId){
+  const file=input?.files?.[0],preview=$(previewId),label=$(labelId);if(!file){if(preview){preview.removeAttribute('src');preview.style.display='none';}if(label)label.textContent='Tap to attach payment slip';return;}
+  if(!/^image\//i.test(file.type)){input.value='';showToast('Please select a payment-slip image','err');return;}
+  if(file.size>12*1024*1024){input.value='';showToast('Payment slip must be below 12 MB','err');return;}
+  if(label)label.textContent='✓ '+file.name;
+  const reader=new FileReader();reader.onload=e=>{if(preview){preview.src=e.target.result;preview.style.display='block';}};reader.onerror=()=>showToast('Payment slip image could not be read','err');reader.readAsDataURL(file);
+};
 window.openAirCargoPayment=function(orderId){
   const o=allD.find(x=>String(x.id)===String(orderId));if(!o)return;document.getElementById('airCargoChargeMod')?.remove();
-  const mod=document.createElement('div');mod.id='airCargoChargeMod';mod.className='modal-overlay show';mod.innerHTML=`<div class="modal-box" style="max-width:430px"><div class="modal-hd"><div class="modal-title"><i class="fas fa-plane" style="color:#9b59b6"></i> Air Cargo Payment</div><button class="close-btn" onclick="document.getElementById('airCargoChargeMod').remove()"><i class="fas fa-times"></i></button></div><div style="text-align:center;background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.3);border-radius:14px;padding:.9rem;margin-bottom:.8rem"><div style="font-size:.62rem;color:rgba(255,255,255,.45)">MALDIVIAN CARGO CONSIGNMENT NOTE</div><div style="font:900 1.7rem monospace;color:#e74c3c;margin-top:4px">MVR ${Number(o.airConsignmentAmount).toFixed(2).replace(/\.00$/,'')}</div></div><div class="bank-box"><div class="bank-row"><span class="bk">Bank</span><span class="bv">Bank of Maldives</span></div><div class="bank-row"><span class="bk">Account Name</span><span class="bv">EasyCargo MV</span></div><div class="bank-row"><span class="bk">Account No.</span><span class="bv" style="display:flex;align-items:center;gap:7px"><span style="font-family:monospace">7730000770230</span><button type="button" class="copy-btn" onclick="copyBankAccount(this)"><i class="fas fa-copy"></i> COPY</button></span></div></div><div class="fg"><label>Upload Payment Slip</label><div class="file-zone"><input type="file" id="airChargeSlip" accept="image/*"><i class="fas fa-cloud-arrow-up"></i><span>Tap to attach payment slip</span></div></div><button type="button" id="airChargeSubmit" class="btn btn-gold" style="width:100%" onclick="submitAirCargoPayment('${o.id}')"><i class="fas fa-paper-plane"></i> Submit Payment for Review</button></div>`;document.body.appendChild(mod);
+  const mod=document.createElement('div');mod.id='airCargoChargeMod';mod.className='modal-overlay show';mod.innerHTML=`<div class="modal-box" style="max-width:430px"><div class="modal-hd"><div class="modal-title"><i class="fas fa-plane" style="color:#9b59b6"></i> Air Cargo Payment</div><button class="close-btn" onclick="document.getElementById('airCargoChargeMod').remove()"><i class="fas fa-times"></i></button></div><div style="text-align:center;background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.3);border-radius:14px;padding:.9rem;margin-bottom:.8rem"><div style="font-size:.62rem;color:rgba(255,255,255,.45)">MALDIVIAN CARGO CONSIGNMENT NOTE</div><div style="font:900 1.7rem monospace;color:#e74c3c;margin-top:4px">MVR ${Number(o.airConsignmentAmount).toFixed(2).replace(/\.00$/,'')}</div></div><div class="bank-box"><div class="bank-row"><span class="bk">Bank</span><span class="bv">Bank of Maldives</span></div><div class="bank-row"><span class="bk">Account Name</span><span class="bv">EasyCargo MV</span></div><div class="bank-row"><span class="bk">Account No.</span><span class="bv" style="display:flex;align-items:center;gap:7px"><span style="font-family:monospace">7730000770230</span><button type="button" class="copy-btn" onclick="copyBankAccount(this)"><i class="fas fa-copy"></i> COPY</button></span></div></div><div class="fg"><label>Upload Payment Slip</label><div class="file-zone"><input type="file" id="airChargeSlip" accept="image/*" onchange="previewPaymentSlip(this,'airChargeSlipPreview','airChargeSlipLabel')"><img class="payment-slip-preview" id="airChargeSlipPreview" alt="Payment slip preview"><i class="fas fa-cloud-arrow-up"></i><span id="airChargeSlipLabel">Tap to attach payment slip</span></div></div><button type="button" id="airChargeSubmit" class="btn btn-gold" style="width:100%" onclick="submitAirCargoPayment('${o.id}')"><i class="fas fa-paper-plane"></i> Submit Payment for Review</button></div>`;document.body.appendChild(mod);
 };
 window.submitAirCargoPayment=async function(orderId){const input=$('airChargeSlip'),file=input?.files[0];if(!file){showToast('Attach the Air Cargo payment slip','err');return;}const btn=$('airChargeSubmit');btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> Submitting…';try{const slip=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=e=>resolve(e.target.result);r.onerror=reject;r.readAsDataURL(file);});const snap=await db.ref('cargoDeliveries').once('value'),orders=toArr(snap.val()),idx=orders.findIndex(x=>String(x.id)===String(orderId));if(idx<0)throw new Error('Order not found');await db.ref('cargoDeliveries/'+idx).update({airConsignmentPaymentSlip:slip,airConsignmentPaymentStatus:'under_review',airConsignmentPaymentSubmittedAt:new Date().toISOString()});$('airCargoChargeMod')?.remove();showToast('Air Cargo payment submitted for Backend review','ok');}catch(e){showToast('Payment upload failed: '+e.message,'err');btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Submit Payment for Review';}};
 
@@ -3154,7 +3188,7 @@ window.viewSlip=src=>{$('slipViewImg').src=src;$('slipMod').classList.add('show'
 $('slipClose').onclick=$('slipClose2').onclick=()=>$('slipMod').classList.remove('show');
 
 /* ═══ FORM SUBMIT ═══ */
-$('slipFile').addEventListener('change',function(){$('slipFN').textContent=this.files[0]?this.files[0].name:'Tap to attach slip photo';});
+$('slipFile').addEventListener('change',function(){previewPaymentSlip(this,'slipPreview','slipFN');});
 $('payClose').onclick=$('payCancel').onclick=()=>{
   if(busy)return; // don't allow close while saving
   $('payMod').classList.remove('show');
@@ -3166,6 +3200,7 @@ $('cargoForm').addEventListener('submit',function(e){
   e.preventDefault();if(busy)return;
   if(isCapacityFull(allD)){updateCapBar();showToast('Today\'s delivery capacity is full. Please try another day.','err');return;}
   const isAir=$('ctIsAir').value==='1';
+  const usesLiveMap=isAir||['cargo','boat','speedboat'].includes(dMode);
   const ctype=$('ctV').value;if(!ctype){showToast('Select a cargo type','err');return;}
   if(isAir){
     if(!$('airPickupVal').value){showToast('Select a pickup location','err');return;}
@@ -3177,37 +3212,36 @@ $('cargoForm').addEventListener('submit',function(e){
   }else{
     const pickup=$('pLocVal').value;if(!pickup){showToast('Select a pickup location','err');return;}
     if(!dMode){showToast('Select a delivery mode','err');return;}
-    if(dMode==='cargo'){if(!$('pickupLat').value||!$('pickupLng').value){showToast('Set an accurate pickup point on the map first','err');$('cargoDeliveryMap').scrollIntoView({behavior:'smooth',block:'center'});return;}if(!$('deliveryLat').value||!$('deliveryLng').value){showToast('Search or tap the map to set the delivery point','err');$('cargoDeliveryMap').scrollIntoView({behavior:'smooth',block:'center'});return;}if(!$('requiredVehicleCategory').value){showToast('Select Any, Car, Motorcycle or Van','err');$('manualVehiclePanel').scrollIntoView({behavior:'smooth',block:'center'});return;}
+    if(['boat','speedboat'].includes(dMode)){if(!$('marineBoatName').value.trim()){showToast('Enter the delivery boat name','err');editMarineDetails();return;}if(!$('marineBoatContact').value.trim()||!$('marineDepartureTime').value||!$('marineCurrentLocation').value.trim()||!$('marinePackageLabel').value.trim()||!$('marineIslandCode').value.trim()){showToast('Complete all delivery boat details first','err');editMarineDetails();return;}}
+    if(usesLiveMap){if(!$('pickupLat').value||!$('pickupLng').value){showToast('Set an accurate pickup point on the map first','err');$('cargoDeliveryMap').scrollIntoView({behavior:'smooth',block:'center'});return;}if(!$('deliveryLat').value||!$('deliveryLng').value){showToast('Search or tap the map to set the delivery point','err');$('cargoDeliveryMap').scrollIntoView({behavior:'smooth',block:'center'});return;}if(!$('requiredVehicleCategory').value){showToast('Select Any, Car, Motorcycle or Van','err');$('manualVehiclePanel').scrollIntoView({behavior:'smooth',block:'center'});return;}
       if(!$('selSizeId').value){showToast('Select a package size','err');return;}
       if($('ctIsExpress').value==='1'&&!$('selTimeId').value){showToast('Select a time slot','err');return;}
-    }else if(dMode==='boat'){if(!($('selBoat').value||$('manualBoatName').value)){showToast('Select or enter a boat name','err');return;}if(!($('selIsl').value||$('manualBoatIsland').value)){showToast('Select a destination island','err');return;}}
-    else if(dMode==='speedboat'){if(!($('selSB').value||$('manualSBName').value)){showToast('Select or enter a speed boat name','err');return;}if(!($('selSBIsl').value||$('manualSBIsland').value)){showToast('Select a destination island','err');return;}}
+    }
   }
   if(!$('dDate').value){showToast('Select a delivery date','err');return;}
   const price=calcTotal();if(!price||price<=0){showToast('Delivery price is 0. Check your selections.','err');return;}
   const isExp=$('ctIsExpress').value==='1';
   let dest='',boatNameVal='',boatIslandVal='',boatContactVal='';
   if(!isAir){
-    if(dMode==='cargo')dest=$('mapDeliveryAddress').value||'Map delivery point';
-    else if(dMode==='boat'){boatNameVal=boatInputMode==='manual'?$('manualBoatName').value:$('selBoat').value;boatIslandVal=boatInputMode==='manual'?$('manualBoatIsland').value:$('selIsl').value;boatContactVal=boatInputMode==='manual'?($('manualBoatContact').value||''):'';dest=boatIslandVal;}
-    else{boatNameVal=sbInputMode==='manual'?$('manualSBName').value:$('selSB').value;boatIslandVal=sbInputMode==='manual'?$('manualSBIsland').value:$('selSBIsl').value;boatContactVal=sbInputMode==='manual'?($('manualSBContact').value||''):'';dest=boatIslandVal;}
+    dest=$('mapDeliveryAddress').value||'Map delivery point';
+    if(['boat','speedboat'].includes(dMode)){boatNameVal=$('marineBoatName').value.trim();boatContactVal=$('marineBoatContact').value.trim();}
   }
   tmpD={
     referenceNumber:genRef(),customerName:me.username,customerContact:me.contact||$('cCt').value,
     pickupLocation:isAir?$('airPickupVal').value:$('pLocVal').value,pickupAddress:$('addrVal').value||$('airAddrVal').value||'',
-    deliveryAddress:(dMode==='cargo'?[ $('mapDeliveryAddress').value,isAir?'':$('houseAddr').value.trim() ].filter(Boolean).join(' — '):'')||$('delivAddrVal')?.value||$('addrVal')?.value||'',
+    deliveryAddress:(usesLiveMap?[ $('mapDeliveryAddress').value,isAir?'':$('houseAddr').value.trim() ].filter(Boolean).join(' — '):'')||$('delivAddrVal')?.value||$('addrVal')?.value||'',
     deliveryMode:isAir?'air':dMode,deliveryLocation:isAir?$('airSelIslandName').value:dest,
     pickupLat:parseFloat($('pickupLat').value)||null,pickupLng:parseFloat($('pickupLng').value)||null,pickupSelectionMethod:pickupMethod||'configured',
-    deliveryLat:dMode==='cargo'?parseFloat($('deliveryLat').value):null,deliveryLng:dMode==='cargo'?parseFloat($('deliveryLng').value):null,mapDistanceKm:dMode==='cargo'?(parseFloat($('mapDistanceKm').value)||null):null,
-    boatName:boatNameVal,boatContact:$('boatContactNum')?.value||boatContactVal||'',boatDeparture:$('boatDepartureTime')?.value||'',boatCurrentLocation:$('boatCurrentLocation')?.value||'',destinationIsland:boatIslandVal,
-    manualBoatEntry:!isAir&&((dMode==='boat'&&boatInputMode==='manual')||(dMode==='speedboat'&&sbInputMode==='manual')),
+    deliveryLat:usesLiveMap?parseFloat($('deliveryLat').value):null,deliveryLng:usesLiveMap?parseFloat($('deliveryLng').value):null,mapDistanceKm:usesLiveMap?(parseFloat($('mapDistanceKm').value)||null):null,
+    boatName:boatNameVal,boatContact:boatContactVal||'',boatDeparture:['boat','speedboat'].includes(dMode)?$('marineDepartureTime').value:'',boatCurrentLocation:['boat','speedboat'].includes(dMode)?$('marineCurrentLocation').value.trim():'',boatPackageLabel:['boat','speedboat'].includes(dMode)?$('marinePackageLabel').value.trim():'',boatIslandCode:['boat','speedboat'].includes(dMode)?$('marineIslandCode').value.trim().toUpperCase():'',destinationIsland:boatIslandVal,
+    manualBoatEntry:false,
     cargoType:ctype,isExpress:isExp&&!isAir,isAir,
     airSubType:isAir?$('airSubType').value:'',airDestination:isAir?$('airSelIslandName').value:'',
     airWeight:isAir?($('airSelWeightRange').value||''):'',airGroup:isAir?$('airSelIslandGroup').value:'',
     packageSize:!isAir?($('selSizeName').value+' / up to '+$('selSizeWeight').value+' kg'):'',
     selectedSizeName:!isAir?$('selSizeName').value||'':'',selectedHrLabel:isExp&&!isAir?$('selTimeLabel').value:'',
-    requiredVehicleCategory:dMode==='cargo'?($('requiredVehicleCategory').value||''):'',requiredVehicleType:dMode==='cargo'?($('requiredVehicleLabel').value||''):'',vehiclePrice:dMode==='cargo'?(parseFloat($('selectedVehiclePrice').value)||0):0,mapRoutePrice:dMode==='cargo'?(parseFloat($('routePrice').value)||0):0,
-    linkedPriceZoneId:dMode==='cargo'?(activeVehiclePriceZone?.id||''):'',linkedPriceZoneName:dMode==='cargo'?(activeVehiclePriceZone?.name||''):'',linkedPackageKey:dMode==='cargo'?currentLinkedPriceSelection().packageKey:'',routeDriverEarning:dMode==='cargo'?selectedRouteDriverEarning:0,routeDriverPercent:dMode==='cargo'?selectedRouteDriverPercent:0,
+    requiredVehicleCategory:usesLiveMap?($('requiredVehicleCategory').value||''):'',requiredVehicleType:usesLiveMap?($('requiredVehicleLabel').value||''):'',vehiclePrice:usesLiveMap?(parseFloat($('selectedVehiclePrice').value)||0):0,mapRoutePrice:usesLiveMap?(parseFloat($('routePrice').value)||0):0,
+    linkedPriceZoneId:usesLiveMap?(activeVehiclePriceZone?.id||''):'',linkedPriceZoneName:usesLiveMap?(activeVehiclePriceZone?.name||''):'',linkedPackageKey:usesLiveMap?currentLinkedPriceSelection().packageKey:'',routeDriverEarning:usesLiveMap?selectedRouteDriverEarning:0,routeDriverPercent:usesLiveMap?selectedRouteDriverPercent:0,
     expressDeadline:(()=>{if(!isExp||isAir)return'';const t=$('selTimeDeadline')?.value||'';if(!t)return'';if(t.includes('T'))return t;const dDate=$('dDate')?.value||'';if(dDate){const pts=t.split(':');const d=new Date(dDate+'T00:00:00');d.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);return d.toISOString();}return t;})(),
     deliveryDuration:!isExp&&!isAir?'3-5 Business Days':'',
     packageWeight:!isAir?($('selSizeName').value+' / up to '+$('selSizeWeight').value+' kg'):'—',
@@ -3217,7 +3251,7 @@ $('cargoForm').addEventListener('submit',function(e){
     deliveryDate:$('dDate').value,status:'Order Placed',progress:1,
     id:Date.now(),createdAt:new Date().toISOString(),paymentStatus:'under_review',createdBy:me.email
   };
-  $('payAmt').textContent=price+' MVR';$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';if($('payAirNotice'))$('payAirNotice').style.display=isAir?'block':'none';$('payMod').classList.add('show');
+  $('payAmt').textContent=price+' MVR';$('slipFile').value='';$('slipFN').textContent='Tap to attach slip';if($('slipPreview')){$('slipPreview').removeAttribute('src');$('slipPreview').style.display='none';}if($('payAirNotice'))$('payAirNotice').style.display=isAir?'block':'none';$('payMod').classList.add('show');
 });
 
 $('payConfirm').onclick=async()=>{
@@ -3309,7 +3343,7 @@ $('payConfirm').onclick=async()=>{
     $('pLocVal').value='';$('dLocVal').value='';$('routePrice').value='0';$('boatPrice').value='0';$('floorPrice').value='0';$('floorNum').value='';
     $('selW').value='';$('selWP').value='0';$('selSizeId').value='';$('selSizeName').value='';$('selSizeWeight').value='';$('selTimeId').value='';$('selTimePrice').value='0';$('selTimeLabel').value='';$('requiredVehicleCategory').value='';$('requiredVehicleLabel').value='';$('selectedVehiclePrice').value='0';document.querySelectorAll('.manual-vehicle-card').forEach(b=>b.classList.remove('active'));
     $('selBoat').value='';$('selSB').value='';$('selIsl').value='';$('selSBIsl').value='';
-    dMode='';pickupMethod='';cargoPinMode='delivery';$('pickupMethodChoice').classList.remove('show');$('pickupConfirmWrap').classList.remove('show');$('pickupLivePanel').classList.remove('show');$('cargoDest').style.display='none';$('boatSec').classList.remove('show');$('speedboatSec').classList.remove('show');clearCargoMapPin(true);
+    dMode='';pickupMethod='';cargoPinMode='delivery';$('pickupMethodChoice').classList.remove('show');$('pickupConfirmWrap').classList.remove('show');$('pickupLivePanel').classList.remove('show');$('cargoDest').style.display='none';$('marineDetailsPanel').classList.remove('show');$('marineConfirmedSummary').classList.remove('show');$('boatSec').classList.remove('show');$('speedboatSec').classList.remove('show');clearCargoMapPin(true);
     clearPackageVehicle();
     resetAirSteps();
     const rpb=$('routePriceBadge');if(rpb)rpb.classList.remove('show');
