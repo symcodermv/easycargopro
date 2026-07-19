@@ -2439,7 +2439,7 @@ db.ref('driverLiveLocations').on('value',snap=>{
 db.ref('driverSettings').on('value',snap=>{driverUiSettings=Object.assign({responseMinutes:10},snap.val()||{});if(me)loadMyDriver();});
 
 function driverFromOrder(order){
-  if(!order||!order.assignedDriverId)return null;
+  if(!order)return null;
   return{
     id:order.assignedDriverId,
     name:order.assignedDriverName||'Your driver',
@@ -2623,10 +2623,15 @@ function loadMyDriver(){
   // Find customer's active order that has a driver assigned
   const myOrders=allD.filter(d=>d.createdBy===me.email);
   const isFinished=o=>/^(delivered|complete|completed|cancelled|canceled)$/i.test(String(o.status||'').trim());
+  const orderWasTaken=o=>{
+    const id=o?.assignedDriverId;
+    const hasDriverId=id!==undefined&&id!==null&&id!==''&&id!==0&&id!=='0';
+    return hasDriverId||Boolean(o?.assignedAt||o?.takenAt);
+  };
   const paymentWasSubmitted=o=>Boolean(o.paymentSlip||o.paymentSubmittedAt)&&!/^unpaid$/i.test(String(o.paymentStatus||''));
-  const waitingOrders=myOrders.filter(o=>!o.assignedDriverId&&!isFinished(o)&&paymentWasSubmitted(o))
+  const waitingOrders=myOrders.filter(o=>!orderWasTaken(o)&&!isFinished(o)&&paymentWasSubmitted(o))
     .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,1);
-  const activeWithDriver=myOrders.filter(o=>o.assignedDriverId&&!isFinished(o))
+  const activeWithDriver=myOrders.filter(o=>orderWasTaken(o)&&!isFinished(o))
     .sort((a,b)=>new Date(b.assignedAt||b.createdAt)-new Date(a.assignedAt||a.createdAt));
 
   if(!waitingOrders.length&&!activeWithDriver.length){
@@ -2637,10 +2642,12 @@ function loadMyDriver(){
   let html='';
   // The active-driver carousel belongs only to an unassigned saved order.
   // When that order is taken, assignedDriverId removes it from waitingOrders immediately.
-  waitingOrders.forEach(o=>{html+=buildFindingDriverCard(o);});
+  // Once any driver has taken an active order, show only the assigned delivery.
+  // Do not keep another waiting-order carousel above the live driver card.
+  if(!activeWithDriver.length)waitingOrders.forEach(o=>{html+=buildFindingDriverCard(o);});
   // Active delivery card
   activeWithDriver.forEach(o=>{
-    const driver=allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId))||driverFromOrder(o);
+    const driver=(o.assignedDriverId?allDriversIdx.find(d=>String(d.id)===String(o.assignedDriverId)):null)||driverFromOrder(o);
     html+=buildDriverCard(o,driver,'active');
   });
   el.innerHTML=html;
@@ -2928,28 +2935,44 @@ async function initCustomerLiveMaps(orders){
     const pickup={lat:Number(order.pickupLat),lng:Number(order.pickupLng)},delivery={lat:Number(order.deliveryLat),lng:Number(order.deliveryLng)};
     let state=customerTrackingMaps[sid];
     if(!state||state.el!==el){
-      const map=new google.maps.Map(el,{center:pickup,zoom:14,mapTypeControl:false,streetViewControl:false,fullscreenControl:true,gestureHandling:'greedy',styles:UBER_MAP_STYLES});
+      const map=new google.maps.Map(el,{center:pickup,zoom:14,mapTypeId:google.maps.MapTypeId.ROADMAP,mapTypeControl:false,streetViewControl:false,fullscreenControl:true,gestureHandling:'greedy',styles:UBER_MAP_STYLES});
       const pickupMarker=new google.maps.Marker({map,position:pickup,title:'Pickup',zIndex:50,label:{text:'P',color:'#fff',fontWeight:'800'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:13,fillColor:'#08754d',fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
       const deliveryMarker=new google.maps.Marker({map,position:delivery,title:'Delivery',zIndex:50,label:{text:'D',color:'#fff',fontWeight:'800'},icon:{path:google.maps.SymbolPath.CIRCLE,scale:13,fillColor:'#2574c7',fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
-      const directions=new google.maps.DirectionsService(),renderer=new google.maps.DirectionsRenderer({map,suppressMarkers:true,preserveViewport:true,polylineOptions:{strokeColor:'#08754d',strokeOpacity:.92,strokeWeight:4,zIndex:5}});
-      const fallbackLine=new google.maps.Polyline({map,path:[pickup,delivery],strokeColor:'#08754d',strokeOpacity:.92,strokeWeight:4,zIndex:5});
+      const directions=new google.maps.DirectionsService(),renderer=new google.maps.DirectionsRenderer({map,suppressMarkers:true,preserveViewport:true,polylineOptions:{strokeColor:'#08754d',strokeOpacity:1,strokeWeight:6,zIndex:5}});
+      const fallbackLine=new google.maps.Polyline({map:null,path:[pickup,delivery],strokeColor:'#08754d',strokeOpacity:.35,strokeWeight:3,zIndex:4});
       const firstLive=customerLiveForOrder(order),firstPos=firstLive&&validCustomerPin(firstLive.lat,firstLive.lng)?{lat:Number(firstLive.lat),lng:Number(firstLive.lng)}:{lat:pickup.lat+.00012,lng:pickup.lng};
       const driverMarker=new google.maps.Marker({map,position:firstPos,zIndex:100,optimized:false});setCustomerVehicleStyle(driverMarker,order,firstLive);
-      state=customerTrackingMaps[sid]={el,map,pickupMarker,deliveryMarker,directions,renderer,fallbackLine,driverMarker,lastRouteAt:0,lastOrigin:null,orderId:order.id};
+      state=customerTrackingMaps[sid]={el,map,pickupMarker,deliveryMarker,directions,renderer,fallbackLine,driverMarker,roadRouteReady:false,roadRouteLoading:false,orderId:order.id};
       const bounds=new google.maps.LatLngBounds();bounds.extend(pickup);bounds.extend(delivery);map.fitBounds(bounds,55);
     }
     updateCustomerLiveMap(order,customerLiveForOrder(order),true);
   });}catch(e){mapped.forEach(o=>{const st=$('customerLiveStatus_'+customerMapSafeId(o.id));if(st)st.innerHTML='<i class="fas fa-triangle-exclamation"></i> Live map unavailable. Please check internet access.';});}
 }
+function requestCustomerRoadRoute(order,state){
+  if(!state||state.roadRouteReady||state.roadRouteLoading)return;
+  const origin={lat:Number(order.pickupLat),lng:Number(order.pickupLng)},destination={lat:Number(order.deliveryLat),lng:Number(order.deliveryLng)};
+  state.roadRouteLoading=true;
+  state.directions.route({origin,destination,travelMode:google.maps.TravelMode.DRIVING,provideRouteAlternatives:false},(res,st)=>{
+    state.roadRouteLoading=false;
+    if(st==='OK'&&res?.routes?.length){
+      state.renderer.setDirections(res);state.roadRouteReady=true;
+      if(state.fallbackLine)state.fallbackLine.setMap(null);
+      const bounds=res.routes[0].bounds;if(bounds)state.map.fitBounds(bounds,{top:38,right:38,bottom:38,left:38});
+    }else{
+      /* A faint direct guide is used only when Google cannot return a road route. */
+      if(state.fallbackLine){state.fallbackLine.setPath([origin,destination]);state.fallbackLine.setMap(state.map);}
+    }
+  });
+}
 function updateCustomerLiveMap(order,live,force){
   const sid=customerMapSafeId(order.id),state=customerTrackingMaps[sid];if(!state)return;
+  requestCustomerRoadRoute(order,state);
   const phase=customerOrderPhase(order,live),target=phase==='to_delivery'?{lat:Number(order.deliveryLat),lng:Number(order.deliveryLng)}:{lat:Number(order.pickupLat),lng:Number(order.pickupLng)},phaseEl=$('customerLivePhase_'+sid),status=$('customerLiveStatus_'+sid);
   if(phaseEl)phaseEl.textContent=phase==='to_delivery'?'COMING TO YOU':'GOING TO PICKUP';
   if(!live||!validCustomerPin(live.lat,live.lng)){
     if(state.driverMarker){state.driverMarker.setPosition({lat:Number(order.pickupLat)+.00012,lng:Number(order.pickupLng)});setCustomerVehicleStyle(state.driverMarker,order,null);}
     if(status)status.innerHTML='<i class="fas fa-satellite-dish"></i> Waiting for the driver to allow live GPS…';
-    if(state.fallbackLine){state.fallbackLine.setPath([{lat:Number(order.pickupLat),lng:Number(order.pickupLng)},{lat:Number(order.deliveryLat),lng:Number(order.deliveryLng)}]);state.fallbackLine.setMap(state.map);}
-    if(force)state.directions.route({origin:{lat:Number(order.pickupLat),lng:Number(order.pickupLng)},destination:{lat:Number(order.deliveryLat),lng:Number(order.deliveryLng)},travelMode:google.maps.TravelMode.DRIVING},(res,st)=>{if(st==='OK'){state.renderer.setDirections(res);if(state.fallbackLine)state.fallbackLine.setMap(null);}});return;
+    return;
   }
   const pos={lat:Number(live.lat),lng:Number(live.lng)};
   if(!state.driverMarker)state.driverMarker=new google.maps.Marker({map:state.map,position:pos,zIndex:100,optimized:false});
@@ -2960,8 +2983,6 @@ function updateCustomerLiveMap(order,live,force){
   const age=Math.max(0,Math.round((Date.now()-new Date(live.updatedAt).getTime())/1000)),ageText=age<8?'just now':age<60?age+' sec ago':Math.floor(age/60)+' min ago';
   const vehicleName=(live.driverVehicle||order.assignedDriverVehicle||'Driver vehicle');
   if(status)status.innerHTML='<i class="fas fa-location-arrow"></i> '+vehicleName+' · '+(phase==='to_delivery'?'heading to your delivery point':'heading to pickup')+' · updated '+ageText;
-  const moved=!state.lastOrigin||Math.abs(state.lastOrigin.lat-pos.lat)+Math.abs(state.lastOrigin.lng-pos.lng)>.00012;
-  if((force||moved)&&Date.now()-state.lastRouteAt>8000){state.lastRouteAt=Date.now();state.lastOrigin=pos;if(state.fallbackLine){state.fallbackLine.setPath([pos,target]);state.fallbackLine.setMap(state.map);}state.directions.route({origin:pos,destination:target,travelMode:google.maps.TravelMode.DRIVING},(res,st)=>{if(st==='OK'){state.renderer.setDirections(res);if(state.fallbackLine)state.fallbackLine.setMap(null);}});}
 }
 function refreshCustomerLiveMaps(){
   const myOrders=allD.filter(o=>me&&o.createdBy===me.email&&o.assignedDriverId&&o.status!=='Delivered');
