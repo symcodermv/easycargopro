@@ -2187,6 +2187,7 @@ function closeSB(){$('sidebar').classList.remove('open');$('sideOvl').classList.
 $('sideOvl').onclick=closeSB;
 
 /* ═══ CARGO TYPE GRID ═══ */
+function mainCargoUiName(ct){if(!ct)return'Cargo';if(ct.isAir||ct.key==='air')return ct.name||'Air Cargo';if(ct.isExpress)return'Quick Delivery';if(ct.key==='normal'||/^normal cargo$/i.test(ct.name||''))return'Delivery';return ct.name||'Cargo';}
 function loadCtypeGrid(){
   const g=$('ctypeGrid');
   const icons={'normal':'fa-box','express':'fa-bolt','fragile':'fa-wine-glass-crack','oversized':'fa-pallet','custom':'fa-cube','air':'fa-plane'};
@@ -2195,7 +2196,7 @@ function loadCtypeGrid(){
   const nonAirTypes=[...allCargoTypes].filter(ct=>!ct.isAir&&ct.key!=='air').sort((a,b)=>(a.order||0)-(b.order||0));
   const nonAirHTML=nonAirTypes.map(ct=>{
     const prLabel=ct.isExpress?'Select size &amp; time':'Select package size';
-    return`<div class="ct-card${ct.isExpress?' express-card':''}" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${ct.isExpress?'Quick Delivery':ct.name}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${prLabel}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`;
+    return`<div class="ct-card${ct.isExpress?' express-card':''}" data-id="${ct.id}" onclick="selCtype(this,'${ct.id}')"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i><div class="ct-name">${mainCargoUiName(ct)}</div><div class="ct-eta">${ct.eta||''}</div><div class="ct-pr">${prLabel}</div><div class="ct-ck"><i class="fas fa-check"></i></div></div>`;
   }).join('');
 
   // ONE Air Cargo card — clicking it triggers plane animation, then shows Normal/Express choice
@@ -2206,7 +2207,7 @@ function loadCtypeGrid(){
     const defaultHTML=`
       <div class="ct-card" data-id="normal" onclick="selCtype(this,'normal')">
         <i class="fas fa-box"></i>
-        <div class="ct-name">Normal Cargo</div>
+        <div class="ct-name">Delivery</div>
         <div class="ct-eta">Standard delivery</div>
         <div class="ct-pr">Select package size</div>
         <div class="ct-ck"><i class="fas fa-check"></i></div>
@@ -2236,7 +2237,7 @@ function loadDashboardCargoTypes(){
     return `<img class="dash-cargo-bg" src="${safe}" alt="" style="opacity:${opacity}" onerror="this.style.display='none'">`;
   };
   const types=[...allCargoTypes].filter(ct=>!ct.isAir&&ct.key!=='air').sort((a,b)=>Number(!!b.isExpress)-Number(!!a.isExpress)||(a.order||0)-(b.order||0));
-  const cards=types.map(ct=>`<button type="button" class="dash-cargo-card${ct.isExpress?' express':''}" onclick="openDeliveryForCargo('${ct.id}')">${bgImage(ct.id)}<span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i></span><div class="dash-cargo-name">${ct.isExpress?'Quick Delivery':ct.name}</div><div class="dash-cargo-eta">${ct.eta||(ct.isExpress?'Same Day':'3–5 Business Days')}</div><div class="dash-cargo-action">${ct.isExpress?'Select size & time':'Select package size'}</div></button>`).join('');
+  const cards=types.map(ct=>`<button type="button" class="dash-cargo-card${ct.isExpress?' express':''}" onclick="openDeliveryForCargo('${ct.id}')">${bgImage(ct.id)}<span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas ${icons[ct.key||'normal']||'fa-box'}"></i></span><div class="dash-cargo-name">${mainCargoUiName(ct)}</div><div class="dash-cargo-eta">${ct.eta||(ct.isExpress?'Same Day':'3–5 Business Days')}</div><div class="dash-cargo-action">${ct.isExpress?'Select size & time':'Select package size'}</div></button>`).join('');
   const air=`<button type="button" class="dash-cargo-card air" onclick="openDeliveryForCargo('__air__')">${bgImage('__air__')}<span class="dash-cargo-arrow"><i class="fas fa-arrow-right"></i></span><span class="dash-cargo-icon"><i class="fas fa-plane"></i></span><div class="dash-cargo-name">Air Cargo</div><div class="dash-cargo-eta">Domestic Flights</div><div class="dash-cargo-action">Normal & Express</div></button>`;
   g.innerHTML=cards+air;
 }
@@ -2262,7 +2263,7 @@ window.openDeliveryForCargo=function(id){
     if(!card.classList.contains('active'))selCtype(card,String(id));
     const ct=String(id)==='__air__'?{name:'Air Cargo'}:(allCargoTypes.find(c=>String(c.id)===String(id))||{name:'Cargo'});
     const icon=String(id)==='__air__'?'fa-plane':ct.isExpress?'fa-bolt':ct.key==='fragile'?'fa-wine-glass-crack':ct.key==='oversized'?'fa-pallet':'fa-box';
-    $('cargoTypeFormSection').style.display='none';$('selectedCargoSummary').classList.add('show');$('selectedCargoName').textContent=ct.isExpress?'Quick Delivery':ct.name;$('selectedCargoIcon').innerHTML='<i class="fas '+icon+'"></i>';
+    $('cargoTypeFormSection').style.display='none';$('selectedCargoSummary').classList.add('show');$('selectedCargoName').textContent=mainCargoUiName(ct);$('selectedCargoIcon').innerHTML='<i class="fas '+icon+'"></i>';
     $('cargoForm').scrollIntoView({behavior:'smooth',block:'start'});
   });
 };
